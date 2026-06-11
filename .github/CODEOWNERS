@@ -1,7 +1,7 @@
 # Default reviewer for all files
 *                                   @open-space-collective/sdk-maintainers
 
-# Auto-generated SDK files — maintained by the spec-refresh workflow.
+# Auto-generated SDK files, maintained by the spec-refresh workflow.
 # Changes here should come from fern generate, not manual edits.
 sdks/python/tracss/bulk_data/       @open-space-collective/sdk-maintainers
 sdks/python/tracss/metadata/        @open-space-collective/sdk-maintainers
