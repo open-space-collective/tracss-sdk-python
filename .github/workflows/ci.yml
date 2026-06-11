@@ -1,0 +1,151 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  fern-check:
+    name: Fern config validation
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      - run: npm install -g fern-api@5.46.0
+      - run: fern check
+
+  spec-freshness:
+    name: OpenAPI spec freshness
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+      - name: Fetch current specs
+        run: |
+          make specs || {
+            echo ""
+            echo "::error::'make specs' failed. api.tracss.gov may be unreachable or returned an error."
+            echo "::error::If this is transient, re-run the job. If persistent, check the TraCSS API status."
+            exit 1
+          }
+      - name: Fail if specs changed
+        run: |
+          if ! git diff --exit-code fern/apis/; then
+            echo "::error::OpenAPI specs are stale. Run 'make specs' and commit."
+            exit 1
+          fi
+
+  generate-check:
+    name: Generated SDK is up to date
+    needs: [fern-check]
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      - run: npm install -g fern-api@5.46.0
+      - uses: astral-sh/setup-uv@v4
+      - run: uv sync
+      - name: Regenerate SDK
+        run: fern generate --group python-sdk --local
+        env:
+          FERN_TOKEN: ${{ secrets.FERN_TOKEN }}
+      - name: Fail if generated files differ from committed
+        run: |
+          if ! git diff --exit-code sdks/python/; then
+            echo "::error::Generated SDK is stale. Run 'make generate' and commit the result."
+            exit 1
+          fi
+
+  lint-and-test:
+    name: Lint & unit tests (Python 3.12)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v4
+      - run: uv sync
+      - run: make lint
+      - run: make test
+
+  typecheck:
+    name: Type checking (mypy)
+    needs: [lint-and-test]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v4
+      - run: uv sync
+      - run: make typecheck
+
+  build:
+    name: Build & validate wheel
+    needs: [lint-and-test]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v4
+      - run: uv sync
+      - run: make build
+      - uses: actions/upload-artifact@v4
+        with:
+          name: dist
+          path: dist/
+
+  integration:
+    name: Integration tests (Prism)
+    needs: [lint-and-test]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      - uses: astral-sh/setup-uv@v4
+      - run: npm install -g @stoplight/prism-cli
+      - run: uv sync
+      - name: Start Prism mock servers
+        run: |
+          prism mock fern/apis/subscriber/openapi/openapi.json --port 4010 &
+          prism mock fern/apis/bulk_data/openapi/openapi.json  --port 4011 &
+          prism mock fern/apis/metadata/openapi/openapi.json   --port 4012 &
+          for port in 4010 4011 4012; do
+            until curl -s --max-time 2 http://localhost:${port} > /dev/null 2>&1; do sleep 0.5; done
+          done
+      - run: make integration
+
+  docs:
+    name: Fern docs preview
+    needs: [fern-check]
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      - run: npm install -g fern-api@5.46.0
+      - name: Preview docs
+        run: fern generate --docs --preview
+        env:
+          FERN_TOKEN: ${{ secrets.FERN_TOKEN }}
+
+  docs-deploy:
+    name: Deploy Fern docs
+    needs: [fern-check]
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      - run: npm install -g fern-api@5.46.0
+      - name: Deploy docs
+        run: fern generate --docs
+        env:
+          FERN_TOKEN: ${{ secrets.FERN_TOKEN }}

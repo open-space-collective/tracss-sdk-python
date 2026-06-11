@@ -1,0 +1,23 @@
+name: Smoke tests
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  smoke:
+    name: Smoke tests (live API)
+    runs-on: ubuntu-latest
+    # Prevent forks from failing with missing secrets instead of skipping.
+    if: github.repository == 'open-space-collective/tracss-sdk-python'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v4
+      - run: uv sync
+      - run: make smoke
+        env:
+          TRACSS_CLIENT_ID: ${{ secrets.TRACSS_CLIENT_ID }}
+          TRACSS_CLIENT_SECRET: ${{ secrets.TRACSS_CLIENT_SECRET }}
+          TRACSS_OKTA_DOMAIN: ${{ secrets.TRACSS_OKTA_DOMAIN }}
+          TRACSS_OKTA_AUTH_SERVER_ID: ${{ secrets.TRACSS_OKTA_AUTH_SERVER_ID }}

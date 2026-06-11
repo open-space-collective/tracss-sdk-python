@@ -1,0 +1,27 @@
+name: Publish to PyPI
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Version to publish (e.g. 0.2.0)"
+        required: true
+        type: string
+
+jobs:
+  publish:
+    name: Build & publish Python SDK
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v4
+      - run: uv sync
+      - name: Bump version
+        run: |
+          sed -i 's/^version = .*/version = "${{ inputs.version }}"/' sdks/python/pyproject.toml
+      - name: Build wheel
+        run: uv build --package tracss
+      - name: Validate wheel
+        run: uv run twine check dist/*
+      - name: Publish to PyPI
+        run: uv publish --token ${{ secrets.PYPI_TOKEN }}

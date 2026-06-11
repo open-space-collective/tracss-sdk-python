@@ -1,0 +1,84 @@
+name: Spec Refresh
+
+on:
+  schedule:
+    - cron: "0 6 * * *"
+  workflow_dispatch:
+    inputs:
+      reason:
+        description: "Reason for manual trigger"
+        required: false
+        type: string
+
+jobs:
+  refresh:
+    name: Fetch specs, generate SDK, open PR
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      - run: npm install -g fern-api@5.46.0
+
+      - uses: astral-sh/setup-uv@v4
+        with:
+          python-version: "3.12"
+      - run: uv sync
+
+      - name: Fetch latest OpenAPI specs
+        run: make specs
+
+      - name: Check for spec changes
+        id: diff
+        run: |
+          if git diff --quiet fern/openapi/; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+            echo "No spec changes detected."
+          else
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+            echo "Changed specs:"
+            git diff --name-only fern/openapi/
+          fi
+
+      - name: Validate Fern config against new specs
+        if: steps.diff.outputs.changed == 'true'
+        run: fern check
+
+      - name: Regenerate SDK
+        if: steps.diff.outputs.changed == 'true'
+        run: fern generate --group python-sdk --local --token "$FERN_TOKEN"
+        env:
+          FERN_TOKEN: ${{ secrets.FERN_TOKEN }}
+
+      - name: Build PR body
+        if: steps.diff.outputs.changed == 'true'
+        id: pr-body
+        run: |
+          CHANGED=$(git diff --name-only fern/openapi/ | sed 's/^/- /')
+          cat <<EOF >> "$GITHUB_OUTPUT"
+          body<<BODY
+          Automated spec refresh. The following OpenAPI specs changed:
+
+          ${CHANGED}
+
+          The SDK has been regenerated via \`fern generate --group python-sdk --local\`.
+          Please review the diff and merge once CI passes.
+          BODY
+          EOF
+
+      - name: Open pull request
+        if: steps.diff.outputs.changed == 'true'
+        uses: peter-evans/create-pull-request@v6
+        with:
+          token: ${{ secrets.GH_PAT }}
+          branch: auto/spec-refresh-${{ github.run_id }}
+          title: "chore: refresh OpenAPI specs and regenerate SDK"
+          body: ${{ steps.pr-body.outputs.body }}
+          commit-message: "chore: refresh OpenAPI specs and regenerate SDK"
+          labels: automated, spec-refresh
+          delete-branch: true
