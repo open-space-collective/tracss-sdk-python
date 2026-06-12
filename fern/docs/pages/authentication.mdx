@@ -1,0 +1,76 @@
+# Authentication
+
+TraCSS uses an **Okta client-credentials** OAuth 2.0 flow. The SDK handles the entire token
+lifecycle automatically — callers never need to manage tokens directly.
+
+## Obtaining Credentials
+
+1. Log in to your TraCSS account at [tracss.gov](https://tracss.gov).
+2. Navigate to your application settings to find your **Client ID** and **Client Secret**.
+
+## Environment Variables
+
+| Variable | Required | Default | Description |
+|---|---|---|---|
+| `TRACSS_CLIENT_ID` | Yes | — | OAuth client ID |
+| `TRACSS_CLIENT_SECRET` | Yes | — | OAuth client secret |
+| `TRACSS_OKTA_DOMAIN` | No | `tracssamu.okta-gov.com` | Okta domain |
+| `TRACSS_OKTA_AUTH_SERVER_ID` | No | `aus1358llxDldKxE80j7` | Okta authorization server ID |
+| `TRACSS_OKTA_SCOPE` | No | `tracssusername` | OAuth scope |
+
+Set the required variables before calling any SDK method:
+
+```bash
+export TRACSS_CLIENT_ID="your-client-id"
+export TRACSS_CLIENT_SECRET="your-client-secret"
+```
+
+## Explicit Configuration
+
+Pass credentials directly if you prefer not to use environment variables, or need to override
+the Okta defaults:
+
+```python
+from tracss import TraCSS
+
+client = TraCSS(
+    client_id="your-client-id",
+    client_secret="your-client-secret",
+    okta_domain="tracssamu.okta-gov.com",        # optional override
+    okta_auth_server_id="aus1358llxDldKxE80j7",  # optional override
+    okta_scope="tracssusername",                  # optional override
+)
+```
+
+## Token Lifecycle
+
+- **Lazy fetch**: The token is not fetched at construction time. The first API call triggers
+  the credential exchange.
+- **Automatic refresh**: Tokens have a 24-hour TTL. The SDK refreshes the token automatically
+  30 seconds before expiry so requests never fail mid-session.
+- **Thread safety**: A reentrant lock ensures a single token fetch even under concurrent
+  requests.
+
+The token endpoint used is:
+
+```
+POST https://{okta_domain}/oauth2/{okta_auth_server_id}/v1/token
+```
+
+Credentials are sent as HTTP Basic Auth (`Authorization: Basic base64(client_id:client_secret)`).
+
+## Async Client
+
+The async client (`AsyncTraCSS`) uses the same credential resolution and token lifecycle, with
+an `asyncio.Lock` in place of the threading lock:
+
+```python
+import asyncio
+from tracss import AsyncTraCSS
+
+async def main():
+    client = AsyncTraCSS(client_id="...", client_secret="...")
+    topics = await client.subscriber.topics.list()
+
+asyncio.run(main())
+```

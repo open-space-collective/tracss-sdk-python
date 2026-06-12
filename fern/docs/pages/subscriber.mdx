@@ -1,0 +1,48 @@
+---
+title: Subscriber
+description: Subscribe to Kafka topics for real-time space tracking data.
+---
+
+The Subscriber API exposes a Kafka-backed message bus that delivers tracking data in real time. Use it when you want to receive new data as it arrives — for live dashboards, alerting, or event-driven pipelines.
+
+## How it works
+
+TraCSS publishes new records to named Kafka topics as they are ingested. Each topic has a monotonically increasing **offset**. You specify a starting offset and the API returns all messages from that point forward.
+
+| Topic | Data |
+|---|---|
+| `gov.tracss.tracss.v2.cdms` | Conjunction Data Messages (current) |
+| `gov.tracss.tracss.v1.cdms` | CDM (legacy) |
+| `gov.tracss.parsed.v2.ocms` | Object Catalog Messages (current) |
+| `gov.tracss.parsed.v1.ocms` | OCM (legacy) |
+| `gov.tracss.conjunction.data.event` | Conjunction events |
+| `gov.tracss.tip.reports` | TIP reports |
+| `gov.tracss.parsed.tracsscat` | TraCSS catalog updates |
+
+## Quick start
+
+```python
+from tracss import TraCSS
+
+client = TraCSS()
+
+# 1. Discover available topics and their latest offsets
+topics = client.subscriber.topics.list()
+
+# 2. Find the current end of a specific topic
+offset = client.subscriber.topics.get_offset(
+    topic="gov.tracss.tracss.v2.cdms"
+)
+
+# 3. Read messages from a known offset
+msgs = client.subscriber.messages.list(
+    topic="gov.tracss.tracss.v2.cdms",
+    offset=offset - 100,  # last 100 messages
+)
+```
+
+To process data continuously, poll `messages.list()` and advance the offset after each batch.
+
+## Authentication
+
+All endpoints require a valid Okta access token. The SDK fetches and refreshes tokens automatically — see [Authentication](/authentication) for details.

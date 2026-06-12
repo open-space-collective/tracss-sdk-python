@@ -1,0 +1,44 @@
+---
+title: Metadata
+description: Query and manage the TraCSS data catalog.
+---
+
+The Metadata API gives you read and write access to the TraCSS data catalog. Use it to upload new tracking data, query existing records, manage your organization's contact directory, and retrieve schemas.
+
+## Resources
+
+| Group | Methods | Description |
+|---|---|---|
+| `client.metadata.ocm` | `upload()`, `list()`, `list_by_operational_batch()` | Object Catalog Messages |
+| `client.metadata.cdm` | `list()`, `list_by_operational_batch()` | Conjunction Data Messages |
+| `client.metadata.tracss_cat` | `list()`, `upload_csv()` | TraCSS satellite catalog |
+| `client.metadata.contact_directory` | `list_operational()`, `update_operational()` | Operational contact directory |
+| `client.metadata.tip_reports` | `list()` | Tasking Information Package reports |
+| `client.metadata.conjunction_events` | `list()` | Conjunction data events |
+| `client.metadata.space_track` | `list()`, `list_nested()` | Space-Track data |
+| `client.metadata.schemas` | `get_xsd()`, `get_json()` | Data format schemas |
+| `client.metadata.announcements` | `list()` | System announcements |
+
+v2 endpoints are current for OCM and CDM. v1 variants (`upload_v1()`, `list_v1()`, etc.) are retained for backwards compatibility.
+
+## Quick start
+
+```python
+from tracss import TraCSS
+
+client = TraCSS()
+
+# Upload an OCM file
+with open("data.ocm", "rb") as f:
+    client.metadata.ocm.upload(file=f)
+
+# Query the CDM catalog
+cdms = client.metadata.cdm.list()
+
+# Download current XSD schema
+xsd = client.metadata.schemas.get_xsd()
+```
+
+## Authentication
+
+All endpoints require a valid Okta access token. The SDK fetches and refreshes tokens automatically — see [Authentication](/authentication) for details.

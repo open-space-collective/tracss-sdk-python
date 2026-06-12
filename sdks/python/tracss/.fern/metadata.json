@@ -1,0 +1,25 @@
+{
+  "cliVersion": "5.46.0",
+  "generatorName": "fernapi/fern-python-sdk",
+  "generatorVersion": "5.12.11",
+  "generatorConfig": {
+    "package_name": "tracss",
+    "client": {
+      "filename": "base_client.py",
+      "class_name": "BaseTraCSS",
+      "exported_filename": "client.py",
+      "exported_class_name": "TraCSS"
+    },
+    "flat_layout": true,
+    "pydantic_config": {
+      "use_str_enums": true,
+      "enum_type": "forward_compatible_python_enums",
+      "skip_validation": true,
+      "use_typeddict_requests": false
+    },
+    "pyproject_toml": "[project]\ndescription = \"Python SDK for the TraCSS REST APIs\"\nrequires-python = \">=3.10\"\nclassifiers = [\n  \"Development Status :: 4 - Beta\",\n  \"Intended Audience :: Developers\",\n  \"License :: OSI Approved :: Apache Software License\",\n  \"Programming Language :: Python :: 3\",\n  \"Typing :: Typed\"\n]\n\n[project.license]\ntext = \"Apache-2.0\"\n\n[project.urls]\nHomepage = \"https://github.com/open-space-collective/tracss-sdk-python\"\nRepository = \"https://github.com/open-space-collective/tracss-sdk-python\"\nIssues = \"https://github.com/open-space-collective/tracss-sdk-python/issues\"\n"
+  },
+  "originGitCommit": "5d684d5f985e7eada2d1ee64e3956e94c09532d3",
+  "originGitCommitIsDirty": true,
+  "invokedBy": "manual"
+}

@@ -1,0 +1,36 @@
+paths:
+  /bulkdata/tip/stream:
+    get:
+      x-fern-sdk-group-name: [tip]
+      x-fern-sdk-method-name: stream
+
+  /bulkdata/ocm/v2/stream:
+    get:
+      x-fern-sdk-group-name: [ocm]
+      x-fern-sdk-method-name: stream
+      x-fern-streaming: true
+
+  /bulkdata/ocm/v1/stream:
+    get:
+      x-fern-sdk-group-name: [ocm]
+      x-fern-sdk-method-name: stream_v1
+      x-fern-availability: legacy
+      x-fern-streaming: true
+
+  /bulkdata/cdm/v2/stream:
+    get:
+      x-fern-sdk-group-name: [cdm]
+      x-fern-sdk-method-name: stream
+      x-fern-streaming: true
+
+  /bulkdata/cdm/v1/stream:
+    get:
+      x-fern-sdk-group-name: [cdm]
+      x-fern-sdk-method-name: stream_v1
+      x-fern-availability: legacy
+      x-fern-streaming: true
+
+  /bulkdata/announcements:
+    get:
+      x-fern-sdk-group-name: [announcements]
+      x-fern-sdk-method-name: list

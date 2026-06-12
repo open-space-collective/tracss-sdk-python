@@ -5,7 +5,25 @@ on:
     branches: [main]
   pull_request:
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
 jobs:
+  changes:
+    name: Detect changed paths
+    runs-on: ubuntu-latest
+    outputs:
+      fern: ${{ steps.filter.outputs.fern }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dorny/paths-filter@v3
+        id: filter
+        with:
+          filters: |
+            fern:
+              - 'fern/**'
+
   fern-check:
     name: Fern config validation
     runs-on: ubuntu-latest
@@ -52,6 +70,8 @@ jobs:
           node-version: "20"
       - run: npm install -g fern-api@5.46.0
       - uses: astral-sh/setup-uv@v4
+        with:
+          enable-cache: true
       - run: uv sync
       - name: Regenerate SDK
         run: fern generate --group python-sdk --local
@@ -70,9 +90,35 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: astral-sh/setup-uv@v4
+        with:
+          enable-cache: true
       - run: uv sync
       - run: make lint
       - run: make test
+
+  security:
+    name: Security scan
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v4
+        with:
+          enable-cache: true
+      - run: uv sync
+      - run: uv run bandit -r sdks/python/tracss/client.py tests/ -ll
+      - run: uv run pip-audit
+
+  commitlint:
+    name: Commit message lint
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: wagoid/commitlint-github-action@v6
+        with:
+          configFile: .commitlintrc.yml
 
   typecheck:
     name: Type checking (mypy)
@@ -81,6 +127,8 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: astral-sh/setup-uv@v4
+        with:
+          enable-cache: true
       - run: uv sync
       - run: make typecheck
 
@@ -91,8 +139,11 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: astral-sh/setup-uv@v4
+        with:
+          enable-cache: true
       - run: uv sync
       - run: make build
+      - run: uv run pip-licenses --fail-on="GPL" --ignore-packages tracss
       - uses: actions/upload-artifact@v4
         with:
           name: dist
@@ -108,13 +159,14 @@ jobs:
         with:
           node-version: "20"
       - uses: astral-sh/setup-uv@v4
-      - run: npm install -g @stoplight/prism-cli
+        with:
+          enable-cache: true
       - run: uv sync
       - name: Start Prism mock servers
         run: |
-          prism mock fern/openapi/subscriber/openapi.json --port 4010 &
-          prism mock fern/openapi/bulk_data/openapi.json  --port 4011 &
-          prism mock fern/openapi/metadata/openapi.json   --port 4012 &
+          npx --yes @stoplight/prism-cli mock fern/openapi/subscriber/openapi.json --port 4010 &
+          npx --yes @stoplight/prism-cli mock fern/openapi/bulk_data/openapi.json  --port 4011 &
+          npx --yes @stoplight/prism-cli mock fern/openapi/metadata/openapi.json   --port 4012 &
           for port in 4010 4011 4012; do
             timeout 15 bash -c \
               "until curl -s --max-time 2 http://localhost:\${port} > /dev/null 2>&1; do sleep 0.5; done" \
@@ -124,9 +176,9 @@ jobs:
 
   docs:
     name: Fern docs preview
-    needs: [fern-check]
+    needs: [fern-check, changes]
     runs-on: ubuntu-latest
-    if: github.event_name == 'pull_request'
+    if: github.event_name == 'pull_request' && needs.changes.outputs.fern == 'true'
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -140,9 +192,9 @@ jobs:
 
   docs-deploy:
     name: Deploy Fern docs
-    needs: [fern-check]
+    needs: [fern-check, changes]
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push' && needs.changes.outputs.fern == 'true'
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4

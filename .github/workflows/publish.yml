@@ -1,27 +1,55 @@
 name: Publish to PyPI
 
 on:
-  workflow_dispatch:
-    inputs:
-      version:
-        description: "Version to publish (e.g. 0.2.0)"
-        required: true
-        type: string
+  push:
+    tags: ["v*.*.*"]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: false
 
 jobs:
   publish:
     name: Build & publish Python SDK
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
       - uses: actions/checkout@v4
       - uses: astral-sh/setup-uv@v4
+        with:
+          enable-cache: true
       - run: uv sync
-      - name: Bump version
+
+      - name: Apply tag version to pyproject.toml
         run: |
-          sed -i 's/^version = .*/version = "${{ inputs.version }}"/' sdks/python/pyproject.toml
+          VERSION="${{ github.ref_name }}"
+          sed -i "s/^version = .*/version = \"${VERSION#v}\"/" sdks/python/pyproject.toml
+
       - name: Build wheel
         run: uv build --package tracss
+
       - name: Validate wheel
         run: uv run twine check dist/*
-      - name: Publish to PyPI
-        run: uv publish --token ${{ secrets.PYPI_TOKEN }}
+
+      - name: Publish to PyPI (stable) or TestPyPI (release candidate)
+        run: |
+          if [[ "${{ github.ref_name }}" == *"-rc"* ]]; then
+            uv publish --token ${{ secrets.TEST_PYPI_TOKEN }} \
+              --publish-url https://test.pypi.org/legacy/
+          else
+            uv publish --token ${{ secrets.PYPI_TOKEN }}
+          fi
+
+      - name: Create GitHub release
+        run: |
+          PRERELEASE_FLAG=""
+          if [[ "${{ github.ref_name }}" == *"-rc"* ]]; then
+            PRERELEASE_FLAG="--prerelease"
+          fi
+          gh release create "${{ github.ref_name }}" dist/* \
+            --title "${{ github.ref_name }}" \
+            --generate-notes \
+            $PRERELEASE_FLAG
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

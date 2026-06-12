@@ -1,0 +1,117 @@
+# yaml-language-server: $schema=https://schema.buildwithfern.dev/generators-yml.json
+
+api:
+  auth: bearer
+  specs:
+    - openapi: ./openapi/bulk_data/openapi.json
+      namespace: bulk_data
+      overrides: ./sdks/bulkdata-overrides.yaml
+
+    - openapi: ./openapi/metadata/openapi.json
+      namespace: metadata
+      overrides: ./sdks/metadata-overrides.yaml
+
+    - openapi: ./openapi/subscriber/openapi.json
+      namespace: subscriber
+      overrides: ./sdks/subscriber-overrides.yaml
+
+default-group: python-sdk
+
+groups:
+  python-sdk:
+    generators:
+      - name: fernapi/fern-python-sdk
+        version: 5.12.11
+        config:
+          package_name: tracss
+
+          client:
+            filename: base_client.py
+            class_name: BaseTraCSS
+            exported_filename: client.py
+            exported_class_name: TraCSS
+
+          flat_layout: true
+
+          pydantic_config:
+            use_str_enums: true
+            enum_type: forward_compatible_python_enums
+            skip_validation: true
+            use_typeddict_requests: false
+
+          # Apache 2.0 header on generated files (supported since fern-python-sdk 5.x)
+          # license: "Apache-2.0"
+
+          # Inject metadata into the generated pyproject.toml.
+          # NOTE: verify these land after `fern generate`; if unsupported in 5.12.11
+          # add a `post-generate` Makefile target to patch pyproject.toml instead.
+          pyproject_toml: |
+            [project]
+            description = "Python SDK for the TraCSS REST APIs"
+            requires-python = ">=3.10"
+            classifiers = [
+              "Development Status :: 4 - Beta",
+              "Intended Audience :: Developers",
+              "License :: OSI Approved :: Apache Software License",
+              "Programming Language :: Python :: 3",
+              "Typing :: Typed"
+            ]
+
+            [project.license]
+            text = "Apache-2.0"
+
+            [project.urls]
+            Homepage = "https://github.com/open-space-collective/tracss-sdk-python"
+            Repository = "https://github.com/open-space-collective/tracss-sdk-python"
+            Issues = "https://github.com/open-space-collective/tracss-sdk-python/issues"
+
+        output:
+          location: local-file-system
+          path: ../sdks/python/tracss
+
+  publish:
+    generators:
+      - name: fernapi/fern-python-sdk
+        version: 5.12.11
+        config:
+          package_name: tracss
+
+          client:
+            filename: base_client.py
+            class_name: BaseTraCSS
+            exported_filename: client.py
+            exported_class_name: TraCSS
+
+          flat_layout: true
+
+          pydantic_config:
+            use_str_enums: true
+            enum_type: forward_compatible_python_enums
+            skip_validation: true
+            use_typeddict_requests: false
+
+          pyproject_toml: |
+            [project]
+            description = "Python SDK for the TraCSS REST APIs"
+            requires-python = ">=3.10"
+            classifiers = [
+              "Development Status :: 4 - Beta",
+              "Intended Audience :: Developers",
+              "License :: OSI Approved :: Apache Software License",
+              "Programming Language :: Python :: 3",
+              "Typing :: Typed"
+            ]
+
+            [project.license]
+            text = "Apache-2.0"
+
+            [project.urls]
+            Homepage = "https://github.com/open-space-collective/tracss-sdk-python"
+            Repository = "https://github.com/open-space-collective/tracss-sdk-python"
+            Issues = "https://github.com/open-space-collective/tracss-sdk-python/issues"
+            Documentation = "https://tracss.docs.buildwithfern.com"
+
+        output:
+          location: pypi
+          package-name: tracss
+          token: ${PYPI_TOKEN}

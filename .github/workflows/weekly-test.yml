@@ -1,0 +1,18 @@
+name: Weekly dependency health
+
+on:
+  schedule:
+    - cron: "0 9 * * 5"  # Every Friday 09:00 UTC
+  workflow_dispatch:
+
+jobs:
+  test-latest-deps:
+    name: Test against latest dependencies
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v4
+      - run: uv sync --upgrade
+      - run: make lint
+      - run: make typecheck
+      - run: make test

@@ -1,0 +1,3760 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Subscriber Service API",
+    "description": "User Information",
+    "version": "1.0"
+  },
+  "servers": [
+    {
+      "url": "https://api.tracss.gov",
+      "description": "Generated server url"
+    }
+  ],
+  "paths": {
+    "/subscriber/topics": {
+      "get": {
+        "tags": [
+          "kafka-request-controller"
+        ],
+        "summary": "Retrieve the list of available topics to subscribe to, as well as their latest offset",
+        "description": "Retrieve the list of available topics to subscribe to, as well as their latest offset",
+        "operationId": "getListTopicsRequest",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Authorization token to retrieve list of topics",
+            "required": true,
+            "example": "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ7XCJpZF..."
+          }
+        ],
+        "responses": {
+          "500": {
+            "description": "Internal Server Error - There was an unknown error while retrieving the list of topics",
+            "content": {
+              "text/plain": {}
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "Ok - List of topics successfully retrieved",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string",
+                  "example": {
+                    "gov.tracss.tracss.v1.cdms": 204518705,
+                    "gov.tracss.tracss.v2.cdms": 204518704,
+                    "gov.tracss.parsed.v1.ocms": 239987,
+                    "gov.tracss.parsed.v2.ocms": 335132,
+                    "gov.tracss.conjunction.data.event": 204518705,
+                    "gov.tracss.tip.reports": 879971,
+                    "gov.tracss.anomaly.report": 85,
+                    "gov.tracss.parsed.tracsscat": 10129090
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized - There was a problem with the authorization token passed to the API call",
+            "content": {
+              "text/plain": {}
+            }
+          }
+        },
+        "security": [
+          {
+            "Authorization": []
+          }
+        ]
+      }
+    },
+    "/subscriber/offset": {
+      "get": {
+        "tags": [
+          "kafka-request-controller"
+        ],
+        "summary": "Retrieve the latest kafka offset of a passed in topic",
+        "description": "Retrieve the latest kafka offset of a passed in topic",
+        "operationId": "getLatestOffsetRequest",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Authorization token to retrieve offset of the topic",
+            "required": true,
+            "example": "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ7XCJpZF..."
+          },
+          {
+            "name": "topic",
+            "in": "query",
+            "description": "Topic to retrieve the offset from",
+            "required": true,
+            "example": "gov.tracss.tracss.v1.cdms"
+          }
+        ],
+        "responses": {
+          "500": {
+            "description": "Internal Server Error - There was an unknown error while retrieving the offset of the topic",
+            "content": {
+              "text/plain": {}
+            }
+          },
+          "400": {
+            "description": "Bad request - Invalid parameter was sent in, such as an invalid topic, or misspelled query param",
+            "content": {
+              "text/plain": {}
+            }
+          },
+          "200": {
+            "description": "Ok - offset retrieved successfully",
+            "content": {
+              "application/json": {
+                "example": 1401791
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized - There was a problem with the authorization token passed to the API call",
+            "content": {
+              "text/plain": {}
+            }
+          }
+        },
+        "security": [
+          {
+            "Authorization": []
+          }
+        ]
+      }
+    },
+    "/subscriber/messages": {
+      "get": {
+        "tags": [
+          "kafka-request-controller"
+        ],
+        "summary": "Retrieve messages from a given topic starting at a given offset",
+        "description": "Retrieve messages from a given topic starting at a given offset. Available topics are:                            gov.tracss.parsed.elsetCsv,                            gov.tracss.tracss.v1.cdms,                            gov.tracss.tracss.v2.cdms,                            gov.tracss.parsed.v1.ocms,                            gov.tracss.parsed.v2.ocms,                            gov.tracss.parsed.spVectors,                            gov.tracss.parsed.tracsscat                            gov.tracss.conjunction.data.event",
+        "operationId": "getMessagesRequest",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Authorization token to retrieve messages from the given topic",
+            "required": true,
+            "example": "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ7XCJpZF..."
+          },
+          {
+            "name": "topic",
+            "in": "query",
+            "description": "Topic to retrieve messages from",
+            "required": true,
+            "example": "gov.tracss.tracss.v1.cdms"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "description": "Offset to begin retrieving messages from - represents the starting point. Defaults to 0",
+            "required": true,
+            "example": 1000
+          },
+          {
+            "name": "maxResults",
+            "in": "query",
+            "description": "Optional - max amount of messages to retrieve. If not provided, defaults to 1000, or 25 for gov.tracss.parsed.v1.ocms. This limits the number of results in the response - not number of messages looked at",
+            "example": 500
+          },
+          {
+            "name": "filterDesignators",
+            "in": "query",
+            "description": "Comma separated list of Object Designators to filter the request by. Can be combined with operators for more refined filtering.  Valid operators include:\n\nEQUALS (ie. filterDesignators=12345),\n\nNOT EQUALS (ie. filterDesignators=<>12345),\n\nLIKE (ie. filterDesignators=*123)  The like value can fall anywhere in the objectDesignator string,\n\nNOT LIKE(ie. filterDesignators=~*123)  The not like value can fall anywhere in the objectDesignator string,\n\nGREATER THAN OR EQUAL TO (ie. filterDesignators=>=12345),\n\nGREATER THAN (ie. filterDesignators=>12345),\n\nLESS THAN OR EQUAL TO (ie. filterDesignators=<=12345),\n\nLESS THAN (ie. filterDesignators=<12345),\n\nIN (ie. filterDesignators=12345,67890,34567)  Comma separated list of objectDesignators,\n\nBETWEEN (ie. filterDesignators=12345...67890) Lowest number in the range must be on the left.\n\n",
+            "example": 12345
+          },
+          {
+            "name": "fields",
+            "in": "query",
+            "description": "comma seperated list of fields to filter by. Only works with CDM and OCM topics",
+            "required": false,
+            "example": "missDistance, collisionProbability"
+          }
+        ],
+        "responses": {
+          "500": {
+            "description": "Internal Server Error - There was an unknown error while retrieving messages from topic",
+            "content": {
+              "text/plain": {}
+            }
+          },
+          "400": {
+            "description": "Bad request - Invalid parameter was sent in, such as an invalid topic, or an offset that does not exist on the topic,a negative offset is passed, or an parameter is speller incorrectly",
+            "content": {
+              "text/plain": {}
+            }
+          },
+          "200": {
+            "description": "Ok - messages retrieved successfully",
+            "headers": {
+              "Offset-Reached": {
+                "description": "Latest offset reached from query",
+                "style": "simple",
+                "example": 50000
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "cdm_v1": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/TracssCdm"
+                      }
+                    },
+                    "cdm_v2": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/TracssCdmV2"
+                      }
+                    },
+                    "ocm_v1": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/ConsolidatedOcm"
+                      }
+                    },
+                    "ocm_v2": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/ConsolidatedOcmV2"
+                      }
+                    },
+                    "conjunctionDataEvent": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/ConjunctionDataEvent"
+                      }
+                    },
+                    "tipReports": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/TipReport"
+                      }
+                    },
+                    "anomalyReport": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/AnomalyReport"
+                      }
+                    },
+                    "tracsscat": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/TracssCat"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "No Content - request was valid, but no messages returned, either due to an empty topic, or no messages belonged to the operator",
+            "content": {
+              "application/json": {}
+            }
+          },
+          "401": {
+            "description": "Unauthorized - There was a problem with the authorization token passed to the API call",
+            "content": {
+              "text/plain": {}
+            }
+          }
+        },
+        "security": [
+          {
+            "Authorization": []
+          }
+        ]
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "TracssCdm": {
+        "type": "object",
+        "properties": {
+          "correlationId": {
+            "type": "string"
+          },
+          "batchId": {
+            "type": "string"
+          },
+          "runId": {
+            "type": "string"
+          },
+          "counter": {
+            "type": "string"
+          },
+          "ocmMessageId": {
+            "type": "string"
+          },
+          "ccsdsCdmVersVers": {
+            "type": "string"
+          },
+          "creationDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "originator": {
+            "type": "string"
+          },
+          "messageFor": {
+            "type": "string"
+          },
+          "messageId": {
+            "type": "string"
+          },
+          "screeningOption": {
+            "type": "string"
+          },
+          "tca": {
+            "type": "string"
+          },
+          "startScreeningPeriod": {
+            "type": "string"
+          },
+          "stopScreeningPeriod": {
+            "type": "string"
+          },
+          "screenVolumeFrame": {
+            "type": "string"
+          },
+          "missDistanceValue": {
+            "type": "string"
+          },
+          "missDistanceUnit": {
+            "type": "string"
+          },
+          "relativeSpeedValue": {
+            "type": "string"
+          },
+          "relativeSpeedUnit": {
+            "type": "string"
+          },
+          "relativePositionRValue": {
+            "type": "string"
+          },
+          "relativePositionRUnit": {
+            "type": "string"
+          },
+          "relativePositionTValue": {
+            "type": "string"
+          },
+          "relativePositionTUnit": {
+            "type": "string"
+          },
+          "relativePositionNValue": {
+            "type": "string"
+          },
+          "relativePositionNUnit": {
+            "type": "string"
+          },
+          "relativeVelocityRValue": {
+            "type": "string"
+          },
+          "relativeVelocityRUnit": {
+            "type": "string"
+          },
+          "relativeVelocityTValue": {
+            "type": "string"
+          },
+          "relativeVelocityTUnit": {
+            "type": "string"
+          },
+          "relativeVelocityNValue": {
+            "type": "string"
+          },
+          "relativeVelocityNUnit": {
+            "type": "string"
+          },
+          "collisionProbability": {
+            "type": "number",
+            "format": "double"
+          },
+          "collisionProbabilityMethod": {
+            "type": "string"
+          },
+          "object1Object": {
+            "type": "string"
+          },
+          "object1ObjectDesignator": {
+            "type": "string"
+          },
+          "object1CatalogName": {
+            "type": "string"
+          },
+          "object1ObjectName": {
+            "type": "string"
+          },
+          "object1InternationalDesignator": {
+            "type": "string"
+          },
+          "object1EphemerisName": {
+            "type": "string"
+          },
+          "object1CovarianceMethod": {
+            "type": "string"
+          },
+          "object1Maneuverable": {
+            "type": "string"
+          },
+          "object1RefFrame": {
+            "type": "string"
+          },
+          "object1GravityModel": {
+            "type": "string"
+          },
+          "object1AtmosphericModel": {
+            "type": "string"
+          },
+          "object1NBodyPerturbations": {
+            "type": "string"
+          },
+          "object1SolarRadPressure": {
+            "type": "string"
+          },
+          "object1EarthTides": {
+            "type": "string"
+          },
+          "object1IntrackThrust": {
+            "type": "string"
+          },
+          "object1CovarianceScaleFactor": {
+            "type": "string"
+          },
+          "object1ExclusionVolumeRadiusValue": {
+            "type": "string"
+          },
+          "object1ExclusionVolumeRadiusUnit": {
+            "type": "string"
+          },
+          "object1TimeLastobStart": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "object1TimeLastobEnd": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "object1RecommendedODSpanValue": {
+            "type": "string"
+          },
+          "object1RecommendedODSpanUnit": {
+            "type": "string"
+          },
+          "object1ActualODSpanValue": {
+            "type": "string"
+          },
+          "object1ActualODSpanUnit": {
+            "type": "string"
+          },
+          "object1ObsAvailable": {
+            "type": "string"
+          },
+          "object1ObsUsed": {
+            "type": "string"
+          },
+          "object1TracksAvailable": {
+            "type": "string"
+          },
+          "object1TracksUsed": {
+            "type": "string"
+          },
+          "object1ResidualsAcceptedValue": {
+            "type": "string"
+          },
+          "object1ResidualsAcceptedUnit": {
+            "type": "string"
+          },
+          "object1WeightedRms": {
+            "type": "string"
+          },
+          "object1ApogeeAltitudeValue": {
+            "type": "string"
+          },
+          "object1ApogeeAltitudeUnit": {
+            "type": "string"
+          },
+          "object1PerigeeAltitudeValue": {
+            "type": "string"
+          },
+          "object1PerigeeAltitudeUnit": {
+            "type": "string"
+          },
+          "object1InclinationValue": {
+            "type": "string"
+          },
+          "object1InclinationUnit": {
+            "type": "string"
+          },
+          "object1AreaPcValue": {
+            "type": "string"
+          },
+          "object1AreaPcUnit": {
+            "type": "string"
+          },
+          "object1CdAreaOverMassValue": {
+            "type": "string"
+          },
+          "object1CdAreaOverMassUnit": {
+            "type": "string"
+          },
+          "object1CrAreaOverMassValue": {
+            "type": "string"
+          },
+          "object1CrAreaOverMassUnit": {
+            "type": "string"
+          },
+          "object1ThrustAccelerationValue": {
+            "type": "string"
+          },
+          "object1ThrustAccelerationUnit": {
+            "type": "string"
+          },
+          "object1SedrValue": {
+            "type": "string"
+          },
+          "object1SedrUnit": {
+            "type": "string"
+          },
+          "object1XValue": {
+            "type": "string"
+          },
+          "object1XUnit": {
+            "type": "string"
+          },
+          "object1YValue": {
+            "type": "string"
+          },
+          "object1YUnit": {
+            "type": "string"
+          },
+          "object1ZValue": {
+            "type": "string"
+          },
+          "object1ZUnit": {
+            "type": "string"
+          },
+          "object1XDotValue": {
+            "type": "string"
+          },
+          "object1XDotUnit": {
+            "type": "string"
+          },
+          "object1YDotValue": {
+            "type": "string"
+          },
+          "object1YDotUnit": {
+            "type": "string"
+          },
+          "object1ZDotValue": {
+            "type": "string"
+          },
+          "object1ZDotUnit": {
+            "type": "string"
+          },
+          "object1DcpDensityForecastUncertainty": {
+            "type": "string"
+          },
+          "object1DcpSensitivityVectorRtnPosValue": {
+            "type": "string"
+          },
+          "object1DcpSensitivityVectorRtnPosUnit": {
+            "type": "string"
+          },
+          "object1DcpSensitivityVectorRtnVelValue": {
+            "type": "string"
+          },
+          "object1DcpSensitivityVectorRtnVelUnit": {
+            "type": "string"
+          },
+          "object1CrRValue": {
+            "type": "string"
+          },
+          "object1CrRUnit": {
+            "type": "string"
+          },
+          "object1CtRValue": {
+            "type": "string"
+          },
+          "object1CtRUnit": {
+            "type": "string"
+          },
+          "object1CtTValue": {
+            "type": "string"
+          },
+          "object1CtTUnit": {
+            "type": "string"
+          },
+          "object1CnRValue": {
+            "type": "string"
+          },
+          "object1CnRUnit": {
+            "type": "string"
+          },
+          "object1CnTValue": {
+            "type": "string"
+          },
+          "object1CnTUnit": {
+            "type": "string"
+          },
+          "object1CnNValue": {
+            "type": "string"
+          },
+          "object1CnNUnit": {
+            "type": "string"
+          },
+          "object1CrdotRValue": {
+            "type": "string"
+          },
+          "object1CrdotRUnit": {
+            "type": "string"
+          },
+          "object1CrdotTValue": {
+            "type": "string"
+          },
+          "object1CrdotTUnit": {
+            "type": "string"
+          },
+          "object1CrdotNValue": {
+            "type": "string"
+          },
+          "object1CrdotNUnit": {
+            "type": "string"
+          },
+          "object1CrdotRDotValue": {
+            "type": "string"
+          },
+          "object1CrdotRDotUnit": {
+            "type": "string"
+          },
+          "object1CtdotRValue": {
+            "type": "string"
+          },
+          "object1CtdotRUnit": {
+            "type": "string"
+          },
+          "object1CtdotTValue": {
+            "type": "string"
+          },
+          "object1CtdotTUnit": {
+            "type": "string"
+          },
+          "object1CtdotNValue": {
+            "type": "string"
+          },
+          "object1CtdotNUnit": {
+            "type": "string"
+          },
+          "object1CtdotRDotValue": {
+            "type": "string"
+          },
+          "object1CtdotRDotUnit": {
+            "type": "string"
+          },
+          "object1CtdotTDotValue": {
+            "type": "string"
+          },
+          "object1CtdotTDotUnit": {
+            "type": "string"
+          },
+          "object1CndotRValue": {
+            "type": "string"
+          },
+          "object1CndotRUnit": {
+            "type": "string"
+          },
+          "object1CndotTValue": {
+            "type": "string"
+          },
+          "object1CndotTUnit": {
+            "type": "string"
+          },
+          "object1CndotNValue": {
+            "type": "string"
+          },
+          "object1CndotNUnit": {
+            "type": "string"
+          },
+          "object1CndotRDotValue": {
+            "type": "string"
+          },
+          "object1CndotRDotUnit": {
+            "type": "string"
+          },
+          "object1CndotTDotValue": {
+            "type": "string"
+          },
+          "object1CndotTDotUnit": {
+            "type": "string"
+          },
+          "object1CndotNDotValue": {
+            "type": "string"
+          },
+          "object1CndotNDotUnit": {
+            "type": "string"
+          },
+          "object1CdrgRValue": {
+            "type": "string"
+          },
+          "object1CdrgRUnit": {
+            "type": "string"
+          },
+          "object1CdrgTValue": {
+            "type": "string"
+          },
+          "object1CdrgTUnit": {
+            "type": "string"
+          },
+          "object1CdrgNValue": {
+            "type": "string"
+          },
+          "object1CdrgNUnit": {
+            "type": "string"
+          },
+          "object1CdrgRDotValue": {
+            "type": "string"
+          },
+          "object1CdrgRDotUnit": {
+            "type": "string"
+          },
+          "object1CdrgTDotValue": {
+            "type": "string"
+          },
+          "object1CdrgTDotUnit": {
+            "type": "string"
+          },
+          "object1CdrgNDotValue": {
+            "type": "string"
+          },
+          "object1CdrgNDotUnit": {
+            "type": "string"
+          },
+          "object1CdrgDrgValue": {
+            "type": "string"
+          },
+          "object1CdrgDrgUnit": {
+            "type": "string"
+          },
+          "object1CsrpRValue": {
+            "type": "string"
+          },
+          "object1CsrpRUnit": {
+            "type": "string"
+          },
+          "object1CsrpTValue": {
+            "type": "string"
+          },
+          "object1CsrpTUnit": {
+            "type": "string"
+          },
+          "object1CsrpNValue": {
+            "type": "string"
+          },
+          "object1CsrpNUnit": {
+            "type": "string"
+          },
+          "object1CsrpRdotValue": {
+            "type": "string"
+          },
+          "object1CsrpRdotUnit": {
+            "type": "string"
+          },
+          "object1CsrpTdotValue": {
+            "type": "string"
+          },
+          "object1CsrpTdotUnit": {
+            "type": "string"
+          },
+          "object1CsrpNdotValue": {
+            "type": "string"
+          },
+          "object1CsrpNdotUnit": {
+            "type": "string"
+          },
+          "object1CsrpDrgValue": {
+            "type": "string"
+          },
+          "object1CsrpDrgUnit": {
+            "type": "string"
+          },
+          "object1CsrpSrpValue": {
+            "type": "string"
+          },
+          "object1CsrpSrpUnit": {
+            "type": "string"
+          },
+          "object1OnorbitClassificationMarking": {
+            "type": "string"
+          },
+          "object1OnorbitCategory": {
+            "type": "string"
+          },
+          "object1OnorbitLifetimeYears": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "object1OnorbitAltName": {
+            "type": "string"
+          },
+          "object1OnorbitDecayDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "object1OnorbitOrigin": {
+            "type": "string"
+          },
+          "object1OnorbitManeuverable": {
+            "type": "string"
+          },
+          "object1OnorbitStatus": {
+            "type": "string"
+          },
+          "object1OperatorPhone": {
+            "type": "string"
+          },
+          "object1OperatorPosition": {
+            "type": "string"
+          },
+          "object1OperatorEmail": {
+            "type": "string"
+          },
+          "object1OperatorOrganization": {
+            "type": "string"
+          },
+          "object1ScreenVolumeShape": {
+            "type": "string"
+          },
+          "object1ScreenVolumeXValue": {
+            "type": "string"
+          },
+          "object1ScreenVolumeXUnit": {
+            "type": "string"
+          },
+          "object1ScreenVolumeYValue": {
+            "type": "string"
+          },
+          "object1ScreenVolumeYUnit": {
+            "type": "string"
+          },
+          "object1ScreenVolumeZValue": {
+            "type": "string"
+          },
+          "object1ScreenVolumeZUnit": {
+            "type": "string"
+          },
+          "object1Type": {
+            "type": "string"
+          },
+          "object2Object": {
+            "type": "string"
+          },
+          "object2ObjectDesignator": {
+            "type": "string"
+          },
+          "object2CatalogName": {
+            "type": "string"
+          },
+          "object2ObjectName": {
+            "type": "string"
+          },
+          "object2InternationalDesignator": {
+            "type": "string"
+          },
+          "object2EphemerisName": {
+            "type": "string"
+          },
+          "object2CovarianceMethod": {
+            "type": "string"
+          },
+          "object2Maneuverable": {
+            "type": "string"
+          },
+          "object2RefFrame": {
+            "type": "string"
+          },
+          "object2GravityModel": {
+            "type": "string"
+          },
+          "object2AtmosphericModel": {
+            "type": "string"
+          },
+          "object2NBodyPerturbations": {
+            "type": "string"
+          },
+          "object2SolarRadPressure": {
+            "type": "string"
+          },
+          "object2EarthTides": {
+            "type": "string"
+          },
+          "object2IntrackThrust": {
+            "type": "string"
+          },
+          "object2CovarianceScaleFactor": {
+            "type": "string"
+          },
+          "object2ExclusionVolumeRadiusValue": {
+            "type": "string"
+          },
+          "object2ExclusionVolumeRadiusUnit": {
+            "type": "string"
+          },
+          "object2TimeLastobStart": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "object2TimeLastobEnd": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "object2RecommendedODSpanValue": {
+            "type": "string"
+          },
+          "object2RecommendedODSpanUnit": {
+            "type": "string"
+          },
+          "object2ActualODSpanValue": {
+            "type": "string"
+          },
+          "object2ActualODSpanUnit": {
+            "type": "string"
+          },
+          "object2ObsAvailable": {
+            "type": "string"
+          },
+          "object2ObsUsed": {
+            "type": "string"
+          },
+          "object2TracksAvailable": {
+            "type": "string"
+          },
+          "object2TracksUsed": {
+            "type": "string"
+          },
+          "object2ResidualsAcceptedValue": {
+            "type": "string"
+          },
+          "object2ResidualsAcceptedUnit": {
+            "type": "string"
+          },
+          "object2WeightedRms": {
+            "type": "string"
+          },
+          "object2ApogeeAltitudeValue": {
+            "type": "string"
+          },
+          "object2ApogeeAltitudeUnit": {
+            "type": "string"
+          },
+          "object2PerigeeAltitudeValue": {
+            "type": "string"
+          },
+          "object2PerigeeAltitudeUnit": {
+            "type": "string"
+          },
+          "object2InclinationValue": {
+            "type": "string"
+          },
+          "object2InclinationUnit": {
+            "type": "string"
+          },
+          "object2AreaPcValue": {
+            "type": "string"
+          },
+          "object2AreaPcUnit": {
+            "type": "string"
+          },
+          "object2CdAreaOverMassValue": {
+            "type": "string"
+          },
+          "object2CdAreaOverMassUnit": {
+            "type": "string"
+          },
+          "object2CrAreaOverMassValue": {
+            "type": "string"
+          },
+          "object2CrAreaOverMassUnit": {
+            "type": "string"
+          },
+          "object2ThrustAccelerationValue": {
+            "type": "string"
+          },
+          "object2ThrustAccelerationUnit": {
+            "type": "string"
+          },
+          "object2SedrValue": {
+            "type": "string"
+          },
+          "object2SedrUnit": {
+            "type": "string"
+          },
+          "object2XValue": {
+            "type": "string"
+          },
+          "object2XUnit": {
+            "type": "string"
+          },
+          "object2YValue": {
+            "type": "string"
+          },
+          "object2YUnit": {
+            "type": "string"
+          },
+          "object2ZValue": {
+            "type": "string"
+          },
+          "object2ZUnit": {
+            "type": "string"
+          },
+          "object2XDotValue": {
+            "type": "string"
+          },
+          "object2XDotUnit": {
+            "type": "string"
+          },
+          "object2YDotValue": {
+            "type": "string"
+          },
+          "object2YDotUnit": {
+            "type": "string"
+          },
+          "object2ZDotValue": {
+            "type": "string"
+          },
+          "object2ZDotUnit": {
+            "type": "string"
+          },
+          "object2DcpDensityForecastUncertainty": {
+            "type": "string"
+          },
+          "object2DcpSensitivityVectorRtnPosValue": {
+            "type": "string"
+          },
+          "object2DcpSensitivityVectorRtnPosUnit": {
+            "type": "string"
+          },
+          "object2DcpSensitivityVectorRtnVelValue": {
+            "type": "string"
+          },
+          "object2DcpSensitivityVectorRtnVelUnit": {
+            "type": "string"
+          },
+          "object2CrRValue": {
+            "type": "string"
+          },
+          "object2CrRUnit": {
+            "type": "string"
+          },
+          "object2CtRValue": {
+            "type": "string"
+          },
+          "object2CtRUnit": {
+            "type": "string"
+          },
+          "object2CtTValue": {
+            "type": "string"
+          },
+          "object2CtTUnit": {
+            "type": "string"
+          },
+          "object2CnRValue": {
+            "type": "string"
+          },
+          "object2CnRUnit": {
+            "type": "string"
+          },
+          "object2CnTValue": {
+            "type": "string"
+          },
+          "object2CnTUnit": {
+            "type": "string"
+          },
+          "object2CnNValue": {
+            "type": "string"
+          },
+          "object2CnNUnit": {
+            "type": "string"
+          },
+          "object2CrdotRValue": {
+            "type": "string"
+          },
+          "object2CrdotRUnit": {
+            "type": "string"
+          },
+          "object2CrdotTValue": {
+            "type": "string"
+          },
+          "object2CrdotTUnit": {
+            "type": "string"
+          },
+          "object2CrdotNValue": {
+            "type": "string"
+          },
+          "object2CrdotNUnit": {
+            "type": "string"
+          },
+          "object2CrdotRDotValue": {
+            "type": "string"
+          },
+          "object2CrdotRDotUnit": {
+            "type": "string"
+          },
+          "object2CtdotRValue": {
+            "type": "string"
+          },
+          "object2CtdotRUnit": {
+            "type": "string"
+          },
+          "object2CtdotTValue": {
+            "type": "string"
+          },
+          "object2CtdotTUnit": {
+            "type": "string"
+          },
+          "object2CtdotNValue": {
+            "type": "string"
+          },
+          "object2CtdotNUnit": {
+            "type": "string"
+          },
+          "object2CtdotRDotValue": {
+            "type": "string"
+          },
+          "object2CtdotRDotUnit": {
+            "type": "string"
+          },
+          "object2CtdotTDotValue": {
+            "type": "string"
+          },
+          "object2CtdotTDotUnit": {
+            "type": "string"
+          },
+          "object2CndotRValue": {
+            "type": "string"
+          },
+          "object2CndotRUnit": {
+            "type": "string"
+          },
+          "object2CndotTValue": {
+            "type": "string"
+          },
+          "object2CndotTUnit": {
+            "type": "string"
+          },
+          "object2CndotNValue": {
+            "type": "string"
+          },
+          "object2CndotNUnit": {
+            "type": "string"
+          },
+          "object2CndotRDotValue": {
+            "type": "string"
+          },
+          "object2CndotRDotUnit": {
+            "type": "string"
+          },
+          "object2CndotTDotValue": {
+            "type": "string"
+          },
+          "object2CndotTDotUnit": {
+            "type": "string"
+          },
+          "object2CndotNDotValue": {
+            "type": "string"
+          },
+          "object2CndotNDotUnit": {
+            "type": "string"
+          },
+          "object2CdrgRValue": {
+            "type": "string"
+          },
+          "object2CdrgRUnit": {
+            "type": "string"
+          },
+          "object2CdrgTValue": {
+            "type": "string"
+          },
+          "object2CdrgTUnit": {
+            "type": "string"
+          },
+          "object2CdrgNValue": {
+            "type": "string"
+          },
+          "object2CdrgNUnit": {
+            "type": "string"
+          },
+          "object2CdrgRDotValue": {
+            "type": "string"
+          },
+          "object2CdrgRDotUnit": {
+            "type": "string"
+          },
+          "object2CdrgTDotValue": {
+            "type": "string"
+          },
+          "object2CdrgTDotUnit": {
+            "type": "string"
+          },
+          "object2CdrgNDotValue": {
+            "type": "string"
+          },
+          "object2CdrgNDotUnit": {
+            "type": "string"
+          },
+          "object2CdrgDrgValue": {
+            "type": "string"
+          },
+          "object2CdrgDrgUnit": {
+            "type": "string"
+          },
+          "object2CsrpRValue": {
+            "type": "string"
+          },
+          "object2CsrpRUnit": {
+            "type": "string"
+          },
+          "object2CsrpTValue": {
+            "type": "string"
+          },
+          "object2CsrpTUnit": {
+            "type": "string"
+          },
+          "object2CsrpNValue": {
+            "type": "string"
+          },
+          "object2CsrpNUnit": {
+            "type": "string"
+          },
+          "object2CsrpRdotValue": {
+            "type": "string"
+          },
+          "object2CsrpRdotUnit": {
+            "type": "string"
+          },
+          "object2CsrpTdotValue": {
+            "type": "string"
+          },
+          "object2CsrpTdotUnit": {
+            "type": "string"
+          },
+          "object2CsrpNdotValue": {
+            "type": "string"
+          },
+          "object2CsrpNdotUnit": {
+            "type": "string"
+          },
+          "object2CsrpDrgValue": {
+            "type": "string"
+          },
+          "object2CsrpDrgUnit": {
+            "type": "string"
+          },
+          "object2CsrpSrpValue": {
+            "type": "string"
+          },
+          "object2CsrpSrpUnit": {
+            "type": "string"
+          },
+          "object2OnorbitClassificationMarking": {
+            "type": "string"
+          },
+          "object2OnorbitCategory": {
+            "type": "string"
+          },
+          "object2OnorbitLifetimeYears": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "object2OnorbitAltName": {
+            "type": "string"
+          },
+          "object2OnorbitDecayDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "object2OnorbitOrigin": {
+            "type": "string"
+          },
+          "object2OnorbitManeuverable": {
+            "type": "string"
+          },
+          "object2OnorbitStatus": {
+            "type": "string"
+          },
+          "object2OperatorPhone": {
+            "type": "string"
+          },
+          "object2OperatorPosition": {
+            "type": "string"
+          },
+          "object2OperatorEmail": {
+            "type": "string"
+          },
+          "object2OperatorOrganization": {
+            "type": "string"
+          },
+          "object2ScreenVolumeShape": {
+            "type": "string"
+          },
+          "object2ScreenVolumeX": {
+            "type": "string"
+          },
+          "object2ScreenVolumeY": {
+            "type": "string"
+          },
+          "object2ScreenVolumeZ": {
+            "type": "string"
+          },
+          "object2Type": {
+            "type": "string"
+          },
+          "orbitCenter": {
+            "type": "string"
+          },
+          "conjunctionId": {
+            "type": "string"
+          },
+          "offset": {
+            "type": "integer",
+            "format": "int64"
+          }
+        }
+      },
+      "TracssCdmV2": {
+        "type": "object",
+        "properties": {
+          "correlationId": {
+            "type": "string"
+          },
+          "batchId": {
+            "type": "string"
+          },
+          "runId": {
+            "type": "string"
+          },
+          "counter": {
+            "type": "string"
+          },
+          "ocmMessageId": {
+            "type": "string"
+          },
+          "ccsdsCdmVers": {
+            "type": "string"
+          },
+          "classification": {
+            "type": "string"
+          },
+          "creationDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "originator": {
+            "type": "string"
+          },
+          "messageFor": {
+            "type": "string"
+          },
+          "messageId": {
+            "type": "string"
+          },
+          "conjunctionId": {
+            "type": "string"
+          },
+          "tca": {
+            "type": "string"
+          },
+          "missDistanceValue": {
+            "type": "string"
+          },
+          "missDistanceUnit": {
+            "type": "string"
+          },
+          "mahalanobisDistanceValue": {
+            "type": "string"
+          },
+          "mahalanobisDistanceUnit": {
+            "type": "string"
+          },
+          "relativeSpeedValue": {
+            "type": "string"
+          },
+          "relativeSpeedUnit": {
+            "type": "string"
+          },
+          "relativePositionRValue": {
+            "type": "string"
+          },
+          "relativePositionRUnit": {
+            "type": "string"
+          },
+          "relativePositionTValue": {
+            "type": "string"
+          },
+          "relativePositionTUnit": {
+            "type": "string"
+          },
+          "relativePositionNValue": {
+            "type": "string"
+          },
+          "relativePositionNUnit": {
+            "type": "string"
+          },
+          "relativeVelocityRValue": {
+            "type": "string"
+          },
+          "relativeVelocityRUnit": {
+            "type": "string"
+          },
+          "relativeVelocityTValue": {
+            "type": "string"
+          },
+          "relativeVelocityTUnit": {
+            "type": "string"
+          },
+          "relativeVelocityNValue": {
+            "type": "string"
+          },
+          "relativeVelocityNUnit": {
+            "type": "string"
+          },
+          "approachAngleValue": {
+            "type": "string"
+          },
+          "approachAngleUnit": {
+            "type": "string"
+          },
+          "startScreeningPeriod": {
+            "type": "string"
+          },
+          "stopScreeningPeriod": {
+            "type": "string"
+          },
+          "screenVolumeFrame": {
+            "type": "string"
+          },
+          "screenVolumeShape": {
+            "type": "string"
+          },
+          "screenVolumeXValue": {
+            "type": "string"
+          },
+          "screenVolumeXUnit": {
+            "type": "string"
+          },
+          "screenVolumeYValue": {
+            "type": "string"
+          },
+          "screenVolumeYUnit": {
+            "type": "string"
+          },
+          "screenVolumeZValue": {
+            "type": "string"
+          },
+          "screenVolumeZUnit": {
+            "type": "string"
+          },
+          "screenPcThreshold": {
+            "type": "string"
+          },
+          "collisionProbabilityMethod": {
+            "type": "string"
+          },
+          "collisionMaxProbability": {
+            "type": "string"
+          },
+          "collisionMaxPcMethod": {
+            "type": "string"
+          },
+          "object1Object": {
+            "type": "string"
+          },
+          "object1ObjectDesignator": {
+            "type": "string"
+          },
+          "object1CatalogName": {
+            "type": "string"
+          },
+          "object1ObjectName": {
+            "type": "string"
+          },
+          "object1InternationalDesignator": {
+            "type": "string"
+          },
+          "object1ObjectType": {
+            "type": "string"
+          },
+          "object1OpsStatus": {
+            "type": "string"
+          },
+          "object1OperatorOrganization": {
+            "type": "string"
+          },
+          "object1OperatorPhone": {
+            "type": "string"
+          },
+          "object1OperatorEmail": {
+            "type": "string"
+          },
+          "object1EphemerisName": {
+            "type": "string"
+          },
+          "object1CovarianceMethod": {
+            "type": "string"
+          },
+          "object1Maneuverable": {
+            "type": "string"
+          },
+          "object1OrbitCenter": {
+            "type": "string"
+          },
+          "object1RefFrame": {
+            "type": "string"
+          },
+          "object1GravityModel": {
+            "type": "string"
+          },
+          "object1AtmosphericModel": {
+            "type": "string"
+          },
+          "object1NBodyPerturbations": {
+            "type": "string"
+          },
+          "object1SolarRadPressure": {
+            "type": "string"
+          },
+          "object1EarthTides": {
+            "type": "string"
+          },
+          "object1IntrackThrust": {
+            "type": "string"
+          },
+          "object1TimeLastobStart": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "object1TimeLastobEnd": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "object1RecommendedODSpanValue": {
+            "type": "string"
+          },
+          "object1RecommendedODSpanUnit": {
+            "type": "string"
+          },
+          "object1ActualODSpanValue": {
+            "type": "string"
+          },
+          "object1ActualODSpanUnit": {
+            "type": "string"
+          },
+          "object1ObsAvailable": {
+            "type": "string"
+          },
+          "object1ObsUsed": {
+            "type": "string"
+          },
+          "object1TracksAvailable": {
+            "type": "string"
+          },
+          "object1TracksUsed": {
+            "type": "string"
+          },
+          "object1ResidualsAcceptedValue": {
+            "type": "string"
+          },
+          "object1ResidualsAcceptedUnit": {
+            "type": "string"
+          },
+          "object1WeightedRms": {
+            "type": "string"
+          },
+          "object1AreaPcValue": {
+            "type": "string"
+          },
+          "object1AreaPcUnit": {
+            "type": "string"
+          },
+          "object1MassValue": {
+            "type": "string"
+          },
+          "object1MassUnit": {
+            "type": "string"
+          },
+          "object1HBRValue": {
+            "type": "string"
+          },
+          "object1HBRUnit": {
+            "type": "string"
+          },
+          "object1CdAreaOverMassValue": {
+            "type": "string"
+          },
+          "object1CdAreaOverMassUnit": {
+            "type": "string"
+          },
+          "object1CrAreaOverMassValue": {
+            "type": "string"
+          },
+          "object1CrAreaOverMassUnit": {
+            "type": "string"
+          },
+          "object1ThrustAccelerationValue": {
+            "type": "string"
+          },
+          "object1ThrustAccelerationUnit": {
+            "type": "string"
+          },
+          "object1SedrValue": {
+            "type": "string"
+          },
+          "object1SedrUnit": {
+            "type": "string"
+          },
+          "object1ApoapsisAltitudeValue": {
+            "type": "string"
+          },
+          "object1ApoapsisAltitudeUnit": {
+            "type": "string"
+          },
+          "object1PeriapsisAltitudeValue": {
+            "type": "string"
+          },
+          "object1PeriapsisAltitudeUnit": {
+            "type": "string"
+          },
+          "object1InclinationValue": {
+            "type": "string"
+          },
+          "object1InclinationUnit": {
+            "type": "string"
+          },
+          "object1XValue": {
+            "type": "string"
+          },
+          "object1XUnit": {
+            "type": "string"
+          },
+          "object1YValue": {
+            "type": "string"
+          },
+          "object1YUnit": {
+            "type": "string"
+          },
+          "object1ZValue": {
+            "type": "string"
+          },
+          "object1ZUnit": {
+            "type": "string"
+          },
+          "object1XDotValue": {
+            "type": "string"
+          },
+          "object1XDotUnit": {
+            "type": "string"
+          },
+          "object1YDotValue": {
+            "type": "string"
+          },
+          "object1YDotUnit": {
+            "type": "string"
+          },
+          "object1ZDotValue": {
+            "type": "string"
+          },
+          "object1ZDotUnit": {
+            "type": "string"
+          },
+          "object1CrRValue": {
+            "type": "string"
+          },
+          "object1CrRUnit": {
+            "type": "string"
+          },
+          "object1CtRValue": {
+            "type": "string"
+          },
+          "object1CtRUnit": {
+            "type": "string"
+          },
+          "object1CtTValue": {
+            "type": "string"
+          },
+          "object1CtTUnit": {
+            "type": "string"
+          },
+          "object1CnRValue": {
+            "type": "string"
+          },
+          "object1CnRUnit": {
+            "type": "string"
+          },
+          "object1CnTValue": {
+            "type": "string"
+          },
+          "object1CnTUnit": {
+            "type": "string"
+          },
+          "object1CnNValue": {
+            "type": "string"
+          },
+          "object1CnNUnit": {
+            "type": "string"
+          },
+          "object1CrdotRValue": {
+            "type": "string"
+          },
+          "object1CrdotRUnit": {
+            "type": "string"
+          },
+          "object1CrdotTValue": {
+            "type": "string"
+          },
+          "object1CrdotTUnit": {
+            "type": "string"
+          },
+          "object1CrdotNValue": {
+            "type": "string"
+          },
+          "object1CrdotNUnit": {
+            "type": "string"
+          },
+          "object1CrdotRDotValue": {
+            "type": "string"
+          },
+          "object1CrdotRDotUnit": {
+            "type": "string"
+          },
+          "object1CtdotRValue": {
+            "type": "string"
+          },
+          "object1CtdotRUnit": {
+            "type": "string"
+          },
+          "object1CtdotTValue": {
+            "type": "string"
+          },
+          "object1CtdotTUnit": {
+            "type": "string"
+          },
+          "object1CtdotNValue": {
+            "type": "string"
+          },
+          "object1CtdotNUnit": {
+            "type": "string"
+          },
+          "object1CtdotRDotValue": {
+            "type": "string"
+          },
+          "object1CtdotRDotUnit": {
+            "type": "string"
+          },
+          "object1CtdotTDotValue": {
+            "type": "string"
+          },
+          "object1CtdotTDotUnit": {
+            "type": "string"
+          },
+          "object1CndotRValue": {
+            "type": "string"
+          },
+          "object1CndotRUnit": {
+            "type": "string"
+          },
+          "object1CndotTValue": {
+            "type": "string"
+          },
+          "object1CndotTUnit": {
+            "type": "string"
+          },
+          "object1CndotNValue": {
+            "type": "string"
+          },
+          "object1CndotNUnit": {
+            "type": "string"
+          },
+          "object1CndotRDotValue": {
+            "type": "string"
+          },
+          "object1CndotRDotUnit": {
+            "type": "string"
+          },
+          "object1CndotTDotValue": {
+            "type": "string"
+          },
+          "object1CndotTDotUnit": {
+            "type": "string"
+          },
+          "object1CndotNDotValue": {
+            "type": "string"
+          },
+          "object1CndotNDotUnit": {
+            "type": "string"
+          },
+          "object1DensityForecastUncertainty": {
+            "type": "string"
+          },
+          "object1ScreeningDataSource": {
+            "type": "string"
+          },
+          "object1DcpSensitivityVectorPositionValue": {
+            "type": "string"
+          },
+          "object1DcpSensitivityVectorPositionUnit": {
+            "type": "string"
+          },
+          "object1DcpSensitivityVectorVelocityValue": {
+            "type": "string"
+          },
+          "object1DcpSensitivityVectorVelocityUnit": {
+            "type": "string"
+          },
+          "object2Object": {
+            "type": "string"
+          },
+          "object2ObjectDesignator": {
+            "type": "string"
+          },
+          "object2CatalogName": {
+            "type": "string"
+          },
+          "object2ObjectName": {
+            "type": "string"
+          },
+          "object2InternationalDesignator": {
+            "type": "string"
+          },
+          "object2ObjectType": {
+            "type": "string"
+          },
+          "object2OpsStatus": {
+            "type": "string"
+          },
+          "object2OperatorOrganization": {
+            "type": "string"
+          },
+          "object2OperatorPhone": {
+            "type": "string"
+          },
+          "object2OperatorEmail": {
+            "type": "string"
+          },
+          "object2EphemerisName": {
+            "type": "string"
+          },
+          "object2CovarianceMethod": {
+            "type": "string"
+          },
+          "object2Maneuverable": {
+            "type": "string"
+          },
+          "object2OrbitCenter": {
+            "type": "string"
+          },
+          "object2RefFrame": {
+            "type": "string"
+          },
+          "object2GravityModel": {
+            "type": "string"
+          },
+          "object2AtmosphericModel": {
+            "type": "string"
+          },
+          "object2NBodyPerturbations": {
+            "type": "string"
+          },
+          "object2SolarRadPressure": {
+            "type": "string"
+          },
+          "object2EarthTides": {
+            "type": "string"
+          },
+          "object2IntrackThrust": {
+            "type": "string"
+          },
+          "object2TimeLastobStart": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "object2TimeLastobEnd": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "object2RecommendedODSpanValue": {
+            "type": "string"
+          },
+          "object2RecommendedODSpanUnit": {
+            "type": "string"
+          },
+          "object2ActualODSpanValue": {
+            "type": "string"
+          },
+          "object2ActualODSpanUnit": {
+            "type": "string"
+          },
+          "object2ObsAvailable": {
+            "type": "string"
+          },
+          "object2ObsUsed": {
+            "type": "string"
+          },
+          "object2TracksAvailable": {
+            "type": "string"
+          },
+          "object2TracksUsed": {
+            "type": "string"
+          },
+          "object2ResidualsAcceptedValue": {
+            "type": "string"
+          },
+          "object2ResidualsAcceptedUnit": {
+            "type": "string"
+          },
+          "object2WeightedRms": {
+            "type": "string"
+          },
+          "object2AreaPcValue": {
+            "type": "string"
+          },
+          "object2AreaPcUnit": {
+            "type": "string"
+          },
+          "object2MassValue": {
+            "type": "string"
+          },
+          "object2MassUnit": {
+            "type": "string"
+          },
+          "object2HBRValue": {
+            "type": "string"
+          },
+          "object2HBRUnit": {
+            "type": "string"
+          },
+          "object2CdAreaOverMassValue": {
+            "type": "string"
+          },
+          "object2CdAreaOverMassUnit": {
+            "type": "string"
+          },
+          "object2CrAreaOverMassValue": {
+            "type": "string"
+          },
+          "object2CrAreaOverMassUnit": {
+            "type": "string"
+          },
+          "object2ThrustAccelerationValue": {
+            "type": "string"
+          },
+          "object2ThrustAccelerationUnit": {
+            "type": "string"
+          },
+          "object2SedrValue": {
+            "type": "string"
+          },
+          "object2SedrUnit": {
+            "type": "string"
+          },
+          "object2ApoapsisAltitudeValue": {
+            "type": "string"
+          },
+          "object2ApoapsisAltitudeUnit": {
+            "type": "string"
+          },
+          "object2PeriapsisAltitudeValue": {
+            "type": "string"
+          },
+          "object2PeriapsisAltitudeUnit": {
+            "type": "string"
+          },
+          "object2InclinationValue": {
+            "type": "string"
+          },
+          "object2InclinationUnit": {
+            "type": "string"
+          },
+          "object2XValue": {
+            "type": "string"
+          },
+          "object2XUnit": {
+            "type": "string"
+          },
+          "object2YValue": {
+            "type": "string"
+          },
+          "object2YUnit": {
+            "type": "string"
+          },
+          "object2ZValue": {
+            "type": "string"
+          },
+          "object2ZUnit": {
+            "type": "string"
+          },
+          "object2XDotValue": {
+            "type": "string"
+          },
+          "object2XDotUnit": {
+            "type": "string"
+          },
+          "object2YDotValue": {
+            "type": "string"
+          },
+          "object2YDotUnit": {
+            "type": "string"
+          },
+          "object2ZDotValue": {
+            "type": "string"
+          },
+          "object2ZDotUnit": {
+            "type": "string"
+          },
+          "object2CrRValue": {
+            "type": "string"
+          },
+          "object2CrRUnit": {
+            "type": "string"
+          },
+          "object2CtRValue": {
+            "type": "string"
+          },
+          "object2CtRUnit": {
+            "type": "string"
+          },
+          "object2CtTValue": {
+            "type": "string"
+          },
+          "object2CtTUnit": {
+            "type": "string"
+          },
+          "object2CnRValue": {
+            "type": "string"
+          },
+          "object2CnRUnit": {
+            "type": "string"
+          },
+          "object2CnTValue": {
+            "type": "string"
+          },
+          "object2CnTUnit": {
+            "type": "string"
+          },
+          "object2CnNValue": {
+            "type": "string"
+          },
+          "object2CnNUnit": {
+            "type": "string"
+          },
+          "object2CrdotRValue": {
+            "type": "string"
+          },
+          "object2CrdotRUnit": {
+            "type": "string"
+          },
+          "object2CrdotTValue": {
+            "type": "string"
+          },
+          "object2CrdotTUnit": {
+            "type": "string"
+          },
+          "object2CrdotNValue": {
+            "type": "string"
+          },
+          "object2CrdotNUnit": {
+            "type": "string"
+          },
+          "object2CrdotRDotValue": {
+            "type": "string"
+          },
+          "object2CrdotRDotUnit": {
+            "type": "string"
+          },
+          "object2CtdotRValue": {
+            "type": "string"
+          },
+          "object2CtdotRUnit": {
+            "type": "string"
+          },
+          "object2CtdotTValue": {
+            "type": "string"
+          },
+          "object2CtdotTUnit": {
+            "type": "string"
+          },
+          "object2CtdotNValue": {
+            "type": "string"
+          },
+          "object2CtdotNUnit": {
+            "type": "string"
+          },
+          "object2CtdotRDotValue": {
+            "type": "string"
+          },
+          "object2CtdotRDotUnit": {
+            "type": "string"
+          },
+          "object2CtdotTDotValue": {
+            "type": "string"
+          },
+          "object2CtdotTDotUnit": {
+            "type": "string"
+          },
+          "object2CndotRValue": {
+            "type": "string"
+          },
+          "object2CndotRUnit": {
+            "type": "string"
+          },
+          "object2CndotTValue": {
+            "type": "string"
+          },
+          "object2CndotTUnit": {
+            "type": "string"
+          },
+          "object2CndotNValue": {
+            "type": "string"
+          },
+          "object2CndotNUnit": {
+            "type": "string"
+          },
+          "object2CndotRDotValue": {
+            "type": "string"
+          },
+          "object2CndotRDotUnit": {
+            "type": "string"
+          },
+          "object2CndotTDotValue": {
+            "type": "string"
+          },
+          "object2CndotTDotUnit": {
+            "type": "string"
+          },
+          "object2CndotNDotValue": {
+            "type": "string"
+          },
+          "object2CndotNDotUnit": {
+            "type": "string"
+          },
+          "object2DensityForecastUncertainty": {
+            "type": "string"
+          },
+          "object2ScreeningDataSource": {
+            "type": "string"
+          },
+          "object2DcpSensitivityVectorPositionValue": {
+            "type": "string"
+          },
+          "object2DcpSensitivityVectorPositionUnit": {
+            "type": "string"
+          },
+          "object2DcpSensitivityVectorVelocityValue": {
+            "type": "string"
+          },
+          "object2DcpSensitivityVectorVelocityUnit": {
+            "type": "string"
+          },
+          "userDefinedMeetsAlertableCriteria": {
+            "type": "string"
+          },
+          "userDefinedRunId": {
+            "type": "string"
+          },
+          "userDefinedCorrelationId": {
+            "type": "string"
+          },
+          "userDefinedDilutionStatus": {
+            "type": "string"
+          },
+          "userDefinedDilutionSignificance": {
+            "type": "string"
+          },
+          "userDefinedEnvironmentalImpactFragmentation": {
+            "type": "string"
+          },
+          "userDefinedFragmentationModel": {
+            "type": "string"
+          },
+          "offset": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "collisionProbability": {
+            "type": "number"
+          }
+        }
+      },
+      "ConsolidatedOcm": {
+        "type": "object",
+        "properties": {
+          "ccsdsOcmVersion": {
+            "type": "string"
+          },
+          "classification": {
+            "type": "string"
+          },
+          "creationDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "originator": {
+            "type": "string"
+          },
+          "messageId": {
+            "type": "string"
+          },
+          "objectName": {
+            "type": "string"
+          },
+          "internationalDesignator": {
+            "type": "string"
+          },
+          "catalogName": {
+            "type": "string"
+          },
+          "objectDesignator": {
+            "type": "string"
+          },
+          "originatorPoc": {
+            "type": "string"
+          },
+          "originatorPosition": {
+            "type": "string"
+          },
+          "originatorPhone": {
+            "type": "string"
+          },
+          "originatorEmail": {
+            "type": "string"
+          },
+          "originatorAddress": {
+            "type": "string"
+          },
+          "techOrg": {
+            "type": "string"
+          },
+          "techPoc": {
+            "type": "string"
+          },
+          "techPosition": {
+            "type": "string"
+          },
+          "techPhone": {
+            "type": "string"
+          },
+          "techEmail": {
+            "type": "string"
+          },
+          "techAddress": {
+            "type": "string"
+          },
+          "prevMessageId": {
+            "type": "string"
+          },
+          "nextMessageId": {
+            "type": "string"
+          },
+          "admMsgLink": {
+            "type": "string"
+          },
+          "cdmMsgLink": {
+            "type": "string"
+          },
+          "prmMsgLink": {
+            "type": "string"
+          },
+          "rdmMsgLink": {
+            "type": "string"
+          },
+          "tdmMsgLink": {
+            "type": "string"
+          },
+          "operator": {
+            "type": "string"
+          },
+          "owner": {
+            "type": "string"
+          },
+          "country": {
+            "type": "string"
+          },
+          "constellation": {
+            "type": "string"
+          },
+          "objectType": {
+            "type": "string"
+          },
+          "timeSystem": {
+            "type": "string"
+          },
+          "epochT0": {
+            "type": "string"
+          },
+          "orbitCategory": {
+            "type": "string"
+          },
+          "sclkOffsetAtEpoch": {
+            "type": "string"
+          },
+          "sclkSecPerSiSec": {
+            "type": "string"
+          },
+          "previousMessageEpoch": {
+            "type": "string"
+          },
+          "nextMessageEpoch": {
+            "type": "string"
+          },
+          "startTime": {
+            "type": "string"
+          },
+          "stopTime": {
+            "type": "string"
+          },
+          "timeSpan": {
+            "type": "string"
+          },
+          "taimUtcAtT0": {
+            "type": "string"
+          },
+          "nextLeapEpoch": {
+            "type": "string"
+          },
+          "nextLeapTaimUtc": {
+            "type": "string"
+          },
+          "ut1MUtcAtT0": {
+            "type": "string"
+          },
+          "eopSource": {
+            "type": "string"
+          },
+          "interpMethodEop": {
+            "type": "string"
+          },
+          "celestialSource": {
+            "type": "string"
+          },
+          "manufacturer": {
+            "type": "string"
+          },
+          "busModel": {
+            "type": "string"
+          },
+          "dockedWith": {
+            "type": "string"
+          },
+          "dragConstArea": {
+            "type": "string"
+          },
+          "dragCoeff": {
+            "type": "number",
+            "format": "double"
+          },
+          "dragUncertainty": {
+            "type": "number",
+            "format": "double"
+          },
+          "initialWetMass": {
+            "type": "string"
+          },
+          "wetMass": {
+            "type": "string"
+          },
+          "dryMass": {
+            "type": "string"
+          },
+          "oebParentFrame": {
+            "type": "string"
+          },
+          "oebParentFrameEpoch": {
+            "type": "string"
+          },
+          "oebQ1": {
+            "type": "string"
+          },
+          "oebQ2": {
+            "type": "string"
+          },
+          "oebQ3": {
+            "type": "string"
+          },
+          "oebQC": {
+            "type": "string"
+          },
+          "oebMax": {
+            "type": "string"
+          },
+          "oebInt": {
+            "type": "string"
+          },
+          "oebMin": {
+            "type": "string"
+          },
+          "areaAlongOebMax": {
+            "type": "string"
+          },
+          "areaAlongOebInt": {
+            "type": "string"
+          },
+          "areaAlongOebMin": {
+            "type": "string"
+          },
+          "areaMinForPc": {
+            "type": "string"
+          },
+          "areaMaxForPc": {
+            "type": "string"
+          },
+          "areaTypForPc": {
+            "type": "string"
+          },
+          "rcs": {
+            "type": "string"
+          },
+          "rcsMin": {
+            "type": "string"
+          },
+          "rcsMax": {
+            "type": "string"
+          },
+          "srpConstArea": {
+            "type": "string"
+          },
+          "solarRadCoeff": {
+            "type": "string"
+          },
+          "solarRadUncertainty": {
+            "type": "string"
+          },
+          "vmAbsolute": {
+            "type": "string"
+          },
+          "vmApparentMin": {
+            "type": "string"
+          },
+          "vmApparent": {
+            "type": "string"
+          },
+          "vmApparentMax": {
+            "type": "string"
+          },
+          "reflectance": {
+            "type": "string"
+          },
+          "attControlMode": {
+            "type": "string"
+          },
+          "attActuatorType": {
+            "type": "string"
+          },
+          "attKnowledge": {
+            "type": "string"
+          },
+          "attControl": {
+            "type": "string"
+          },
+          "attPointing": {
+            "type": "string"
+          },
+          "avgManeuverFreq": {
+            "type": "string"
+          },
+          "maxThrust": {
+            "type": "string"
+          },
+          "dvBol": {
+            "type": "string"
+          },
+          "dvRemaining": {
+            "type": "string"
+          },
+          "atmosphericModel": {
+            "type": "string"
+          },
+          "gravityModel": {
+            "type": "string"
+          },
+          "equatorialRadius": {
+            "type": "number",
+            "format": "double"
+          },
+          "gm": {
+            "type": "string"
+          },
+          "centralBodyRotation": {
+            "type": "number",
+            "format": "double"
+          },
+          "oblateFlattening": {
+            "type": "number",
+            "format": "double"
+          },
+          "oceanTidesModel": {
+            "type": "string"
+          },
+          "solidTidesModel": {
+            "type": "string"
+          },
+          "reductionTheory": {
+            "type": "string"
+          },
+          "albedoModel": {
+            "type": "string"
+          },
+          "albedoGridSize": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "shadowModel": {
+            "type": "string"
+          },
+          "shadowBodies": {
+            "type": "string"
+          },
+          "srpModel": {
+            "type": "string"
+          },
+          "swDataSource": {
+            "type": "string"
+          },
+          "swDataEpoch": {
+            "type": "string"
+          },
+          "swInterpMethod": {
+            "type": "string"
+          },
+          "fixedGeomagKp": {
+            "type": "string"
+          },
+          "fixedGeomagAp": {
+            "type": "string"
+          },
+          "fixedGeomagDst": {
+            "type": "string"
+          },
+          "fixedF10P7": {
+            "type": "string"
+          },
+          "fixedF10P7Mean": {
+            "type": "string"
+          },
+          "fixedM10P7": {
+            "type": "string"
+          },
+          "fixedM10P7Mean": {
+            "type": "string"
+          },
+          "fixedS10P7": {
+            "type": "string"
+          },
+          "fixedS10P7Mean": {
+            "type": "string"
+          },
+          "fixedY10P7": {
+            "type": "string"
+          },
+          "fixedY10P7Mean": {
+            "type": "string"
+          },
+          "odId": {
+            "type": "string"
+          },
+          "odPrevId": {
+            "type": "string"
+          },
+          "odMethod": {
+            "type": "string"
+          },
+          "odEpoch": {
+            "type": "string"
+          },
+          "daysSinceFirstObs": {
+            "type": "number",
+            "format": "double"
+          },
+          "daysSinceLastObs": {
+            "type": "number",
+            "format": "double"
+          },
+          "recommendedOdSpan": {
+            "type": "number",
+            "format": "double"
+          },
+          "actualOdSpan": {
+            "type": "number",
+            "format": "double"
+          },
+          "obsAvailable": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "obsUsed": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "tracksAvailable": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "tracksUsed": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "maxObsGap": {
+            "type": "number",
+            "format": "double"
+          },
+          "odEpochElGMAJ": {
+            "type": "number",
+            "format": "double"
+          },
+          "odEpochElGINT": {
+            "type": "number",
+            "format": "double"
+          },
+          "odEpochElGMIN": {
+            "type": "number",
+            "format": "double"
+          },
+          "odMaxPredEigMAJ": {
+            "type": "number",
+            "format": "double"
+          },
+          "odMaxPredEigMIN": {
+            "type": "number",
+            "format": "double"
+          },
+          "odConfidence": {
+            "type": "number",
+            "format": "double"
+          },
+          "gdop": {
+            "type": "number",
+            "format": "double"
+          },
+          "solveN": {
+            "type": "string"
+          },
+          "solveStates": {
+            "type": "string"
+          },
+          "considerN": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "considerParams": {
+            "type": "string"
+          },
+          "sedr": {
+            "type": "string"
+          },
+          "sensorsN": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "sensors": {
+            "type": "string"
+          },
+          "weightedRms": {
+            "type": "string"
+          },
+          "dataTypes": {
+            "type": "string"
+          },
+          "trajectories": {
+            "type": "string"
+          },
+          "covariances": {
+            "type": "string"
+          },
+          "maneuvers": {
+            "type": "string"
+          },
+          "userData": {
+            "type": "string"
+          },
+          "offset": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "ixz": {
+            "type": "string"
+          },
+          "ixx": {
+            "type": "string"
+          },
+          "ixy": {
+            "type": "string"
+          },
+          "izz": {
+            "type": "string"
+          },
+          "iyz": {
+            "type": "string"
+          },
+          "iyy": {
+            "type": "string"
+          },
+          "nbodyPertubationsRaw": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "nbodyPertubations": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "headerComments": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "metaComments": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "alternateNames": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "opsStatus": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "ocmDataElements": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "physComments": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "pertComments": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "odComments": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "userComments": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "ConsolidatedOcmV2": {
+        "type": "object",
+        "properties": {
+          "ccsdsOcmVersion": {
+            "type": "string"
+          },
+          "classification": {
+            "type": "string"
+          },
+          "creationDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "originator": {
+            "type": "string"
+          },
+          "messageId": {
+            "type": "string"
+          },
+          "objectName": {
+            "type": "string"
+          },
+          "internationalDesignator": {
+            "type": "string"
+          },
+          "catalogName": {
+            "type": "string"
+          },
+          "objectDesignator": {
+            "type": "string"
+          },
+          "originatorPoc": {
+            "type": "string"
+          },
+          "originatorPosition": {
+            "type": "string"
+          },
+          "originatorPhone": {
+            "type": "string"
+          },
+          "originatorEmail": {
+            "type": "string"
+          },
+          "originatorAddress": {
+            "type": "string"
+          },
+          "techOrg": {
+            "type": "string"
+          },
+          "techPoc": {
+            "type": "string"
+          },
+          "techPosition": {
+            "type": "string"
+          },
+          "techPhone": {
+            "type": "string"
+          },
+          "techEmail": {
+            "type": "string"
+          },
+          "techAddress": {
+            "type": "string"
+          },
+          "prevMessageId": {
+            "type": "string"
+          },
+          "nextMessageId": {
+            "type": "string"
+          },
+          "admMsgLink": {
+            "type": "string"
+          },
+          "cdmMsgLink": {
+            "type": "string"
+          },
+          "prmMsgLink": {
+            "type": "string"
+          },
+          "rdmMsgLink": {
+            "type": "string"
+          },
+          "tdmMsgLink": {
+            "type": "string"
+          },
+          "operator": {
+            "type": "string"
+          },
+          "owner": {
+            "type": "string"
+          },
+          "country": {
+            "type": "string"
+          },
+          "constellation": {
+            "type": "string"
+          },
+          "objectType": {
+            "type": "string"
+          },
+          "timeSystem": {
+            "type": "string"
+          },
+          "epochT0": {
+            "type": "string"
+          },
+          "opsStatusRaw": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "opsStatus": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "orbitCategory": {
+            "type": "string"
+          },
+          "sclkOffsetAtEpoch": {
+            "type": "string"
+          },
+          "sclkSecPerSiSec": {
+            "type": "string"
+          },
+          "previousMessageEpoch": {
+            "type": "string"
+          },
+          "nextMessageEpoch": {
+            "type": "string"
+          },
+          "startTime": {
+            "type": "string"
+          },
+          "stopTime": {
+            "type": "string"
+          },
+          "timeSpan": {
+            "type": "string"
+          },
+          "taimUtcAtT0": {
+            "type": "string"
+          },
+          "nextLeapEpoch": {
+            "type": "string"
+          },
+          "nextLeapTaimUtc": {
+            "type": "string"
+          },
+          "ut1MUtcAtT0": {
+            "type": "string"
+          },
+          "eopSource": {
+            "type": "string"
+          },
+          "interpMethodEop": {
+            "type": "string"
+          },
+          "celestialSource": {
+            "type": "string"
+          },
+          "manufacturer": {
+            "type": "string"
+          },
+          "busModel": {
+            "type": "string"
+          },
+          "dockedWith": {
+            "type": "string"
+          },
+          "dragConstArea": {
+            "type": "string"
+          },
+          "dragCoeff": {
+            "type": "number",
+            "format": "double"
+          },
+          "dragUncertainty": {
+            "type": "number",
+            "format": "double"
+          },
+          "initialWetMass": {
+            "type": "string"
+          },
+          "wetMass": {
+            "type": "string"
+          },
+          "dryMass": {
+            "type": "string"
+          },
+          "oebParentFrame": {
+            "type": "string"
+          },
+          "oebParentFrameEpoch": {
+            "type": "string"
+          },
+          "oebQ1": {
+            "type": "string"
+          },
+          "oebQ2": {
+            "type": "string"
+          },
+          "oebQ3": {
+            "type": "string"
+          },
+          "oebQC": {
+            "type": "string"
+          },
+          "oebMax": {
+            "type": "string"
+          },
+          "oebInt": {
+            "type": "string"
+          },
+          "oebMin": {
+            "type": "string"
+          },
+          "areaAlongOebMax": {
+            "type": "string"
+          },
+          "areaAlongOebInt": {
+            "type": "string"
+          },
+          "areaAlongOebMin": {
+            "type": "string"
+          },
+          "areaMinForPc": {
+            "type": "string"
+          },
+          "areaMaxForPc": {
+            "type": "string"
+          },
+          "areaTypForPc": {
+            "type": "string"
+          },
+          "rcs": {
+            "type": "string"
+          },
+          "rcsMin": {
+            "type": "string"
+          },
+          "rcsMax": {
+            "type": "string"
+          },
+          "srpConstArea": {
+            "type": "string"
+          },
+          "solarRadCoeff": {
+            "type": "string"
+          },
+          "solarRadUncertainty": {
+            "type": "string"
+          },
+          "vmAbsolute": {
+            "type": "string"
+          },
+          "vmApparentMin": {
+            "type": "string"
+          },
+          "vmApparent": {
+            "type": "string"
+          },
+          "vmApparentMax": {
+            "type": "string"
+          },
+          "reflectance": {
+            "type": "string"
+          },
+          "attControlMode": {
+            "type": "string"
+          },
+          "attActuatorType": {
+            "type": "string"
+          },
+          "attKnowledge": {
+            "type": "string"
+          },
+          "attControl": {
+            "type": "string"
+          },
+          "attPointing": {
+            "type": "string"
+          },
+          "avgManeuverFreq": {
+            "type": "string"
+          },
+          "maxThrust": {
+            "type": "string"
+          },
+          "dvBol": {
+            "type": "string"
+          },
+          "dvRemaining": {
+            "type": "string"
+          },
+          "atmosphericModel": {
+            "type": "string"
+          },
+          "gravityModel": {
+            "type": "string"
+          },
+          "equatorialRadius": {
+            "type": "number",
+            "format": "double"
+          },
+          "gm": {
+            "type": "string"
+          },
+          "centralBodyRotation": {
+            "type": "number",
+            "format": "double"
+          },
+          "oblateFlattening": {
+            "type": "number",
+            "format": "double"
+          },
+          "oceanTidesModel": {
+            "type": "string"
+          },
+          "solidTidesModel": {
+            "type": "string"
+          },
+          "reductionTheory": {
+            "type": "string"
+          },
+          "albedoModel": {
+            "type": "string"
+          },
+          "albedoGridSize": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "shadowModel": {
+            "type": "string"
+          },
+          "shadowBodies": {
+            "type": "string"
+          },
+          "srpModel": {
+            "type": "string"
+          },
+          "swDataSource": {
+            "type": "string"
+          },
+          "swDataEpoch": {
+            "type": "string"
+          },
+          "swInterpMethod": {
+            "type": "string"
+          },
+          "fixedGeomagKp": {
+            "type": "string"
+          },
+          "fixedGeomagAp": {
+            "type": "string"
+          },
+          "fixedGeomagDst": {
+            "type": "string"
+          },
+          "fixedF10P7": {
+            "type": "string"
+          },
+          "fixedF10P7Mean": {
+            "type": "string"
+          },
+          "fixedM10P7": {
+            "type": "string"
+          },
+          "fixedM10P7Mean": {
+            "type": "string"
+          },
+          "fixedS10P7": {
+            "type": "string"
+          },
+          "fixedS10P7Mean": {
+            "type": "string"
+          },
+          "fixedY10P7": {
+            "type": "string"
+          },
+          "fixedY10P7Mean": {
+            "type": "string"
+          },
+          "odId": {
+            "type": "string"
+          },
+          "odPrevId": {
+            "type": "string"
+          },
+          "odMethod": {
+            "type": "string"
+          },
+          "odEpoch": {
+            "type": "string"
+          },
+          "daysSinceFirstObs": {
+            "type": "number",
+            "format": "double"
+          },
+          "daysSinceLastObs": {
+            "type": "number",
+            "format": "double"
+          },
+          "recommendedOdSpan": {
+            "type": "number",
+            "format": "double"
+          },
+          "actualOdSpan": {
+            "type": "number",
+            "format": "double"
+          },
+          "obsAvailable": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "obsUsed": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "tracksAvailable": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "tracksUsed": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "maxObsGap": {
+            "type": "number",
+            "format": "double"
+          },
+          "odEpochElGMAJ": {
+            "type": "number",
+            "format": "double"
+          },
+          "odEpochElGINT": {
+            "type": "number",
+            "format": "double"
+          },
+          "odEpochElGMIN": {
+            "type": "number",
+            "format": "double"
+          },
+          "odMaxPredEigMAJ": {
+            "type": "number",
+            "format": "double"
+          },
+          "odMaxPredEigMIN": {
+            "type": "number",
+            "format": "double"
+          },
+          "odConfidence": {
+            "type": "number",
+            "format": "double"
+          },
+          "gdop": {
+            "type": "number",
+            "format": "double"
+          },
+          "solveN": {
+            "type": "string"
+          },
+          "solveStates": {
+            "type": "string"
+          },
+          "considerN": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "considerParams": {
+            "type": "string"
+          },
+          "sedr": {
+            "type": "string"
+          },
+          "sensorsN": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "sensors": {
+            "type": "string"
+          },
+          "weightedRms": {
+            "type": "string"
+          },
+          "dataTypes": {
+            "type": "string"
+          },
+          "hbr": {
+            "type": "string"
+          },
+          "trajectories": {
+            "type": "string"
+          },
+          "covariances": {
+            "type": "string"
+          },
+          "maneuvers": {
+            "type": "string"
+          },
+          "ixz": {
+            "type": "string"
+          },
+          "ixx": {
+            "type": "string"
+          },
+          "ixy": {
+            "type": "string"
+          },
+          "izz": {
+            "type": "string"
+          },
+          "iyz": {
+            "type": "string"
+          },
+          "iyy": {
+            "type": "string"
+          },
+          "nbodyPertubationsRaw": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "nbodyPertubations": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "headerComments": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "metaComments": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "alternateNames": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "ocmDataElements": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "physComments": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "pertComments": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "odComments": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "userComments": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "offset": {
+            "type": "integer",
+            "format": "int64"
+          }
+        }
+      },
+      "ConjunctionDataEvent": {
+        "type": "object",
+        "properties": {
+          "conjunctionDataEventId": {
+            "type": "string"
+          },
+          "tca": {
+            "type": "string"
+          },
+          "missDistance": {
+            "type": "string"
+          },
+          "collisionProbability": {
+            "type": "number",
+            "format": "double"
+          },
+          "object1ObjectDesignator": {
+            "type": "string"
+          },
+          "object2ObjectDesignator": {
+            "type": "string"
+          },
+          "creationDate": {
+            "type": "string"
+          },
+          "offset": {
+            "type": "integer",
+            "format": "int64"
+          }
+        }
+      },
+      "TipReport": {
+        "type": "object",
+        "properties": {
+          "noradId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "msgEpoch": {
+            "type": "string"
+          },
+          "insertEpoch": {
+            "type": "string"
+          },
+          "decayEpoch": {
+            "type": "string"
+          },
+          "window": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "rev": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "direction": {
+            "type": "string"
+          },
+          "latitude": {
+            "type": "number",
+            "format": "double"
+          },
+          "longitude": {
+            "type": "number",
+            "format": "double"
+          },
+          "inclination": {
+            "type": "number",
+            "format": "double"
+          },
+          "nextReport": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "highInterest": {
+            "type": "string"
+          },
+          "objectNumber": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "offset": {
+            "type": "integer",
+            "format": "int64"
+          }
+        }
+      },
+      "AnomalyReport": {
+        "type": "object",
+        "properties": {
+          "reportId": {
+            "type": "string"
+          },
+          "submitterOrganization": {
+            "type": "string"
+          },
+          "submitterName": {
+            "type": "string"
+          },
+          "submitterEmail": {
+            "type": "string"
+          },
+          "submissionTime": {
+            "type": "string"
+          },
+          "noradIds": {
+            "type": "string"
+          },
+          "satelliteNames": {
+            "type": "string"
+          },
+          "eventStartTimestamp": {
+            "type": "string"
+          },
+          "eventEndTimestamp": {
+            "type": "string"
+          },
+          "anomalyTypes": {
+            "type": "string"
+          },
+          "anomalyDescription": {
+            "type": "string"
+          },
+          "telemetryAvailable": {
+            "type": "string"
+          },
+          "attachmentFilenames": {
+            "type": "string"
+          },
+          "operationalImpact": {
+            "type": "string"
+          },
+          "mitigationStatus": {
+            "type": "string"
+          },
+          "reportingReason": {
+            "type": "string"
+          },
+          "relatedEventIds": {
+            "type": "string"
+          },
+          "createdAt": {
+            "type": "string"
+          },
+          "offset": {
+            "type": "integer",
+            "format": "int64"
+          }
+        }
+      },
+      "CatalogSource": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "source": {
+            "type": "string"
+          }
+        }
+      },
+      "TracssCat": {
+        "type": "object",
+        "properties": {
+          "noradId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "name": {
+            "type": "string"
+          },
+          "alternateNames": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "uniqueItems": true
+          },
+          "internationalDesignator": {
+            "type": "string"
+          },
+          "organization": {
+            "type": "string"
+          },
+          "launchLicense": {
+            "type": "string"
+          },
+          "headquarters": {
+            "type": "string"
+          },
+          "communicationLicense": {
+            "type": "string"
+          },
+          "remoteSensingLicense": {
+            "type": "string"
+          },
+          "unitedNationsRegistry": {
+            "type": "string"
+          },
+          "countriesOfAffiliation": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "uniqueItems": true
+          },
+          "constellation": {
+            "type": "string"
+          },
+          "launchProvider": {
+            "type": "string"
+          },
+          "launchVehicle": {
+            "type": "string"
+          },
+          "launchLocation": {
+            "type": "string"
+          },
+          "launchDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "deploymentDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "additionalDeployments": {
+            "type": "string"
+          },
+          "launchName": {
+            "type": "string"
+          },
+          "generalFunction": {
+            "type": "string"
+          },
+          "objectType": {
+            "type": "string"
+          },
+          "decayDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "estimatedTimeOnOrbit": {
+            "type": "number",
+            "format": "double"
+          },
+          "period": {
+            "type": "number",
+            "format": "double"
+          },
+          "inclination": {
+            "type": "number",
+            "format": "double"
+          },
+          "apogee": {
+            "type": "number",
+            "format": "double"
+          },
+          "perigee": {
+            "type": "number",
+            "format": "double"
+          },
+          "plannedOrbitPeriod": {
+            "type": "number",
+            "format": "double"
+          },
+          "plannedOrbitInclination": {
+            "type": "number",
+            "format": "double"
+          },
+          "plannedOrbitApogee": {
+            "type": "number",
+            "format": "double"
+          },
+          "plannedOrbitPerigee": {
+            "type": "number",
+            "format": "double"
+          },
+          "rcsValue": {
+            "type": "number",
+            "format": "double"
+          },
+          "rcsSize": {
+            "type": "string"
+          },
+          "launchPiece": {
+            "type": "string"
+          },
+          "operationalStatus": {
+            "type": "string"
+          },
+          "orbitalRegime": {
+            "type": "string"
+          },
+          "orbitCategory": {
+            "type": "string"
+          },
+          "wetMass": {
+            "type": "number",
+            "format": "double"
+          },
+          "hbr": {
+            "type": "number",
+            "format": "double"
+          },
+          "conjunctionMitigationCapabilities": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "uniqueItems": true
+          },
+          "expectedOperationalLifetime": {
+            "type": "number",
+            "format": "double"
+          },
+          "estimatedTotalTimeOnOrbit": {
+            "type": "number",
+            "format": "double"
+          },
+          "firstDerivativeOfMeanMotion": {
+            "type": "number",
+            "format": "double"
+          },
+          "secondDerivativeOfMeanMotion": {
+            "type": "number",
+            "format": "double"
+          },
+          "dragTerm": {
+            "type": "number",
+            "format": "double"
+          },
+          "raan": {
+            "type": "number",
+            "format": "double"
+          },
+          "eccentricity": {
+            "type": "number",
+            "format": "double"
+          },
+          "argOfPerigee": {
+            "type": "number",
+            "format": "double"
+          },
+          "meanAnomaly": {
+            "type": "number",
+            "format": "double"
+          },
+          "meanMotion": {
+            "type": "number",
+            "format": "double"
+          },
+          "revNumberAtEpoch": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "source": {
+            "$ref": "#/components/schemas/CatalogSource"
+          },
+          "offset": {
+            "type": "integer",
+            "format": "int64"
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "Authorization": {
+        "type": "http",
+        "in": "header",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      },
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    }
+  }
+}

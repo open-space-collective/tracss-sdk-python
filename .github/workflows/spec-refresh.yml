@@ -10,6 +10,10 @@ on:
         required: false
         type: string
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: false
+
 jobs:
   refresh:
     name: Fetch specs, generate SDK, open PR
@@ -26,6 +30,8 @@ jobs:
       - run: npm install -g fern-api@5.46.0
 
       - uses: astral-sh/setup-uv@v4
+        with:
+          enable-cache: true
       - run: uv sync
 
       - name: Fetch latest OpenAPI specs

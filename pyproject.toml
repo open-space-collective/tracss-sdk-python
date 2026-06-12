@@ -1,0 +1,49 @@
+requires-python = ">=3.12"
+dependencies = [
+    "httpx>=0.28.1",
+    "pydantic>=2.13.4",
+]
+
+[tool.uv.workspace]
+members = ["sdks/python"]
+
+[dependency-groups]
+dev = [
+    "ruff>=0.4",
+    "mypy>=1.10",
+    "pre-commit>=3",
+    "pytest>=8",
+    "pytest-asyncio>=0.23",
+    "pytest-cov>=5",
+    "respx>=0.21",
+    "httpx>=0.27",
+    "twine>=5",
+    "bandit>=1.8",
+    "pip-audit>=2.7",
+    "pip-licenses>=5",
+]
+
+[tool.mypy]
+python_version = "3.12"
+check_untyped_defs = true
+ignore_missing_imports = true
+namespace_packages = true
+exclude = [
+    "sdks/python/tracss/core/",
+    "sdks/python/tracss/bulk_data/",
+    "sdks/python/tracss/metadata/",
+    "sdks/python/tracss/subscriber/",
+    "sdks/python/tracss/__init__.py",
+    "sdks/python/tracss/base_client.py",
+    "sdks/python/tracss/environment.py",
+    "sdks/python/tracss/_default_clients.py",
+    "sdks/python/tracss/tests/",
+]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+addopts = "--cov=tracss.client --cov-report=term-missing --cov-fail-under=90"
+markers = [
+    "integration: requires Prism mock servers (run with make prism-all first)",
+    "smoke: requires live TraCSS credentials (run with make smoke)",
+]

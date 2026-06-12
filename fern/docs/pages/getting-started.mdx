@@ -1,0 +1,103 @@
+# Getting Started
+
+<Note>
+  **Community SDK - not an official TraCSS product.**
+  Built and maintained by [Loft Orbital](https://www.loftorbital.com) via the
+  [Open Space Collective](https://github.com/open-space-collective) organization,
+  using [Fern](https://buildwithfern.com). Not affiliated with, endorsed by, or
+  officially supported by the Office of Space Commerce (OSC) or NOAA.
+</Note>
+
+## Installation
+
+```bash
+pip install tracss
+```
+
+The SDK requires Python 3.10 or later.
+
+## Configuration
+
+The client reads credentials from environment variables by default:
+
+```bash
+export TRACSS_CLIENT_ID="your-client-id"
+export TRACSS_CLIENT_SECRET="your-client-secret"
+```
+
+You can also pass them directly at construction time:
+
+```python
+from tracss import TraCSS
+
+client = TraCSS(client_id="your-client-id", client_secret="your-client-secret")
+```
+
+See the [Authentication guide](./authentication) for details on the Okta token flow and
+advanced configuration options.
+
+## Usage
+
+### Bulk Data
+
+```python
+from tracss import TraCSS
+
+client = TraCSS()
+
+# Stream CDM conjunction messages
+for chunk in client.bulk_data.cdm.stream():
+    process(chunk)
+
+# Stream OCM object catalog data
+for chunk in client.bulk_data.ocm.stream():
+    process(chunk)
+
+# Stream TIP tasking reports (returns a response object, not an iterator)
+tip_data = client.bulk_data.tip.stream()
+```
+
+### Metadata
+
+```python
+# Upload OCM (v2 default)
+client.metadata.ocm.upload(...)
+
+# Upload OCM (legacy v1)
+client.metadata.ocm.upload_v1(...)
+
+# List CDM records
+records = client.metadata.cdm.list(...)
+records = client.metadata.cdm.list_by_operational_batch(...)
+
+# Update contact directory
+client.metadata.contact_directory.update_operational(...)
+
+# Update TraCSS catalog from CSV
+client.metadata.tracss_cat.update_from_csv(...)
+```
+
+### Subscriber
+
+```python
+# List available topics
+topics = client.subscriber.topics.list()
+
+# Get offset for a topic
+offset = client.subscriber.topics.get_offset(topic="my-topic")
+
+# Read messages from a topic
+messages = client.subscriber.messages.list(topic="my-topic", offset=0)
+```
+
+## Async Client
+
+An async variant is available for use with `asyncio`:
+
+```python
+from tracss import AsyncTraCSS
+
+async def main():
+    client = AsyncTraCSS()
+    topics = await client.subscriber.topics.list()
+```

@@ -1,0 +1,134 @@
+paths:
+  # ── Contact Directory ──────────────────────────────────────────────────
+  /metadata/contactDirectory/operational/all:
+    get:
+      x-fern-sdk-group-name: [contact_directory]
+      x-fern-sdk-method-name: list_operational
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/OperationalContactInfoDTO"
+
+  /metadata/contactDirectory/operational/update:
+    put:
+      x-fern-sdk-group-name: [contact_directory]
+      x-fern-sdk-method-name: update_operational
+
+  # ── OCM (v2 default) ───────────────────────────────────────────────────
+  /metadata/v2/ocm:
+    get:
+      x-fern-sdk-group-name: [ocm]
+      x-fern-sdk-method-name: list
+
+  /metadata/v2/ocm/operationalBatch:
+    get:
+      x-fern-sdk-group-name: [ocm]
+      x-fern-sdk-method-name: list_by_operational_batch
+
+  /metadata/v2/ocm/upload:
+    post:
+      x-fern-sdk-group-name: [ocm]
+      x-fern-sdk-method-name: upload
+
+  # ── OCM (v1 legacy) ────────────────────────────────────────────────────
+  /metadata/ocm:
+    get:
+      x-fern-sdk-group-name: [ocm]
+      x-fern-sdk-method-name: list_v1
+      x-fern-availability: legacy
+
+  /metadata/ocm/operationalBatch:
+    get:
+      x-fern-sdk-group-name: [ocm]
+      x-fern-sdk-method-name: list_by_operational_batch_v1
+      x-fern-availability: legacy
+
+  /metadata/ocm/upload:
+    post:
+      x-fern-sdk-group-name: [ocm]
+      x-fern-sdk-method-name: upload_v1
+      x-fern-availability: legacy
+
+  # ── CDM (v2 default) ───────────────────────────────────────────────────
+  /metadata/v2/tracssCdm:
+    get:
+      x-fern-sdk-group-name: [cdm]
+      x-fern-sdk-method-name: list
+
+  /metadata/v2/tracssCdmByOperationalBatch:
+    get:
+      x-fern-sdk-group-name: [cdm]
+      x-fern-sdk-method-name: list_by_operational_batch
+
+  # ── CDM (v1 legacy) ────────────────────────────────────────────────────
+  /metadata/tracssCdm:
+    get:
+      x-fern-sdk-group-name: [cdm]
+      x-fern-sdk-method-name: list_v1
+      x-fern-availability: legacy
+
+  /metadata/tracssCdmByOperationalBatch:
+    get:
+      x-fern-sdk-group-name: [cdm]
+      x-fern-sdk-method-name: list_by_operational_batch_v1
+      x-fern-availability: legacy
+
+  # ── TraCSS CAT ─────────────────────────────────────────────────────────
+  /metadata/tracssCat:
+    get:
+      x-fern-sdk-group-name: [tracss_cat]
+      x-fern-sdk-method-name: list
+
+  /metadata/tracssCat/update/csv:
+    post:
+      description: >-
+        Upload a CSV file to update the TraCSS catalog. The CSV must include a noradId column as the
+        minimum required header; all other fields are optional. Rows with noradIds your organization
+        does not own will generate change requests pending TraCSS Operations approval.
+        See tracss.gov for the full list of valid fields and accepted date formats.
+      x-fern-sdk-group-name: [tracss_cat]
+      x-fern-sdk-method-name: upload_csv
+
+  # ── TIP Reports ────────────────────────────────────────────────────────
+  /metadata/tipReports:
+    get:
+      x-fern-sdk-group-name: [tip_reports]
+      x-fern-sdk-method-name: list
+
+  # ── Space Track ────────────────────────────────────────────────────────
+  /metadata/space-track:
+    get:
+      x-fern-sdk-group-name: [space_track]
+      x-fern-sdk-method-name: list
+
+  /metadata/space-track-nested:
+    get:
+      x-fern-sdk-group-name: [space_track]
+      x-fern-sdk-method-name: list_nested
+
+  # ── Schemas ────────────────────────────────────────────────────────────
+  /metadata/schemas/xsd:
+    get:
+      x-fern-sdk-group-name: [schemas]
+      x-fern-sdk-method-name: get_xsd
+
+  /metadata/schemas/json:
+    get:
+      x-fern-sdk-group-name: [schemas]
+      x-fern-sdk-method-name: get_json
+
+  # ── Conjunction Events ─────────────────────────────────────────────────
+  /metadata/conjunctionDataEvents:
+    get:
+      x-fern-sdk-group-name: [conjunction_events]
+      x-fern-sdk-method-name: list
+
+  # ── Announcements ──────────────────────────────────────────────────────
+  /metadata/announcements:
+    get:
+      x-fern-sdk-group-name: [announcements]
+      x-fern-sdk-method-name: list

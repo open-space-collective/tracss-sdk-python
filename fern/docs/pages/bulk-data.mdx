@@ -1,0 +1,45 @@
+---
+title: Bulk Data
+description: Stream CDM, OCM, and TIP tracking data in bulk over HTTP.
+---
+
+The Bulk Data API streams large volumes of space tracking data as chunked HTTP responses. Use it when you need the full dataset rather than real-time updates — for backfilling a database, running analytics, or syncing to a file store.
+
+## Data types
+
+| Group | Method | Data |
+|---|---|---|
+| `client.bulk_data.cdm` | `stream()` | Conjunction Data Messages (v2, current) |
+| `client.bulk_data.cdm` | `stream_v1()` | CDM (v1, legacy) |
+| `client.bulk_data.ocm` | `stream()` | Object Catalog Messages (v2, current) |
+| `client.bulk_data.ocm` | `stream_v1()` | OCM (v1, legacy) |
+| `client.bulk_data.tip` | `stream()` | Tasking Information Package reports |
+| `client.bulk_data.announcements` | `list()` | System announcements |
+
+v2 endpoints are current. v1 endpoints are retained for backwards compatibility and are marked legacy — prefer v2 for new integrations.
+
+## Quick start
+
+```python
+from tracss import TraCSS
+
+client = TraCSS()  # reads TRACSS_CLIENT_ID and TRACSS_CLIENT_SECRET from env
+
+# Stream all CDM conjunction messages
+for chunk in client.bulk_data.cdm.stream():
+    process(chunk)
+
+# Stream OCM object catalog data
+for chunk in client.bulk_data.ocm.stream():
+    process(chunk)
+
+# Stream TIP tasking reports
+for chunk in client.bulk_data.tip.stream():
+    process(chunk)
+```
+
+Each `stream()` call returns an iterator of response chunks. The connection stays open until all data has been delivered.
+
+## Authentication
+
+All endpoints require a valid Okta access token. The SDK fetches and refreshes tokens automatically — see [Authentication](/authentication) for details.
