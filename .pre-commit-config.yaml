@@ -1,22 +1,28 @@
 repos:
-  - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.9.6
-    hooks:
-      - id: ruff
-        args: [--fix]
-        files: "^(sdks/python/tracss/client\\.py|tests/)"
-      - id: ruff-format
-        files: "^(sdks/python/tracss/client\\.py|tests/)"
-
-  - repo: https://github.com/PyCQA/bandit
-    rev: 1.8.3
-    hooks:
-      - id: bandit
-        args: ["-ll"]
-        files: "^(sdks/python/tracss/client\\.py|tests/)"
-
   - repo: local
     hooks:
+      - id: ruff
+        name: ruff
+        language: system
+        entry: uv run ruff check --fix
+        files: "^(sdks/python/tracss/client\\.py|tests/)"
+        types: [python]
+
+      - id: ruff-format
+        name: ruff-format
+        language: system
+        entry: uv run ruff format
+        files: "^(sdks/python/tracss/client\\.py|tests/)"
+        types: [python]
+
+      - id: bandit
+        name: bandit
+        language: system
+        entry: uv run bandit
+        args: ["-ll"]
+        files: "^(sdks/python/tracss/client\\.py|tests/)"
+        types: [python]
+
       - id: mypy
         name: mypy
         language: system
@@ -26,9 +32,11 @@ repos:
         pass_filenames: false
         args: ["sdks/python/tracss/client.py", "tests/"]
 
-  - repo: https://github.com/conventional-changelog/commitlint
-    rev: v19.5.0
-    hooks:
       - id: commitlint
+        name: commitlint
+        language: node
+        entry: npx --no -- commitlint --edit
         stages: [commit-msg]
-        additional_dependencies: ["@commitlint/config-conventional@19"]
+        additional_dependencies:
+          - "@commitlint/cli@19"
+          - "@commitlint/config-conventional@19"
