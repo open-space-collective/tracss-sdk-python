@@ -1,4 +1,6 @@
-# Copyright © Loft Orbital Solutions Inc.
+# SPDX-License-Identifier: Apache-2.0
+"""Fixtures and helpers for integration tests against Prism mock servers."""
+
 import json
 import os
 import threading

@@ -66,6 +66,10 @@ fmt: ## Auto-fix lint + formatting (hand-written files only)
 	uv run ruff format $(LINT_TARGETS)
 	uv run ruff check --fix $(LINT_TARGETS)
 
+.PHONY: pre-commit
+pre-commit: ## Run all pre-commit hooks against all files
+	uv run pre-commit run --all-files
+
 .PHONY: typecheck
 typecheck: ## Run mypy on hand-written files
 	uv run mypy sdks/python/tracss/client.py tests/
@@ -81,15 +85,15 @@ METADATA_PORT   ?= 4012
 
 .PHONY: prism-subscriber
 prism-subscriber: ## Start Prism mock server for subscriber (port 4010)
-	npx --yes @stoplight/prism-cli mock fern/openapi/subscriber/openapi.json --port $(SUBSCRIBER_PORT)
+	npx --yes @stoplight/prism-cli@5 mock fern/openapi/subscriber/openapi.json --port $(SUBSCRIBER_PORT)
 
 .PHONY: prism-bulkdata
 prism-bulkdata: ## Start Prism mock server for bulkdata (port 4011)
-	npx --yes @stoplight/prism-cli mock fern/openapi/bulk_data/openapi.json --port $(BULKDATA_PORT)
+	npx --yes @stoplight/prism-cli@5 mock fern/openapi/bulk_data/openapi.json --port $(BULKDATA_PORT)
 
 .PHONY: prism-metadata
 prism-metadata: ## Start Prism mock server for metadata (port 4012)
-	npx --yes @stoplight/prism-cli mock fern/openapi/metadata/openapi.json --port $(METADATA_PORT)
+	npx --yes @stoplight/prism-cli@5 mock fern/openapi/metadata/openapi.json --port $(METADATA_PORT)
 
 .PHONY: prism-all
 prism-all: ## Start all three Prism mock servers in the background and wait for readiness
@@ -100,7 +104,7 @@ prism-all: ## Start all three Prism mock servers in the background and wait for 
 		spec=$$(echo $$spec_port | cut -d: -f1); \
 		port=$$(echo $$spec_port | cut -d: -f4-); \
 		if ! curl -s --max-time 0.5 http://localhost:$$port > /dev/null 2>&1; then \
-			npx --yes @stoplight/prism-cli mock "$$spec" --port $$port & \
+			npx --yes @stoplight/prism-cli@5 mock "$$spec" --port $$port & \
 		fi; \
 	done
 	@for port in $(SUBSCRIBER_PORT) $(BULKDATA_PORT) $(METADATA_PORT); do \

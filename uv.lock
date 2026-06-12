@@ -13,8 +13,11 @@ members = [
 
 [manifest.dependency-groups]
 dev = [
+    { name = "bandit", specifier = ">=1.8" },
     { name = "httpx", specifier = ">=0.27" },
     { name = "mypy", specifier = ">=1.10" },
+    { name = "pip-audit", specifier = ">=2.7" },
+    { name = "pip-licenses", specifier = ">=5" },
     { name = "pre-commit", specifier = ">=3" },
     { name = "pytest", specifier = ">=8" },
     { name = "pytest-asyncio", specifier = ">=0.23" },
@@ -103,6 +106,48 @@ source = { registry = "https://us-central1-python.pkg.dev/loft-orbital-engineeri
 sdist = { url = "https://us-central1-python.pkg.dev/loft-orbital-engineering/pypi/backports-tarfile/backports_tarfile-1.2.0.tar.gz", hash = "sha256:d75e02c268746e1b8144c278978b6e98e85de6ad16f8e4b0844a154557eca991" }
 wheels = [
     { url = "https://us-central1-python.pkg.dev/loft-orbital-engineering/pypi/backports-tarfile/backports.tarfile-1.2.0-py3-none-any.whl", hash = "sha256:77e284d754527b01fb1e6fa8a1afe577858ebe4e9dad8919e34c862cb399bc34" },
+]
+
+[[package]]
+name = "bandit"
+version = "1.9.4"
+source = { registry = "https://us-central1-python.pkg.dev/loft-orbital-engineering/pypi/simple" }
+dependencies = [
+    { name = "colorama", marker = "sys_platform == 'win32'" },
+    { name = "pyyaml" },
+    { name = "rich" },
+    { name = "stevedore" },
+]
+sdist = { url = "https://us-central1-python.pkg.dev/loft-orbital-engineering/pypi/bandit/bandit-1.9.4.tar.gz", hash = "sha256:b589e5de2afe70bd4d53fa0c1da6199f4085af666fde00e8a034f152a52cd628" }
+wheels = [
+    { url = "https://us-central1-python.pkg.dev/loft-orbital-engineering/pypi/bandit/bandit-1.9.4-py3-none-any.whl", hash = "sha256:f89ffa663767f5a0585ea075f01020207e966a9c0f2b9ef56a57c7963a3f6f8e" },
+]
+
+[[package]]
+name = "boolean-py"
+version = "5.0"
+source = { registry = "https://us-central1-python.pkg.dev/loft-orbital-engineering/pypi/simple" }
+sdist = { url = "https://us-central1-python.pkg.dev/loft-orbital-engineering/pypi/boolean-py/boolean_py-5.0.tar.gz", hash = "sha256:60cbc4bad079753721d32649545505362c754e121570ada4658b852a3a318d95" }
+wheels = [
+    { url = "https://us-central1-python.pkg.dev/loft-orbital-engineering/pypi/boolean-py/boolean_py-5.0-py3-none-any.whl", hash = "sha256:ef28a70bd43115208441b53a045d1549e2f0ec6e3d08a9d142cbc41c1938e8d9" },
+]
+
+[[package]]
+name = "cachecontrol"
+version = "0.14.4"
+source = { registry = "https://us-central1-python.pkg.dev/loft-orbital-engineering/pypi/simple" }
+dependencies = [
+    { name = "msgpack" },
+    { name = "requests" },
+]
+sdist = { url = "https://us-central1-python.pkg.dev/loft-orbital-engineering/pypi/cachecontrol/cachecontrol-0.14.4.tar.gz", hash = "sha256:e6220afafa4c22a47dd0badb319f84475d79108100d04e26e8542ef7d3ab05a1" }
+wheels = [
+    { url = "https://us-central1-python.pkg.dev/loft-orbital-engineering/pypi/cachecontrol/cachecontrol-0.14.4-py3-none-any.whl", hash = "sha256:b7ac014ff72ee199b5f8af1de29d60239954f223e948196fa3d84adaffc71d2b" },
+]
+
+[package.optional-dependencies]
+filecache = [
+    { name = "filelock" },
 ]
 
 [[package]]
@@ -440,6 +485,31 @@ wheels = [
 ]
 
 [[package]]
+name = "cyclonedx-python-lib"
+version = "11.10.0"
+source = { registry = "https://us-central1-python.pkg.dev/loft-orbital-engineering/pypi/simple" }
+dependencies = [
+    { name = "license-expression" },
+    { name = "packageurl-python" },
+    { name = "py-serializable" },
+    { name = "sortedcontainers" },
+    { name = "typing-extensions", marker = "python_full_version < '3.13'" },
+]
+sdist = { url = "https://us-central1-python.pkg.dev/loft-orbital-engineering/pypi/cyclonedx-python-lib/cyclonedx_python_lib-11.10.0.tar.gz", hash = "sha256:d03d6ea271e26feaf123b8b1b34468a305f33a338c5763f56e397a8408f9b290" }
+wheels = [
+    { url = "https://us-central1-python.pkg.dev/loft-orbital-engineering/pypi/cyclonedx-python-lib/cyclonedx_python_lib-11.10.0-py3-none-any.whl", hash = "sha256:ffb9510b8d00a0896cfbe0a78b97c545d28f7d2a54e9d9dd5e5dc6e91ca9b375" },
+]
+
+[[package]]
+name = "defusedxml"
+version = "0.7.1"
+source = { registry = "https://us-central1-python.pkg.dev/loft-orbital-engineering/pypi/simple" }
+sdist = { url = "https://us-central1-python.pkg.dev/loft-orbital-engineering/pypi/defusedxml/defusedxml-0.7.1.tar.gz", hash = "sha256:1bb3032db185915b62d7c6209c5a8792be6a32ab2fedacc84e01b52c51aa3e69" }
+wheels = [
+    { url = "https://us-central1-python.pkg.dev/loft-orbital-engineering/pypi/defusedxml/defusedxml-0.7.1-py2.py3-none-any.whl", hash = "sha256:a352e7e428770286cc899e2542b6cdaedb2b4953ff269a210103ec58f6198a61" },
+]
+
+[[package]]
 name = "distlib"
 version = "0.4.2"
 source = { registry = "https://us-central1-python.pkg.dev/loft-orbital-engineering/pypi/simple" }
@@ -715,6 +785,18 @@ wheels = [
 ]
 
 [[package]]
+name = "license-expression"
+version = "30.4.4"
+source = { registry = "https://us-central1-python.pkg.dev/loft-orbital-engineering/pypi/simple" }
+dependencies = [
+    { name = "boolean-py" },
+]
+sdist = { url = "https://us-central1-python.pkg.dev/loft-orbital-engineering/pypi/license-expression/license_expression-30.4.4.tar.gz", hash = "sha256:73448f0aacd8d0808895bdc4b2c8e01a8d67646e4188f887375398c761f340fd" }
+wheels = [
+    { url = "https://us-central1-python.pkg.dev/loft-orbital-engineering/pypi/license-expression/license_expression-30.4.4-py3-none-any.whl", hash = "sha256:421788fdcadb41f049d2dc934ce666626265aeccefddd25e162a26f23bcbf8a4" },
+]
+
+[[package]]
 name = "markdown-it-py"
 version = "4.2.0"
 source = { registry = "https://us-central1-python.pkg.dev/loft-orbital-engineering/pypi/simple" }
@@ -742,6 +824,79 @@ source = { registry = "https://us-central1-python.pkg.dev/loft-orbital-engineeri
 sdist = { url = "https://us-central1-python.pkg.dev/loft-orbital-engineering/pypi/more-itertools/more_itertools-11.1.0.tar.gz", hash = "sha256:48e8f4d9e7e5878571ecf6f2b4e57634f93cd474cc8cfbd2376f2d11b396e30d" }
 wheels = [
     { url = "https://us-central1-python.pkg.dev/loft-orbital-engineering/pypi/more-itertools/more_itertools-11.1.0-py3-none-any.whl", hash = "sha256:4b65538ae22f6fed0ce4874efd317463a7489796a0939fa66824dd542125a192" },
+]
+
+[[package]]
+name = "msgpack"
+version = "1.2.0"
+source = { registry = "https://us-central1-python.pkg.dev/loft-orbital-engineering/pypi/simple" }
+sdist = { url = "https://us-central1-python.pkg.dev/loft-orbital-engineering/pypi/msgpack/msgpack-1.2.0.tar.gz", hash = "sha256:8e17af38197bf58e7e819041678f6178f4491493f5b8c8580414f40f7c2c3c41" }
+wheels = [
+    { url = "https://us-central1-python.pkg.dev/loft-orbital-engineering/pypi/msgpack/msgpack-1.2.0-cp310-cp310-macosx_10_9_x86_64.whl", hash = "sha256:ed8c9495a0f12d17a2b4b69e23f895b88f26aabe40911c86594d3fbddecfff08" },
+    { url = "https://us-central1-python.pkg.dev/loft-orbital-engineering/pypi/msgpack/msgpack-1.2.0-cp310-cp310-macosx_11_0_arm64.whl", hash = "sha256:d7384859c90b45a28a4b31aa50b49cca84504c9f27df459cea6e072627650dcb" },
+    { url = "https://us-central1-python.pkg.dev/loft-orbital-engineering/pypi/msgpack/msgpack-1.2.0-cp310-cp310-manylinux2014_aarch64.manylinux_2_17_aarch64.manylinux_2_28_aarch64.whl", hash = "sha256:63b35e8e65f04ff7ad5c9c70885da587c74f51e4b4eb3db624eac6d250e8cf59" },
+    { url = "https://us-central1-python.pkg.dev/loft-orbital-engineering/pypi/msgpack/msgpack-1.2.0-cp310-cp310-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl", hash = "sha256:9004c5a02acd3eca4e15e1ae7b461c32e3711105a28b1ad78be2f6facff4c523" },
+    { url = "https://us-central1-python.pkg.dev/loft-orbital-engineering/pypi/msgpack/msgpack-1.2.0-cp310-cp310-manylinux_2_31_riscv64.manylinux_2_39_riscv64.whl", hash = "sha256:7e2032dacb0a973fcbf7bd088415a369dae31c5af40e199d234806be22e86765" },
+    { url = "https://us-central1-python.pkg.dev/loft-orbital-engineering/pypi/msgpack/msgpack-1.2.0-cp310-cp310-musllinux_1_2_aarch64.whl", hash = "sha256:c1feb100651fbe4b39826207cb20af065dfbfbfa43b1bafd7eaa2252abf7acfd" },
+    { url = "https://us-central1-python.pkg.dev/loft-orbital-engineering/pypi/msgpack/msgpack-1.2.0-cp310-cp310-musllinux_1_2_riscv64.whl", hash = "sha256:82487709d4c597d252311a65370220675fb1cc859e7da9269a3060c03ac02cf6" },
+    { url = "https://us-central1-python.pkg.dev/loft-orbital-engineering/pypi/msgpack/msgpack-1.2.0-cp310-cp310-musllinux_1_2_x86_64.whl", hash = "sha256:0268c67a74f5f913f545a0fdbbfaa3f6ebcf23b4c3209bb99704a2ea87e13f90" },
+    { url = "https://us-central1-python.pkg.dev/loft-orbital-engineering/pypi/msgpack/msgpack-1.2.0-cp310-cp310-win32.whl", hash = "sha256:7df87173b0e13ddd134919731f13525dbbf75204145597decf1cb86887ebb492" },
+    { url = "https://us-central1-python.pkg.dev/loft-orbital-engineering/pypi/msgpack/msgpack-1.2.0-cp310-cp310-win_amd64.whl", hash = "sha256:6371edb47788fbfd8a22016f9a97b5616dd9849bc50abcbb8e82d38f71efa096" },
+    { url = "https://us-central1-python.pkg.dev/loft-orbital-engineering/pypi/msgpack/msgpack-1.2.0-cp311-cp311-macosx_10_9_x86_64.whl", hash = "sha256:ec35cd3f127f50806aa10c3f74bf27b749f13ddf1d2217964ada8f38042d1653" },
+    { url = "https://us-central1-python.pkg.dev/loft-orbital-engineering/pypi/msgpack/msgpack-1.2.0-cp311-cp311-macosx_11_0_arm64.whl", hash = "sha256:317eb298297121bfad9173d748124a04a36af27b6ac39c2bbc1db1ce57608dcf" },
+    { url = "https://us-central1-python.pkg.dev/loft-orbital-engineering/pypi/msgpack/msgpack-1.2.0-cp311-cp311-manylinux2014_aarch64.manylinux_2_17_aarch64.manylinux_2_28_aarch64.whl", hash = "sha256:50fe6434de89073273026dd032a62e8b63f8857a261d7a2df5b07c9e72f3a8f7" },
+    { url = "https://us-central1-python.pkg.dev/loft-orbital-engineering/pypi/msgpack/msgpack-1.2.0-cp311-cp311-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl", hash = "sha256:106c6d333ff3d4eda075b7d4b9695d1752c5bcc635e40d0dbaf4e276c9ed80e1" },
+    { url = "https://us-central1-python.pkg.dev/loft-orbital-engineering/pypi/msgpack/msgpack-1.2.0-cp311-cp311-manylinux_2_31_riscv64.manylinux_2_39_riscv64.whl", hash = "sha256:67055a611e871cb1bd0acb732f2e9f64ca8155ca0bba1d0a5bb362e7209e5541" },
+    { url = "https://us-central1-python.pkg.dev/loft-orbital-engineering/pypi/msgpack/msgpack-1.2.0-cp311-cp311-musllinux_1_2_aarch64.whl", hash = "sha256:ceec7f8e633d5a4b4a32b0416bef90ee3cd1017ea36247f705e523072e576119" },
+    { url = "https://us-central1-python.pkg.dev/loft-orbital-engineering/pypi/msgpack/msgpack-1.2.0-cp311-cp311-musllinux_1_2_riscv64.whl", hash = "sha256:7ec5851160a3c2c0f77d68ddec620318cd8e7d88d94f9c058190e8ce0dfa1d31" },
+    { url = "https://us-central1-python.pkg.dev/loft-orbital-engineering/pypi/msgpack/msgpack-1.2.0-cp311-cp311-musllinux_1_2_x86_64.whl", hash = "sha256:dd7140f7b09dbe1984a0dff3189375d840247e3e4cf4ac45c5a499b3b599c8d2" },
+    { url = "https://us-central1-python.pkg.dev/loft-orbital-engineering/pypi/msgpack/msgpack-1.2.0-cp311-cp311-win32.whl", hash = "sha256:cbfd54018d386da0951c7a2be13de0f58559d251313e613b2155e52ed1cbd8f1" },
+    { url = "https://us-central1-python.pkg.dev/loft-orbital-engineering/pypi/msgpack/msgpack-1.2.0-cp311-cp311-win_amd64.whl", hash = "sha256:653373c4614c31463ba486a67776e4bb396af289921bd5353e209534b71467fa" },
+    { url = "https://us-central1-python.pkg.dev/loft-orbital-engineering/pypi/msgpack/msgpack-1.2.0-cp311-cp311-win_arm64.whl", hash = "sha256:7a260aea1e5e7d6c7f1d9284c7360d29021627b61dc4dd7df144b81210810537" },
+    { url = "https://us-central1-python.pkg.dev/loft-orbital-engineering/pypi/msgpack/msgpack-1.2.0-cp312-cp312-macosx_10_13_x86_64.whl", hash = "sha256:e2d6047ccd11a12c96a69f2bfe026471abef67334c3d0494a93e5310e45140a2" },
+    { url = "https://us-central1-python.pkg.dev/loft-orbital-engineering/pypi/msgpack/msgpack-1.2.0-cp312-cp312-macosx_11_0_arm64.whl", hash = "sha256:0347e3ac0dfee99086d3b68fe959da3f5f657c0019ddbaeaaa259a85f8603422" },
+    { url = "https://us-central1-python.pkg.dev/loft-orbital-engineering/pypi/msgpack/msgpack-1.2.0-cp312-cp312-manylinux2014_aarch64.manylinux_2_17_aarch64.manylinux_2_28_aarch64.whl", hash = "sha256:25552ff1f2ff3dc8333e27eabb94f702da5929ed0e07969688194a3e9f12e151" },
+    { url = "https://us-central1-python.pkg.dev/loft-orbital-engineering/pypi/msgpack/msgpack-1.2.0-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl", hash = "sha256:a0d94420d9d52c56568159a69200af7e45eadb29615fa9d09fada140de1c38c7" },
+    { url = "https://us-central1-python.pkg.dev/loft-orbital-engineering/pypi/msgpack/msgpack-1.2.0-cp312-cp312-manylinux_2_31_riscv64.manylinux_2_39_riscv64.whl", hash = "sha256:d16e1f2db4a9eebc07b7cc91898d71e710f2eed8358711a605fee802caff8923" },
+    { url = "https://us-central1-python.pkg.dev/loft-orbital-engineering/pypi/msgpack/msgpack-1.2.0-cp312-cp312-musllinux_1_2_aarch64.whl", hash = "sha256:e9cb2e700e85f1e27bbb5c9de6cc1c9a4bc5ac64d5404bdcbcb37a0dc7a947a3" },
+    { url = "https://us-central1-python.pkg.dev/loft-orbital-engineering/pypi/msgpack/msgpack-1.2.0-cp312-cp312-musllinux_1_2_riscv64.whl", hash = "sha256:717d0b166dd176a5f786aeafff081f6439680acf5af193eb63e6266c12b04d3d" },
+    { url = "https://us-central1-python.pkg.dev/loft-orbital-engineering/pypi/msgpack/msgpack-1.2.0-cp312-cp312-musllinux_1_2_x86_64.whl", hash = "sha256:e87c7a21654d18111eb1a89bd5c42baba42e61887365d9e89585e112b4203f9e" },
+    { url = "https://us-central1-python.pkg.dev/loft-orbital-engineering/pypi/msgpack/msgpack-1.2.0-cp312-cp312-win32.whl", hash = "sha256:967e0c891f5f23ab65762f2e5dc95922759c79f1ef99ef4c7e1fdd863e0d0af9" },
+    { url = "https://us-central1-python.pkg.dev/loft-orbital-engineering/pypi/msgpack/msgpack-1.2.0-cp312-cp312-win_amd64.whl", hash = "sha256:6c23e33cee28dcffa112ae205661da4636fd7b06bd9ad1559a890623b92d060b" },
+    { url = "https://us-central1-python.pkg.dev/loft-orbital-engineering/pypi/msgpack/msgpack-1.2.0-cp312-cp312-win_arm64.whl", hash = "sha256:6eeb771571f63f68045433b1a35c0256b946f31ed62f006997e40b8ad8b735af" },
+    { url = "https://us-central1-python.pkg.dev/loft-orbital-engineering/pypi/msgpack/msgpack-1.2.0-cp313-cp313-macosx_10_13_x86_64.whl", hash = "sha256:3a1d30df1f302f2b7a7404afbac2ab76d510036c34cf34dffb01f704a7288e45" },
+    { url = "https://us-central1-python.pkg.dev/loft-orbital-engineering/pypi/msgpack/msgpack-1.2.0-cp313-cp313-macosx_11_0_arm64.whl", hash = "sha256:581e317112260d8ca488d490cad9290a5682276f309c41c7de237a85ed8799c8" },
+    { url = "https://us-central1-python.pkg.dev/loft-orbital-engineering/pypi/msgpack/msgpack-1.2.0-cp313-cp313-manylinux2014_aarch64.manylinux_2_17_aarch64.manylinux_2_28_aarch64.whl", hash = "sha256:c6827d12eacc16873eba62408a1b7bbe8ecfb4a8f7ed78a631ae9bae6ad43cf2" },
+    { url = "https://us-central1-python.pkg.dev/loft-orbital-engineering/pypi/msgpack/msgpack-1.2.0-cp313-cp313-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl", hash = "sha256:a186027e4279efa4c8bf06ce30605498d7d0d3af0fba0b9799dce85a3fd4a93c" },
+    { url = "https://us-central1-python.pkg.dev/loft-orbital-engineering/pypi/msgpack/msgpack-1.2.0-cp313-cp313-manylinux_2_31_riscv64.manylinux_2_39_riscv64.whl", hash = "sha256:a96142c14a11cf1a509e8b9aaf72858a3b742b7613e095ce646913e88ce7bd99" },
+    { url = "https://us-central1-python.pkg.dev/loft-orbital-engineering/pypi/msgpack/msgpack-1.2.0-cp313-cp313-musllinux_1_2_aarch64.whl", hash = "sha256:50c220579b68a6085b95408b2eaa486b259520f55d8e363ddc9b5d7ba5a6ac6d" },
+    { url = "https://us-central1-python.pkg.dev/loft-orbital-engineering/pypi/msgpack/msgpack-1.2.0-cp313-cp313-musllinux_1_2_riscv64.whl", hash = "sha256:4dcb9d12ab100ecacdfaaf37a3d72fe8392eacc7054afc1916b12d1b747c8446" },
+    { url = "https://us-central1-python.pkg.dev/loft-orbital-engineering/pypi/msgpack/msgpack-1.2.0-cp313-cp313-musllinux_1_2_x86_64.whl", hash = "sha256:a804727188ab0ebb237fadb303b743f04925a69d8c3247292d1e33e679767c15" },
+    { url = "https://us-central1-python.pkg.dev/loft-orbital-engineering/pypi/msgpack/msgpack-1.2.0-cp313-cp313-win32.whl", hash = "sha256:1a1ac6ae1fe23298f79380e7b144c8a454e5d05616b0096584f353ba2d750114" },
+    { url = "https://us-central1-python.pkg.dev/loft-orbital-engineering/pypi/msgpack/msgpack-1.2.0-cp313-cp313-win_amd64.whl", hash = "sha256:1c3c80949d79578f9dc85fd9fb91edfe6694e8a729cd5744634d59d8455fdde3" },
+    { url = "https://us-central1-python.pkg.dev/loft-orbital-engineering/pypi/msgpack/msgpack-1.2.0-cp313-cp313-win_arm64.whl", hash = "sha256:fcf8f76fa587c2395fd0057c7232dbf071241f9ad280b235adb7ab585289989e" },
+    { url = "https://us-central1-python.pkg.dev/loft-orbital-engineering/pypi/msgpack/msgpack-1.2.0-cp314-cp314-macosx_10_15_x86_64.whl", hash = "sha256:f854fa1a8b55d75d82ef9a905d9cdbeffdf7897c088f6020bd221867da5e56a5" },
+    { url = "https://us-central1-python.pkg.dev/loft-orbital-engineering/pypi/msgpack/msgpack-1.2.0-cp314-cp314-macosx_11_0_arm64.whl", hash = "sha256:e90df581f80f53b372d5d9d9349078d729851a3a0d0bd74f53ccb598d01e45b8" },
+    { url = "https://us-central1-python.pkg.dev/loft-orbital-engineering/pypi/msgpack/msgpack-1.2.0-cp314-cp314-manylinux2014_aarch64.manylinux_2_17_aarch64.manylinux_2_28_aarch64.whl", hash = "sha256:b276ed50d8ac75d1f134a433ae79af8557d0fa25ee5b4737da533dfc2ce382e8" },
+    { url = "https://us-central1-python.pkg.dev/loft-orbital-engineering/pypi/msgpack/msgpack-1.2.0-cp314-cp314-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl", hash = "sha256:544d972459c92aa32e63b800d07c2d9cf2734a3be29cee3a0b478a622850e9f5" },
+    { url = "https://us-central1-python.pkg.dev/loft-orbital-engineering/pypi/msgpack/msgpack-1.2.0-cp314-cp314-manylinux_2_31_riscv64.manylinux_2_39_riscv64.whl", hash = "sha256:a070147cc2cf6b8a891734e0f5c8fe8f70ed8739ab30ba140b058005a6e86af4" },
+    { url = "https://us-central1-python.pkg.dev/loft-orbital-engineering/pypi/msgpack/msgpack-1.2.0-cp314-cp314-musllinux_1_2_aarch64.whl", hash = "sha256:7685e23b0f51745a751629c31713fbefdef8896b31b2bb38299dfa4ae6c0740c" },
+    { url = "https://us-central1-python.pkg.dev/loft-orbital-engineering/pypi/msgpack/msgpack-1.2.0-cp314-cp314-musllinux_1_2_riscv64.whl", hash = "sha256:b9204daeee8d91a7ae5acf2d2a8e3983be9a3025f38aa21bfaefbd7eea84a7dc" },
+    { url = "https://us-central1-python.pkg.dev/loft-orbital-engineering/pypi/msgpack/msgpack-1.2.0-cp314-cp314-musllinux_1_2_x86_64.whl", hash = "sha256:bfc057248609742ebbabf6bcd27fea4fd99c4980584e613c168c9b002318298f" },
+    { url = "https://us-central1-python.pkg.dev/loft-orbital-engineering/pypi/msgpack/msgpack-1.2.0-cp314-cp314-win32.whl", hash = "sha256:a3faa7edf2388337ae849239878e92f0298b4dab4488e4f1834062f9d0c410c9" },
+    { url = "https://us-central1-python.pkg.dev/loft-orbital-engineering/pypi/msgpack/msgpack-1.2.0-cp314-cp314-win_amd64.whl", hash = "sha256:1a3effc392a57744e4681e55d05f97d5ee7b598747d718340a9b4b8a970c40e1" },
+    { url = "https://us-central1-python.pkg.dev/loft-orbital-engineering/pypi/msgpack/msgpack-1.2.0-cp314-cp314-win_arm64.whl", hash = "sha256:56a318f7df6bec7b40928d6b0519961f20a510d8baabf6baa393a70444588f0a" },
+    { url = "https://us-central1-python.pkg.dev/loft-orbital-engineering/pypi/msgpack/msgpack-1.2.0-cp314-cp314t-macosx_10_15_x86_64.whl", hash = "sha256:afa4a65ab2097795e771a74a3a81ea49534aaeba874eaf426a3332268e045ae6" },
+    { url = "https://us-central1-python.pkg.dev/loft-orbital-engineering/pypi/msgpack/msgpack-1.2.0-cp314-cp314t-macosx_11_0_arm64.whl", hash = "sha256:409550770632bb28daa70a11d0ed5763f7db38f40b06f7db9f11dd2794d01102" },
+    { url = "https://us-central1-python.pkg.dev/loft-orbital-engineering/pypi/msgpack/msgpack-1.2.0-cp314-cp314t-manylinux2014_aarch64.manylinux_2_17_aarch64.manylinux_2_28_aarch64.whl", hash = "sha256:bf47e3cd11ce044965a9736a322afdd390b31ed602d1c1b10211d1a841f1d587" },
+    { url = "https://us-central1-python.pkg.dev/loft-orbital-engineering/pypi/msgpack/msgpack-1.2.0-cp314-cp314t-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl", hash = "sha256:204bc9f5d6e59c1718c0a4a84fc8ff71b5b4562faac257c1a68bca611ecf9b72" },
+    { url = "https://us-central1-python.pkg.dev/loft-orbital-engineering/pypi/msgpack/msgpack-1.2.0-cp314-cp314t-manylinux_2_31_riscv64.manylinux_2_39_riscv64.whl", hash = "sha256:610154307b27267266368bc1d1c7bb8aeb71da7be9356d403cb2442d9e6399f5" },
+    { url = "https://us-central1-python.pkg.dev/loft-orbital-engineering/pypi/msgpack/msgpack-1.2.0-cp314-cp314t-musllinux_1_2_aarch64.whl", hash = "sha256:6799f157bb63e79f11e2e590cfdb28423fc18dd60c270c3914b5b4586ae36f7e" },
+    { url = "https://us-central1-python.pkg.dev/loft-orbital-engineering/pypi/msgpack/msgpack-1.2.0-cp314-cp314t-musllinux_1_2_riscv64.whl", hash = "sha256:72bd844902cf0a5ac3af2ef742f253cd0b1e5bcd184f49b4fb9a6a1f7bf305e8" },
+    { url = "https://us-central1-python.pkg.dev/loft-orbital-engineering/pypi/msgpack/msgpack-1.2.0-cp314-cp314t-musllinux_1_2_x86_64.whl", hash = "sha256:3c0bd450f78d0d81722c80da6cdbf674a856967870a9db2f6c4debc4d8b3c67c" },
+    { url = "https://us-central1-python.pkg.dev/loft-orbital-engineering/pypi/msgpack/msgpack-1.2.0-cp314-cp314t-win32.whl", hash = "sha256:378caf74c4c718dfc17590ce68a6d710ed398ff6fcf08237de23b77755730b55" },
+    { url = "https://us-central1-python.pkg.dev/loft-orbital-engineering/pypi/msgpack/msgpack-1.2.0-cp314-cp314t-win_amd64.whl", hash = "sha256:553b42598165c4dd3235994fd6e4b0dfb1ce5f3fd33d94ba9609442643015f38" },
+    { url = "https://us-central1-python.pkg.dev/loft-orbital-engineering/pypi/msgpack/msgpack-1.2.0-cp314-cp314t-win_arm64.whl", hash = "sha256:2825bb1da548d214ab8a810906b7dd69a10f3838b615a2cc46e5172d3cb44f6e" },
 ]
 
 [[package]]
@@ -856,6 +1011,15 @@ wheels = [
 ]
 
 [[package]]
+name = "packageurl-python"
+version = "0.17.6"
+source = { registry = "https://us-central1-python.pkg.dev/loft-orbital-engineering/pypi/simple" }
+sdist = { url = "https://us-central1-python.pkg.dev/loft-orbital-engineering/pypi/packageurl-python/packageurl_python-0.17.6.tar.gz", hash = "sha256:1252ce3a102372ca6f86eb968e16f9014c4ba511c5c37d95a7f023e2ca6e5c25" }
+wheels = [
+    { url = "https://us-central1-python.pkg.dev/loft-orbital-engineering/pypi/packageurl-python/packageurl_python-0.17.6-py3-none-any.whl", hash = "sha256:31a85c2717bc41dd818f3c62908685ff9eebcb68588213745b14a6ee9e7df7c9" },
+]
+
+[[package]]
 name = "packaging"
 version = "26.2"
 source = { registry = "https://us-central1-python.pkg.dev/loft-orbital-engineering/pypi/simple" }
@@ -871,6 +1035,74 @@ source = { registry = "https://us-central1-python.pkg.dev/loft-orbital-engineeri
 sdist = { url = "https://us-central1-python.pkg.dev/loft-orbital-engineering/pypi/pathspec/pathspec-1.1.1.tar.gz", hash = "sha256:17db5ecd524104a120e173814c90367a96a98d07c45b2e10c2f3919fff91bf5a" }
 wheels = [
     { url = "https://us-central1-python.pkg.dev/loft-orbital-engineering/pypi/pathspec/pathspec-1.1.1-py3-none-any.whl", hash = "sha256:a00ce642f577bf7f473932318056212bc4f8bfdf53128c78bbd5af0b9b20b189" },
+]
+
+[[package]]
+name = "pip"
+version = "26.1.2"
+source = { registry = "https://us-central1-python.pkg.dev/loft-orbital-engineering/pypi/simple" }
+sdist = { url = "https://us-central1-python.pkg.dev/loft-orbital-engineering/pypi/pip/pip-26.1.2.tar.gz", hash = "sha256:f49cd134c61cf2fd75e0ce2676db03e4054504a5a4986d00f8299ae632dc4605" }
+wheels = [
+    { url = "https://us-central1-python.pkg.dev/loft-orbital-engineering/pypi/pip/pip-26.1.2-py3-none-any.whl", hash = "sha256:382ff9f685ee3bc25864f820aa50505825f10f5458ffff07e30a6d96e5715cab" },
+]
+
+[[package]]
+name = "pip-api"
+version = "0.0.34"
+source = { registry = "https://us-central1-python.pkg.dev/loft-orbital-engineering/pypi/simple" }
+dependencies = [
+    { name = "pip" },
+]
+sdist = { url = "https://us-central1-python.pkg.dev/loft-orbital-engineering/pypi/pip-api/pip_api-0.0.34.tar.gz", hash = "sha256:9b75e958f14c5a2614bae415f2adf7eeb54d50a2cfbe7e24fd4826471bac3625" }
+wheels = [
+    { url = "https://us-central1-python.pkg.dev/loft-orbital-engineering/pypi/pip-api/pip_api-0.0.34-py3-none-any.whl", hash = "sha256:8b2d7d7c37f2447373aa2cf8b1f60a2f2b27a84e1e9e0294a3f6ef10eb3ba6bb" },
+]
+
+[[package]]
+name = "pip-audit"
+version = "2.10.1"
+source = { registry = "https://us-central1-python.pkg.dev/loft-orbital-engineering/pypi/simple" }
+dependencies = [
+    { name = "cachecontrol", extra = ["filecache"] },
+    { name = "cyclonedx-python-lib" },
+    { name = "packaging" },
+    { name = "pip-api" },
+    { name = "pip-requirements-parser" },
+    { name = "platformdirs" },
+    { name = "requests" },
+    { name = "rich" },
+    { name = "tomli" },
+    { name = "tomli-w" },
+]
+sdist = { url = "https://us-central1-python.pkg.dev/loft-orbital-engineering/pypi/pip-audit/pip_audit-2.10.1.tar.gz", hash = "sha256:1eb4565d19ebe5d48996f4b770b4d2b32887e12cb12cfa637f1a064011b55ffc" }
+wheels = [
+    { url = "https://us-central1-python.pkg.dev/loft-orbital-engineering/pypi/pip-audit/pip_audit-2.10.1-py3-none-any.whl", hash = "sha256:99ef3f600a317c1945f1e89e227ef26e1c2d618429b8bd3fa6f4f7c440c4611a" },
+]
+
+[[package]]
+name = "pip-licenses"
+version = "5.5.5"
+source = { registry = "https://us-central1-python.pkg.dev/loft-orbital-engineering/pypi/simple" }
+dependencies = [
+    { name = "prettytable" },
+    { name = "tomli", marker = "python_full_version < '3.11'" },
+]
+sdist = { url = "https://us-central1-python.pkg.dev/loft-orbital-engineering/pypi/pip-licenses/pip_licenses-5.5.5.tar.gz", hash = "sha256:60750c006adf7a0910347b726e8ee9fee3bc8d2e7c8307a5c4ec0776c8e2a276" }
+wheels = [
+    { url = "https://us-central1-python.pkg.dev/loft-orbital-engineering/pypi/pip-licenses/pip_licenses-5.5.5-py3-none-any.whl", hash = "sha256:f4c4c6d9e6a03612cf59f29f19dc8ab54904d82e055b8e191498f2279a224e14" },
+]
+
+[[package]]
+name = "pip-requirements-parser"
+version = "32.0.1"
+source = { registry = "https://us-central1-python.pkg.dev/loft-orbital-engineering/pypi/simple" }
+dependencies = [
+    { name = "packaging" },
+    { name = "pyparsing" },
+]
+sdist = { url = "https://us-central1-python.pkg.dev/loft-orbital-engineering/pypi/pip-requirements-parser/pip-requirements-parser-32.0.1.tar.gz", hash = "sha256:b4fa3a7a0be38243123cf9d1f3518da10c51bdb165a2b2985566247f9155a7d3" }
+wheels = [
+    { url = "https://us-central1-python.pkg.dev/loft-orbital-engineering/pypi/pip-requirements-parser/pip_requirements_parser-32.0.1-py3-none-any.whl", hash = "sha256:4659bc2a667783e7a15d190f6fccf8b2486685b6dba4c19c3876314769c57526" },
 ]
 
 [[package]]
@@ -905,6 +1137,30 @@ dependencies = [
 sdist = { url = "https://us-central1-python.pkg.dev/loft-orbital-engineering/pypi/pre-commit/pre_commit-4.6.0.tar.gz", hash = "sha256:718d2208cef53fdc38206e40524a6d4d9576d103eb16f0fec11c875e7716e9d9" }
 wheels = [
     { url = "https://us-central1-python.pkg.dev/loft-orbital-engineering/pypi/pre-commit/pre_commit-4.6.0-py2.py3-none-any.whl", hash = "sha256:e2cf246f7299edcabcf15f9b0571fdce06058527f0a06535068a86d38089f29b" },
+]
+
+[[package]]
+name = "prettytable"
+version = "3.17.0"
+source = { registry = "https://us-central1-python.pkg.dev/loft-orbital-engineering/pypi/simple" }
+dependencies = [
+    { name = "wcwidth" },
+]
+sdist = { url = "https://us-central1-python.pkg.dev/loft-orbital-engineering/pypi/prettytable/prettytable-3.17.0.tar.gz", hash = "sha256:59f2590776527f3c9e8cf9fe7b66dd215837cca96a9c39567414cbc632e8ddb0" }
+wheels = [
+    { url = "https://us-central1-python.pkg.dev/loft-orbital-engineering/pypi/prettytable/prettytable-3.17.0-py3-none-any.whl", hash = "sha256:aad69b294ddbe3e1f95ef8886a060ed1666a0b83018bbf56295f6f226c43d287" },
+]
+
+[[package]]
+name = "py-serializable"
+version = "2.1.0"
+source = { registry = "https://us-central1-python.pkg.dev/loft-orbital-engineering/pypi/simple" }
+dependencies = [
+    { name = "defusedxml" },
+]
+sdist = { url = "https://us-central1-python.pkg.dev/loft-orbital-engineering/pypi/py-serializable/py_serializable-2.1.0.tar.gz", hash = "sha256:9d5db56154a867a9b897c0163b33a793c804c80cee984116d02d49e4578fc103" }
+wheels = [
+    { url = "https://us-central1-python.pkg.dev/loft-orbital-engineering/pypi/py-serializable/py_serializable-2.1.0-py3-none-any.whl", hash = "sha256:b56d5d686b5a03ba4f4db5e769dc32336e142fc3bd4d68a8c25579ebb0a67304" },
 ]
 
 [[package]]
@@ -1054,6 +1310,15 @@ source = { registry = "https://us-central1-python.pkg.dev/loft-orbital-engineeri
 sdist = { url = "https://us-central1-python.pkg.dev/loft-orbital-engineering/pypi/pygments/pygments-2.20.0.tar.gz", hash = "sha256:6757cd03768053ff99f3039c1a36d6c0aa0b263438fcab17520b30a303a82b5f" }
 wheels = [
     { url = "https://us-central1-python.pkg.dev/loft-orbital-engineering/pypi/pygments/pygments-2.20.0-py3-none-any.whl", hash = "sha256:81a9e26dd42fd28a23a2d169d86d7ac03b46e2f8b59ed4698fb4785f946d0176" },
+]
+
+[[package]]
+name = "pyparsing"
+version = "3.3.2"
+source = { registry = "https://us-central1-python.pkg.dev/loft-orbital-engineering/pypi/simple" }
+sdist = { url = "https://us-central1-python.pkg.dev/loft-orbital-engineering/pypi/pyparsing/pyparsing-3.3.2.tar.gz", hash = "sha256:c777f4d763f140633dcb6d8a3eda953bf7a214dc4eff598413c070bcdc117cbc" }
+wheels = [
+    { url = "https://us-central1-python.pkg.dev/loft-orbital-engineering/pypi/pyparsing/pyparsing-3.3.2-py3-none-any.whl", hash = "sha256:850ba148bd908d7e2411587e247a1e4f0327839c40e2e5e6d05a007ecc69911d" },
 ]
 
 [[package]]
@@ -1302,6 +1567,24 @@ wheels = [
 ]
 
 [[package]]
+name = "sortedcontainers"
+version = "2.4.0"
+source = { registry = "https://us-central1-python.pkg.dev/loft-orbital-engineering/pypi/simple" }
+sdist = { url = "https://us-central1-python.pkg.dev/loft-orbital-engineering/pypi/sortedcontainers/sortedcontainers-2.4.0.tar.gz", hash = "sha256:25caa5a06cc30b6b83d11423433f65d1f9d76c4c6a0c90e3379eaa43b9bfdb88" }
+wheels = [
+    { url = "https://us-central1-python.pkg.dev/loft-orbital-engineering/pypi/sortedcontainers/sortedcontainers-2.4.0-py2.py3-none-any.whl", hash = "sha256:a163dcaede0f1c021485e957a39245190e74249897e2ae4b2aa38595db237ee0" },
+]
+
+[[package]]
+name = "stevedore"
+version = "5.8.0"
+source = { registry = "https://us-central1-python.pkg.dev/loft-orbital-engineering/pypi/simple" }
+sdist = { url = "https://us-central1-python.pkg.dev/loft-orbital-engineering/pypi/stevedore/stevedore-5.8.0.tar.gz", hash = "sha256:b49867b32ca3016e94100e68dbf26e72aa7b8708d0a3f73c08aeb220370ac715" }
+wheels = [
+    { url = "https://us-central1-python.pkg.dev/loft-orbital-engineering/pypi/stevedore/stevedore-5.8.0-py3-none-any.whl", hash = "sha256:88eede9e66ca80e34085b9174e2327da2c61ac91f24f70e41c3ad76e4bb4872b" },
+]
+
+[[package]]
 name = "tomli"
 version = "2.4.1"
 source = { registry = "https://us-central1-python.pkg.dev/loft-orbital-engineering/pypi/simple" }
@@ -1353,6 +1636,15 @@ wheels = [
     { url = "https://us-central1-python.pkg.dev/loft-orbital-engineering/pypi/tomli/tomli-2.4.1-cp314-cp314t-win_amd64.whl", hash = "sha256:2c1c351919aca02858f740c6d33adea0c5deea37f9ecca1cc1ef9e884a619d26" },
     { url = "https://us-central1-python.pkg.dev/loft-orbital-engineering/pypi/tomli/tomli-2.4.1-cp314-cp314t-win_arm64.whl", hash = "sha256:eab21f45c7f66c13f2a9e0e1535309cee140182a9cdae1e041d02e47291e8396" },
     { url = "https://us-central1-python.pkg.dev/loft-orbital-engineering/pypi/tomli/tomli-2.4.1-py3-none-any.whl", hash = "sha256:0d85819802132122da43cb86656f8d1f8c6587d54ae7dcaf30e90533028b49fe" },
+]
+
+[[package]]
+name = "tomli-w"
+version = "1.2.0"
+source = { registry = "https://us-central1-python.pkg.dev/loft-orbital-engineering/pypi/simple" }
+sdist = { url = "https://us-central1-python.pkg.dev/loft-orbital-engineering/pypi/tomli-w/tomli_w-1.2.0.tar.gz", hash = "sha256:2dd14fac5a47c27be9cd4c976af5a12d87fb1f0b4512f81d69cce3b35ae25021" }
+wheels = [
+    { url = "https://us-central1-python.pkg.dev/loft-orbital-engineering/pypi/tomli-w/tomli_w-1.2.0-py3-none-any.whl", hash = "sha256:188306098d013b691fcadc011abd66727d3c414c571bb01b1a174ba8c983cf90" },
 ]
 
 [[package]]
@@ -1434,6 +1726,15 @@ dependencies = [
 sdist = { url = "https://us-central1-python.pkg.dev/loft-orbital-engineering/pypi/virtualenv/virtualenv-21.4.2.tar.gz", hash = "sha256:38e6ee0a555615c0ea9da2ac7e9998fe8dc3b911dd33ad8eaad2020957653b0c" }
 wheels = [
     { url = "https://us-central1-python.pkg.dev/loft-orbital-engineering/pypi/virtualenv/virtualenv-21.4.2-py3-none-any.whl", hash = "sha256:854210ca524a1a4d0d744734f4acbc721c3ffe163b85bbf5d56d14d5ae2f0fae" },
+]
+
+[[package]]
+name = "wcwidth"
+version = "0.8.1"
+source = { registry = "https://us-central1-python.pkg.dev/loft-orbital-engineering/pypi/simple" }
+sdist = { url = "https://us-central1-python.pkg.dev/loft-orbital-engineering/pypi/wcwidth/wcwidth-0.8.1.tar.gz", hash = "sha256:faf5b4a5366a72dc49cad48cdf21f52bdf63bdda995178e483ba247ff79089b9" }
+wheels = [
+    { url = "https://us-central1-python.pkg.dev/loft-orbital-engineering/pypi/wcwidth/wcwidth-0.8.1-py3-none-any.whl", hash = "sha256:f453740b1e4a4f3291faa37944c555d71056c4da08d59809b307ef4feba695c8" },
 ]
 
 [[package]]

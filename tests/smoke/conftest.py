@@ -1,4 +1,6 @@
-# Copyright © Loft Orbital Solutions Inc.
+# SPDX-License-Identifier: Apache-2.0
+"""Fixtures for smoke tests against the live TraCSS API."""
+
 import pytest
 
 from tracss import TraCSS

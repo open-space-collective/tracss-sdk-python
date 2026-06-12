@@ -9,10 +9,14 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
+permissions:
+  contents: read
+
 jobs:
   changes:
     name: Detect changed paths
     runs-on: ubuntu-latest
+    timeout-minutes: 5
     outputs:
       fern: ${{ steps.filter.outputs.fern }}
     steps:
@@ -27,6 +31,7 @@ jobs:
   fern-check:
     name: Fern config validation
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -38,6 +43,7 @@ jobs:
   spec-freshness:
     name: OpenAPI spec freshness
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -62,6 +68,7 @@ jobs:
     name: Generated SDK is up to date
     needs: [fern-check]
     runs-on: ubuntu-latest
+    timeout-minutes: 20
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     steps:
       - uses: actions/checkout@v4
@@ -85,13 +92,19 @@ jobs:
           fi
 
   lint-and-test:
-    name: Lint & unit tests (Python 3.12)
+    name: Lint & unit tests (Python ${{ matrix.python-version }})
     runs-on: ubuntu-latest
+    timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.10", "3.11", "3.12"]
     steps:
       - uses: actions/checkout@v4
       - uses: astral-sh/setup-uv@v4
         with:
           enable-cache: true
+          python-version: ${{ matrix.python-version }}
       - run: uv sync
       - run: make lint
       - run: make test
@@ -99,6 +112,7 @@ jobs:
   security:
     name: Security scan
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
       - uses: astral-sh/setup-uv@v4
@@ -111,6 +125,7 @@ jobs:
   commitlint:
     name: Commit message lint
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     if: github.event_name == 'pull_request'
     steps:
       - uses: actions/checkout@v4
@@ -124,6 +139,7 @@ jobs:
     name: Type checking (mypy)
     needs: [lint-and-test]
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
       - uses: astral-sh/setup-uv@v4
@@ -134,8 +150,9 @@ jobs:
 
   build:
     name: Build & validate wheel
-    needs: [lint-and-test]
+    needs: [lint-and-test, security]
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
       - uses: astral-sh/setup-uv@v4
@@ -153,6 +170,7 @@ jobs:
     name: Integration tests (Prism)
     needs: [lint-and-test]
     runs-on: ubuntu-latest
+    timeout-minutes: 20
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -164,9 +182,9 @@ jobs:
       - run: uv sync
       - name: Start Prism mock servers
         run: |
-          npx --yes @stoplight/prism-cli mock fern/openapi/subscriber/openapi.json --port 4010 &
-          npx --yes @stoplight/prism-cli mock fern/openapi/bulk_data/openapi.json  --port 4011 &
-          npx --yes @stoplight/prism-cli mock fern/openapi/metadata/openapi.json   --port 4012 &
+          npx --yes @stoplight/prism-cli@5 mock fern/openapi/subscriber/openapi.json --port 4010 &
+          npx --yes @stoplight/prism-cli@5 mock fern/openapi/bulk_data/openapi.json  --port 4011 &
+          npx --yes @stoplight/prism-cli@5 mock fern/openapi/metadata/openapi.json   --port 4012 &
           for port in 4010 4011 4012; do
             timeout 15 bash -c \
               "until curl -s --max-time 2 http://localhost:\${port} > /dev/null 2>&1; do sleep 0.5; done" \
@@ -178,6 +196,7 @@ jobs:
     name: Fern docs preview
     needs: [fern-check, changes]
     runs-on: ubuntu-latest
+    timeout-minutes: 20
     if: github.event_name == 'pull_request' && needs.changes.outputs.fern == 'true'
     steps:
       - uses: actions/checkout@v4
@@ -194,6 +213,7 @@ jobs:
     name: Deploy Fern docs
     needs: [fern-check, changes]
     runs-on: ubuntu-latest
+    timeout-minutes: 20
     if: github.ref == 'refs/heads/main' && github.event_name == 'push' && needs.changes.outputs.fern == 'true'
     steps:
       - uses: actions/checkout@v4

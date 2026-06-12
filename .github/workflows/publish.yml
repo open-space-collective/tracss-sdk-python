@@ -12,8 +12,10 @@ jobs:
   publish:
     name: Build & publish Python SDK
     runs-on: ubuntu-latest
+    environment: ${{ contains(github.ref_name, '-rc') && 'pypi-test' || 'pypi-prod' }}
     permissions:
       contents: write
+      id-token: write
     steps:
       - uses: actions/checkout@v4
       - uses: astral-sh/setup-uv@v4
@@ -35,10 +37,9 @@ jobs:
       - name: Publish to PyPI (stable) or TestPyPI (release candidate)
         run: |
           if [[ "${{ github.ref_name }}" == *"-rc"* ]]; then
-            uv publish --token ${{ secrets.TEST_PYPI_TOKEN }} \
-              --publish-url https://test.pypi.org/legacy/
+            uv publish --publish-url https://test.pypi.org/legacy/
           else
-            uv publish --token ${{ secrets.PYPI_TOKEN }}
+            uv publish
           fi
 
       - name: Create GitHub release

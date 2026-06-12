@@ -1,4 +1,6 @@
-# Copyright © Loft Orbital Solutions Inc.
+# SPDX-License-Identifier: Apache-2.0
+"""Unit tests for the Bulk Data API client surface."""
+
 import httpx
 import respx
 

@@ -1,4 +1,6 @@
-# Copyright © Loft Orbital Solutions Inc.
+# SPDX-License-Identifier: Apache-2.0
+"""Unit tests for the Metadata API client surface."""
+
 import io
 
 import httpx
@@ -21,10 +23,11 @@ def test_contact_directory_list_operational_path(api_client, respx_mock):
 
 
 def test_contact_directory_list_operational_returns_list(api_client, respx_mock):
-    """
-    Regression: override in fern/sdks/metadata-overrides.yaml pins the response
-    type to List[OperationalContactInfoDto]. This test catches any regeneration
-    that loses that override and falls back to a raw response or wrong type.
+    """Regression: metadata override pins list_operational return type.
+
+    The override in fern/sdks/metadata-overrides.yaml pins the response type to
+    List[OperationalContactInfoDto]. This test catches any regeneration that loses
+    that override and falls back to a raw response or wrong type.
     """
     payload = [
         {

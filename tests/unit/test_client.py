@@ -1,4 +1,6 @@
-# Copyright © Loft Orbital Solutions Inc.
+# SPDX-License-Identifier: Apache-2.0
+"""Unit tests for TraCSS and AsyncTraCSS Okta auth logic."""
+
 import base64
 import os
 import time

@@ -1,6 +1,5 @@
-# Copyright © Loft Orbital Solutions Inc.
-"""
-Integration tests for the Metadata API.
+# SPDX-License-Identifier: Apache-2.0
+"""Integration tests for the Metadata API.
 
 Requires Prism: prism mock fern/openapi/metadata/openapi.json --port 4012
 Run via: make integration
@@ -13,6 +12,8 @@ from tracss.core import RequestOptions
 
 @pytest.mark.integration
 class TestMetadataContactDirectory:
+    """Integration tests for metadata.contact_directory endpoints."""
+
     def test_list_operational_callable(self, metadata_client):
         assert callable(metadata_client.metadata.contact_directory.list_operational)
 
@@ -26,6 +27,8 @@ class TestMetadataContactDirectory:
 
 @pytest.mark.integration
 class TestMetadataOcm:
+    """Integration tests for metadata.ocm endpoints."""
+
     def test_list_callable(self, metadata_client):
         assert callable(metadata_client.metadata.ocm.list)
 
@@ -50,6 +53,8 @@ class TestMetadataOcm:
 
 @pytest.mark.integration
 class TestMetadataCdm:
+    """Integration tests for metadata.cdm endpoints."""
+
     def test_list_callable(self, metadata_client):
         assert callable(metadata_client.metadata.cdm.list)
 
@@ -71,6 +76,8 @@ class TestMetadataCdm:
 
 @pytest.mark.integration
 class TestMetadataTracssCat:
+    """Integration tests for metadata.tracss_cat endpoints."""
+
     def test_list_callable(self, metadata_client):
         assert callable(metadata_client.metadata.tracss_cat.list)
 
@@ -84,6 +91,8 @@ class TestMetadataTracssCat:
 
 @pytest.mark.integration
 class TestMetadataAsync:
+    """Async variants of the Metadata API integration tests."""
+
     async def test_cdm_list_async(self, async_metadata_client):
         result = await async_metadata_client.metadata.cdm.list(
             format="json",

@@ -1,5 +1,5 @@
 # SPDX-License-Identifier: Apache-2.0
-"""TraCSS SDK client — transparent Okta client-credentials auth (sync + async)."""
+"""TraCSS SDK client - transparent Okta client-credentials auth (sync + async)."""
 
 from __future__ import annotations
 

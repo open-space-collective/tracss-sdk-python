@@ -1,6 +1,5 @@
-# Copyright © Loft Orbital Solutions Inc.
-"""
-Smoke tests against the live TraCSS API.
+# SPDX-License-Identifier: Apache-2.0
+"""Smoke tests against the live TraCSS API.
 
 These tests require real credentials in the environment:
   export TRACSS_CLIENT_ID=...

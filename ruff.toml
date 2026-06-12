@@ -4,7 +4,6 @@ target-version = "py312"
 [lint]
 select = ["ALL"]
 ignore = [
-    "D",      # pydocstyle — defer until docstring pass
     "DOC",    # pydoclint — defer until docstring pass
     "COM812", # trailing-comma-missing — formatter conflict
     "ISC001", # implicit-str-concat — formatter conflict
@@ -16,9 +15,16 @@ ignore = [
     "TRY003", # raise-vanilla-args — existing pattern is clear enough
     "EM101",  # raw-string-in-exception — not enforced here
     "EM102",  # f-string-in-exception — not enforced here
+    "D105",   # magic-method-docstring — self-explanatory by name
+    "D107",   # missing-docstring-in-__init__ — Google style: Args live on class docstring
 ]
 
+[lint.pydocstyle]
+convention = "google"
+
 [lint.per-file-ignores]
+# Hand-written source — suppress __init__ docstrings (Google style: Args live on class docstring)
+"sdks/python/tracss/client.py" = ["D107"]
 # Silence Fern-generated paths entirely
 "sdks/python/tracss/core/**"             = ["ALL"]
 "sdks/python/tracss/bulk_data/**"        = ["ALL"]
@@ -29,7 +35,12 @@ ignore = [
 "sdks/python/tracss/environment.py"      = ["ALL"]
 "sdks/python/tracss/_default_clients.py" = ["ALL"]
 "sdks/python/tracss/tests/**"            = ["ALL"]
-# Test files — relax assertion, hardcoded-value, annotation, and private-access rules
+# Empty package markers — never need module or package docstrings
+"tests/__init__.py"             = ["D100", "D104"]
+"tests/unit/__init__.py"        = ["D100", "D104"]
+"tests/smoke/__init__.py"       = ["D100", "D104"]
+"tests/integration/__init__.py" = ["D100", "D104"]
+# Test files — functions are self-documenting by name; module/class docstrings still required
 "tests/**" = [
     "S101",    # assert — expected in tests
     "S105",    # hardcoded-password-string — test tokens are intentional
@@ -42,6 +53,8 @@ ignore = [
     "PLC2701", # private-import — tests may import private helpers
     "F401",    # unused-import — some test modules import for side effects
     "PLC0415", # import-not-at-top — lazy imports inside test functions are intentional
+    "D102",    # public-method-docstring — test methods are self-documenting by name
+    "D103",    # public-function-docstring — test functions are self-documenting by name
 ]
 
 [lint.isort]

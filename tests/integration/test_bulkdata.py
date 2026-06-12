@@ -1,6 +1,5 @@
-# Copyright © Loft Orbital Solutions Inc.
-"""
-Integration tests for the Bulk Data API.
+# SPDX-License-Identifier: Apache-2.0
+"""Integration tests for the Bulk Data API.
 
 Requires Prism in dynamic mode:
     prism mock -d fern/openapi/bulk_data/openapi.json --port 4011
@@ -16,6 +15,8 @@ from tracss.core import RequestOptions
 
 @pytest.mark.integration
 class TestBulkDataCdm:
+    """Integration tests for bulk_data.cdm streaming endpoints."""
+
     def test_stream_method_callable(self, bulkdata_client):
         assert callable(bulkdata_client.bulk_data.cdm.stream)
 
@@ -46,6 +47,8 @@ class TestBulkDataCdm:
 
 @pytest.mark.integration
 class TestBulkDataOcm:
+    """Integration tests for bulk_data.ocm streaming endpoints."""
+
     def test_stream_method_callable(self, bulkdata_client):
         assert callable(bulkdata_client.bulk_data.ocm.stream)
 
@@ -65,6 +68,8 @@ class TestBulkDataOcm:
 
 @pytest.mark.integration
 class TestBulkDataTip:
+    """Integration tests for bulk_data.tip streaming endpoints."""
+
     def test_stream_method_callable(self, bulkdata_client):
         assert callable(bulkdata_client.bulk_data.tip.stream)
 
@@ -79,6 +84,8 @@ class TestBulkDataTip:
 
 @pytest.mark.integration
 class TestBulkDataAnnouncements:
+    """Integration tests for bulk_data.announcements endpoints."""
+
     def test_list_method_callable(self, bulkdata_client):
         assert callable(bulkdata_client.bulk_data.announcements.list)
 
@@ -97,6 +104,8 @@ class TestBulkDataAnnouncements:
 
 @pytest.mark.integration
 class TestBulkDataAsync:
+    """Async variants of the Bulk Data streaming integration tests."""
+
     async def test_cdm_stream_async(self, async_ndjson_client):
         chunks = [
             c

@@ -1,6 +1,5 @@
-# Copyright © Loft Orbital Solutions Inc.
-"""
-Integration tests for the Subscriber API.
+# SPDX-License-Identifier: Apache-2.0
+"""Integration tests for the Subscriber API.
 
 Requires Prism mock servers running (start with: make prism-all):
   prism mock fern/openapi/subscriber/openapi.json --port 4010
@@ -13,6 +12,8 @@ import pytest
 
 @pytest.mark.integration
 class TestSubscriberTopics:
+    """Integration tests for subscriber.topics endpoints."""
+
     def test_list_method_callable(self, subscriber_client):
         assert callable(subscriber_client.subscriber.topics.list)
 
@@ -32,6 +33,8 @@ class TestSubscriberTopics:
 
 @pytest.mark.integration
 class TestSubscriberMessages:
+    """Integration tests for subscriber.messages endpoints."""
+
     def test_list_method_callable(self, subscriber_client):
         assert callable(subscriber_client.subscriber.messages.list)
 
@@ -50,6 +53,8 @@ class TestSubscriberMessages:
 
 @pytest.mark.integration
 class TestSubscriberAsync:
+    """Async variants of the Subscriber API integration tests."""
+
     async def test_topics_list_async(self, async_subscriber_client):
         result = await async_subscriber_client.subscriber.topics.list()
         assert result is not None

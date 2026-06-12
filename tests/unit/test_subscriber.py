@@ -1,4 +1,6 @@
-# Copyright © Loft Orbital Solutions Inc.
+# SPDX-License-Identifier: Apache-2.0
+"""Unit tests for the Subscriber API client surface."""
+
 import httpx
 import pytest
 import respx
@@ -22,7 +24,7 @@ def test_topics_list_no_required_params(api_client, respx_mock):
     respx_mock.get(f"{BASE}/subscriber/topics").mock(
         return_value=httpx.Response(200, json="")
     )
-    # Must not raise TypeError — no required params
+    # Must not raise TypeError - no required params
     api_client.subscriber.topics.list()
 
 
