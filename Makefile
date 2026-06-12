@@ -150,7 +150,7 @@ smoke: ## Run smoke tests against the live TraCSS API (requires real credentials
 .PHONY: security
 security: ## Run security scans (bandit static analysis + pip-audit vulnerability check)
 	uv run bandit -r sdks/python/tracss/client.py tests/ -ll
-	uv run pip-audit
+	uv run pip-audit --vulnerability-service osv
 
 .PHONY: coverage
 coverage: ## Generate HTML coverage report (open htmlcov/index.html)

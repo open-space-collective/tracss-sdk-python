@@ -122,7 +122,7 @@ jobs:
           enable-cache: true
       - run: uv sync
       - run: uv run bandit -r sdks/python/tracss/client.py tests/ -ll
-      - run: uv run pip-audit
+      - run: uv run pip-audit --vulnerability-service osv
 
   commitlint:
     name: Commit message lint
