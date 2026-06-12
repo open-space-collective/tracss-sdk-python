@@ -12,7 +12,7 @@ jobs:
   publish:
     name: Build & publish Python SDK
     runs-on: ubuntu-latest
-    environment: ${{ contains(github.ref_name, '-rc') && 'pypi-test' || 'pypi-prod' }}
+    environment: pypi-prod
     permissions:
       contents: write
       id-token: write
@@ -34,13 +34,8 @@ jobs:
       - name: Validate wheel
         run: uv run twine check dist/*
 
-      - name: Publish to PyPI (stable) or TestPyPI (release candidate)
-        run: |
-          if [[ "${{ github.ref_name }}" == *"-rc"* ]]; then
-            uv publish --publish-url https://test.pypi.org/legacy/
-          else
-            uv publish
-          fi
+      - name: Publish to PyPI
+        run: uv publish
 
       - name: Create GitHub release
         run: |
