@@ -182,13 +182,15 @@ jobs:
         with:
           enable-cache: true
       - run: uv sync
+      - name: Install Prism mock server
+        run: npm install -g @stoplight/prism-cli@5
       - name: Start Prism mock servers
         run: |
-          npx --yes @stoplight/prism-cli@5 mock fern/openapi/subscriber/openapi.json --port 4010 &
-          npx --yes @stoplight/prism-cli@5 mock fern/openapi/bulk_data/openapi.json  --port 4011 &
-          npx --yes @stoplight/prism-cli@5 mock fern/openapi/metadata/openapi.json   --port 4012 &
+          prism mock fern/openapi/subscriber/openapi.json --port 4010 &
+          prism mock fern/openapi/bulk_data/openapi.json  --port 4011 &
+          prism mock fern/openapi/metadata/openapi.json   --port 4012 &
           for port in 4010 4011 4012; do
-            timeout 15 bash -c \
+            timeout 30 bash -c \
               "until curl -s --max-time 2 http://localhost:\${port} > /dev/null 2>&1; do sleep 0.5; done" \
               || { echo "Prism did not start on port ${port}" >&2; exit 1; }
           done
