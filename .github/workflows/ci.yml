@@ -98,7 +98,6 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     strategy:
-      fail-fast: false
       matrix:
         python-version: ["3.10", "3.11", "3.12"]
     steps:
@@ -195,6 +194,9 @@ jobs:
               || { echo "Prism did not start on port ${port}" >&2; exit 1; }
           done
       - run: make integration
+      - name: Stop Prism mock servers
+        if: always()
+        run: pkill -f "prism mock" 2>/dev/null || true
 
   docs:
     name: Fern docs preview
