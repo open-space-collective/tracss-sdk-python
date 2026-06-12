@@ -39,6 +39,35 @@ cdms = client.metadata.cdm.list()
 xsd = client.metadata.schemas.get_xsd()
 ```
 
+## Response formats
+
+CDM, OCM, and TIP report list methods all support a `format` query parameter. The TraCSS
+API returns CCSDS KVN (`text/plain`) by default when `format` is omitted, but the SDK
+automatically sends `format=json` so callers always get a typed response object.
+
+```python
+# Default — format=json injected automatically, returns a typed response object
+cdms = client.metadata.cdm.list()
+ocms = client.metadata.ocm.list()
+tips = client.metadata.tip_reports.list()
+
+# Explicit non-JSON format — returns raw str
+kvn_text = client.metadata.cdm.list(format="KVN")   # CCSDS KVN
+xml_text = client.metadata.cdm.list(format="xml")
+csv_text = client.metadata.cdm.list(format="csv")   # CDM only
+```
+
+| Method group | Supported `format=` values |
+|---|---|
+| `cdm.list()`, `cdm.list_v1()` | `json` (default), `KVN`, `xml`, `csv` |
+| `cdm.list_by_operational_batch()`, `cdm.list_by_operational_batch_v1()` | `json` (default), `KVN`, `xml` |
+| `ocm.list()`, `ocm.list_v1()` | `json` (default), `KVN`, `xml` |
+| `ocm.list_by_operational_batch()` | JSON only |
+| `tip_reports.list()` | `json` (default), `KVN`, `xml` |
+
+When a non-JSON format is requested, the method returns a raw `str` containing the
+response body. All other errors (4xx, 5xx) are raised as `ApiError` unchanged.
+
 ## Authentication
 
 All endpoints require a valid Okta access token. The SDK fetches and refreshes tokens automatically — see [Authentication](/authentication) for details.

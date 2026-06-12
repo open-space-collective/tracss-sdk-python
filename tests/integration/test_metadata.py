@@ -7,8 +7,6 @@ Run via: make integration
 
 import pytest
 
-from tracss.core import RequestOptions
-
 
 @pytest.mark.integration
 class TestMetadataContactDirectory:
@@ -33,12 +31,7 @@ class TestMetadataOcm:
         assert callable(metadata_client.metadata.ocm.list)
 
     def test_list_returns(self, metadata_client):
-        result = metadata_client.metadata.ocm.list(
-            format="json",
-            request_options=RequestOptions(
-                additional_headers={"Accept": "application/json"}
-            ),
-        )
+        result = metadata_client.metadata.ocm.list()
         assert result is not None
 
     def test_list_v1_callable(self, metadata_client):
@@ -59,12 +52,7 @@ class TestMetadataCdm:
         assert callable(metadata_client.metadata.cdm.list)
 
     def test_list_returns(self, metadata_client):
-        result = metadata_client.metadata.cdm.list(
-            format="json",
-            request_options=RequestOptions(
-                additional_headers={"Accept": "application/json"}
-            ),
-        )
+        result = metadata_client.metadata.cdm.list()
         assert result is not None
 
     def test_list_v1_callable(self, metadata_client):
@@ -94,19 +82,9 @@ class TestMetadataAsync:
     """Async variants of the Metadata API integration tests."""
 
     async def test_cdm_list_async(self, async_metadata_client):
-        result = await async_metadata_client.metadata.cdm.list(
-            format="json",
-            request_options=RequestOptions(
-                additional_headers={"Accept": "application/json"}
-            ),
-        )
+        result = await async_metadata_client.metadata.cdm.list()
         assert result is not None
 
     async def test_ocm_list_async(self, async_metadata_client):
-        result = await async_metadata_client.metadata.ocm.list(
-            format="json",
-            request_options=RequestOptions(
-                additional_headers={"Accept": "application/json"}
-            ),
-        )
+        result = await async_metadata_client.metadata.ocm.list()
         assert result is not None

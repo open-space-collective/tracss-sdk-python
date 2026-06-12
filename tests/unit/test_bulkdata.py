@@ -1,6 +1,8 @@
 # SPDX-License-Identifier: Apache-2.0
 """Unit tests for the Bulk Data API client surface."""
 
+from http import HTTPStatus
+
 import httpx
 import respx
 
@@ -9,7 +11,7 @@ BASE = "https://api.tracss.gov"
 
 def test_cdm_stream_no_args(api_client, respx_mock):
     route = respx_mock.get(f"{BASE}/bulkdata/cdm/v2/stream").mock(
-        return_value=httpx.Response(200, text="")
+        return_value=httpx.Response(HTTPStatus.OK, text="")
     )
     list(api_client.bulk_data.cdm.stream())
     assert route.called
@@ -18,7 +20,7 @@ def test_cdm_stream_no_args(api_client, respx_mock):
 
 def test_cdm_stream_partial_args(api_client, respx_mock):
     route = respx_mock.get(f"{BASE}/bulkdata/cdm/v2/stream").mock(
-        return_value=httpx.Response(200, text="")
+        return_value=httpx.Response(HTTPStatus.OK, text="")
     )
     list(
         api_client.bulk_data.cdm.stream(
@@ -32,7 +34,7 @@ def test_cdm_stream_partial_args(api_client, respx_mock):
 
 def test_cdm_stream_full_args(api_client, respx_mock):
     route = respx_mock.get(f"{BASE}/bulkdata/cdm/v2/stream").mock(
-        return_value=httpx.Response(200, text="")
+        return_value=httpx.Response(HTTPStatus.OK, text="")
     )
     list(
         api_client.bulk_data.cdm.stream(
@@ -54,7 +56,7 @@ def test_cdm_stream_full_args(api_client, respx_mock):
 
 def test_cdm_stream_v1_uses_v1_path(api_client, respx_mock):
     route = respx_mock.get(f"{BASE}/bulkdata/cdm/v1/stream").mock(
-        return_value=httpx.Response(200, text="")
+        return_value=httpx.Response(HTTPStatus.OK, text="")
     )
     list(api_client.bulk_data.cdm.stream_v1())
     assert route.called
@@ -62,7 +64,7 @@ def test_cdm_stream_v1_uses_v1_path(api_client, respx_mock):
 
 def test_ocm_stream_uses_v2_path(api_client, respx_mock):
     route = respx_mock.get(f"{BASE}/bulkdata/ocm/v2/stream").mock(
-        return_value=httpx.Response(200, text="")
+        return_value=httpx.Response(HTTPStatus.OK, text="")
     )
     list(api_client.bulk_data.ocm.stream())
     assert route.called
@@ -70,7 +72,7 @@ def test_ocm_stream_uses_v2_path(api_client, respx_mock):
 
 def test_ocm_stream_partial_args(api_client, respx_mock):
     route = respx_mock.get(f"{BASE}/bulkdata/ocm/v2/stream").mock(
-        return_value=httpx.Response(200, text="")
+        return_value=httpx.Response(HTTPStatus.OK, text="")
     )
     list(api_client.bulk_data.ocm.stream(operator="STARLINK", object_designator="45678"))
     url = str(route.calls[0].request.url)
@@ -80,7 +82,7 @@ def test_ocm_stream_partial_args(api_client, respx_mock):
 
 def test_ocm_stream_v1_uses_v1_path(api_client, respx_mock):
     route = respx_mock.get(f"{BASE}/bulkdata/ocm/v1/stream").mock(
-        return_value=httpx.Response(200, text="")
+        return_value=httpx.Response(HTTPStatus.OK, text="")
     )
     list(api_client.bulk_data.ocm.stream_v1())
     assert route.called
@@ -88,7 +90,7 @@ def test_ocm_stream_v1_uses_v1_path(api_client, respx_mock):
 
 def test_tip_stream_no_args(api_client, respx_mock):
     route = respx_mock.get(f"{BASE}/bulkdata/tip/stream").mock(
-        return_value=httpx.Response(200, json={})
+        return_value=httpx.Response(HTTPStatus.OK, json={})
     )
     api_client.bulk_data.tip.stream()
     assert route.called
@@ -97,7 +99,7 @@ def test_tip_stream_no_args(api_client, respx_mock):
 
 def test_tip_stream_partial_args(api_client, respx_mock):
     route = respx_mock.get(f"{BASE}/bulkdata/tip/stream").mock(
-        return_value=httpx.Response(200, json={})
+        return_value=httpx.Response(HTTPStatus.OK, json={})
     )
     api_client.bulk_data.tip.stream(norad_id="12345", high_interest="true")
     url = str(route.calls[0].request.url)
@@ -108,7 +110,7 @@ def test_tip_stream_partial_args(api_client, respx_mock):
 def test_announcements_list_is_get(api_client, respx_mock):
     # Fern calls _response.json() even for str return types; mock with json= not text=
     route = respx_mock.get(f"{BASE}/bulkdata/announcements").mock(
-        return_value=httpx.Response(200, json="")
+        return_value=httpx.Response(HTTPStatus.OK, json="")
     )
     api_client.bulk_data.announcements.list()
     assert route.called
@@ -117,7 +119,7 @@ def test_announcements_list_is_get(api_client, respx_mock):
 
 def test_announcements_list_optional_type_param(api_client, respx_mock):
     route = respx_mock.get(f"{BASE}/bulkdata/announcements").mock(
-        return_value=httpx.Response(200, json="")
+        return_value=httpx.Response(HTTPStatus.OK, json="")
     )
     api_client.bulk_data.announcements.list(type="OPERATIONAL")
     url = str(route.calls[0].request.url)

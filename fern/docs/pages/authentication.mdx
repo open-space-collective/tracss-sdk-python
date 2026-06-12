@@ -1,5 +1,13 @@
 # Authentication
 
+<Note>
+The API reference panels show an `Authorization: Bearer <token>` header marked as required.
+**You do not need to set this header yourself when using the SDK.** The client fetches a token
+from Okta automatically and attaches the correct `Authorization` header to every request. The
+header documentation describes the underlying HTTP contract which is satisfied transparently by
+the SDK.
+</Note>
+
 TraCSS uses an **Okta client-credentials** OAuth 2.0 flow. The SDK handles the entire token
 lifecycle automatically — callers never need to manage tokens directly.
 

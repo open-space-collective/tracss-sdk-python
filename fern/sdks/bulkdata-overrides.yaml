@@ -3,6 +3,7 @@ paths:
     get:
       x-fern-sdk-group-name: [tip]
       x-fern-sdk-method-name: stream
+      x-fern-streaming: true
 
   /bulkdata/ocm/v2/stream:
     get:

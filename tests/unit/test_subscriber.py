@@ -1,6 +1,8 @@
 # SPDX-License-Identifier: Apache-2.0
 """Unit tests for the Subscriber API client surface."""
 
+from http import HTTPStatus
+
 import httpx
 import pytest
 import respx
@@ -22,7 +24,7 @@ def test_topics_list_is_get(api_client, respx_mock):
 
 def test_topics_list_no_required_params(api_client, respx_mock):
     respx_mock.get(f"{BASE}/subscriber/topics").mock(
-        return_value=httpx.Response(200, json="")
+        return_value=httpx.Response(HTTPStatus.OK, json="")
     )
     # Must not raise TypeError - no required params
     api_client.subscriber.topics.list()
@@ -30,7 +32,7 @@ def test_topics_list_no_required_params(api_client, respx_mock):
 
 def test_topics_get_offset_sends_topic(api_client, respx_mock):
     route = respx_mock.get(f"{BASE}/subscriber/offset").mock(
-        return_value=httpx.Response(200, json={"offset": 42})
+        return_value=httpx.Response(HTTPStatus.OK, json={"offset": 42})
     )
     api_client.subscriber.topics.get_offset(topic="gov.tracss.tracss.v2.cdms")
     url = str(route.calls[0].request.url)
@@ -39,7 +41,7 @@ def test_topics_get_offset_sends_topic(api_client, respx_mock):
 
 def test_topics_get_offset_requires_topic(api_client, respx_mock):
     respx_mock.get(f"{BASE}/subscriber/offset").mock(
-        return_value=httpx.Response(200, json={})
+        return_value=httpx.Response(HTTPStatus.OK, json={})
     )
     with pytest.raises(TypeError):
         api_client.subscriber.topics.get_offset()  # topic is required
@@ -47,7 +49,7 @@ def test_topics_get_offset_requires_topic(api_client, respx_mock):
 
 def test_messages_list_minimal_args(api_client, respx_mock):
     route = respx_mock.get(f"{BASE}/subscriber/messages").mock(
-        return_value=httpx.Response(200, json={})
+        return_value=httpx.Response(HTTPStatus.OK, json={})
     )
     api_client.subscriber.messages.list(topic="gov.tracss.tracss.v2.cdms", offset="0")
     url = str(route.calls[0].request.url)
@@ -60,7 +62,7 @@ def test_messages_list_minimal_args(api_client, respx_mock):
 
 def test_messages_list_full_args(api_client, respx_mock):
     respx_mock.get(f"{BASE}/subscriber/messages").mock(
-        return_value=httpx.Response(200, json={})
+        return_value=httpx.Response(HTTPStatus.OK, json={})
     )
     api_client.subscriber.messages.list(
         topic="gov.tracss.tracss.v2.cdms",
@@ -77,7 +79,7 @@ def test_messages_list_full_args(api_client, respx_mock):
 
 def test_messages_list_requires_topic_and_offset(api_client, respx_mock):
     respx_mock.get(f"{BASE}/subscriber/messages").mock(
-        return_value=httpx.Response(200, json={})
+        return_value=httpx.Response(HTTPStatus.OK, json={})
     )
     with pytest.raises(TypeError):
         api_client.subscriber.messages.list()  # topic and offset are required
@@ -85,7 +87,9 @@ def test_messages_list_requires_topic_and_offset(api_client, respx_mock):
 
 def test_messages_list_401_raises(api_client, respx_mock):
     respx_mock.get(f"{BASE}/subscriber/messages").mock(
-        return_value=httpx.Response(401, json={"error": "unauthorized"})
+        return_value=httpx.Response(
+            HTTPStatus.UNAUTHORIZED, json={"error": "unauthorized"}
+        )
     )
     from tracss.subscriber.errors import UnauthorizedError
 

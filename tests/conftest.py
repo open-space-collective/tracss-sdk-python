@@ -4,6 +4,7 @@
 import pytest
 
 from tracss import TraCSS
+from tracss.client import AsyncTraCSS
 
 
 def pytest_configure(config: pytest.Config) -> None:
@@ -14,6 +15,15 @@ def pytest_configure(config: pytest.Config) -> None:
 def api_client() -> TraCSS:
     """Sync client with a pre-seeded token - bypasses Okta for method unit tests."""
     client = TraCSS(client_id="fake", client_secret="fake")
+    client._token = "unit-test-token"
+    client._token_expires_at = float("inf")
+    return client
+
+
+@pytest.fixture
+async def async_api_client() -> AsyncTraCSS:
+    """Async client with a pre-seeded token - bypasses Okta for method unit tests."""
+    client = AsyncTraCSS(client_id="fake", client_secret="fake")
     client._token = "unit-test-token"
     client._token_expires_at = float("inf")
     return client
