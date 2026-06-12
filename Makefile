@@ -124,7 +124,7 @@ integration: ## Run integration tests (requires prism-all running)
 	TRACSS_METADATA_URL=http://localhost:$(METADATA_PORT) \
 	TRACSS_CLIENT_ID=fake \
 	TRACSS_CLIENT_SECRET=fake \
-	uv run pytest tests/integration/ -v -m integration
+	uv run pytest tests/unit/ tests/integration/ -v
 
 
 .PHONY: build
