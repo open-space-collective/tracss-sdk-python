@@ -1,7 +1,7 @@
 # yaml-language-server: $schema=https://schema.buildwithfern.dev/docs-yml.json
 
 instances:
-  - url: tracss.docs.buildwithfern.com
+  - url: open-space-collective.docs.buildwithfern.com
     # custom-domain: docs.tracss.gov   # uncomment once DNS is delegated to Fern
     edit-this-page:
       github:

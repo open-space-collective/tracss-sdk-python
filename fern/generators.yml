@@ -109,7 +109,7 @@ groups:
             Homepage = "https://github.com/open-space-collective/tracss-sdk-python"
             Repository = "https://github.com/open-space-collective/tracss-sdk-python"
             Issues = "https://github.com/open-space-collective/tracss-sdk-python/issues"
-            Documentation = "https://tracss.docs.buildwithfern.com"
+            Documentation = "https://open-space-collective.docs.buildwithfern.com"
 
         output:
           location: pypi
