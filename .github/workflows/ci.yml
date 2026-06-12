@@ -191,7 +191,7 @@ jobs:
           prism mock fern/openapi/metadata/openapi.json   --port 4012 &
           for port in 4010 4011 4012; do
             timeout 30 bash -c \
-              "until curl -s --max-time 2 http://localhost:\${port} > /dev/null 2>&1; do sleep 0.5; done" \
+              "until curl -s --max-time 2 http://127.0.0.1:\${port} > /dev/null 2>&1; do sleep 0.5; done" \
               || { echo "Prism did not start on port ${port}" >&2; exit 1; }
           done
       - run: make integration

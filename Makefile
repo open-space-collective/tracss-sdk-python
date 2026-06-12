@@ -109,7 +109,7 @@ prism-all: ## Start all three Prism mock servers in the background and wait for 
 	done
 	@for port in $(SUBSCRIBER_PORT) $(BULKDATA_PORT) $(METADATA_PORT); do \
 		timeout 60 bash -c \
-			"until curl -s --max-time 2 http://localhost:$$port > /dev/null 2>&1; do sleep 0.5; done" \
+			"until curl -s --max-time 2 http://127.0.0.1:$$port > /dev/null 2>&1; do sleep 0.5; done" \
 			|| { echo "Prism did not start on port $$port" >&2; exit 1; }; \
 	done
 
