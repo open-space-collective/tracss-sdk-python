@@ -25,6 +25,7 @@ dev = [
     "bandit>=1.8",
     "pip-audit>=2.7",
     "pip-licenses>=5",
+    "pyyaml>=6",
 ]
 
 [tool.mypy]
@@ -51,3 +52,67 @@ markers = [
     "integration: requires Prism mock servers (run with make prism-all first)",
     "smoke: requires live TraCSS credentials (run with make smoke)",
 ]
+
+[tool.ruff]
+line-length = 90
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["ALL"]
+ignore = [
+    "DOC",    # pydoclint, defer until docstring pass
+    "COM812", # trailing-comma-missing, formatter conflict
+    "ISC001", # implicit-str-concat, formatter conflict
+    "ERA001", # commented-out-code
+    "FIX002", # line-contains-todo
+    "TD",     # TODO rules
+    "ANN",    # annotations, generated files have none; revisit later
+    "CPY001", # copyright-notice, pattern not yet configured
+    "TRY003", # raise-vanilla-args, existing pattern is clear enough
+    "EM101",  # raw-string-in-exception, not enforced here
+    "EM102",  # f-string-in-exception, not enforced here
+    "D105",   # magic-method-docstring, self-explanatory by name
+    "D107",   # missing-docstring-in-__init__, Google style: Args live on class docstring
+    "UP047",  # type-parameter syntax requires 3.12+; requires-python = ">=3.10"
+]
+
+[tool.ruff.lint.pydocstyle]
+convention = "google"
+
+[tool.ruff.lint.per-file-ignores]
+"sdks/python/tracss/client.py"           = ["D107"]
+"sdks/python/tracss/core/**"             = ["ALL"]
+"sdks/python/tracss/bulk_data/**"        = ["ALL"]
+"sdks/python/tracss/metadata/**"         = ["ALL"]
+"sdks/python/tracss/subscriber/**"       = ["ALL"]
+"sdks/python/tracss/__init__.py"         = ["ALL"]
+"sdks/python/tracss/base_client.py"      = ["ALL"]
+"sdks/python/tracss/environment.py"      = ["ALL"]
+"sdks/python/tracss/_default_clients.py" = ["ALL"]
+"sdks/python/tracss/tests/**"            = ["ALL"]
+"tests/__init__.py"                      = ["D100", "D104"]
+"tests/unit/__init__.py"                 = ["D100", "D104"]
+"tests/smoke/__init__.py"                = ["D100", "D104"]
+"tests/integration/__init__.py"          = ["D100", "D104"]
+"tests/**" = [
+    "S101",    # assert - expected in tests
+    "S105",    # hardcoded-password-string, test tokens are intentional
+    "S106",    # hardcoded-password-func-arg, test credentials are intentional
+    "ANN",     # annotations
+    "PLR2004", # magic-value-comparison
+    "PLR6301", # no-self-use, test classes use self for fixture access
+    "SLF001",  # private-member-access, tests legitimately probe internals
+    "ARG001",  # unused-function-argument, fixture args may not be used directly
+    "PLC2701", # private-import, tests may import private helpers
+    "F401",    # unused-import, some test modules import for side effects
+    "PLC0415", # import-not-at-top, lazy imports inside test functions are intentional
+    "D102",    # public-method-docstring, test methods are self-documenting by name
+    "D103",    # public-function-docstring, test functions are self-documenting by name
+]
+
+[tool.ruff.lint.isort]
+known-first-party = ["tracss"]
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"

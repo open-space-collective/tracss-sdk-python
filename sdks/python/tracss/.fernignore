@@ -1,2 +1,4 @@
+# Hand-written Okta auth wrapper. Do not overwrite!
 client.py
+# PEP 561 marker, signals this package ships inline types.
 py.typed
