@@ -71,7 +71,14 @@ jobs:
           ${CHANGED}
 
           The SDK has been regenerated via \`fern generate --group python-sdk --local\`.
-          Please review the diff and merge once CI passes.
+
+          ## Versioning checklist
+
+          - [ ] Review \`git diff fern/openapi/\` and identify any new paths or HTTP methods
+          - [ ] For each new endpoint, add an override entry in the relevant \`fern/sdks/*-overrides.yaml\` (convention: unversioned name = current latest; old version gets \`_vN\` suffix + \`x-fern-availability: legacy\`)
+          - [ ] Update \`EXPECTED_SURFACE\` in \`tests/unit/test_codegen_contract.py\` to match the new surface
+          - [ ] Run \`make test\` and \`make integration\` locally before merging
+          - [ ] Review \`git diff sdks/python/\` for type renames, parameter changes, or streaming protocol changes that the automated tests do not catch
           BODY
           EOF
 

@@ -26,7 +26,7 @@ jobs:
       - name: Apply tag version to pyproject.toml
         run: |
           VERSION="${{ github.ref_name }}"
-          sed -i "s/^version = .*/version = \"${VERSION#v}\"/" sdks/python/pyproject.toml
+          sed -i "s|^version = .*|version = \"${VERSION#v}\"|" sdks/python/pyproject.toml
 
       - name: Build wheel
         run: uv build --package tracss

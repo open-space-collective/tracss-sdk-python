@@ -83,7 +83,7 @@ jobs:
           enable-cache: true
       - run: uv sync
       - name: Regenerate SDK
-        run: fern generate --group python-sdk --local
+        run: make generate
         env:
           FERN_TOKEN: ${{ secrets.FERN_TOKEN }}
       - name: Fail if generated files differ from committed
