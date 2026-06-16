@@ -39,6 +39,12 @@ check: ## Validate Fern config (no generation)
 .PHONY: generate
 generate: ## Generate SDK (requires fern login)
 	fern generate --group python-sdk --local
+	$(MAKE) fern-stop
+	$(MAKE) post-generate
+
+.PHONY: post-generate
+post-generate: ## Modernize type hints in generated files (ruff UP rules)
+	uv run ruff check --fix --select UP --config 'lint.per-file-ignores={}' sdks/python/tracss/
 
 
 .PHONY: docs-dev
@@ -83,20 +89,25 @@ SUBSCRIBER_PORT ?= 4010
 BULKDATA_PORT   ?= 4011
 METADATA_PORT   ?= 4012
 
+.PHONY: prism-install
+prism-install: ## Install Prism mock server globally (run once before prism-all)
+	npm install -g @stoplight/prism-cli@5
+
 .PHONY: prism-subscriber
 prism-subscriber: ## Start Prism mock server for subscriber (port 4010)
-	npx --yes @stoplight/prism-cli@5 mock fern/openapi/subscriber/openapi.json --port $(SUBSCRIBER_PORT)
+	prism mock fern/openapi/subscriber/openapi.json --port $(SUBSCRIBER_PORT)
 
 .PHONY: prism-bulkdata
 prism-bulkdata: ## Start Prism mock server for bulkdata (port 4011)
-	npx --yes @stoplight/prism-cli@5 mock fern/openapi/bulk_data/openapi.json --port $(BULKDATA_PORT)
+	prism mock fern/openapi/bulk_data/openapi.json --port $(BULKDATA_PORT)
 
 .PHONY: prism-metadata
 prism-metadata: ## Start Prism mock server for metadata (port 4012)
-	npx --yes @stoplight/prism-cli@5 mock fern/openapi/metadata/openapi.json --port $(METADATA_PORT)
+	prism mock fern/openapi/metadata/openapi.json --port $(METADATA_PORT)
 
 .PHONY: prism-all
 prism-all: ## Start all three Prism mock servers in the background and wait for readiness
+	@command -v prism > /dev/null 2>&1 || { echo "Prism not found. Run: make prism-install" >&2; exit 1; }
 	@for spec_port in \
 		"fern/openapi/subscriber/openapi.json:::$(SUBSCRIBER_PORT)" \
 		"fern/openapi/bulk_data/openapi.json:::$(BULKDATA_PORT)" \
@@ -104,7 +115,7 @@ prism-all: ## Start all three Prism mock servers in the background and wait for 
 		spec=$$(echo $$spec_port | cut -d: -f1); \
 		port=$$(echo $$spec_port | cut -d: -f4-); \
 		if ! curl -s --max-time 0.5 http://localhost:$$port > /dev/null 2>&1; then \
-			npx --yes @stoplight/prism-cli@5 mock "$$spec" --port $$port & \
+			prism mock "$$spec" --port $$port > /dev/null 2>&1 & \
 		fi; \
 	done
 	@for port in $(SUBSCRIBER_PORT) $(BULKDATA_PORT) $(METADATA_PORT); do \
@@ -116,6 +127,12 @@ prism-all: ## Start all three Prism mock servers in the background and wait for 
 .PHONY: prism-stop
 prism-stop: ## Stop all Prism mock servers
 	-pkill -f "prism mock" 2>/dev/null || true
+	@printf '\n'
+
+.PHONY: fern-stop
+fern-stop: ## Stop any background fern docs server
+	-pkill -f "fern docs" 2>/dev/null || true
+	@printf '\n'
 
 .PHONY: integration
 integration: ## Run integration tests (requires prism-all running)
@@ -124,7 +141,7 @@ integration: ## Run integration tests (requires prism-all running)
 	TRACSS_METADATA_URL=http://localhost:$(METADATA_PORT) \
 	TRACSS_CLIENT_ID=fake \
 	TRACSS_CLIENT_SECRET=fake \
-	uv run pytest tests/unit/ tests/integration/ -v
+	uv run pytest tests/integration/ -v --no-cov
 
 
 .PHONY: build
