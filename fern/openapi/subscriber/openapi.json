@@ -7,7 +7,7 @@
   },
   "servers": [
     {
-      "url": "https://api.tracss.gov",
+      "url": "https://api.tracss.gov:443",
       "description": "Generated server url"
     }
   ],
@@ -2700,22 +2700,22 @@
             "type": "integer",
             "format": "int64"
           },
-          "ixz": {
+          "iyz": {
             "type": "string"
           },
           "ixx": {
             "type": "string"
           },
-          "ixy": {
+          "iyy": {
             "type": "string"
           },
           "izz": {
             "type": "string"
           },
-          "iyz": {
+          "ixy": {
             "type": "string"
           },
-          "iyy": {
+          "ixz": {
             "type": "string"
           },
           "nbodyPertubationsRaw": {
@@ -3288,22 +3288,22 @@
           "maneuvers": {
             "type": "string"
           },
-          "ixz": {
+          "iyz": {
             "type": "string"
           },
           "ixx": {
             "type": "string"
           },
-          "ixy": {
+          "iyy": {
             "type": "string"
           },
           "izz": {
             "type": "string"
           },
-          "iyz": {
+          "ixy": {
             "type": "string"
           },
-          "iyy": {
+          "ixz": {
             "type": "string"
           },
           "nbodyPertubationsRaw": {
