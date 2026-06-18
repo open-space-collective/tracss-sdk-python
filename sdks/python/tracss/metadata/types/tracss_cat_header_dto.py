@@ -11,11 +11,15 @@ from ...core.unchecked_base_model import UncheckedBaseModel
 
 class TracssCatHeaderDto(UncheckedBaseModel):
     object_type: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="objectType"), pydantic.Field(alias="objectType")
+        typing.Optional[str],
+        FieldMetadata(alias="objectType"),
+        pydantic.Field(alias="objectType"),
     ] = None
     organization: typing.Optional[str] = None
     norad_id: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="noradId"), pydantic.Field(alias="noradId")
+        typing.Optional[str],
+        FieldMetadata(alias="noradId"),
+        pydantic.Field(alias="noradId"),
     ] = None
     international_designator: typing_extensions.Annotated[
         typing.Optional[str],
@@ -23,14 +27,20 @@ class TracssCatHeaderDto(UncheckedBaseModel):
         pydantic.Field(alias="internationalDesignator"),
     ] = None
     orbital_regime: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="orbitalRegime"), pydantic.Field(alias="orbitalRegime")
+        typing.Optional[str],
+        FieldMetadata(alias="orbitalRegime"),
+        pydantic.Field(alias="orbitalRegime"),
     ] = None
     satellite_name: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="satelliteName"), pydantic.Field(alias="satelliteName")
+        typing.Optional[str],
+        FieldMetadata(alias="satelliteName"),
+        pydantic.Field(alias="satelliteName"),
     ] = None
 
     if IS_PYDANTIC_V2:
-        model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(extra="allow", frozen=True)  # type: ignore # Pydantic v2
+        model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(
+            extra="allow", frozen=True
+        )  # type: ignore # Pydantic v2
     else:
 
         class Config:

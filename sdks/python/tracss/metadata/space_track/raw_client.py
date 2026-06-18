@@ -22,7 +22,10 @@ class RawSpaceTrackClient:
         self._client_wrapper = client_wrapper
 
     def list(
-        self, *, id: typing.Optional[str] = None, request_options: typing.Optional[RequestOptions] = None
+        self,
+        *,
+        id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
     ) -> HttpResponse[typing.Optional[typing.List[SpaceTrack]]]:
         """
         Retrieves Space-track data based on a given correlationId
@@ -95,15 +98,29 @@ class RawSpaceTrackClient:
                 )
             _response_json = _response.json()
         except JSONDecodeError:
-            raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
+            raise ApiError(
+                status_code=_response.status_code,
+                headers=dict(_response.headers),
+                body=_response.text,
+            )
         except ValidationError as e:
             raise ParsingError(
-                status_code=_response.status_code, headers=dict(_response.headers), body=_response.json(), cause=e
+                status_code=_response.status_code,
+                headers=dict(_response.headers),
+                body=_response.json(),
+                cause=e,
             )
-        raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
+        raise ApiError(
+            status_code=_response.status_code,
+            headers=dict(_response.headers),
+            body=_response_json,
+        )
 
     def list_nested(
-        self, *, id: typing.Optional[str] = None, request_options: typing.Optional[RequestOptions] = None
+        self,
+        *,
+        id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
     ) -> HttpResponse[typing.List[SpaceTrackNestedDto]]:
         """
         Retrieve Space Track Package Data with all tar files combined in response
@@ -174,12 +191,23 @@ class RawSpaceTrackClient:
                 )
             _response_json = _response.json()
         except JSONDecodeError:
-            raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
+            raise ApiError(
+                status_code=_response.status_code,
+                headers=dict(_response.headers),
+                body=_response.text,
+            )
         except ValidationError as e:
             raise ParsingError(
-                status_code=_response.status_code, headers=dict(_response.headers), body=_response.json(), cause=e
+                status_code=_response.status_code,
+                headers=dict(_response.headers),
+                body=_response.json(),
+                cause=e,
             )
-        raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
+        raise ApiError(
+            status_code=_response.status_code,
+            headers=dict(_response.headers),
+            body=_response_json,
+        )
 
 
 class AsyncRawSpaceTrackClient:
@@ -187,7 +215,10 @@ class AsyncRawSpaceTrackClient:
         self._client_wrapper = client_wrapper
 
     async def list(
-        self, *, id: typing.Optional[str] = None, request_options: typing.Optional[RequestOptions] = None
+        self,
+        *,
+        id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
     ) -> AsyncHttpResponse[typing.Optional[typing.List[SpaceTrack]]]:
         """
         Retrieves Space-track data based on a given correlationId
@@ -260,15 +291,29 @@ class AsyncRawSpaceTrackClient:
                 )
             _response_json = _response.json()
         except JSONDecodeError:
-            raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
+            raise ApiError(
+                status_code=_response.status_code,
+                headers=dict(_response.headers),
+                body=_response.text,
+            )
         except ValidationError as e:
             raise ParsingError(
-                status_code=_response.status_code, headers=dict(_response.headers), body=_response.json(), cause=e
+                status_code=_response.status_code,
+                headers=dict(_response.headers),
+                body=_response.json(),
+                cause=e,
             )
-        raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
+        raise ApiError(
+            status_code=_response.status_code,
+            headers=dict(_response.headers),
+            body=_response_json,
+        )
 
     async def list_nested(
-        self, *, id: typing.Optional[str] = None, request_options: typing.Optional[RequestOptions] = None
+        self,
+        *,
+        id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
     ) -> AsyncHttpResponse[typing.List[SpaceTrackNestedDto]]:
         """
         Retrieve Space Track Package Data with all tar files combined in response
@@ -339,9 +384,20 @@ class AsyncRawSpaceTrackClient:
                 )
             _response_json = _response.json()
         except JSONDecodeError:
-            raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
+            raise ApiError(
+                status_code=_response.status_code,
+                headers=dict(_response.headers),
+                body=_response.text,
+            )
         except ValidationError as e:
             raise ParsingError(
-                status_code=_response.status_code, headers=dict(_response.headers), body=_response.json(), cause=e
+                status_code=_response.status_code,
+                headers=dict(_response.headers),
+                body=_response.json(),
+                cause=e,
             )
-        raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
+        raise ApiError(
+            status_code=_response.status_code,
+            headers=dict(_response.headers),
+            body=_response_json,
+        )

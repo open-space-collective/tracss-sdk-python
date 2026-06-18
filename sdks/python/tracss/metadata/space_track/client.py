@@ -25,7 +25,10 @@ class SpaceTrackClient:
         return self._raw_client
 
     def list(
-        self, *, id: typing.Optional[str] = None, request_options: typing.Optional[RequestOptions] = None
+        self,
+        *,
+        id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
     ) -> typing.Optional[typing.List[SpaceTrack]]:
         """
         Retrieves Space-track data based on a given correlationId
@@ -48,7 +51,7 @@ class SpaceTrackClient:
         from tracss import TraCSS
 
         client = TraCSS(
-            token="YOUR_TOKEN",
+            client_id="YOUR_CLIENT_ID", client_secret="YOUR_CLIENT_SECRET",
         )
         client.metadata.space_track.list()
         """
@@ -56,7 +59,10 @@ class SpaceTrackClient:
         return _response.data
 
     def list_nested(
-        self, *, id: typing.Optional[str] = None, request_options: typing.Optional[RequestOptions] = None
+        self,
+        *,
+        id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
     ) -> typing.List[SpaceTrackNestedDto]:
         """
         Retrieve Space Track Package Data with all tar files combined in response
@@ -79,7 +85,7 @@ class SpaceTrackClient:
         from tracss import TraCSS
 
         client = TraCSS(
-            token="YOUR_TOKEN",
+            client_id="YOUR_CLIENT_ID", client_secret="YOUR_CLIENT_SECRET",
         )
         client.metadata.space_track.list_nested()
         """
@@ -103,7 +109,10 @@ class AsyncSpaceTrackClient:
         return self._raw_client
 
     async def list(
-        self, *, id: typing.Optional[str] = None, request_options: typing.Optional[RequestOptions] = None
+        self,
+        *,
+        id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
     ) -> typing.Optional[typing.List[SpaceTrack]]:
         """
         Retrieves Space-track data based on a given correlationId
@@ -128,7 +137,7 @@ class AsyncSpaceTrackClient:
         from tracss import AsyncTraCSS
 
         client = AsyncTraCSS(
-            token="YOUR_TOKEN",
+            client_id="YOUR_CLIENT_ID", client_secret="YOUR_CLIENT_SECRET",
         )
 
 
@@ -142,7 +151,10 @@ class AsyncSpaceTrackClient:
         return _response.data
 
     async def list_nested(
-        self, *, id: typing.Optional[str] = None, request_options: typing.Optional[RequestOptions] = None
+        self,
+        *,
+        id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
     ) -> typing.List[SpaceTrackNestedDto]:
         """
         Retrieve Space Track Package Data with all tar files combined in response
@@ -167,7 +179,7 @@ class AsyncSpaceTrackClient:
         from tracss import AsyncTraCSS
 
         client = AsyncTraCSS(
-            token="YOUR_TOKEN",
+            client_id="YOUR_CLIENT_ID", client_secret="YOUR_CLIENT_SECRET",
         )
 
 
@@ -177,5 +189,7 @@ class AsyncSpaceTrackClient:
 
         asyncio.run(main())
         """
-        _response = await self._raw_client.list_nested(id=id, request_options=request_options)
+        _response = await self._raw_client.list_nested(
+            id=id, request_options=request_options
+        )
         return _response.data

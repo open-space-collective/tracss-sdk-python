@@ -16,11 +16,15 @@ class ConjunctionCountSummary(UncheckedBaseModel):
         pydantic.Field(alias="conjunctionDataEventTotal"),
     ] = None
     message_id_total: typing_extensions.Annotated[
-        typing.Optional[int], FieldMetadata(alias="messageIdTotal"), pydantic.Field(alias="messageIdTotal")
+        typing.Optional[int],
+        FieldMetadata(alias="messageIdTotal"),
+        pydantic.Field(alias="messageIdTotal"),
     ] = None
 
     if IS_PYDANTIC_V2:
-        model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(extra="allow", frozen=True)  # type: ignore # Pydantic v2
+        model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(
+            extra="allow", frozen=True
+        )  # type: ignore # Pydantic v2
     else:
 
         class Config:

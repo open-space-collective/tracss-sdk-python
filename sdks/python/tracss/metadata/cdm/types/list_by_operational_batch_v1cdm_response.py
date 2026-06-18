@@ -12,12 +12,16 @@ from ...types.cdm_header import CdmHeader
 
 class ListByOperationalBatchV1CdmResponse(UncheckedBaseModel):
     headers_only: typing_extensions.Annotated[
-        typing.Optional[typing.List[CdmHeader]], FieldMetadata(alias="headersOnly"), pydantic.Field(alias="headersOnly")
+        typing.Optional[typing.List[CdmHeader]],
+        FieldMetadata(alias="headersOnly"),
+        pydantic.Field(alias="headersOnly"),
     ] = None
     default: typing.Optional[str] = None
 
     if IS_PYDANTIC_V2:
-        model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(extra="allow", frozen=True)  # type: ignore # Pydantic v2
+        model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(
+            extra="allow", frozen=True
+        )  # type: ignore # Pydantic v2
     else:
 
         class Config:

@@ -14,25 +14,39 @@ from .tracss_file import TracssFile
 
 class SpaceTrack(UncheckedBaseModel):
     table_id: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="tableId"), pydantic.Field(alias="tableId")
+        typing.Optional[str],
+        FieldMetadata(alias="tableId"),
+        pydantic.Field(alias="tableId"),
     ] = None
     file_name: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="fileName"), pydantic.Field(alias="fileName")
+        typing.Optional[str],
+        FieldMetadata(alias="fileName"),
+        pydantic.Field(alias="fileName"),
     ] = None
     creation_date: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="creationDate"), pydantic.Field(alias="creationDate")
+        typing.Optional[str],
+        FieldMetadata(alias="creationDate"),
+        pydantic.Field(alias="creationDate"),
     ] = None
     record_count: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="recordCount"), pydantic.Field(alias="recordCount")
+        typing.Optional[str],
+        FieldMetadata(alias="recordCount"),
+        pydantic.Field(alias="recordCount"),
     ] = None
     run_type: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="runType"), pydantic.Field(alias="runType")
+        typing.Optional[str],
+        FieldMetadata(alias="runType"),
+        pydantic.Field(alias="runType"),
     ] = None
     file_size: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="fileSize"), pydantic.Field(alias="fileSize")
+        typing.Optional[str],
+        FieldMetadata(alias="fileSize"),
+        pydantic.Field(alias="fileSize"),
     ] = None
     start_time: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="startTime"), pydantic.Field(alias="startTime")
+        typing.Optional[str],
+        FieldMetadata(alias="startTime"),
+        pydantic.Field(alias="startTime"),
     ] = None
     space_tracks: typing_extensions.Annotated[
         typing.Optional[typing.List["SpaceTrack"]],
@@ -40,13 +54,17 @@ class SpaceTrack(UncheckedBaseModel):
         pydantic.Field(alias="spaceTracks"),
     ] = None
     correlation_id: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="correlationId"), pydantic.Field(alias="correlationId")
+        typing.Optional[str],
+        FieldMetadata(alias="correlationId"),
+        pydantic.Field(alias="correlationId"),
     ] = None
     name: typing.Optional[str] = None
     tars: typing.Optional[typing.List[TracssFile]] = None
 
     if IS_PYDANTIC_V2:
-        model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(extra="allow", frozen=True)  # type: ignore # Pydantic v2
+        model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(
+            extra="allow", frozen=True
+        )  # type: ignore # Pydantic v2
     else:
 
         class Config:

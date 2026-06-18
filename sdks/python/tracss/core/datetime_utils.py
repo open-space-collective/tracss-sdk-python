@@ -42,7 +42,9 @@ class Rfc2822DateTime(dt.datetime):
     def __get_pydantic_core_schema__(cls, _source_type: Any, _handler: Any) -> Any:  # type: ignore[override]
         from pydantic_core import core_schema
 
-        return core_schema.no_info_before_validator_function(parse_rfc2822_datetime, core_schema.datetime_schema())
+        return core_schema.no_info_before_validator_function(
+            parse_rfc2822_datetime, core_schema.datetime_schema()
+        )
 
 
 def serialize_datetime(v: dt.datetime) -> str:

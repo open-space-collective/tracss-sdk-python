@@ -11,23 +11,35 @@ from ...core.unchecked_base_model import UncheckedBaseModel
 
 class SpaceTrackNestedDto(UncheckedBaseModel):
     package_name: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="packageName"), pydantic.Field(alias="packageName")
+        typing.Optional[str],
+        FieldMetadata(alias="packageName"),
+        pydantic.Field(alias="packageName"),
     ] = None
     creation_date: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="creationDate"), pydantic.Field(alias="creationDate")
+        typing.Optional[str],
+        FieldMetadata(alias="creationDate"),
+        pydantic.Field(alias="creationDate"),
     ] = None
     correlation_id: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="correlationId"), pydantic.Field(alias="correlationId")
+        typing.Optional[str],
+        FieldMetadata(alias="correlationId"),
+        pydantic.Field(alias="correlationId"),
     ] = None
     run_type: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="runType"), pydantic.Field(alias="runType")
+        typing.Optional[str],
+        FieldMetadata(alias="runType"),
+        pydantic.Field(alias="runType"),
     ] = None
     included_files: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="includedFiles"), pydantic.Field(alias="includedFiles")
+        typing.Optional[str],
+        FieldMetadata(alias="includedFiles"),
+        pydantic.Field(alias="includedFiles"),
     ] = None
 
     if IS_PYDANTIC_V2:
-        model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(extra="allow", frozen=True)  # type: ignore # Pydantic v2
+        model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(
+            extra="allow", frozen=True
+        )  # type: ignore # Pydantic v2
     else:
 
         class Config:

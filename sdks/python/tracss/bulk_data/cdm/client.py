@@ -137,7 +137,7 @@ class CdmClient:
         from tracss import TraCSS
 
         client = TraCSS(
-            token="YOUR_TOKEN",
+            client_id="YOUR_CLIENT_ID", client_secret="YOUR_CLIENT_SECRET",
         )
         response = client.bulk_data.cdm.stream(
             message_id="000043928_conj_000054603_2024329195621",
@@ -300,7 +300,7 @@ class CdmClient:
         from tracss import TraCSS
 
         client = TraCSS(
-            token="YOUR_TOKEN",
+            client_id="YOUR_CLIENT_ID", client_secret="YOUR_CLIENT_SECRET",
         )
         response = client.bulk_data.cdm.stream_v1(
             message_id="000043928_conj_000054603_2024329195621",
@@ -482,7 +482,7 @@ class AsyncCdmClient:
         from tracss import AsyncTraCSS
 
         client = AsyncTraCSS(
-            token="YOUR_TOKEN",
+            client_id="YOUR_CLIENT_ID", client_secret="YOUR_CLIENT_SECRET",
         )
 
 
@@ -654,7 +654,7 @@ class AsyncCdmClient:
         from tracss import AsyncTraCSS
 
         client = AsyncTraCSS(
-            token="YOUR_TOKEN",
+            client_id="YOUR_CLIENT_ID", client_secret="YOUR_CLIENT_SECRET",
         )
 
 

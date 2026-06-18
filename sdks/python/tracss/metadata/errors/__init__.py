@@ -23,7 +23,9 @@ _dynamic_imports: typing.Dict[str, str] = {
 def __getattr__(attr_name: str) -> typing.Any:
     module_name = _dynamic_imports.get(attr_name)
     if module_name is None:
-        raise AttributeError(f"No {attr_name} found in _dynamic_imports for module name -> {__name__}")
+        raise AttributeError(
+            f"No {attr_name} found in _dynamic_imports for module name -> {__name__}"
+        )
     try:
         module = import_module(module_name, __package__)
         if module_name == f".{attr_name}":
@@ -41,4 +43,10 @@ def __dir__():
     return sorted(lazy_attrs)
 
 
-__all__ = ["BadRequestError", "InternalServerError", "NotFoundError", "UnauthorizedError", "UnprocessableEntityError"]
+__all__ = [
+    "BadRequestError",
+    "InternalServerError",
+    "NotFoundError",
+    "UnauthorizedError",
+    "UnprocessableEntityError",
+]

@@ -12,23 +12,33 @@ from ...core.unchecked_base_model import UncheckedBaseModel
 class OcmMetadataV2Dto(UncheckedBaseModel):
     type: typing.Optional[str] = None
     message_id: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="messageId"), pydantic.Field(alias="messageId")
+        typing.Optional[str],
+        FieldMetadata(alias="messageId"),
+        pydantic.Field(alias="messageId"),
     ] = None
     sat_no: typing_extensions.Annotated[
         typing.Optional[str], FieldMetadata(alias="satNo"), pydantic.Field(alias="satNo")
     ] = None
     creation_date: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="creationDate"), pydantic.Field(alias="creationDate")
+        typing.Optional[str],
+        FieldMetadata(alias="creationDate"),
+        pydantic.Field(alias="creationDate"),
     ] = None
     start_time: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="startTime"), pydantic.Field(alias="startTime")
+        typing.Optional[str],
+        FieldMetadata(alias="startTime"),
+        pydantic.Field(alias="startTime"),
     ] = None
     stop_time: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="stopTime"), pydantic.Field(alias="stopTime")
+        typing.Optional[str],
+        FieldMetadata(alias="stopTime"),
+        pydantic.Field(alias="stopTime"),
     ] = None
 
     if IS_PYDANTIC_V2:
-        model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(extra="allow", frozen=True)  # type: ignore # Pydantic v2
+        model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(
+            extra="allow", frozen=True
+        )  # type: ignore # Pydantic v2
     else:
 
         class Config:

@@ -8,12 +8,23 @@ from importlib import import_module
 if typing.TYPE_CHECKING:
     from .api_error import ApiError
     from .client_wrapper import AsyncClientWrapper, BaseClientWrapper, SyncClientWrapper
-    from .datetime_utils import Rfc2822DateTime, parse_rfc2822_datetime, serialize_datetime
+    from .datetime_utils import (
+        Rfc2822DateTime,
+        parse_rfc2822_datetime,
+        serialize_datetime,
+    )
     from .file import File, convert_file_dict_to_httpx_tuples, with_content_type
     from .http_client import AsyncHttpClient, HttpClient
     from .http_response import AsyncHttpResponse, HttpResponse
     from .jsonable_encoder import encode_path_param, jsonable_encoder
-    from .logging import ConsoleLogger, ILogger, LogConfig, LogLevel, Logger, create_logger
+    from .logging import (
+        ConsoleLogger,
+        ILogger,
+        LogConfig,
+        LogLevel,
+        Logger,
+        create_logger,
+    )
     from .parse_error import ParsingError
     from .pydantic_utilities import (
         IS_PYDANTIC_V2,
@@ -74,7 +85,9 @@ _dynamic_imports: typing.Dict[str, str] = {
 def __getattr__(attr_name: str) -> typing.Any:
     module_name = _dynamic_imports.get(attr_name)
     if module_name is None:
-        raise AttributeError(f"No {attr_name} found in _dynamic_imports for module name -> {__name__}")
+        raise AttributeError(
+            f"No {attr_name} found in _dynamic_imports for module name -> {__name__}"
+        )
     try:
         module = import_module(module_name, __package__)
         if module_name == f".{attr_name}":

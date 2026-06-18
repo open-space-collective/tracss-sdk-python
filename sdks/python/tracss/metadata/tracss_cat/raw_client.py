@@ -23,7 +23,9 @@ class RawTracssCatClient:
     def __init__(self, *, client_wrapper: SyncClientWrapper):
         self._client_wrapper = client_wrapper
 
-    def upload_csv(self, *, request_options: typing.Optional[RequestOptions] = None) -> HttpResponse[typing.Any]:
+    def upload_csv(
+        self, *, request_options: typing.Optional[RequestOptions] = None
+    ) -> HttpResponse[typing.Any]:
         """
         Upload a CSV file to update the TraCSS catalog. The CSV must include a noradId column as the minimum required header; all other fields are optional. Rows with noradIds your organization does not own will generate change requests pending TraCSS Operations approval. See tracss.gov for the full list of valid fields and accepted date formats.
 
@@ -82,12 +84,23 @@ class RawTracssCatClient:
                 )
             _response_json = _response.json()
         except JSONDecodeError:
-            raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
+            raise ApiError(
+                status_code=_response.status_code,
+                headers=dict(_response.headers),
+                body=_response.text,
+            )
         except ValidationError as e:
             raise ParsingError(
-                status_code=_response.status_code, headers=dict(_response.headers), body=_response.json(), cause=e
+                status_code=_response.status_code,
+                headers=dict(_response.headers),
+                body=_response.json(),
+                cause=e,
             )
-        raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
+        raise ApiError(
+            status_code=_response.status_code,
+            headers=dict(_response.headers),
+            body=_response_json,
+        )
 
     def list(
         self,
@@ -225,12 +238,23 @@ class RawTracssCatClient:
                 )
             _response_json = _response.json()
         except JSONDecodeError:
-            raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
+            raise ApiError(
+                status_code=_response.status_code,
+                headers=dict(_response.headers),
+                body=_response.text,
+            )
         except ValidationError as e:
             raise ParsingError(
-                status_code=_response.status_code, headers=dict(_response.headers), body=_response.json(), cause=e
+                status_code=_response.status_code,
+                headers=dict(_response.headers),
+                body=_response.json(),
+                cause=e,
             )
-        raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
+        raise ApiError(
+            status_code=_response.status_code,
+            headers=dict(_response.headers),
+            body=_response_json,
+        )
 
 
 class AsyncRawTracssCatClient:
@@ -298,12 +322,23 @@ class AsyncRawTracssCatClient:
                 )
             _response_json = _response.json()
         except JSONDecodeError:
-            raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
+            raise ApiError(
+                status_code=_response.status_code,
+                headers=dict(_response.headers),
+                body=_response.text,
+            )
         except ValidationError as e:
             raise ParsingError(
-                status_code=_response.status_code, headers=dict(_response.headers), body=_response.json(), cause=e
+                status_code=_response.status_code,
+                headers=dict(_response.headers),
+                body=_response.json(),
+                cause=e,
             )
-        raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
+        raise ApiError(
+            status_code=_response.status_code,
+            headers=dict(_response.headers),
+            body=_response_json,
+        )
 
     async def list(
         self,
@@ -441,9 +476,20 @@ class AsyncRawTracssCatClient:
                 )
             _response_json = _response.json()
         except JSONDecodeError:
-            raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
+            raise ApiError(
+                status_code=_response.status_code,
+                headers=dict(_response.headers),
+                body=_response.text,
+            )
         except ValidationError as e:
             raise ParsingError(
-                status_code=_response.status_code, headers=dict(_response.headers), body=_response.json(), cause=e
+                status_code=_response.status_code,
+                headers=dict(_response.headers),
+                body=_response.json(),
+                cause=e,
             )
-        raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
+        raise ApiError(
+            status_code=_response.status_code,
+            headers=dict(_response.headers),
+            body=_response_json,
+        )

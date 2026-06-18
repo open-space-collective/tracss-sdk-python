@@ -78,12 +78,15 @@ class OcmClient:
         from tracss import TraCSS
 
         client = TraCSS(
-            token="YOUR_TOKEN",
+            client_id="YOUR_CLIENT_ID", client_secret="YOUR_CLIENT_SECRET",
         )
         client.metadata.ocm.upload()
         """
         _response = self._raw_client.upload(
-            file=file, trigger_ca=trigger_ca, update_database=update_database, request_options=request_options
+            file=file,
+            trigger_ca=trigger_ca,
+            update_database=update_database,
+            request_options=request_options,
         )
         return _response.data
 
@@ -136,12 +139,15 @@ class OcmClient:
         from tracss import TraCSS
 
         client = TraCSS(
-            token="YOUR_TOKEN",
+            client_id="YOUR_CLIENT_ID", client_secret="YOUR_CLIENT_SECRET",
         )
         client.metadata.ocm.upload_v1()
         """
         _response = self._raw_client.upload_v1(
-            file=file, trigger_ca=trigger_ca, update_database=update_database, request_options=request_options
+            file=file,
+            trigger_ca=trigger_ca,
+            update_database=update_database,
+            request_options=request_options,
         )
         return _response.data
 
@@ -247,7 +253,7 @@ class OcmClient:
         from tracss import TraCSS
 
         client = TraCSS(
-            token="YOUR_TOKEN",
+            client_id="YOUR_CLIENT_ID", client_secret="YOUR_CLIENT_SECRET",
         )
         client.metadata.ocm.list(
             owner="ABCCorporation",
@@ -348,7 +354,7 @@ class OcmClient:
         from tracss import TraCSS
 
         client = TraCSS(
-            token="YOUR_TOKEN",
+            client_id="YOUR_CLIENT_ID", client_secret="YOUR_CLIENT_SECRET",
         )
         client.metadata.ocm.list_by_operational_batch(
             message_id="000043928_conj_000054603_2024329195621",
@@ -480,7 +486,7 @@ class OcmClient:
         from tracss import TraCSS
 
         client = TraCSS(
-            token="YOUR_TOKEN",
+            client_id="YOUR_CLIENT_ID", client_secret="YOUR_CLIENT_SECRET",
         )
         client.metadata.ocm.list_v1(
             owner="ABCCorporation",
@@ -581,7 +587,7 @@ class OcmClient:
         from tracss import TraCSS
 
         client = TraCSS(
-            token="YOUR_TOKEN",
+            client_id="YOUR_CLIENT_ID", client_secret="YOUR_CLIENT_SECRET",
         )
         client.metadata.ocm.list_by_operational_batch_v1(
             message_id="000043928_conj_000054603_2024329195621",
@@ -678,7 +684,7 @@ class AsyncOcmClient:
         from tracss import AsyncTraCSS
 
         client = AsyncTraCSS(
-            token="YOUR_TOKEN",
+            client_id="YOUR_CLIENT_ID", client_secret="YOUR_CLIENT_SECRET",
         )
 
 
@@ -689,7 +695,10 @@ class AsyncOcmClient:
         asyncio.run(main())
         """
         _response = await self._raw_client.upload(
-            file=file, trigger_ca=trigger_ca, update_database=update_database, request_options=request_options
+            file=file,
+            trigger_ca=trigger_ca,
+            update_database=update_database,
+            request_options=request_options,
         )
         return _response.data
 
@@ -744,7 +753,7 @@ class AsyncOcmClient:
         from tracss import AsyncTraCSS
 
         client = AsyncTraCSS(
-            token="YOUR_TOKEN",
+            client_id="YOUR_CLIENT_ID", client_secret="YOUR_CLIENT_SECRET",
         )
 
 
@@ -755,7 +764,10 @@ class AsyncOcmClient:
         asyncio.run(main())
         """
         _response = await self._raw_client.upload_v1(
-            file=file, trigger_ca=trigger_ca, update_database=update_database, request_options=request_options
+            file=file,
+            trigger_ca=trigger_ca,
+            update_database=update_database,
+            request_options=request_options,
         )
         return _response.data
 
@@ -863,7 +875,7 @@ class AsyncOcmClient:
         from tracss import AsyncTraCSS
 
         client = AsyncTraCSS(
-            token="YOUR_TOKEN",
+            client_id="YOUR_CLIENT_ID", client_secret="YOUR_CLIENT_SECRET",
         )
 
 
@@ -972,7 +984,7 @@ class AsyncOcmClient:
         from tracss import AsyncTraCSS
 
         client = AsyncTraCSS(
-            token="YOUR_TOKEN",
+            client_id="YOUR_CLIENT_ID", client_secret="YOUR_CLIENT_SECRET",
         )
 
 
@@ -1112,7 +1124,7 @@ class AsyncOcmClient:
         from tracss import AsyncTraCSS
 
         client = AsyncTraCSS(
-            token="YOUR_TOKEN",
+            client_id="YOUR_CLIENT_ID", client_secret="YOUR_CLIENT_SECRET",
         )
 
 
@@ -1221,7 +1233,7 @@ class AsyncOcmClient:
         from tracss import AsyncTraCSS
 
         client = AsyncTraCSS(
-            token="YOUR_TOKEN",
+            client_id="YOUR_CLIENT_ID", client_secret="YOUR_CLIENT_SECRET",
         )
 
 

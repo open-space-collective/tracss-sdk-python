@@ -12,38 +12,60 @@ from ...core.unchecked_base_model import UncheckedBaseModel
 class Operator(UncheckedBaseModel):
     id: typing.Optional[str] = None
     object_designator: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="objectDesignator"), pydantic.Field(alias="objectDesignator")
+        typing.Optional[str],
+        FieldMetadata(alias="objectDesignator"),
+        pydantic.Field(alias="objectDesignator"),
     ] = None
     operator_position: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="operatorPosition"), pydantic.Field(alias="operatorPosition")
+        typing.Optional[str],
+        FieldMetadata(alias="operatorPosition"),
+        pydantic.Field(alias="operatorPosition"),
     ] = None
     operator_organization: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="operatorOrganization"), pydantic.Field(alias="operatorOrganization")
+        typing.Optional[str],
+        FieldMetadata(alias="operatorOrganization"),
+        pydantic.Field(alias="operatorOrganization"),
     ] = None
     operator_phone: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="operatorPhone"), pydantic.Field(alias="operatorPhone")
+        typing.Optional[str],
+        FieldMetadata(alias="operatorPhone"),
+        pydantic.Field(alias="operatorPhone"),
     ] = None
     operator_email: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="operatorEmail"), pydantic.Field(alias="operatorEmail")
+        typing.Optional[str],
+        FieldMetadata(alias="operatorEmail"),
+        pydantic.Field(alias="operatorEmail"),
     ] = None
     operator_language: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="operatorLanguage"), pydantic.Field(alias="operatorLanguage")
+        typing.Optional[str],
+        FieldMetadata(alias="operatorLanguage"),
+        pydantic.Field(alias="operatorLanguage"),
     ] = None
     operator_country: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="operatorCountry"), pydantic.Field(alias="operatorCountry")
+        typing.Optional[str],
+        FieldMetadata(alias="operatorCountry"),
+        pydantic.Field(alias="operatorCountry"),
     ] = None
     originator_address: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="originatorAddress"), pydantic.Field(alias="originatorAddress")
+        typing.Optional[str],
+        FieldMetadata(alias="originatorAddress"),
+        pydantic.Field(alias="originatorAddress"),
     ] = None
     operator_website: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="operatorWebsite"), pydantic.Field(alias="operatorWebsite")
+        typing.Optional[str],
+        FieldMetadata(alias="operatorWebsite"),
+        pydantic.Field(alias="operatorWebsite"),
     ] = None
     operator_time_zone: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="operatorTimeZone"), pydantic.Field(alias="operatorTimeZone")
+        typing.Optional[str],
+        FieldMetadata(alias="operatorTimeZone"),
+        pydantic.Field(alias="operatorTimeZone"),
     ] = None
 
     if IS_PYDANTIC_V2:
-        model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(extra="allow", frozen=True)  # type: ignore # Pydantic v2
+        model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(
+            extra="allow", frozen=True
+        )  # type: ignore # Pydantic v2
     else:
 
         class Config:

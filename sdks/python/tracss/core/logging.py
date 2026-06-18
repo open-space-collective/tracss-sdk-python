@@ -95,7 +95,9 @@ class Logger:
 _default_logger: Logger = Logger(level="info", logger=ConsoleLogger(), silent=True)
 
 
-def create_logger(config: typing.Optional[typing.Union[LogConfig, Logger]] = None) -> Logger:
+def create_logger(
+    config: typing.Optional[typing.Union[LogConfig, Logger]] = None,
+) -> Logger:
     if config is None:
         return _default_logger
     if isinstance(config, Logger):

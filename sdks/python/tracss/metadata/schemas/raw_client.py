@@ -17,7 +17,9 @@ class RawSchemasClient:
     def __init__(self, *, client_wrapper: SyncClientWrapper):
         self._client_wrapper = client_wrapper
 
-    def get_xsd(self, *, request_options: typing.Optional[RequestOptions] = None) -> HttpResponse[typing.List[str]]:
+    def get_xsd(
+        self, *, request_options: typing.Optional[RequestOptions] = None
+    ) -> HttpResponse[typing.List[str]]:
         """
         Parameters
         ----------
@@ -57,14 +59,27 @@ class RawSchemasClient:
                 )
             _response_json = _response.json()
         except JSONDecodeError:
-            raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
+            raise ApiError(
+                status_code=_response.status_code,
+                headers=dict(_response.headers),
+                body=_response.text,
+            )
         except ValidationError as e:
             raise ParsingError(
-                status_code=_response.status_code, headers=dict(_response.headers), body=_response.json(), cause=e
+                status_code=_response.status_code,
+                headers=dict(_response.headers),
+                body=_response.json(),
+                cause=e,
             )
-        raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
+        raise ApiError(
+            status_code=_response.status_code,
+            headers=dict(_response.headers),
+            body=_response_json,
+        )
 
-    def get_json(self, *, request_options: typing.Optional[RequestOptions] = None) -> HttpResponse[typing.List[str]]:
+    def get_json(
+        self, *, request_options: typing.Optional[RequestOptions] = None
+    ) -> HttpResponse[typing.List[str]]:
         """
         Parameters
         ----------
@@ -104,12 +119,23 @@ class RawSchemasClient:
                 )
             _response_json = _response.json()
         except JSONDecodeError:
-            raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
+            raise ApiError(
+                status_code=_response.status_code,
+                headers=dict(_response.headers),
+                body=_response.text,
+            )
         except ValidationError as e:
             raise ParsingError(
-                status_code=_response.status_code, headers=dict(_response.headers), body=_response.json(), cause=e
+                status_code=_response.status_code,
+                headers=dict(_response.headers),
+                body=_response.json(),
+                cause=e,
             )
-        raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
+        raise ApiError(
+            status_code=_response.status_code,
+            headers=dict(_response.headers),
+            body=_response_json,
+        )
 
 
 class AsyncRawSchemasClient:
@@ -158,12 +184,23 @@ class AsyncRawSchemasClient:
                 )
             _response_json = _response.json()
         except JSONDecodeError:
-            raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
+            raise ApiError(
+                status_code=_response.status_code,
+                headers=dict(_response.headers),
+                body=_response.text,
+            )
         except ValidationError as e:
             raise ParsingError(
-                status_code=_response.status_code, headers=dict(_response.headers), body=_response.json(), cause=e
+                status_code=_response.status_code,
+                headers=dict(_response.headers),
+                body=_response.json(),
+                cause=e,
             )
-        raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
+        raise ApiError(
+            status_code=_response.status_code,
+            headers=dict(_response.headers),
+            body=_response_json,
+        )
 
     async def get_json(
         self, *, request_options: typing.Optional[RequestOptions] = None
@@ -207,9 +244,20 @@ class AsyncRawSchemasClient:
                 )
             _response_json = _response.json()
         except JSONDecodeError:
-            raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
+            raise ApiError(
+                status_code=_response.status_code,
+                headers=dict(_response.headers),
+                body=_response.text,
+            )
         except ValidationError as e:
             raise ParsingError(
-                status_code=_response.status_code, headers=dict(_response.headers), body=_response.json(), cause=e
+                status_code=_response.status_code,
+                headers=dict(_response.headers),
+                body=_response.json(),
+                cause=e,
             )
-        raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
+        raise ApiError(
+            status_code=_response.status_code,
+            headers=dict(_response.headers),
+            body=_response_json,
+        )

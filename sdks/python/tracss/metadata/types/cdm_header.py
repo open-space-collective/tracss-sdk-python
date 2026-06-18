@@ -11,35 +11,53 @@ from ...core.unchecked_base_model import UncheckedBaseModel
 
 class CdmHeader(UncheckedBaseModel):
     message_id: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="messageId"), pydantic.Field(alias="messageId")
+        typing.Optional[str],
+        FieldMetadata(alias="messageId"),
+        pydantic.Field(alias="messageId"),
     ] = None
     correlation_id: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="correlationId"), pydantic.Field(alias="correlationId")
+        typing.Optional[str],
+        FieldMetadata(alias="correlationId"),
+        pydantic.Field(alias="correlationId"),
     ] = None
     ocm_message_id: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="ocmMessageId"), pydantic.Field(alias="ocmMessageId")
+        typing.Optional[str],
+        FieldMetadata(alias="ocmMessageId"),
+        pydantic.Field(alias="ocmMessageId"),
     ] = None
     creation_date: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="creationDate"), pydantic.Field(alias="creationDate")
+        typing.Optional[str],
+        FieldMetadata(alias="creationDate"),
+        pydantic.Field(alias="creationDate"),
     ] = None
     object1: typing.Optional[str] = None
     object2: typing.Optional[str] = None
     tca: typing.Optional[str] = None
     collision_probability: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="collisionProbability"), pydantic.Field(alias="collisionProbability")
+        typing.Optional[str],
+        FieldMetadata(alias="collisionProbability"),
+        pydantic.Field(alias="collisionProbability"),
     ] = None
     miss_distance: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="missDistance"), pydantic.Field(alias="missDistance")
+        typing.Optional[str],
+        FieldMetadata(alias="missDistance"),
+        pydantic.Field(alias="missDistance"),
     ] = None
     object1regime: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="object1Regime"), pydantic.Field(alias="object1Regime")
+        typing.Optional[str],
+        FieldMetadata(alias="object1Regime"),
+        pydantic.Field(alias="object1Regime"),
     ] = None
     object2regime: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="object2Regime"), pydantic.Field(alias="object2Regime")
+        typing.Optional[str],
+        FieldMetadata(alias="object2Regime"),
+        pydantic.Field(alias="object2Regime"),
     ] = None
 
     if IS_PYDANTIC_V2:
-        model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(extra="allow", frozen=True)  # type: ignore # Pydantic v2
+        model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(
+            extra="allow", frozen=True
+        )  # type: ignore # Pydantic v2
     else:
 
         class Config:

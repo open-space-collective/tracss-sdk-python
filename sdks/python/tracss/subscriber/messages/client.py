@@ -86,7 +86,7 @@ class MessagesClient:
         from tracss import TraCSS
 
         client = TraCSS(
-            token="YOUR_TOKEN",
+            client_id="YOUR_CLIENT_ID", client_secret="YOUR_CLIENT_SECRET",
         )
         client.subscriber.messages.list(
             topic="gov.tracss.tracss.v1.cdms",
@@ -185,7 +185,7 @@ class AsyncMessagesClient:
         from tracss import AsyncTraCSS
 
         client = AsyncTraCSS(
-            token="YOUR_TOKEN",
+            client_id="YOUR_CLIENT_ID", client_secret="YOUR_CLIENT_SECRET",
         )
 
 

@@ -11,7 +11,9 @@ from ...core.unchecked_base_model import UncheckedBaseModel
 
 class AnomalyReport(UncheckedBaseModel):
     report_id: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="reportId"), pydantic.Field(alias="reportId")
+        typing.Optional[str],
+        FieldMetadata(alias="reportId"),
+        pydantic.Field(alias="reportId"),
     ] = None
     submitter_organization: typing_extensions.Annotated[
         typing.Optional[str],
@@ -19,57 +21,91 @@ class AnomalyReport(UncheckedBaseModel):
         pydantic.Field(alias="submitterOrganization"),
     ] = None
     submitter_name: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="submitterName"), pydantic.Field(alias="submitterName")
+        typing.Optional[str],
+        FieldMetadata(alias="submitterName"),
+        pydantic.Field(alias="submitterName"),
     ] = None
     submitter_email: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="submitterEmail"), pydantic.Field(alias="submitterEmail")
+        typing.Optional[str],
+        FieldMetadata(alias="submitterEmail"),
+        pydantic.Field(alias="submitterEmail"),
     ] = None
     submission_time: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="submissionTime"), pydantic.Field(alias="submissionTime")
+        typing.Optional[str],
+        FieldMetadata(alias="submissionTime"),
+        pydantic.Field(alias="submissionTime"),
     ] = None
     norad_ids: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="noradIds"), pydantic.Field(alias="noradIds")
+        typing.Optional[str],
+        FieldMetadata(alias="noradIds"),
+        pydantic.Field(alias="noradIds"),
     ] = None
     satellite_names: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="satelliteNames"), pydantic.Field(alias="satelliteNames")
+        typing.Optional[str],
+        FieldMetadata(alias="satelliteNames"),
+        pydantic.Field(alias="satelliteNames"),
     ] = None
     event_start_timestamp: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="eventStartTimestamp"), pydantic.Field(alias="eventStartTimestamp")
+        typing.Optional[str],
+        FieldMetadata(alias="eventStartTimestamp"),
+        pydantic.Field(alias="eventStartTimestamp"),
     ] = None
     event_end_timestamp: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="eventEndTimestamp"), pydantic.Field(alias="eventEndTimestamp")
+        typing.Optional[str],
+        FieldMetadata(alias="eventEndTimestamp"),
+        pydantic.Field(alias="eventEndTimestamp"),
     ] = None
     anomaly_types: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="anomalyTypes"), pydantic.Field(alias="anomalyTypes")
+        typing.Optional[str],
+        FieldMetadata(alias="anomalyTypes"),
+        pydantic.Field(alias="anomalyTypes"),
     ] = None
     anomaly_description: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="anomalyDescription"), pydantic.Field(alias="anomalyDescription")
+        typing.Optional[str],
+        FieldMetadata(alias="anomalyDescription"),
+        pydantic.Field(alias="anomalyDescription"),
     ] = None
     telemetry_available: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="telemetryAvailable"), pydantic.Field(alias="telemetryAvailable")
+        typing.Optional[str],
+        FieldMetadata(alias="telemetryAvailable"),
+        pydantic.Field(alias="telemetryAvailable"),
     ] = None
     attachment_filenames: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="attachmentFilenames"), pydantic.Field(alias="attachmentFilenames")
+        typing.Optional[str],
+        FieldMetadata(alias="attachmentFilenames"),
+        pydantic.Field(alias="attachmentFilenames"),
     ] = None
     operational_impact: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="operationalImpact"), pydantic.Field(alias="operationalImpact")
+        typing.Optional[str],
+        FieldMetadata(alias="operationalImpact"),
+        pydantic.Field(alias="operationalImpact"),
     ] = None
     mitigation_status: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="mitigationStatus"), pydantic.Field(alias="mitigationStatus")
+        typing.Optional[str],
+        FieldMetadata(alias="mitigationStatus"),
+        pydantic.Field(alias="mitigationStatus"),
     ] = None
     reporting_reason: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="reportingReason"), pydantic.Field(alias="reportingReason")
+        typing.Optional[str],
+        FieldMetadata(alias="reportingReason"),
+        pydantic.Field(alias="reportingReason"),
     ] = None
     related_event_ids: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="relatedEventIds"), pydantic.Field(alias="relatedEventIds")
+        typing.Optional[str],
+        FieldMetadata(alias="relatedEventIds"),
+        pydantic.Field(alias="relatedEventIds"),
     ] = None
     created_at: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="createdAt"), pydantic.Field(alias="createdAt")
+        typing.Optional[str],
+        FieldMetadata(alias="createdAt"),
+        pydantic.Field(alias="createdAt"),
     ] = None
     offset: typing.Optional[int] = None
 
     if IS_PYDANTIC_V2:
-        model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(extra="allow", frozen=True)  # type: ignore # Pydantic v2
+        model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(
+            extra="allow", frozen=True
+        )  # type: ignore # Pydantic v2
     else:
 
         class Config:

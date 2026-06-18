@@ -22,7 +22,9 @@ class SchemasClient:
         """
         return self._raw_client
 
-    def get_xsd(self, *, request_options: typing.Optional[RequestOptions] = None) -> typing.List[str]:
+    def get_xsd(
+        self, *, request_options: typing.Optional[RequestOptions] = None
+    ) -> typing.List[str]:
         """
         Parameters
         ----------
@@ -39,14 +41,16 @@ class SchemasClient:
         from tracss import TraCSS
 
         client = TraCSS(
-            token="YOUR_TOKEN",
+            client_id="YOUR_CLIENT_ID", client_secret="YOUR_CLIENT_SECRET",
         )
         client.metadata.schemas.get_xsd()
         """
         _response = self._raw_client.get_xsd(request_options=request_options)
         return _response.data
 
-    def get_json(self, *, request_options: typing.Optional[RequestOptions] = None) -> typing.List[str]:
+    def get_json(
+        self, *, request_options: typing.Optional[RequestOptions] = None
+    ) -> typing.List[str]:
         """
         Parameters
         ----------
@@ -63,7 +67,7 @@ class SchemasClient:
         from tracss import TraCSS
 
         client = TraCSS(
-            token="YOUR_TOKEN",
+            client_id="YOUR_CLIENT_ID", client_secret="YOUR_CLIENT_SECRET",
         )
         client.metadata.schemas.get_json()
         """
@@ -86,7 +90,9 @@ class AsyncSchemasClient:
         """
         return self._raw_client
 
-    async def get_xsd(self, *, request_options: typing.Optional[RequestOptions] = None) -> typing.List[str]:
+    async def get_xsd(
+        self, *, request_options: typing.Optional[RequestOptions] = None
+    ) -> typing.List[str]:
         """
         Parameters
         ----------
@@ -105,7 +111,7 @@ class AsyncSchemasClient:
         from tracss import AsyncTraCSS
 
         client = AsyncTraCSS(
-            token="YOUR_TOKEN",
+            client_id="YOUR_CLIENT_ID", client_secret="YOUR_CLIENT_SECRET",
         )
 
 
@@ -118,7 +124,9 @@ class AsyncSchemasClient:
         _response = await self._raw_client.get_xsd(request_options=request_options)
         return _response.data
 
-    async def get_json(self, *, request_options: typing.Optional[RequestOptions] = None) -> typing.List[str]:
+    async def get_json(
+        self, *, request_options: typing.Optional[RequestOptions] = None
+    ) -> typing.List[str]:
         """
         Parameters
         ----------
@@ -137,7 +145,7 @@ class AsyncSchemasClient:
         from tracss import AsyncTraCSS
 
         client = AsyncTraCSS(
-            token="YOUR_TOKEN",
+            client_id="YOUR_CLIENT_ID", client_secret="YOUR_CLIENT_SECRET",
         )
 
 

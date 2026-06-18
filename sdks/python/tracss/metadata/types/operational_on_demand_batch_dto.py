@@ -12,19 +12,29 @@ from .operational_on_demand_batch_ocm_dto import OperationalOnDemandBatchOcmDto
 
 class OperationalOnDemandBatchDto(UncheckedBaseModel):
     batch_id: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="batchId"), pydantic.Field(alias="batchId")
+        typing.Optional[str],
+        FieldMetadata(alias="batchId"),
+        pydantic.Field(alias="batchId"),
     ] = None
     upload_date: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="uploadDate"), pydantic.Field(alias="uploadDate")
+        typing.Optional[str],
+        FieldMetadata(alias="uploadDate"),
+        pydantic.Field(alias="uploadDate"),
     ] = None
     created_at: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="createdAt"), pydantic.Field(alias="createdAt")
+        typing.Optional[str],
+        FieldMetadata(alias="createdAt"),
+        pydantic.Field(alias="createdAt"),
     ] = None
     created_by: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="createdBy"), pydantic.Field(alias="createdBy")
+        typing.Optional[str],
+        FieldMetadata(alias="createdBy"),
+        pydantic.Field(alias="createdBy"),
     ] = None
     cdm_found: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="cdmFound"), pydantic.Field(alias="cdmFound")
+        typing.Optional[str],
+        FieldMetadata(alias="cdmFound"),
+        pydantic.Field(alias="cdmFound"),
     ] = None
     ocm_batch_list: typing_extensions.Annotated[
         typing.Optional[typing.List[OperationalOnDemandBatchOcmDto]],
@@ -33,7 +43,9 @@ class OperationalOnDemandBatchDto(UncheckedBaseModel):
     ] = None
 
     if IS_PYDANTIC_V2:
-        model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(extra="allow", frozen=True)  # type: ignore # Pydantic v2
+        model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(
+            extra="allow", frozen=True
+        )  # type: ignore # Pydantic v2
     else:
 
         class Config:

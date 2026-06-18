@@ -5,8 +5,12 @@ import typing
 from ...core.client_wrapper import AsyncClientWrapper, SyncClientWrapper
 from ...core.request_options import RequestOptions
 from .raw_client import AsyncRawCdmClient, RawCdmClient
-from .types.list_by_operational_batch_cdm_response import ListByOperationalBatchCdmResponse
-from .types.list_by_operational_batch_v1cdm_response import ListByOperationalBatchV1CdmResponse
+from .types.list_by_operational_batch_cdm_response import (
+    ListByOperationalBatchCdmResponse,
+)
+from .types.list_by_operational_batch_v1cdm_response import (
+    ListByOperationalBatchV1CdmResponse,
+)
 from .types.list_cdm_response import ListCdmResponse
 from .types.list_v1cdm_response import ListV1CdmResponse
 
@@ -193,7 +197,7 @@ class CdmClient:
         from tracss import TraCSS
 
         client = TraCSS(
-            token="YOUR_TOKEN",
+            client_id="YOUR_CLIENT_ID", client_secret="YOUR_CLIENT_SECRET",
         )
         client.metadata.cdm.list(
             message_id="000043928_conj_000054603_2024329195621, or 000060681_conj_000026126_2025191132238_1751813630,000060681_conj_000026126_2025191132238_1751898521",
@@ -302,7 +306,7 @@ class CdmClient:
         from tracss import TraCSS
 
         client = TraCSS(
-            token="YOUR_TOKEN",
+            client_id="YOUR_CLIENT_ID", client_secret="YOUR_CLIENT_SECRET",
         )
         client.metadata.cdm.list_by_operational_batch(
             batch_id="ope76b2e-2e2f-4526-b782-f96d2675ec32",
@@ -310,7 +314,11 @@ class CdmClient:
         )
         """
         _response = self._raw_client.list_by_operational_batch(
-            batch_id=batch_id, headers_only=headers_only, format=format, size=size, request_options=request_options
+            batch_id=batch_id,
+            headers_only=headers_only,
+            format=format,
+            size=size,
+            request_options=request_options,
         )
         return _response.data
 
@@ -485,7 +493,7 @@ class CdmClient:
         from tracss import TraCSS
 
         client = TraCSS(
-            token="YOUR_TOKEN",
+            client_id="YOUR_CLIENT_ID", client_secret="YOUR_CLIENT_SECRET",
         )
         client.metadata.cdm.list_v1(
             message_id="000043928_conj_000054603_2024329195621, or 000060681_conj_000026126_2025191132238_1751813630,000060681_conj_000026126_2025191132238_1751898521",
@@ -597,7 +605,7 @@ class CdmClient:
         from tracss import TraCSS
 
         client = TraCSS(
-            token="YOUR_TOKEN",
+            client_id="YOUR_CLIENT_ID", client_secret="YOUR_CLIENT_SECRET",
         )
         client.metadata.cdm.list_by_operational_batch_v1(
             batch_id="ope76b2e-2e2f-4526-b782-f96d2675ec32",
@@ -605,7 +613,11 @@ class CdmClient:
         )
         """
         _response = self._raw_client.list_by_operational_batch_v1(
-            batch_id=batch_id, headers_only=headers_only, format=format, size=size, request_options=request_options
+            batch_id=batch_id,
+            headers_only=headers_only,
+            format=format,
+            size=size,
+            request_options=request_options,
         )
         return _response.data
 
@@ -794,7 +806,7 @@ class AsyncCdmClient:
         from tracss import AsyncTraCSS
 
         client = AsyncTraCSS(
-            token="YOUR_TOKEN",
+            client_id="YOUR_CLIENT_ID", client_secret="YOUR_CLIENT_SECRET",
         )
 
 
@@ -911,7 +923,7 @@ class AsyncCdmClient:
         from tracss import AsyncTraCSS
 
         client = AsyncTraCSS(
-            token="YOUR_TOKEN",
+            client_id="YOUR_CLIENT_ID", client_secret="YOUR_CLIENT_SECRET",
         )
 
 
@@ -925,7 +937,11 @@ class AsyncCdmClient:
         asyncio.run(main())
         """
         _response = await self._raw_client.list_by_operational_batch(
-            batch_id=batch_id, headers_only=headers_only, format=format, size=size, request_options=request_options
+            batch_id=batch_id,
+            headers_only=headers_only,
+            format=format,
+            size=size,
+            request_options=request_options,
         )
         return _response.data
 
@@ -1102,7 +1118,7 @@ class AsyncCdmClient:
         from tracss import AsyncTraCSS
 
         client = AsyncTraCSS(
-            token="YOUR_TOKEN",
+            client_id="YOUR_CLIENT_ID", client_secret="YOUR_CLIENT_SECRET",
         )
 
 
@@ -1222,7 +1238,7 @@ class AsyncCdmClient:
         from tracss import AsyncTraCSS
 
         client = AsyncTraCSS(
-            token="YOUR_TOKEN",
+            client_id="YOUR_CLIENT_ID", client_secret="YOUR_CLIENT_SECRET",
         )
 
 
@@ -1236,6 +1252,10 @@ class AsyncCdmClient:
         asyncio.run(main())
         """
         _response = await self._raw_client.list_by_operational_batch_v1(
-            batch_id=batch_id, headers_only=headers_only, format=format, size=size, request_options=request_options
+            batch_id=batch_id,
+            headers_only=headers_only,
+            format=format,
+            size=size,
+            request_options=request_options,
         )
         return _response.data

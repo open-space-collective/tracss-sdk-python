@@ -83,7 +83,9 @@ class RawOcmClient:
                 "file": file,
             },
             headers={
-                "updateDatabase": str(update_database) if update_database is not None else None,
+                "updateDatabase": str(update_database)
+                if update_database is not None
+                else None,
             },
             request_options=request_options,
             omit=OMIT,
@@ -145,12 +147,23 @@ class RawOcmClient:
                 )
             _response_json = _response.json()
         except JSONDecodeError:
-            raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
+            raise ApiError(
+                status_code=_response.status_code,
+                headers=dict(_response.headers),
+                body=_response.text,
+            )
         except ValidationError as e:
             raise ParsingError(
-                status_code=_response.status_code, headers=dict(_response.headers), body=_response.json(), cause=e
+                status_code=_response.status_code,
+                headers=dict(_response.headers),
+                body=_response.json(),
+                cause=e,
             )
-        raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
+        raise ApiError(
+            status_code=_response.status_code,
+            headers=dict(_response.headers),
+            body=_response_json,
+        )
 
     def upload_v1(
         self,
@@ -207,7 +220,9 @@ class RawOcmClient:
                 "file": file,
             },
             headers={
-                "updateDatabase": str(update_database) if update_database is not None else None,
+                "updateDatabase": str(update_database)
+                if update_database is not None
+                else None,
             },
             request_options=request_options,
             omit=OMIT,
@@ -269,12 +284,23 @@ class RawOcmClient:
                 )
             _response_json = _response.json()
         except JSONDecodeError:
-            raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
+            raise ApiError(
+                status_code=_response.status_code,
+                headers=dict(_response.headers),
+                body=_response.text,
+            )
         except ValidationError as e:
             raise ParsingError(
-                status_code=_response.status_code, headers=dict(_response.headers), body=_response.json(), cause=e
+                status_code=_response.status_code,
+                headers=dict(_response.headers),
+                body=_response.json(),
+                cause=e,
             )
-        raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
+        raise ApiError(
+            status_code=_response.status_code,
+            headers=dict(_response.headers),
+            body=_response_json,
+        )
 
     def list(
         self,
@@ -460,12 +486,23 @@ class RawOcmClient:
                 )
             _response_json = _response.json()
         except JSONDecodeError:
-            raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
+            raise ApiError(
+                status_code=_response.status_code,
+                headers=dict(_response.headers),
+                body=_response.text,
+            )
         except ValidationError as e:
             raise ParsingError(
-                status_code=_response.status_code, headers=dict(_response.headers), body=_response.json(), cause=e
+                status_code=_response.status_code,
+                headers=dict(_response.headers),
+                body=_response.json(),
+                cause=e,
             )
-        raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
+        raise ApiError(
+            status_code=_response.status_code,
+            headers=dict(_response.headers),
+            body=_response_json,
+        )
 
     def list_by_operational_batch(
         self,
@@ -619,12 +656,23 @@ class RawOcmClient:
                 )
             _response_json = _response.json()
         except JSONDecodeError:
-            raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
+            raise ApiError(
+                status_code=_response.status_code,
+                headers=dict(_response.headers),
+                body=_response.text,
+            )
         except ValidationError as e:
             raise ParsingError(
-                status_code=_response.status_code, headers=dict(_response.headers), body=_response.json(), cause=e
+                status_code=_response.status_code,
+                headers=dict(_response.headers),
+                body=_response.json(),
+                cause=e,
             )
-        raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
+        raise ApiError(
+            status_code=_response.status_code,
+            headers=dict(_response.headers),
+            body=_response_json,
+        )
 
     def list_v1(
         self,
@@ -810,12 +858,23 @@ class RawOcmClient:
                 )
             _response_json = _response.json()
         except JSONDecodeError:
-            raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
+            raise ApiError(
+                status_code=_response.status_code,
+                headers=dict(_response.headers),
+                body=_response.text,
+            )
         except ValidationError as e:
             raise ParsingError(
-                status_code=_response.status_code, headers=dict(_response.headers), body=_response.json(), cause=e
+                status_code=_response.status_code,
+                headers=dict(_response.headers),
+                body=_response.json(),
+                cause=e,
             )
-        raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
+        raise ApiError(
+            status_code=_response.status_code,
+            headers=dict(_response.headers),
+            body=_response_json,
+        )
 
     def list_by_operational_batch_v1(
         self,
@@ -969,12 +1028,23 @@ class RawOcmClient:
                 )
             _response_json = _response.json()
         except JSONDecodeError:
-            raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
+            raise ApiError(
+                status_code=_response.status_code,
+                headers=dict(_response.headers),
+                body=_response.text,
+            )
         except ValidationError as e:
             raise ParsingError(
-                status_code=_response.status_code, headers=dict(_response.headers), body=_response.json(), cause=e
+                status_code=_response.status_code,
+                headers=dict(_response.headers),
+                body=_response.json(),
+                cause=e,
             )
-        raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
+        raise ApiError(
+            status_code=_response.status_code,
+            headers=dict(_response.headers),
+            body=_response_json,
+        )
 
 
 class AsyncRawOcmClient:
@@ -1036,7 +1106,9 @@ class AsyncRawOcmClient:
                 "file": file,
             },
             headers={
-                "updateDatabase": str(update_database) if update_database is not None else None,
+                "updateDatabase": str(update_database)
+                if update_database is not None
+                else None,
             },
             request_options=request_options,
             omit=OMIT,
@@ -1098,12 +1170,23 @@ class AsyncRawOcmClient:
                 )
             _response_json = _response.json()
         except JSONDecodeError:
-            raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
+            raise ApiError(
+                status_code=_response.status_code,
+                headers=dict(_response.headers),
+                body=_response.text,
+            )
         except ValidationError as e:
             raise ParsingError(
-                status_code=_response.status_code, headers=dict(_response.headers), body=_response.json(), cause=e
+                status_code=_response.status_code,
+                headers=dict(_response.headers),
+                body=_response.json(),
+                cause=e,
             )
-        raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
+        raise ApiError(
+            status_code=_response.status_code,
+            headers=dict(_response.headers),
+            body=_response_json,
+        )
 
     async def upload_v1(
         self,
@@ -1160,7 +1243,9 @@ class AsyncRawOcmClient:
                 "file": file,
             },
             headers={
-                "updateDatabase": str(update_database) if update_database is not None else None,
+                "updateDatabase": str(update_database)
+                if update_database is not None
+                else None,
             },
             request_options=request_options,
             omit=OMIT,
@@ -1222,12 +1307,23 @@ class AsyncRawOcmClient:
                 )
             _response_json = _response.json()
         except JSONDecodeError:
-            raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
+            raise ApiError(
+                status_code=_response.status_code,
+                headers=dict(_response.headers),
+                body=_response.text,
+            )
         except ValidationError as e:
             raise ParsingError(
-                status_code=_response.status_code, headers=dict(_response.headers), body=_response.json(), cause=e
+                status_code=_response.status_code,
+                headers=dict(_response.headers),
+                body=_response.json(),
+                cause=e,
             )
-        raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
+        raise ApiError(
+            status_code=_response.status_code,
+            headers=dict(_response.headers),
+            body=_response_json,
+        )
 
     async def list(
         self,
@@ -1413,12 +1509,23 @@ class AsyncRawOcmClient:
                 )
             _response_json = _response.json()
         except JSONDecodeError:
-            raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
+            raise ApiError(
+                status_code=_response.status_code,
+                headers=dict(_response.headers),
+                body=_response.text,
+            )
         except ValidationError as e:
             raise ParsingError(
-                status_code=_response.status_code, headers=dict(_response.headers), body=_response.json(), cause=e
+                status_code=_response.status_code,
+                headers=dict(_response.headers),
+                body=_response.json(),
+                cause=e,
             )
-        raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
+        raise ApiError(
+            status_code=_response.status_code,
+            headers=dict(_response.headers),
+            body=_response_json,
+        )
 
     async def list_by_operational_batch(
         self,
@@ -1572,12 +1679,23 @@ class AsyncRawOcmClient:
                 )
             _response_json = _response.json()
         except JSONDecodeError:
-            raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
+            raise ApiError(
+                status_code=_response.status_code,
+                headers=dict(_response.headers),
+                body=_response.text,
+            )
         except ValidationError as e:
             raise ParsingError(
-                status_code=_response.status_code, headers=dict(_response.headers), body=_response.json(), cause=e
+                status_code=_response.status_code,
+                headers=dict(_response.headers),
+                body=_response.json(),
+                cause=e,
             )
-        raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
+        raise ApiError(
+            status_code=_response.status_code,
+            headers=dict(_response.headers),
+            body=_response_json,
+        )
 
     async def list_v1(
         self,
@@ -1763,12 +1881,23 @@ class AsyncRawOcmClient:
                 )
             _response_json = _response.json()
         except JSONDecodeError:
-            raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
+            raise ApiError(
+                status_code=_response.status_code,
+                headers=dict(_response.headers),
+                body=_response.text,
+            )
         except ValidationError as e:
             raise ParsingError(
-                status_code=_response.status_code, headers=dict(_response.headers), body=_response.json(), cause=e
+                status_code=_response.status_code,
+                headers=dict(_response.headers),
+                body=_response.json(),
+                cause=e,
             )
-        raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
+        raise ApiError(
+            status_code=_response.status_code,
+            headers=dict(_response.headers),
+            body=_response_json,
+        )
 
     async def list_by_operational_batch_v1(
         self,
@@ -1922,9 +2051,20 @@ class AsyncRawOcmClient:
                 )
             _response_json = _response.json()
         except JSONDecodeError:
-            raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
+            raise ApiError(
+                status_code=_response.status_code,
+                headers=dict(_response.headers),
+                body=_response.text,
+            )
         except ValidationError as e:
             raise ParsingError(
-                status_code=_response.status_code, headers=dict(_response.headers), body=_response.json(), cause=e
+                status_code=_response.status_code,
+                headers=dict(_response.headers),
+                body=_response.json(),
+                cause=e,
             )
-        raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
+        raise ApiError(
+            status_code=_response.status_code,
+            headers=dict(_response.headers),
+            body=_response_json,
+        )

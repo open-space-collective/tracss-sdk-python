@@ -11,16 +11,24 @@ from ...core.unchecked_base_model import UncheckedBaseModel
 
 class TipReport(UncheckedBaseModel):
     norad_id: typing_extensions.Annotated[
-        typing.Optional[int], FieldMetadata(alias="noradId"), pydantic.Field(alias="noradId")
+        typing.Optional[int],
+        FieldMetadata(alias="noradId"),
+        pydantic.Field(alias="noradId"),
     ] = None
     msg_epoch: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="msgEpoch"), pydantic.Field(alias="msgEpoch")
+        typing.Optional[str],
+        FieldMetadata(alias="msgEpoch"),
+        pydantic.Field(alias="msgEpoch"),
     ] = None
     insert_epoch: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="insertEpoch"), pydantic.Field(alias="insertEpoch")
+        typing.Optional[str],
+        FieldMetadata(alias="insertEpoch"),
+        pydantic.Field(alias="insertEpoch"),
     ] = None
     decay_epoch: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="decayEpoch"), pydantic.Field(alias="decayEpoch")
+        typing.Optional[str],
+        FieldMetadata(alias="decayEpoch"),
+        pydantic.Field(alias="decayEpoch"),
     ] = None
     window: typing.Optional[int] = None
     rev: typing.Optional[int] = None
@@ -29,19 +37,27 @@ class TipReport(UncheckedBaseModel):
     longitude: typing.Optional[float] = None
     inclination: typing.Optional[float] = None
     next_report: typing_extensions.Annotated[
-        typing.Optional[int], FieldMetadata(alias="nextReport"), pydantic.Field(alias="nextReport")
+        typing.Optional[int],
+        FieldMetadata(alias="nextReport"),
+        pydantic.Field(alias="nextReport"),
     ] = None
     id: typing.Optional[int] = None
     high_interest: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="highInterest"), pydantic.Field(alias="highInterest")
+        typing.Optional[str],
+        FieldMetadata(alias="highInterest"),
+        pydantic.Field(alias="highInterest"),
     ] = None
     object_number: typing_extensions.Annotated[
-        typing.Optional[int], FieldMetadata(alias="objectNumber"), pydantic.Field(alias="objectNumber")
+        typing.Optional[int],
+        FieldMetadata(alias="objectNumber"),
+        pydantic.Field(alias="objectNumber"),
     ] = None
     offset: typing.Optional[int] = None
 
     if IS_PYDANTIC_V2:
-        model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(extra="allow", frozen=True)  # type: ignore # Pydantic v2
+        model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(
+            extra="allow", frozen=True
+        )  # type: ignore # Pydantic v2
     else:
 
         class Config:

@@ -20,4 +20,6 @@ class ApiError(Exception):
         self.body = body
 
     def __str__(self) -> str:
-        return f"headers: {self.headers}, status_code: {self.status_code}, body: {self.body}"
+        return (
+            f"headers: {self.headers}, status_code: {self.status_code}, body: {self.body}"
+        )

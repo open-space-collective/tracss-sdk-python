@@ -14,8 +14,12 @@ from ..errors.internal_server_error import InternalServerError
 from ..errors.not_found_error import NotFoundError
 from ..errors.unauthorized_error import UnauthorizedError
 from ..errors.unprocessable_entity_error import UnprocessableEntityError
-from .types.list_by_operational_batch_cdm_response import ListByOperationalBatchCdmResponse
-from .types.list_by_operational_batch_v1cdm_response import ListByOperationalBatchV1CdmResponse
+from .types.list_by_operational_batch_cdm_response import (
+    ListByOperationalBatchCdmResponse,
+)
+from .types.list_by_operational_batch_v1cdm_response import (
+    ListByOperationalBatchV1CdmResponse,
+)
 from .types.list_cdm_response import ListCdmResponse
 from .types.list_v1cdm_response import ListV1CdmResponse
 from pydantic import ValidationError
@@ -297,12 +301,23 @@ class RawCdmClient:
                 )
             _response_json = _response.json()
         except JSONDecodeError:
-            raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
+            raise ApiError(
+                status_code=_response.status_code,
+                headers=dict(_response.headers),
+                body=_response.text,
+            )
         except ValidationError as e:
             raise ParsingError(
-                status_code=_response.status_code, headers=dict(_response.headers), body=_response.json(), cause=e
+                status_code=_response.status_code,
+                headers=dict(_response.headers),
+                body=_response.json(),
+                cause=e,
             )
-        raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
+        raise ApiError(
+            status_code=_response.status_code,
+            headers=dict(_response.headers),
+            body=_response_json,
+        )
 
     def list_by_operational_batch(
         self,
@@ -416,12 +431,23 @@ class RawCdmClient:
                 )
             _response_json = _response.json()
         except JSONDecodeError:
-            raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
+            raise ApiError(
+                status_code=_response.status_code,
+                headers=dict(_response.headers),
+                body=_response.text,
+            )
         except ValidationError as e:
             raise ParsingError(
-                status_code=_response.status_code, headers=dict(_response.headers), body=_response.json(), cause=e
+                status_code=_response.status_code,
+                headers=dict(_response.headers),
+                body=_response.json(),
+                cause=e,
             )
-        raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
+        raise ApiError(
+            status_code=_response.status_code,
+            headers=dict(_response.headers),
+            body=_response_json,
+        )
 
     def list_v1(
         self,
@@ -700,12 +726,23 @@ class RawCdmClient:
                 )
             _response_json = _response.json()
         except JSONDecodeError:
-            raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
+            raise ApiError(
+                status_code=_response.status_code,
+                headers=dict(_response.headers),
+                body=_response.text,
+            )
         except ValidationError as e:
             raise ParsingError(
-                status_code=_response.status_code, headers=dict(_response.headers), body=_response.json(), cause=e
+                status_code=_response.status_code,
+                headers=dict(_response.headers),
+                body=_response.json(),
+                cause=e,
             )
-        raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
+        raise ApiError(
+            status_code=_response.status_code,
+            headers=dict(_response.headers),
+            body=_response_json,
+        )
 
     def list_by_operational_batch_v1(
         self,
@@ -819,12 +856,23 @@ class RawCdmClient:
                 )
             _response_json = _response.json()
         except JSONDecodeError:
-            raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
+            raise ApiError(
+                status_code=_response.status_code,
+                headers=dict(_response.headers),
+                body=_response.text,
+            )
         except ValidationError as e:
             raise ParsingError(
-                status_code=_response.status_code, headers=dict(_response.headers), body=_response.json(), cause=e
+                status_code=_response.status_code,
+                headers=dict(_response.headers),
+                body=_response.json(),
+                cause=e,
             )
-        raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
+        raise ApiError(
+            status_code=_response.status_code,
+            headers=dict(_response.headers),
+            body=_response_json,
+        )
 
 
 class AsyncRawCdmClient:
@@ -1103,12 +1151,23 @@ class AsyncRawCdmClient:
                 )
             _response_json = _response.json()
         except JSONDecodeError:
-            raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
+            raise ApiError(
+                status_code=_response.status_code,
+                headers=dict(_response.headers),
+                body=_response.text,
+            )
         except ValidationError as e:
             raise ParsingError(
-                status_code=_response.status_code, headers=dict(_response.headers), body=_response.json(), cause=e
+                status_code=_response.status_code,
+                headers=dict(_response.headers),
+                body=_response.json(),
+                cause=e,
             )
-        raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
+        raise ApiError(
+            status_code=_response.status_code,
+            headers=dict(_response.headers),
+            body=_response_json,
+        )
 
     async def list_by_operational_batch(
         self,
@@ -1222,12 +1281,23 @@ class AsyncRawCdmClient:
                 )
             _response_json = _response.json()
         except JSONDecodeError:
-            raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
+            raise ApiError(
+                status_code=_response.status_code,
+                headers=dict(_response.headers),
+                body=_response.text,
+            )
         except ValidationError as e:
             raise ParsingError(
-                status_code=_response.status_code, headers=dict(_response.headers), body=_response.json(), cause=e
+                status_code=_response.status_code,
+                headers=dict(_response.headers),
+                body=_response.json(),
+                cause=e,
             )
-        raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
+        raise ApiError(
+            status_code=_response.status_code,
+            headers=dict(_response.headers),
+            body=_response_json,
+        )
 
     async def list_v1(
         self,
@@ -1506,12 +1576,23 @@ class AsyncRawCdmClient:
                 )
             _response_json = _response.json()
         except JSONDecodeError:
-            raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
+            raise ApiError(
+                status_code=_response.status_code,
+                headers=dict(_response.headers),
+                body=_response.text,
+            )
         except ValidationError as e:
             raise ParsingError(
-                status_code=_response.status_code, headers=dict(_response.headers), body=_response.json(), cause=e
+                status_code=_response.status_code,
+                headers=dict(_response.headers),
+                body=_response.json(),
+                cause=e,
             )
-        raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
+        raise ApiError(
+            status_code=_response.status_code,
+            headers=dict(_response.headers),
+            body=_response_json,
+        )
 
     async def list_by_operational_batch_v1(
         self,
@@ -1625,9 +1706,20 @@ class AsyncRawCdmClient:
                 )
             _response_json = _response.json()
         except JSONDecodeError:
-            raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
+            raise ApiError(
+                status_code=_response.status_code,
+                headers=dict(_response.headers),
+                body=_response.text,
+            )
         except ValidationError as e:
             raise ParsingError(
-                status_code=_response.status_code, headers=dict(_response.headers), body=_response.json(), cause=e
+                status_code=_response.status_code,
+                headers=dict(_response.headers),
+                body=_response.json(),
+                cause=e,
             )
-        raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
+        raise ApiError(
+            status_code=_response.status_code,
+            headers=dict(_response.headers),
+            body=_response_json,
+        )

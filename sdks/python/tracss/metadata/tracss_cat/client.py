@@ -26,7 +26,9 @@ class TracssCatClient:
         """
         return self._raw_client
 
-    def upload_csv(self, *, request_options: typing.Optional[RequestOptions] = None) -> typing.Any:
+    def upload_csv(
+        self, *, request_options: typing.Optional[RequestOptions] = None
+    ) -> typing.Any:
         """
         Upload a CSV file to update the TraCSS catalog. The CSV must include a noradId column as the minimum required header; all other fields are optional. Rows with noradIds your organization does not own will generate change requests pending TraCSS Operations approval. See tracss.gov for the full list of valid fields and accepted date formats.
 
@@ -45,7 +47,7 @@ class TracssCatClient:
         from tracss import TraCSS
 
         client = TraCSS(
-            token="YOUR_TOKEN",
+            client_id="YOUR_CLIENT_ID", client_secret="YOUR_CLIENT_SECRET",
         )
         client.metadata.tracss_cat.upload_csv()
         """
@@ -130,7 +132,7 @@ class TracssCatClient:
         from tracss import TraCSS
 
         client = TraCSS(
-            token="YOUR_TOKEN",
+            client_id="YOUR_CLIENT_ID", client_secret="YOUR_CLIENT_SECRET",
         )
         client.metadata.tracss_cat.list(
             norad_id="30580, or 30580,30581",
@@ -173,7 +175,9 @@ class AsyncTracssCatClient:
         """
         return self._raw_client
 
-    async def upload_csv(self, *, request_options: typing.Optional[RequestOptions] = None) -> typing.Any:
+    async def upload_csv(
+        self, *, request_options: typing.Optional[RequestOptions] = None
+    ) -> typing.Any:
         """
         Upload a CSV file to update the TraCSS catalog. The CSV must include a noradId column as the minimum required header; all other fields are optional. Rows with noradIds your organization does not own will generate change requests pending TraCSS Operations approval. See tracss.gov for the full list of valid fields and accepted date formats.
 
@@ -194,7 +198,7 @@ class AsyncTracssCatClient:
         from tracss import AsyncTraCSS
 
         client = AsyncTraCSS(
-            token="YOUR_TOKEN",
+            client_id="YOUR_CLIENT_ID", client_secret="YOUR_CLIENT_SECRET",
         )
 
 
@@ -287,7 +291,7 @@ class AsyncTracssCatClient:
         from tracss import AsyncTraCSS
 
         client = AsyncTraCSS(
-            token="YOUR_TOKEN",
+            client_id="YOUR_CLIENT_ID", client_secret="YOUR_CLIENT_SECRET",
         )
 
 

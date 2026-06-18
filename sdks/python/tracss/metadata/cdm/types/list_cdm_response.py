@@ -18,11 +18,15 @@ class ListCdmResponse(UncheckedBaseModel):
     ] = None
     default: typing.Optional[str] = None
     count_only: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="countOnly"), pydantic.Field(alias="countOnly")
+        typing.Optional[str],
+        FieldMetadata(alias="countOnly"),
+        pydantic.Field(alias="countOnly"),
     ] = None
 
     if IS_PYDANTIC_V2:
-        model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(extra="allow", frozen=True)  # type: ignore # Pydantic v2
+        model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(
+            extra="allow", frozen=True
+        )  # type: ignore # Pydantic v2
     else:
 
         class Config:

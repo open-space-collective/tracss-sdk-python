@@ -41,14 +41,16 @@ class TopicsClient:
         from tracss import TraCSS
 
         client = TraCSS(
-            token="YOUR_TOKEN",
+            client_id="YOUR_CLIENT_ID", client_secret="YOUR_CLIENT_SECRET",
         )
         client.subscriber.topics.list()
         """
         _response = self._raw_client.list(request_options=request_options)
         return _response.data
 
-    def get_offset(self, *, topic: str, request_options: typing.Optional[RequestOptions] = None) -> typing.Any:
+    def get_offset(
+        self, *, topic: str, request_options: typing.Optional[RequestOptions] = None
+    ) -> typing.Any:
         """
         Retrieve the latest kafka offset of a passed in topic
 
@@ -70,13 +72,15 @@ class TopicsClient:
         from tracss import TraCSS
 
         client = TraCSS(
-            token="YOUR_TOKEN",
+            client_id="YOUR_CLIENT_ID", client_secret="YOUR_CLIENT_SECRET",
         )
         client.subscriber.topics.get_offset(
             topic="gov.tracss.tracss.v1.cdms",
         )
         """
-        _response = self._raw_client.get_offset(topic=topic, request_options=request_options)
+        _response = self._raw_client.get_offset(
+            topic=topic, request_options=request_options
+        )
         return _response.data
 
 
@@ -95,7 +99,9 @@ class AsyncTopicsClient:
         """
         return self._raw_client
 
-    async def list(self, *, request_options: typing.Optional[RequestOptions] = None) -> str:
+    async def list(
+        self, *, request_options: typing.Optional[RequestOptions] = None
+    ) -> str:
         """
         Retrieve the list of available topics to subscribe to, as well as their latest offset
 
@@ -116,7 +122,7 @@ class AsyncTopicsClient:
         from tracss import AsyncTraCSS
 
         client = AsyncTraCSS(
-            token="YOUR_TOKEN",
+            client_id="YOUR_CLIENT_ID", client_secret="YOUR_CLIENT_SECRET",
         )
 
 
@@ -129,7 +135,9 @@ class AsyncTopicsClient:
         _response = await self._raw_client.list(request_options=request_options)
         return _response.data
 
-    async def get_offset(self, *, topic: str, request_options: typing.Optional[RequestOptions] = None) -> typing.Any:
+    async def get_offset(
+        self, *, topic: str, request_options: typing.Optional[RequestOptions] = None
+    ) -> typing.Any:
         """
         Retrieve the latest kafka offset of a passed in topic
 
@@ -153,7 +161,7 @@ class AsyncTopicsClient:
         from tracss import AsyncTraCSS
 
         client = AsyncTraCSS(
-            token="YOUR_TOKEN",
+            client_id="YOUR_CLIENT_ID", client_secret="YOUR_CLIENT_SECRET",
         )
 
 
@@ -165,5 +173,7 @@ class AsyncTopicsClient:
 
         asyncio.run(main())
         """
-        _response = await self._raw_client.get_offset(topic=topic, request_options=request_options)
+        _response = await self._raw_client.get_offset(
+            topic=topic, request_options=request_options
+        )
         return _response.data

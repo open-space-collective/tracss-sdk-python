@@ -116,5 +116,7 @@ class AsyncBulkDataClient:
         if self._announcements is None:
             from .announcements.client import AsyncAnnouncementsClient  # noqa: E402
 
-            self._announcements = AsyncAnnouncementsClient(client_wrapper=self._client_wrapper)
+            self._announcements = AsyncAnnouncementsClient(
+                client_wrapper=self._client_wrapper
+            )
         return self._announcements

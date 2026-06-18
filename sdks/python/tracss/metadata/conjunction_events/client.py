@@ -106,7 +106,7 @@ class ConjunctionEventsClient:
         from tracss import TraCSS
 
         client = TraCSS(
-            token="YOUR_TOKEN",
+            client_id="YOUR_CLIENT_ID", client_secret="YOUR_CLIENT_SECRET",
         )
         client.metadata.conjunction_events.list(
             min_tca="2025-06-03 00:40:26.36",
@@ -238,7 +238,7 @@ class AsyncConjunctionEventsClient:
         from tracss import AsyncTraCSS
 
         client = AsyncTraCSS(
-            token="YOUR_TOKEN",
+            client_id="YOUR_CLIENT_ID", client_secret="YOUR_CLIENT_SECRET",
         )
 
 

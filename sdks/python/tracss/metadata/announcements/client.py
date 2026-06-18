@@ -62,7 +62,7 @@ class AnnouncementsClient:
         from tracss import TraCSS
 
         client = TraCSS(
-            token="YOUR_TOKEN",
+            client_id="YOUR_CLIENT_ID", client_secret="YOUR_CLIENT_SECRET",
         )
         client.metadata.announcements.list(
             id="someOrganizationId",
@@ -70,7 +70,11 @@ class AnnouncementsClient:
         )
         """
         _response = self._raw_client.list(
-            id=id, announcement_type=announcement_type, page=page, size=size, request_options=request_options
+            id=id,
+            announcement_type=announcement_type,
+            page=page,
+            size=size,
+            request_options=request_options,
         )
         return _response.data
 
@@ -131,7 +135,7 @@ class AsyncAnnouncementsClient:
         from tracss import AsyncTraCSS
 
         client = AsyncTraCSS(
-            token="YOUR_TOKEN",
+            client_id="YOUR_CLIENT_ID", client_secret="YOUR_CLIENT_SECRET",
         )
 
 
@@ -145,6 +149,10 @@ class AsyncAnnouncementsClient:
         asyncio.run(main())
         """
         _response = await self._raw_client.list(
-            id=id, announcement_type=announcement_type, page=page, size=size, request_options=request_options
+            id=id,
+            announcement_type=announcement_type,
+            page=page,
+            size=size,
+            request_options=request_options,
         )
         return _response.data

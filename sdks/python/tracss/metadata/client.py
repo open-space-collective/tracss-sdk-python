@@ -10,8 +10,14 @@ from .raw_client import AsyncRawMetadataClient, RawMetadataClient
 if typing.TYPE_CHECKING:
     from .announcements.client import AnnouncementsClient, AsyncAnnouncementsClient
     from .cdm.client import AsyncCdmClient, CdmClient
-    from .conjunction_events.client import AsyncConjunctionEventsClient, ConjunctionEventsClient
-    from .contact_directory.client import AsyncContactDirectoryClient, ContactDirectoryClient
+    from .conjunction_events.client import (
+        AsyncConjunctionEventsClient,
+        ConjunctionEventsClient,
+    )
+    from .contact_directory.client import (
+        AsyncContactDirectoryClient,
+        ContactDirectoryClient,
+    )
     from .ocm.client import AsyncOcmClient, OcmClient
     from .schemas.client import AsyncSchemasClient, SchemasClient
     from .space_track.client import AsyncSpaceTrackClient, SpaceTrackClient
@@ -49,7 +55,9 @@ class MetadataClient:
         if self._contact_directory is None:
             from .contact_directory.client import ContactDirectoryClient  # noqa: E402
 
-            self._contact_directory = ContactDirectoryClient(client_wrapper=self._client_wrapper)
+            self._contact_directory = ContactDirectoryClient(
+                client_wrapper=self._client_wrapper
+            )
         return self._contact_directory
 
     @property
@@ -105,7 +113,9 @@ class MetadataClient:
         if self._conjunction_events is None:
             from .conjunction_events.client import ConjunctionEventsClient  # noqa: E402
 
-            self._conjunction_events = ConjunctionEventsClient(client_wrapper=self._client_wrapper)
+            self._conjunction_events = ConjunctionEventsClient(
+                client_wrapper=self._client_wrapper
+            )
         return self._conjunction_events
 
     @property
@@ -147,7 +157,9 @@ class AsyncMetadataClient:
         if self._contact_directory is None:
             from .contact_directory.client import AsyncContactDirectoryClient  # noqa: E402
 
-            self._contact_directory = AsyncContactDirectoryClient(client_wrapper=self._client_wrapper)
+            self._contact_directory = AsyncContactDirectoryClient(
+                client_wrapper=self._client_wrapper
+            )
         return self._contact_directory
 
     @property
@@ -203,7 +215,9 @@ class AsyncMetadataClient:
         if self._conjunction_events is None:
             from .conjunction_events.client import AsyncConjunctionEventsClient  # noqa: E402
 
-            self._conjunction_events = AsyncConjunctionEventsClient(client_wrapper=self._client_wrapper)
+            self._conjunction_events = AsyncConjunctionEventsClient(
+                client_wrapper=self._client_wrapper
+            )
         return self._conjunction_events
 
     @property
@@ -211,5 +225,7 @@ class AsyncMetadataClient:
         if self._announcements is None:
             from .announcements.client import AsyncAnnouncementsClient  # noqa: E402
 
-            self._announcements = AsyncAnnouncementsClient(client_wrapper=self._client_wrapper)
+            self._announcements = AsyncAnnouncementsClient(
+                client_wrapper=self._client_wrapper
+            )
         return self._announcements

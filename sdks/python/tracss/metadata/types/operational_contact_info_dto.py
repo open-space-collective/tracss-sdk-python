@@ -22,26 +22,36 @@ class OperationalContactInfoDto(UncheckedBaseModel):
     operational_contact_names: typing_extensions.Annotated[
         typing.Optional[str],
         FieldMetadata(alias="operationalContactNames"),
-        pydantic.Field(alias="operationalContactNames", description="Operational contact name(s)"),
+        pydantic.Field(
+            alias="operationalContactNames", description="Operational contact name(s)"
+        ),
     ] = None
     operational_contact_emails: typing_extensions.Annotated[
         typing.Optional[str],
         FieldMetadata(alias="operationalContactEmails"),
-        pydantic.Field(alias="operationalContactEmails", description="Operational contact email(s)"),
+        pydantic.Field(
+            alias="operationalContactEmails", description="Operational contact email(s)"
+        ),
     ] = None
     operational_contact_phones: typing_extensions.Annotated[
         typing.Optional[str],
         FieldMetadata(alias="operationalContactPhones"),
-        pydantic.Field(alias="operationalContactPhones", description="Operational contact phone(s)"),
+        pydantic.Field(
+            alias="operationalContactPhones", description="Operational contact phone(s)"
+        ),
     ] = None
     norad_id_list: typing_extensions.Annotated[
         typing.Optional[typing.List[str]],
         FieldMetadata(alias="noradIdList"),
-        pydantic.Field(alias="noradIdList", description="List of Norad Ids Operator Oversees"),
+        pydantic.Field(
+            alias="noradIdList", description="List of Norad Ids Operator Oversees"
+        ),
     ] = None
 
     if IS_PYDANTIC_V2:
-        model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(extra="allow", frozen=True)  # type: ignore # Pydantic v2
+        model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(
+            extra="allow", frozen=True
+        )  # type: ignore # Pydantic v2
     else:
 
         class Config:

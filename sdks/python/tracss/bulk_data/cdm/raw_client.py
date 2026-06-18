@@ -209,7 +209,9 @@ class RawCdmClient:
                     _response_json = _response.json()
                 except JSONDecodeError:
                     raise ApiError(
-                        status_code=_response.status_code, headers=dict(_response.headers), body=_response.text
+                        status_code=_response.status_code,
+                        headers=dict(_response.headers),
+                        body=_response.text,
                     )
                 except ValidationError as e:
                     raise ParsingError(
@@ -218,7 +220,11 @@ class RawCdmClient:
                         body=_response.json(),
                         cause=e,
                     )
-                raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
+                raise ApiError(
+                    status_code=_response.status_code,
+                    headers=dict(_response.headers),
+                    body=_response_json,
+                )
 
             yield _stream()
 
@@ -410,7 +416,9 @@ class RawCdmClient:
                     _response_json = _response.json()
                 except JSONDecodeError:
                     raise ApiError(
-                        status_code=_response.status_code, headers=dict(_response.headers), body=_response.text
+                        status_code=_response.status_code,
+                        headers=dict(_response.headers),
+                        body=_response.text,
                     )
                 except ValidationError as e:
                     raise ParsingError(
@@ -419,7 +427,11 @@ class RawCdmClient:
                         body=_response.json(),
                         cause=e,
                     )
-                raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
+                raise ApiError(
+                    status_code=_response.status_code,
+                    headers=dict(_response.headers),
+                    body=_response_json,
+                )
 
             yield _stream()
 
@@ -569,7 +581,9 @@ class AsyncRawCdmClient:
             request_options=request_options,
         ) as _response:
 
-            async def _stream() -> AsyncHttpResponse[typing.AsyncIterator[StreamCdmResponse]]:
+            async def _stream() -> AsyncHttpResponse[
+                typing.AsyncIterator[StreamCdmResponse]
+            ]:
                 try:
                     if 200 <= _response.status_code < 300:
 
@@ -616,7 +630,9 @@ class AsyncRawCdmClient:
                     _response_json = _response.json()
                 except JSONDecodeError:
                     raise ApiError(
-                        status_code=_response.status_code, headers=dict(_response.headers), body=_response.text
+                        status_code=_response.status_code,
+                        headers=dict(_response.headers),
+                        body=_response.text,
                     )
                 except ValidationError as e:
                     raise ParsingError(
@@ -625,7 +641,11 @@ class AsyncRawCdmClient:
                         body=_response.json(),
                         cause=e,
                     )
-                raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
+                raise ApiError(
+                    status_code=_response.status_code,
+                    headers=dict(_response.headers),
+                    body=_response_json,
+                )
 
             yield await _stream()
 
@@ -817,7 +837,9 @@ class AsyncRawCdmClient:
                     _response_json = _response.json()
                 except JSONDecodeError:
                     raise ApiError(
-                        status_code=_response.status_code, headers=dict(_response.headers), body=_response.text
+                        status_code=_response.status_code,
+                        headers=dict(_response.headers),
+                        body=_response.text,
                     )
                 except ValidationError as e:
                     raise ParsingError(
@@ -826,6 +848,10 @@ class AsyncRawCdmClient:
                         body=_response.json(),
                         cause=e,
                     )
-                raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
+                raise ApiError(
+                    status_code=_response.status_code,
+                    headers=dict(_response.headers),
+                    body=_response_json,
+                )
 
             yield await _stream()

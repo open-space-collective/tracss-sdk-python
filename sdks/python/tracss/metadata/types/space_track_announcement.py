@@ -12,20 +12,30 @@ from ...core.unchecked_base_model import UncheckedBaseModel
 class SpaceTrackAnnouncement(UncheckedBaseModel):
     id: typing.Optional[str] = None
     announcement_text: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="announcementText"), pydantic.Field(alias="announcementText")
+        typing.Optional[str],
+        FieldMetadata(alias="announcementText"),
+        pydantic.Field(alias="announcementText"),
     ] = None
     announcement_type: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="announcementType"), pydantic.Field(alias="announcementType")
+        typing.Optional[str],
+        FieldMetadata(alias="announcementType"),
+        pydantic.Field(alias="announcementType"),
     ] = None
     announcement_start: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="announcementStart"), pydantic.Field(alias="announcementStart")
+        typing.Optional[str],
+        FieldMetadata(alias="announcementStart"),
+        pydantic.Field(alias="announcementStart"),
     ] = None
     announcement_end: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="announcementEnd"), pydantic.Field(alias="announcementEnd")
+        typing.Optional[str],
+        FieldMetadata(alias="announcementEnd"),
+        pydantic.Field(alias="announcementEnd"),
     ] = None
 
     if IS_PYDANTIC_V2:
-        model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(extra="allow", frozen=True)  # type: ignore # Pydantic v2
+        model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(
+            extra="allow", frozen=True
+        )  # type: ignore # Pydantic v2
     else:
 
         class Config:

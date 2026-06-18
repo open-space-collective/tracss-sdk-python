@@ -12,17 +12,25 @@ from ...core.unchecked_base_model import UncheckedBaseModel
 class TracssFile(UncheckedBaseModel):
     filename: typing.Optional[str] = None
     creation_date: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="creationDate"), pydantic.Field(alias="creationDate")
+        typing.Optional[str],
+        FieldMetadata(alias="creationDate"),
+        pydantic.Field(alias="creationDate"),
     ] = None
     record_count: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="recordCount"), pydantic.Field(alias="recordCount")
+        typing.Optional[str],
+        FieldMetadata(alias="recordCount"),
+        pydantic.Field(alias="recordCount"),
     ] = None
     file_size: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="fileSize"), pydantic.Field(alias="fileSize")
+        typing.Optional[str],
+        FieldMetadata(alias="fileSize"),
+        pydantic.Field(alias="fileSize"),
     ] = None
 
     if IS_PYDANTIC_V2:
-        model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(extra="allow", frozen=True)  # type: ignore # Pydantic v2
+        model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(
+            extra="allow", frozen=True
+        )  # type: ignore # Pydantic v2
     else:
 
         class Config:

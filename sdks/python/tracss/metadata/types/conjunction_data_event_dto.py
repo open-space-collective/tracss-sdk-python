@@ -16,12 +16,16 @@ class ConjunctionDataEventDto(UncheckedBaseModel):
         pydantic.Field(alias="object1ObjectDesignator"),
     ] = None
     creation_date: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="creationDate"), pydantic.Field(alias="creationDate")
+        typing.Optional[str],
+        FieldMetadata(alias="creationDate"),
+        pydantic.Field(alias="creationDate"),
+    ] = None
+    miss_distance: typing_extensions.Annotated[
+        typing.Optional[float],
+        FieldMetadata(alias="missDistance"),
+        pydantic.Field(alias="missDistance"),
     ] = None
     tca: typing.Optional[str] = None
-    miss_distance: typing_extensions.Annotated[
-        typing.Optional[float], FieldMetadata(alias="missDistance"), pydantic.Field(alias="missDistance")
-    ] = None
     collision_probability: typing_extensions.Annotated[
         typing.Optional[float],
         FieldMetadata(alias="collisionProbability"),
@@ -33,14 +37,20 @@ class ConjunctionDataEventDto(UncheckedBaseModel):
         pydantic.Field(alias="object2ObjectDesignator"),
     ] = None
     conjunction_id: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="conjunctionId"), pydantic.Field(alias="conjunctionId")
+        typing.Optional[str],
+        FieldMetadata(alias="conjunctionId"),
+        pydantic.Field(alias="conjunctionId"),
     ] = None
     cdm_message_ids: typing_extensions.Annotated[
-        typing.Optional[typing.List[str]], FieldMetadata(alias="cdmMessageIds"), pydantic.Field(alias="cdmMessageIds")
+        typing.Optional[typing.List[str]],
+        FieldMetadata(alias="cdmMessageIds"),
+        pydantic.Field(alias="cdmMessageIds"),
     ] = None
 
     if IS_PYDANTIC_V2:
-        model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(extra="allow", frozen=True)  # type: ignore # Pydantic v2
+        model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(
+            extra="allow", frozen=True
+        )  # type: ignore # Pydantic v2
     else:
 
         class Config:

@@ -7,7 +7,9 @@ from importlib import import_module
 
 if typing.TYPE_CHECKING:
     from .list_by_operational_batch_cdm_response import ListByOperationalBatchCdmResponse
-    from .list_by_operational_batch_v1cdm_response import ListByOperationalBatchV1CdmResponse
+    from .list_by_operational_batch_v1cdm_response import (
+        ListByOperationalBatchV1CdmResponse,
+    )
     from .list_cdm_response import ListCdmResponse
     from .list_v1cdm_response import ListV1CdmResponse
 _dynamic_imports: typing.Dict[str, str] = {
@@ -21,7 +23,9 @@ _dynamic_imports: typing.Dict[str, str] = {
 def __getattr__(attr_name: str) -> typing.Any:
     module_name = _dynamic_imports.get(attr_name)
     if module_name is None:
-        raise AttributeError(f"No {attr_name} found in _dynamic_imports for module name -> {__name__}")
+        raise AttributeError(
+            f"No {attr_name} found in _dynamic_imports for module name -> {__name__}"
+        )
     try:
         module = import_module(module_name, __package__)
         if module_name == f".{attr_name}":

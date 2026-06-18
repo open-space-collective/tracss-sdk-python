@@ -155,7 +155,9 @@ class RawOcmClient:
                     _response_json = _response.json()
                 except JSONDecodeError:
                     raise ApiError(
-                        status_code=_response.status_code, headers=dict(_response.headers), body=_response.text
+                        status_code=_response.status_code,
+                        headers=dict(_response.headers),
+                        body=_response.text,
                     )
                 except ValidationError as e:
                     raise ParsingError(
@@ -164,7 +166,11 @@ class RawOcmClient:
                         body=_response.json(),
                         cause=e,
                     )
-                raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
+                raise ApiError(
+                    status_code=_response.status_code,
+                    headers=dict(_response.headers),
+                    body=_response_json,
+                )
 
             yield _stream()
 
@@ -315,7 +321,9 @@ class RawOcmClient:
                     _response_json = _response.json()
                 except JSONDecodeError:
                     raise ApiError(
-                        status_code=_response.status_code, headers=dict(_response.headers), body=_response.text
+                        status_code=_response.status_code,
+                        headers=dict(_response.headers),
+                        body=_response.text,
                     )
                 except ValidationError as e:
                     raise ParsingError(
@@ -324,7 +332,11 @@ class RawOcmClient:
                         body=_response.json(),
                         cause=e,
                     )
-                raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
+                raise ApiError(
+                    status_code=_response.status_code,
+                    headers=dict(_response.headers),
+                    body=_response_json,
+                )
 
             yield _stream()
 
@@ -430,7 +442,9 @@ class AsyncRawOcmClient:
             request_options=request_options,
         ) as _response:
 
-            async def _stream() -> AsyncHttpResponse[typing.AsyncIterator[StreamOcmResponse]]:
+            async def _stream() -> AsyncHttpResponse[
+                typing.AsyncIterator[StreamOcmResponse]
+            ]:
                 try:
                     if 200 <= _response.status_code < 300:
 
@@ -466,7 +480,9 @@ class AsyncRawOcmClient:
                     _response_json = _response.json()
                 except JSONDecodeError:
                     raise ApiError(
-                        status_code=_response.status_code, headers=dict(_response.headers), body=_response.text
+                        status_code=_response.status_code,
+                        headers=dict(_response.headers),
+                        body=_response.text,
                     )
                 except ValidationError as e:
                     raise ParsingError(
@@ -475,7 +491,11 @@ class AsyncRawOcmClient:
                         body=_response.json(),
                         cause=e,
                     )
-                raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
+                raise ApiError(
+                    status_code=_response.status_code,
+                    headers=dict(_response.headers),
+                    body=_response_json,
+                )
 
             yield await _stream()
 
@@ -500,7 +520,9 @@ class AsyncRawOcmClient:
         headers_only: typing.Optional[bool] = None,
         format: typing.Optional[str] = None,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> typing.AsyncIterator[AsyncHttpResponse[typing.AsyncIterator[StreamV1OcmResponse]]]:
+    ) -> typing.AsyncIterator[
+        AsyncHttpResponse[typing.AsyncIterator[StreamV1OcmResponse]]
+    ]:
         """
         Retrieve one or more TraCSS V1 OCMs from TRACSS cloud storage.
 
@@ -579,7 +601,9 @@ class AsyncRawOcmClient:
             request_options=request_options,
         ) as _response:
 
-            async def _stream() -> AsyncHttpResponse[typing.AsyncIterator[StreamV1OcmResponse]]:
+            async def _stream() -> AsyncHttpResponse[
+                typing.AsyncIterator[StreamV1OcmResponse]
+            ]:
                 try:
                     if 200 <= _response.status_code < 300:
 
@@ -626,7 +650,9 @@ class AsyncRawOcmClient:
                     _response_json = _response.json()
                 except JSONDecodeError:
                     raise ApiError(
-                        status_code=_response.status_code, headers=dict(_response.headers), body=_response.text
+                        status_code=_response.status_code,
+                        headers=dict(_response.headers),
+                        body=_response.text,
                     )
                 except ValidationError as e:
                     raise ParsingError(
@@ -635,6 +661,10 @@ class AsyncRawOcmClient:
                         body=_response.json(),
                         cause=e,
                     )
-                raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
+                raise ApiError(
+                    status_code=_response.status_code,
+                    headers=dict(_response.headers),
+                    body=_response_json,
+                )
 
             yield await _stream()

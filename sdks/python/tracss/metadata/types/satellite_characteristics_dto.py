@@ -10,12 +10,18 @@ from ...core.unchecked_base_model import UncheckedBaseModel
 
 
 class SatelliteCharacteristicsDto(UncheckedBaseModel):
-    norad_id: typing_extensions.Annotated[int, FieldMetadata(alias="noradId"), pydantic.Field(alias="noradId")]
+    norad_id: typing_extensions.Annotated[
+        int, FieldMetadata(alias="noradId"), pydantic.Field(alias="noradId")
+    ]
     satellite_name: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="satelliteName"), pydantic.Field(alias="satelliteName")
+        typing.Optional[str],
+        FieldMetadata(alias="satelliteName"),
+        pydantic.Field(alias="satelliteName"),
     ] = None
     alternate_names: typing_extensions.Annotated[
-        typing.Optional[typing.List[str]], FieldMetadata(alias="alternateNames"), pydantic.Field(alias="alternateNames")
+        typing.Optional[typing.List[str]],
+        FieldMetadata(alias="alternateNames"),
+        pydantic.Field(alias="alternateNames"),
     ] = None
     international_designator: typing_extensions.Annotated[
         typing.Optional[str],
@@ -39,20 +45,30 @@ class SatelliteCharacteristicsDto(UncheckedBaseModel):
         pydantic.Field(alias="countryProvidingRemoteSensing"),
     ] = None
     country_of_un_registry: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="countryOfUNRegistry"), pydantic.Field(alias="countryOfUNRegistry")
+        typing.Optional[str],
+        FieldMetadata(alias="countryOfUNRegistry"),
+        pydantic.Field(alias="countryOfUNRegistry"),
     ] = None
     constellation: typing.Optional[str] = None
     operational_status: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="operationalStatus"), pydantic.Field(alias="operationalStatus")
+        typing.Optional[str],
+        FieldMetadata(alias="operationalStatus"),
+        pydantic.Field(alias="operationalStatus"),
     ] = None
     orbit_category: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="orbitCategory"), pydantic.Field(alias="orbitCategory")
+        typing.Optional[str],
+        FieldMetadata(alias="orbitCategory"),
+        pydantic.Field(alias="orbitCategory"),
     ] = None
     wet_mass: typing_extensions.Annotated[
-        typing.Optional[float], FieldMetadata(alias="wetMass"), pydantic.Field(alias="wetMass")
+        typing.Optional[float],
+        FieldMetadata(alias="wetMass"),
+        pydantic.Field(alias="wetMass"),
     ] = None
     hard_body_radius: typing_extensions.Annotated[
-        typing.Optional[float], FieldMetadata(alias="hardBodyRadius"), pydantic.Field(alias="hardBodyRadius")
+        typing.Optional[float],
+        FieldMetadata(alias="hardBodyRadius"),
+        pydantic.Field(alias="hardBodyRadius"),
     ] = None
     conjunction_mitigation_capabilities: typing_extensions.Annotated[
         typing.Optional[typing.List[str]],
@@ -70,19 +86,29 @@ class SatelliteCharacteristicsDto(UncheckedBaseModel):
         pydantic.Field(alias="estimatedTotalTimeOnOrbit"),
     ] = None
     launch_provider: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="launchProvider"), pydantic.Field(alias="launchProvider")
+        typing.Optional[str],
+        FieldMetadata(alias="launchProvider"),
+        pydantic.Field(alias="launchProvider"),
     ] = None
     launch_vehicle: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="launchVehicle"), pydantic.Field(alias="launchVehicle")
+        typing.Optional[str],
+        FieldMetadata(alias="launchVehicle"),
+        pydantic.Field(alias="launchVehicle"),
     ] = None
     launch_location: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="launchLocation"), pydantic.Field(alias="launchLocation")
+        typing.Optional[str],
+        FieldMetadata(alias="launchLocation"),
+        pydantic.Field(alias="launchLocation"),
     ] = None
     launch_date: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="launchDate"), pydantic.Field(alias="launchDate")
+        typing.Optional[str],
+        FieldMetadata(alias="launchDate"),
+        pydantic.Field(alias="launchDate"),
     ] = None
     deployment_date: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="deploymentDate"), pydantic.Field(alias="deploymentDate")
+        typing.Optional[str],
+        FieldMetadata(alias="deploymentDate"),
+        pydantic.Field(alias="deploymentDate"),
     ] = None
     additional_deployments: typing_extensions.Annotated[
         typing.Optional[str],
@@ -90,10 +116,14 @@ class SatelliteCharacteristicsDto(UncheckedBaseModel):
         pydantic.Field(alias="additionalDeployments"),
     ] = None
     launch_name: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="launchName"), pydantic.Field(alias="launchName")
+        typing.Optional[str],
+        FieldMetadata(alias="launchName"),
+        pydantic.Field(alias="launchName"),
     ] = None
     planned_orbit_period: typing_extensions.Annotated[
-        typing.Optional[float], FieldMetadata(alias="plannedOrbitPeriod"), pydantic.Field(alias="plannedOrbitPeriod")
+        typing.Optional[float],
+        FieldMetadata(alias="plannedOrbitPeriod"),
+        pydantic.Field(alias="plannedOrbitPeriod"),
     ] = None
     planned_orbit_inclination: typing_extensions.Annotated[
         typing.Optional[float],
@@ -101,16 +131,24 @@ class SatelliteCharacteristicsDto(UncheckedBaseModel):
         pydantic.Field(alias="plannedOrbitInclination"),
     ] = None
     planned_orbit_apogee: typing_extensions.Annotated[
-        typing.Optional[float], FieldMetadata(alias="plannedOrbitApogee"), pydantic.Field(alias="plannedOrbitApogee")
+        typing.Optional[float],
+        FieldMetadata(alias="plannedOrbitApogee"),
+        pydantic.Field(alias="plannedOrbitApogee"),
     ] = None
     planned_orbit_perigee: typing_extensions.Annotated[
-        typing.Optional[float], FieldMetadata(alias="plannedOrbitPerigee"), pydantic.Field(alias="plannedOrbitPerigee")
+        typing.Optional[float],
+        FieldMetadata(alias="plannedOrbitPerigee"),
+        pydantic.Field(alias="plannedOrbitPerigee"),
     ] = None
     general_function: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="generalFunction"), pydantic.Field(alias="generalFunction")
+        typing.Optional[str],
+        FieldMetadata(alias="generalFunction"),
+        pydantic.Field(alias="generalFunction"),
     ] = None
     object_type: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="objectType"), pydantic.Field(alias="objectType")
+        typing.Optional[str],
+        FieldMetadata(alias="objectType"),
+        pydantic.Field(alias="objectType"),
     ] = None
     operational_contact_names: typing_extensions.Annotated[
         typing.Optional[typing.List[str]],
@@ -129,7 +167,9 @@ class SatelliteCharacteristicsDto(UncheckedBaseModel):
     ] = None
 
     if IS_PYDANTIC_V2:
-        model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(extra="allow", frozen=True)  # type: ignore # Pydantic v2
+        model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(
+            extra="allow", frozen=True
+        )  # type: ignore # Pydantic v2
     else:
 
         class Config:

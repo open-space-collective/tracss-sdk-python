@@ -11,29 +11,45 @@ from ...core.unchecked_base_model import UncheckedBaseModel
 
 class OcmMetadataByStartandEndDateDto(UncheckedBaseModel):
     file_name: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="fileName"), pydantic.Field(alias="fileName")
+        typing.Optional[str],
+        FieldMetadata(alias="fileName"),
+        pydantic.Field(alias="fileName"),
     ] = None
     traj_basis: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="trajBasis"), pydantic.Field(alias="trajBasis")
+        typing.Optional[str],
+        FieldMetadata(alias="trajBasis"),
+        pydantic.Field(alias="trajBasis"),
     ] = None
     start_time: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="startTime"), pydantic.Field(alias="startTime")
+        typing.Optional[str],
+        FieldMetadata(alias="startTime"),
+        pydantic.Field(alias="startTime"),
     ] = None
     stop_time: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="stopTime"), pydantic.Field(alias="stopTime")
+        typing.Optional[str],
+        FieldMetadata(alias="stopTime"),
+        pydantic.Field(alias="stopTime"),
     ] = None
     message_id: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="messageId"), pydantic.Field(alias="messageId")
+        typing.Optional[str],
+        FieldMetadata(alias="messageId"),
+        pydantic.Field(alias="messageId"),
     ] = None
     object_designator: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="objectDesignator"), pydantic.Field(alias="objectDesignator")
+        typing.Optional[str],
+        FieldMetadata(alias="objectDesignator"),
+        pydantic.Field(alias="objectDesignator"),
     ] = None
     creation_date: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="creationDate"), pydantic.Field(alias="creationDate")
+        typing.Optional[str],
+        FieldMetadata(alias="creationDate"),
+        pydantic.Field(alias="creationDate"),
     ] = None
 
     if IS_PYDANTIC_V2:
-        model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(extra="allow", frozen=True)  # type: ignore # Pydantic v2
+        model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(
+            extra="allow", frozen=True
+        )  # type: ignore # Pydantic v2
     else:
 
         class Config:

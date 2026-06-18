@@ -20,22 +20,30 @@ class Organization(UncheckedBaseModel):
     type: typing.Optional[str] = None
     category: typing.Optional[str] = None
     country_code: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="countryCode"), pydantic.Field(alias="countryCode")
+        typing.Optional[str],
+        FieldMetadata(alias="countryCode"),
+        pydantic.Field(alias="countryCode"),
     ] = None
     active: typing.Optional[bool] = None
     description: typing.Optional[str] = None
     external_id: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="externalId"), pydantic.Field(alias="externalId")
+        typing.Optional[str],
+        FieldMetadata(alias="externalId"),
+        pydantic.Field(alias="externalId"),
     ] = None
     origin: typing.Optional[str] = None
     source: typing.Optional[str] = None
     data_mode: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="dataMode"), pydantic.Field(alias="dataMode")
+        typing.Optional[str],
+        FieldMetadata(alias="dataMode"),
+        pydantic.Field(alias="dataMode"),
     ] = None
     version: typing.Optional[int] = None
 
     if IS_PYDANTIC_V2:
-        model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(extra="allow", frozen=True)  # type: ignore # Pydantic v2
+        model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(
+            extra="allow", frozen=True
+        )  # type: ignore # Pydantic v2
     else:
 
         class Config:

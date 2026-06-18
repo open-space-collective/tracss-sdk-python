@@ -12,18 +12,26 @@ from ...core.unchecked_base_model import UncheckedBaseModel
 
 class ConsolidatedOcm(UncheckedBaseModel):
     ccsds_ocm_version: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="ccsdsOcmVersion"), pydantic.Field(alias="ccsdsOcmVersion")
+        typing.Optional[str],
+        FieldMetadata(alias="ccsdsOcmVersion"),
+        pydantic.Field(alias="ccsdsOcmVersion"),
     ] = None
     classification: typing.Optional[str] = None
     creation_date: typing_extensions.Annotated[
-        typing.Optional[dt.datetime], FieldMetadata(alias="creationDate"), pydantic.Field(alias="creationDate")
+        typing.Optional[dt.datetime],
+        FieldMetadata(alias="creationDate"),
+        pydantic.Field(alias="creationDate"),
     ] = None
     originator: typing.Optional[str] = None
     message_id: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="messageId"), pydantic.Field(alias="messageId")
+        typing.Optional[str],
+        FieldMetadata(alias="messageId"),
+        pydantic.Field(alias="messageId"),
     ] = None
     object_name: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="objectName"), pydantic.Field(alias="objectName")
+        typing.Optional[str],
+        FieldMetadata(alias="objectName"),
+        pydantic.Field(alias="objectName"),
     ] = None
     international_designator: typing_extensions.Annotated[
         typing.Optional[str],
@@ -31,153 +39,249 @@ class ConsolidatedOcm(UncheckedBaseModel):
         pydantic.Field(alias="internationalDesignator"),
     ] = None
     catalog_name: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="catalogName"), pydantic.Field(alias="catalogName")
+        typing.Optional[str],
+        FieldMetadata(alias="catalogName"),
+        pydantic.Field(alias="catalogName"),
     ] = None
     object_designator: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="objectDesignator"), pydantic.Field(alias="objectDesignator")
+        typing.Optional[str],
+        FieldMetadata(alias="objectDesignator"),
+        pydantic.Field(alias="objectDesignator"),
     ] = None
     originator_poc: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="originatorPoc"), pydantic.Field(alias="originatorPoc")
+        typing.Optional[str],
+        FieldMetadata(alias="originatorPoc"),
+        pydantic.Field(alias="originatorPoc"),
     ] = None
     originator_position: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="originatorPosition"), pydantic.Field(alias="originatorPosition")
+        typing.Optional[str],
+        FieldMetadata(alias="originatorPosition"),
+        pydantic.Field(alias="originatorPosition"),
     ] = None
     originator_phone: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="originatorPhone"), pydantic.Field(alias="originatorPhone")
+        typing.Optional[str],
+        FieldMetadata(alias="originatorPhone"),
+        pydantic.Field(alias="originatorPhone"),
     ] = None
     originator_email: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="originatorEmail"), pydantic.Field(alias="originatorEmail")
+        typing.Optional[str],
+        FieldMetadata(alias="originatorEmail"),
+        pydantic.Field(alias="originatorEmail"),
     ] = None
     originator_address: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="originatorAddress"), pydantic.Field(alias="originatorAddress")
+        typing.Optional[str],
+        FieldMetadata(alias="originatorAddress"),
+        pydantic.Field(alias="originatorAddress"),
     ] = None
     tech_org: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="techOrg"), pydantic.Field(alias="techOrg")
+        typing.Optional[str],
+        FieldMetadata(alias="techOrg"),
+        pydantic.Field(alias="techOrg"),
     ] = None
     tech_poc: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="techPoc"), pydantic.Field(alias="techPoc")
+        typing.Optional[str],
+        FieldMetadata(alias="techPoc"),
+        pydantic.Field(alias="techPoc"),
     ] = None
     tech_position: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="techPosition"), pydantic.Field(alias="techPosition")
+        typing.Optional[str],
+        FieldMetadata(alias="techPosition"),
+        pydantic.Field(alias="techPosition"),
     ] = None
     tech_phone: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="techPhone"), pydantic.Field(alias="techPhone")
+        typing.Optional[str],
+        FieldMetadata(alias="techPhone"),
+        pydantic.Field(alias="techPhone"),
     ] = None
     tech_email: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="techEmail"), pydantic.Field(alias="techEmail")
+        typing.Optional[str],
+        FieldMetadata(alias="techEmail"),
+        pydantic.Field(alias="techEmail"),
     ] = None
     tech_address: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="techAddress"), pydantic.Field(alias="techAddress")
+        typing.Optional[str],
+        FieldMetadata(alias="techAddress"),
+        pydantic.Field(alias="techAddress"),
     ] = None
     prev_message_id: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="prevMessageId"), pydantic.Field(alias="prevMessageId")
+        typing.Optional[str],
+        FieldMetadata(alias="prevMessageId"),
+        pydantic.Field(alias="prevMessageId"),
     ] = None
     next_message_id: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="nextMessageId"), pydantic.Field(alias="nextMessageId")
+        typing.Optional[str],
+        FieldMetadata(alias="nextMessageId"),
+        pydantic.Field(alias="nextMessageId"),
     ] = None
     adm_msg_link: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="admMsgLink"), pydantic.Field(alias="admMsgLink")
+        typing.Optional[str],
+        FieldMetadata(alias="admMsgLink"),
+        pydantic.Field(alias="admMsgLink"),
     ] = None
     cdm_msg_link: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="cdmMsgLink"), pydantic.Field(alias="cdmMsgLink")
+        typing.Optional[str],
+        FieldMetadata(alias="cdmMsgLink"),
+        pydantic.Field(alias="cdmMsgLink"),
     ] = None
     prm_msg_link: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="prmMsgLink"), pydantic.Field(alias="prmMsgLink")
+        typing.Optional[str],
+        FieldMetadata(alias="prmMsgLink"),
+        pydantic.Field(alias="prmMsgLink"),
     ] = None
     rdm_msg_link: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="rdmMsgLink"), pydantic.Field(alias="rdmMsgLink")
+        typing.Optional[str],
+        FieldMetadata(alias="rdmMsgLink"),
+        pydantic.Field(alias="rdmMsgLink"),
     ] = None
     tdm_msg_link: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="tdmMsgLink"), pydantic.Field(alias="tdmMsgLink")
+        typing.Optional[str],
+        FieldMetadata(alias="tdmMsgLink"),
+        pydantic.Field(alias="tdmMsgLink"),
     ] = None
     operator: typing.Optional[str] = None
     owner: typing.Optional[str] = None
     country: typing.Optional[str] = None
     constellation: typing.Optional[str] = None
     object_type: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="objectType"), pydantic.Field(alias="objectType")
+        typing.Optional[str],
+        FieldMetadata(alias="objectType"),
+        pydantic.Field(alias="objectType"),
     ] = None
     time_system: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="timeSystem"), pydantic.Field(alias="timeSystem")
+        typing.Optional[str],
+        FieldMetadata(alias="timeSystem"),
+        pydantic.Field(alias="timeSystem"),
     ] = None
     epoch_t0: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="epochT0"), pydantic.Field(alias="epochT0")
+        typing.Optional[str],
+        FieldMetadata(alias="epochT0"),
+        pydantic.Field(alias="epochT0"),
     ] = None
     orbit_category: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="orbitCategory"), pydantic.Field(alias="orbitCategory")
+        typing.Optional[str],
+        FieldMetadata(alias="orbitCategory"),
+        pydantic.Field(alias="orbitCategory"),
     ] = None
     sclk_offset_at_epoch: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="sclkOffsetAtEpoch"), pydantic.Field(alias="sclkOffsetAtEpoch")
+        typing.Optional[str],
+        FieldMetadata(alias="sclkOffsetAtEpoch"),
+        pydantic.Field(alias="sclkOffsetAtEpoch"),
     ] = None
     sclk_sec_per_si_sec: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="sclkSecPerSiSec"), pydantic.Field(alias="sclkSecPerSiSec")
+        typing.Optional[str],
+        FieldMetadata(alias="sclkSecPerSiSec"),
+        pydantic.Field(alias="sclkSecPerSiSec"),
     ] = None
     previous_message_epoch: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="previousMessageEpoch"), pydantic.Field(alias="previousMessageEpoch")
+        typing.Optional[str],
+        FieldMetadata(alias="previousMessageEpoch"),
+        pydantic.Field(alias="previousMessageEpoch"),
     ] = None
     next_message_epoch: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="nextMessageEpoch"), pydantic.Field(alias="nextMessageEpoch")
+        typing.Optional[str],
+        FieldMetadata(alias="nextMessageEpoch"),
+        pydantic.Field(alias="nextMessageEpoch"),
     ] = None
     start_time: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="startTime"), pydantic.Field(alias="startTime")
+        typing.Optional[str],
+        FieldMetadata(alias="startTime"),
+        pydantic.Field(alias="startTime"),
     ] = None
     stop_time: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="stopTime"), pydantic.Field(alias="stopTime")
+        typing.Optional[str],
+        FieldMetadata(alias="stopTime"),
+        pydantic.Field(alias="stopTime"),
     ] = None
     time_span: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="timeSpan"), pydantic.Field(alias="timeSpan")
+        typing.Optional[str],
+        FieldMetadata(alias="timeSpan"),
+        pydantic.Field(alias="timeSpan"),
     ] = None
     taim_utc_at_t0: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="taimUtcAtT0"), pydantic.Field(alias="taimUtcAtT0")
+        typing.Optional[str],
+        FieldMetadata(alias="taimUtcAtT0"),
+        pydantic.Field(alias="taimUtcAtT0"),
     ] = None
     next_leap_epoch: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="nextLeapEpoch"), pydantic.Field(alias="nextLeapEpoch")
+        typing.Optional[str],
+        FieldMetadata(alias="nextLeapEpoch"),
+        pydantic.Field(alias="nextLeapEpoch"),
     ] = None
     next_leap_taim_utc: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="nextLeapTaimUtc"), pydantic.Field(alias="nextLeapTaimUtc")
+        typing.Optional[str],
+        FieldMetadata(alias="nextLeapTaimUtc"),
+        pydantic.Field(alias="nextLeapTaimUtc"),
     ] = None
     ut1m_utc_at_t0: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="ut1MUtcAtT0"), pydantic.Field(alias="ut1MUtcAtT0")
+        typing.Optional[str],
+        FieldMetadata(alias="ut1MUtcAtT0"),
+        pydantic.Field(alias="ut1MUtcAtT0"),
     ] = None
     eop_source: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="eopSource"), pydantic.Field(alias="eopSource")
+        typing.Optional[str],
+        FieldMetadata(alias="eopSource"),
+        pydantic.Field(alias="eopSource"),
     ] = None
     interp_method_eop: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="interpMethodEop"), pydantic.Field(alias="interpMethodEop")
+        typing.Optional[str],
+        FieldMetadata(alias="interpMethodEop"),
+        pydantic.Field(alias="interpMethodEop"),
     ] = None
     celestial_source: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="celestialSource"), pydantic.Field(alias="celestialSource")
+        typing.Optional[str],
+        FieldMetadata(alias="celestialSource"),
+        pydantic.Field(alias="celestialSource"),
     ] = None
     manufacturer: typing.Optional[str] = None
     bus_model: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="busModel"), pydantic.Field(alias="busModel")
+        typing.Optional[str],
+        FieldMetadata(alias="busModel"),
+        pydantic.Field(alias="busModel"),
     ] = None
     docked_with: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="dockedWith"), pydantic.Field(alias="dockedWith")
+        typing.Optional[str],
+        FieldMetadata(alias="dockedWith"),
+        pydantic.Field(alias="dockedWith"),
     ] = None
     drag_const_area: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="dragConstArea"), pydantic.Field(alias="dragConstArea")
+        typing.Optional[str],
+        FieldMetadata(alias="dragConstArea"),
+        pydantic.Field(alias="dragConstArea"),
     ] = None
     drag_coeff: typing_extensions.Annotated[
-        typing.Optional[float], FieldMetadata(alias="dragCoeff"), pydantic.Field(alias="dragCoeff")
+        typing.Optional[float],
+        FieldMetadata(alias="dragCoeff"),
+        pydantic.Field(alias="dragCoeff"),
     ] = None
     drag_uncertainty: typing_extensions.Annotated[
-        typing.Optional[float], FieldMetadata(alias="dragUncertainty"), pydantic.Field(alias="dragUncertainty")
+        typing.Optional[float],
+        FieldMetadata(alias="dragUncertainty"),
+        pydantic.Field(alias="dragUncertainty"),
     ] = None
     initial_wet_mass: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="initialWetMass"), pydantic.Field(alias="initialWetMass")
+        typing.Optional[str],
+        FieldMetadata(alias="initialWetMass"),
+        pydantic.Field(alias="initialWetMass"),
     ] = None
     wet_mass: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="wetMass"), pydantic.Field(alias="wetMass")
+        typing.Optional[str],
+        FieldMetadata(alias="wetMass"),
+        pydantic.Field(alias="wetMass"),
     ] = None
     dry_mass: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="dryMass"), pydantic.Field(alias="dryMass")
+        typing.Optional[str],
+        FieldMetadata(alias="dryMass"),
+        pydantic.Field(alias="dryMass"),
     ] = None
     oeb_parent_frame: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="oebParentFrame"), pydantic.Field(alias="oebParentFrame")
+        typing.Optional[str],
+        FieldMetadata(alias="oebParentFrame"),
+        pydantic.Field(alias="oebParentFrame"),
     ] = None
     oeb_parent_frame_epoch: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="oebParentFrameEpoch"), pydantic.Field(alias="oebParentFrameEpoch")
+        typing.Optional[str],
+        FieldMetadata(alias="oebParentFrameEpoch"),
+        pydantic.Field(alias="oebParentFrameEpoch"),
     ] = None
     oeb_q1: typing_extensions.Annotated[
         typing.Optional[str], FieldMetadata(alias="oebQ1"), pydantic.Field(alias="oebQ1")
@@ -192,264 +296,422 @@ class ConsolidatedOcm(UncheckedBaseModel):
         typing.Optional[str], FieldMetadata(alias="oebQC"), pydantic.Field(alias="oebQC")
     ] = None
     oeb_max: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="oebMax"), pydantic.Field(alias="oebMax")
+        typing.Optional[str],
+        FieldMetadata(alias="oebMax"),
+        pydantic.Field(alias="oebMax"),
     ] = None
     oeb_int: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="oebInt"), pydantic.Field(alias="oebInt")
+        typing.Optional[str],
+        FieldMetadata(alias="oebInt"),
+        pydantic.Field(alias="oebInt"),
     ] = None
     oeb_min: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="oebMin"), pydantic.Field(alias="oebMin")
+        typing.Optional[str],
+        FieldMetadata(alias="oebMin"),
+        pydantic.Field(alias="oebMin"),
     ] = None
     area_along_oeb_max: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="areaAlongOebMax"), pydantic.Field(alias="areaAlongOebMax")
+        typing.Optional[str],
+        FieldMetadata(alias="areaAlongOebMax"),
+        pydantic.Field(alias="areaAlongOebMax"),
     ] = None
     area_along_oeb_int: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="areaAlongOebInt"), pydantic.Field(alias="areaAlongOebInt")
+        typing.Optional[str],
+        FieldMetadata(alias="areaAlongOebInt"),
+        pydantic.Field(alias="areaAlongOebInt"),
     ] = None
     area_along_oeb_min: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="areaAlongOebMin"), pydantic.Field(alias="areaAlongOebMin")
+        typing.Optional[str],
+        FieldMetadata(alias="areaAlongOebMin"),
+        pydantic.Field(alias="areaAlongOebMin"),
     ] = None
     area_min_for_pc: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="areaMinForPc"), pydantic.Field(alias="areaMinForPc")
+        typing.Optional[str],
+        FieldMetadata(alias="areaMinForPc"),
+        pydantic.Field(alias="areaMinForPc"),
     ] = None
     area_max_for_pc: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="areaMaxForPc"), pydantic.Field(alias="areaMaxForPc")
+        typing.Optional[str],
+        FieldMetadata(alias="areaMaxForPc"),
+        pydantic.Field(alias="areaMaxForPc"),
     ] = None
     area_typ_for_pc: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="areaTypForPc"), pydantic.Field(alias="areaTypForPc")
+        typing.Optional[str],
+        FieldMetadata(alias="areaTypForPc"),
+        pydantic.Field(alias="areaTypForPc"),
     ] = None
     rcs: typing.Optional[str] = None
     rcs_min: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="rcsMin"), pydantic.Field(alias="rcsMin")
+        typing.Optional[str],
+        FieldMetadata(alias="rcsMin"),
+        pydantic.Field(alias="rcsMin"),
     ] = None
     rcs_max: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="rcsMax"), pydantic.Field(alias="rcsMax")
+        typing.Optional[str],
+        FieldMetadata(alias="rcsMax"),
+        pydantic.Field(alias="rcsMax"),
     ] = None
     srp_const_area: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="srpConstArea"), pydantic.Field(alias="srpConstArea")
+        typing.Optional[str],
+        FieldMetadata(alias="srpConstArea"),
+        pydantic.Field(alias="srpConstArea"),
     ] = None
     solar_rad_coeff: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="solarRadCoeff"), pydantic.Field(alias="solarRadCoeff")
+        typing.Optional[str],
+        FieldMetadata(alias="solarRadCoeff"),
+        pydantic.Field(alias="solarRadCoeff"),
     ] = None
     solar_rad_uncertainty: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="solarRadUncertainty"), pydantic.Field(alias="solarRadUncertainty")
+        typing.Optional[str],
+        FieldMetadata(alias="solarRadUncertainty"),
+        pydantic.Field(alias="solarRadUncertainty"),
     ] = None
     vm_absolute: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="vmAbsolute"), pydantic.Field(alias="vmAbsolute")
+        typing.Optional[str],
+        FieldMetadata(alias="vmAbsolute"),
+        pydantic.Field(alias="vmAbsolute"),
     ] = None
     vm_apparent_min: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="vmApparentMin"), pydantic.Field(alias="vmApparentMin")
+        typing.Optional[str],
+        FieldMetadata(alias="vmApparentMin"),
+        pydantic.Field(alias="vmApparentMin"),
     ] = None
     vm_apparent: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="vmApparent"), pydantic.Field(alias="vmApparent")
+        typing.Optional[str],
+        FieldMetadata(alias="vmApparent"),
+        pydantic.Field(alias="vmApparent"),
     ] = None
     vm_apparent_max: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="vmApparentMax"), pydantic.Field(alias="vmApparentMax")
+        typing.Optional[str],
+        FieldMetadata(alias="vmApparentMax"),
+        pydantic.Field(alias="vmApparentMax"),
     ] = None
     reflectance: typing.Optional[str] = None
     att_control_mode: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="attControlMode"), pydantic.Field(alias="attControlMode")
+        typing.Optional[str],
+        FieldMetadata(alias="attControlMode"),
+        pydantic.Field(alias="attControlMode"),
     ] = None
     att_actuator_type: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="attActuatorType"), pydantic.Field(alias="attActuatorType")
+        typing.Optional[str],
+        FieldMetadata(alias="attActuatorType"),
+        pydantic.Field(alias="attActuatorType"),
     ] = None
     att_knowledge: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="attKnowledge"), pydantic.Field(alias="attKnowledge")
+        typing.Optional[str],
+        FieldMetadata(alias="attKnowledge"),
+        pydantic.Field(alias="attKnowledge"),
     ] = None
     att_control: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="attControl"), pydantic.Field(alias="attControl")
+        typing.Optional[str],
+        FieldMetadata(alias="attControl"),
+        pydantic.Field(alias="attControl"),
     ] = None
     att_pointing: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="attPointing"), pydantic.Field(alias="attPointing")
+        typing.Optional[str],
+        FieldMetadata(alias="attPointing"),
+        pydantic.Field(alias="attPointing"),
     ] = None
     avg_maneuver_freq: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="avgManeuverFreq"), pydantic.Field(alias="avgManeuverFreq")
+        typing.Optional[str],
+        FieldMetadata(alias="avgManeuverFreq"),
+        pydantic.Field(alias="avgManeuverFreq"),
     ] = None
     max_thrust: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="maxThrust"), pydantic.Field(alias="maxThrust")
+        typing.Optional[str],
+        FieldMetadata(alias="maxThrust"),
+        pydantic.Field(alias="maxThrust"),
     ] = None
     dv_bol: typing_extensions.Annotated[
         typing.Optional[str], FieldMetadata(alias="dvBol"), pydantic.Field(alias="dvBol")
     ] = None
     dv_remaining: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="dvRemaining"), pydantic.Field(alias="dvRemaining")
+        typing.Optional[str],
+        FieldMetadata(alias="dvRemaining"),
+        pydantic.Field(alias="dvRemaining"),
     ] = None
     atmospheric_model: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="atmosphericModel"), pydantic.Field(alias="atmosphericModel")
+        typing.Optional[str],
+        FieldMetadata(alias="atmosphericModel"),
+        pydantic.Field(alias="atmosphericModel"),
     ] = None
     gravity_model: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="gravityModel"), pydantic.Field(alias="gravityModel")
+        typing.Optional[str],
+        FieldMetadata(alias="gravityModel"),
+        pydantic.Field(alias="gravityModel"),
     ] = None
     equatorial_radius: typing_extensions.Annotated[
-        typing.Optional[float], FieldMetadata(alias="equatorialRadius"), pydantic.Field(alias="equatorialRadius")
+        typing.Optional[float],
+        FieldMetadata(alias="equatorialRadius"),
+        pydantic.Field(alias="equatorialRadius"),
     ] = None
     gm: typing.Optional[str] = None
     central_body_rotation: typing_extensions.Annotated[
-        typing.Optional[float], FieldMetadata(alias="centralBodyRotation"), pydantic.Field(alias="centralBodyRotation")
+        typing.Optional[float],
+        FieldMetadata(alias="centralBodyRotation"),
+        pydantic.Field(alias="centralBodyRotation"),
     ] = None
     oblate_flattening: typing_extensions.Annotated[
-        typing.Optional[float], FieldMetadata(alias="oblateFlattening"), pydantic.Field(alias="oblateFlattening")
+        typing.Optional[float],
+        FieldMetadata(alias="oblateFlattening"),
+        pydantic.Field(alias="oblateFlattening"),
     ] = None
     ocean_tides_model: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="oceanTidesModel"), pydantic.Field(alias="oceanTidesModel")
+        typing.Optional[str],
+        FieldMetadata(alias="oceanTidesModel"),
+        pydantic.Field(alias="oceanTidesModel"),
     ] = None
     solid_tides_model: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="solidTidesModel"), pydantic.Field(alias="solidTidesModel")
+        typing.Optional[str],
+        FieldMetadata(alias="solidTidesModel"),
+        pydantic.Field(alias="solidTidesModel"),
     ] = None
     reduction_theory: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="reductionTheory"), pydantic.Field(alias="reductionTheory")
+        typing.Optional[str],
+        FieldMetadata(alias="reductionTheory"),
+        pydantic.Field(alias="reductionTheory"),
     ] = None
     albedo_model: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="albedoModel"), pydantic.Field(alias="albedoModel")
+        typing.Optional[str],
+        FieldMetadata(alias="albedoModel"),
+        pydantic.Field(alias="albedoModel"),
     ] = None
     albedo_grid_size: typing_extensions.Annotated[
-        typing.Optional[int], FieldMetadata(alias="albedoGridSize"), pydantic.Field(alias="albedoGridSize")
+        typing.Optional[int],
+        FieldMetadata(alias="albedoGridSize"),
+        pydantic.Field(alias="albedoGridSize"),
     ] = None
     shadow_model: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="shadowModel"), pydantic.Field(alias="shadowModel")
+        typing.Optional[str],
+        FieldMetadata(alias="shadowModel"),
+        pydantic.Field(alias="shadowModel"),
     ] = None
     shadow_bodies: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="shadowBodies"), pydantic.Field(alias="shadowBodies")
+        typing.Optional[str],
+        FieldMetadata(alias="shadowBodies"),
+        pydantic.Field(alias="shadowBodies"),
     ] = None
     srp_model: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="srpModel"), pydantic.Field(alias="srpModel")
+        typing.Optional[str],
+        FieldMetadata(alias="srpModel"),
+        pydantic.Field(alias="srpModel"),
     ] = None
     sw_data_source: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="swDataSource"), pydantic.Field(alias="swDataSource")
+        typing.Optional[str],
+        FieldMetadata(alias="swDataSource"),
+        pydantic.Field(alias="swDataSource"),
     ] = None
     sw_data_epoch: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="swDataEpoch"), pydantic.Field(alias="swDataEpoch")
+        typing.Optional[str],
+        FieldMetadata(alias="swDataEpoch"),
+        pydantic.Field(alias="swDataEpoch"),
     ] = None
     sw_interp_method: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="swInterpMethod"), pydantic.Field(alias="swInterpMethod")
+        typing.Optional[str],
+        FieldMetadata(alias="swInterpMethod"),
+        pydantic.Field(alias="swInterpMethod"),
     ] = None
     fixed_geomag_kp: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="fixedGeomagKp"), pydantic.Field(alias="fixedGeomagKp")
+        typing.Optional[str],
+        FieldMetadata(alias="fixedGeomagKp"),
+        pydantic.Field(alias="fixedGeomagKp"),
     ] = None
     fixed_geomag_ap: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="fixedGeomagAp"), pydantic.Field(alias="fixedGeomagAp")
+        typing.Optional[str],
+        FieldMetadata(alias="fixedGeomagAp"),
+        pydantic.Field(alias="fixedGeomagAp"),
     ] = None
     fixed_geomag_dst: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="fixedGeomagDst"), pydantic.Field(alias="fixedGeomagDst")
+        typing.Optional[str],
+        FieldMetadata(alias="fixedGeomagDst"),
+        pydantic.Field(alias="fixedGeomagDst"),
     ] = None
     fixed_f10p7: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="fixedF10P7"), pydantic.Field(alias="fixedF10P7")
+        typing.Optional[str],
+        FieldMetadata(alias="fixedF10P7"),
+        pydantic.Field(alias="fixedF10P7"),
     ] = None
     fixed_f10p7mean: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="fixedF10P7Mean"), pydantic.Field(alias="fixedF10P7Mean")
+        typing.Optional[str],
+        FieldMetadata(alias="fixedF10P7Mean"),
+        pydantic.Field(alias="fixedF10P7Mean"),
     ] = None
     fixed_m10p7: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="fixedM10P7"), pydantic.Field(alias="fixedM10P7")
+        typing.Optional[str],
+        FieldMetadata(alias="fixedM10P7"),
+        pydantic.Field(alias="fixedM10P7"),
     ] = None
     fixed_m10p7mean: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="fixedM10P7Mean"), pydantic.Field(alias="fixedM10P7Mean")
+        typing.Optional[str],
+        FieldMetadata(alias="fixedM10P7Mean"),
+        pydantic.Field(alias="fixedM10P7Mean"),
     ] = None
     fixed_s10p7: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="fixedS10P7"), pydantic.Field(alias="fixedS10P7")
+        typing.Optional[str],
+        FieldMetadata(alias="fixedS10P7"),
+        pydantic.Field(alias="fixedS10P7"),
     ] = None
     fixed_s10p7mean: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="fixedS10P7Mean"), pydantic.Field(alias="fixedS10P7Mean")
+        typing.Optional[str],
+        FieldMetadata(alias="fixedS10P7Mean"),
+        pydantic.Field(alias="fixedS10P7Mean"),
     ] = None
     fixed_y10p7: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="fixedY10P7"), pydantic.Field(alias="fixedY10P7")
+        typing.Optional[str],
+        FieldMetadata(alias="fixedY10P7"),
+        pydantic.Field(alias="fixedY10P7"),
     ] = None
     fixed_y10p7mean: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="fixedY10P7Mean"), pydantic.Field(alias="fixedY10P7Mean")
+        typing.Optional[str],
+        FieldMetadata(alias="fixedY10P7Mean"),
+        pydantic.Field(alias="fixedY10P7Mean"),
     ] = None
     od_id: typing_extensions.Annotated[
         typing.Optional[str], FieldMetadata(alias="odId"), pydantic.Field(alias="odId")
     ] = None
     od_prev_id: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="odPrevId"), pydantic.Field(alias="odPrevId")
+        typing.Optional[str],
+        FieldMetadata(alias="odPrevId"),
+        pydantic.Field(alias="odPrevId"),
     ] = None
     od_method: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="odMethod"), pydantic.Field(alias="odMethod")
+        typing.Optional[str],
+        FieldMetadata(alias="odMethod"),
+        pydantic.Field(alias="odMethod"),
     ] = None
     od_epoch: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="odEpoch"), pydantic.Field(alias="odEpoch")
+        typing.Optional[str],
+        FieldMetadata(alias="odEpoch"),
+        pydantic.Field(alias="odEpoch"),
     ] = None
     days_since_first_obs: typing_extensions.Annotated[
-        typing.Optional[float], FieldMetadata(alias="daysSinceFirstObs"), pydantic.Field(alias="daysSinceFirstObs")
+        typing.Optional[float],
+        FieldMetadata(alias="daysSinceFirstObs"),
+        pydantic.Field(alias="daysSinceFirstObs"),
     ] = None
     days_since_last_obs: typing_extensions.Annotated[
-        typing.Optional[float], FieldMetadata(alias="daysSinceLastObs"), pydantic.Field(alias="daysSinceLastObs")
+        typing.Optional[float],
+        FieldMetadata(alias="daysSinceLastObs"),
+        pydantic.Field(alias="daysSinceLastObs"),
     ] = None
     recommended_od_span: typing_extensions.Annotated[
-        typing.Optional[float], FieldMetadata(alias="recommendedOdSpan"), pydantic.Field(alias="recommendedOdSpan")
+        typing.Optional[float],
+        FieldMetadata(alias="recommendedOdSpan"),
+        pydantic.Field(alias="recommendedOdSpan"),
     ] = None
     actual_od_span: typing_extensions.Annotated[
-        typing.Optional[float], FieldMetadata(alias="actualOdSpan"), pydantic.Field(alias="actualOdSpan")
+        typing.Optional[float],
+        FieldMetadata(alias="actualOdSpan"),
+        pydantic.Field(alias="actualOdSpan"),
     ] = None
     obs_available: typing_extensions.Annotated[
-        typing.Optional[int], FieldMetadata(alias="obsAvailable"), pydantic.Field(alias="obsAvailable")
+        typing.Optional[int],
+        FieldMetadata(alias="obsAvailable"),
+        pydantic.Field(alias="obsAvailable"),
     ] = None
     obs_used: typing_extensions.Annotated[
-        typing.Optional[int], FieldMetadata(alias="obsUsed"), pydantic.Field(alias="obsUsed")
+        typing.Optional[int],
+        FieldMetadata(alias="obsUsed"),
+        pydantic.Field(alias="obsUsed"),
     ] = None
     tracks_available: typing_extensions.Annotated[
-        typing.Optional[int], FieldMetadata(alias="tracksAvailable"), pydantic.Field(alias="tracksAvailable")
+        typing.Optional[int],
+        FieldMetadata(alias="tracksAvailable"),
+        pydantic.Field(alias="tracksAvailable"),
     ] = None
     tracks_used: typing_extensions.Annotated[
-        typing.Optional[int], FieldMetadata(alias="tracksUsed"), pydantic.Field(alias="tracksUsed")
+        typing.Optional[int],
+        FieldMetadata(alias="tracksUsed"),
+        pydantic.Field(alias="tracksUsed"),
     ] = None
     max_obs_gap: typing_extensions.Annotated[
-        typing.Optional[float], FieldMetadata(alias="maxObsGap"), pydantic.Field(alias="maxObsGap")
+        typing.Optional[float],
+        FieldMetadata(alias="maxObsGap"),
+        pydantic.Field(alias="maxObsGap"),
     ] = None
     od_epoch_el_gmaj: typing_extensions.Annotated[
-        typing.Optional[float], FieldMetadata(alias="odEpochElGMAJ"), pydantic.Field(alias="odEpochElGMAJ")
+        typing.Optional[float],
+        FieldMetadata(alias="odEpochElGMAJ"),
+        pydantic.Field(alias="odEpochElGMAJ"),
     ] = None
     od_epoch_el_gint: typing_extensions.Annotated[
-        typing.Optional[float], FieldMetadata(alias="odEpochElGINT"), pydantic.Field(alias="odEpochElGINT")
+        typing.Optional[float],
+        FieldMetadata(alias="odEpochElGINT"),
+        pydantic.Field(alias="odEpochElGINT"),
     ] = None
     od_epoch_el_gmin: typing_extensions.Annotated[
-        typing.Optional[float], FieldMetadata(alias="odEpochElGMIN"), pydantic.Field(alias="odEpochElGMIN")
+        typing.Optional[float],
+        FieldMetadata(alias="odEpochElGMIN"),
+        pydantic.Field(alias="odEpochElGMIN"),
     ] = None
     od_max_pred_eig_maj: typing_extensions.Annotated[
-        typing.Optional[float], FieldMetadata(alias="odMaxPredEigMAJ"), pydantic.Field(alias="odMaxPredEigMAJ")
+        typing.Optional[float],
+        FieldMetadata(alias="odMaxPredEigMAJ"),
+        pydantic.Field(alias="odMaxPredEigMAJ"),
     ] = None
     od_max_pred_eig_min: typing_extensions.Annotated[
-        typing.Optional[float], FieldMetadata(alias="odMaxPredEigMIN"), pydantic.Field(alias="odMaxPredEigMIN")
+        typing.Optional[float],
+        FieldMetadata(alias="odMaxPredEigMIN"),
+        pydantic.Field(alias="odMaxPredEigMIN"),
     ] = None
     od_confidence: typing_extensions.Annotated[
-        typing.Optional[float], FieldMetadata(alias="odConfidence"), pydantic.Field(alias="odConfidence")
+        typing.Optional[float],
+        FieldMetadata(alias="odConfidence"),
+        pydantic.Field(alias="odConfidence"),
     ] = None
     gdop: typing.Optional[float] = None
     solve_n: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="solveN"), pydantic.Field(alias="solveN")
+        typing.Optional[str],
+        FieldMetadata(alias="solveN"),
+        pydantic.Field(alias="solveN"),
     ] = None
     solve_states: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="solveStates"), pydantic.Field(alias="solveStates")
+        typing.Optional[str],
+        FieldMetadata(alias="solveStates"),
+        pydantic.Field(alias="solveStates"),
     ] = None
     consider_n: typing_extensions.Annotated[
-        typing.Optional[int], FieldMetadata(alias="considerN"), pydantic.Field(alias="considerN")
+        typing.Optional[int],
+        FieldMetadata(alias="considerN"),
+        pydantic.Field(alias="considerN"),
     ] = None
     consider_params: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="considerParams"), pydantic.Field(alias="considerParams")
+        typing.Optional[str],
+        FieldMetadata(alias="considerParams"),
+        pydantic.Field(alias="considerParams"),
     ] = None
     sedr: typing.Optional[str] = None
     sensors_n: typing_extensions.Annotated[
-        typing.Optional[int], FieldMetadata(alias="sensorsN"), pydantic.Field(alias="sensorsN")
+        typing.Optional[int],
+        FieldMetadata(alias="sensorsN"),
+        pydantic.Field(alias="sensorsN"),
     ] = None
     sensors: typing.Optional[str] = None
     weighted_rms: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="weightedRms"), pydantic.Field(alias="weightedRms")
+        typing.Optional[str],
+        FieldMetadata(alias="weightedRms"),
+        pydantic.Field(alias="weightedRms"),
     ] = None
     data_types: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="dataTypes"), pydantic.Field(alias="dataTypes")
+        typing.Optional[str],
+        FieldMetadata(alias="dataTypes"),
+        pydantic.Field(alias="dataTypes"),
     ] = None
     trajectories: typing.Optional[str] = None
     covariances: typing.Optional[str] = None
     maneuvers: typing.Optional[str] = None
     user_data: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="userData"), pydantic.Field(alias="userData")
+        typing.Optional[str],
+        FieldMetadata(alias="userData"),
+        pydantic.Field(alias="userData"),
     ] = None
     offset: typing.Optional[int] = None
-    ixz: typing.Optional[str] = None
-    ixx: typing.Optional[str] = None
-    ixy: typing.Optional[str] = None
-    izz: typing.Optional[str] = None
     iyz: typing.Optional[str] = None
+    ixx: typing.Optional[str] = None
     iyy: typing.Optional[str] = None
+    izz: typing.Optional[str] = None
+    ixy: typing.Optional[str] = None
+    ixz: typing.Optional[str] = None
     nbody_pertubations_raw: typing_extensions.Annotated[
         typing.Optional[typing.List[str]],
         FieldMetadata(alias="nbodyPertubationsRaw"),
@@ -461,16 +723,24 @@ class ConsolidatedOcm(UncheckedBaseModel):
         pydantic.Field(alias="nbodyPertubations"),
     ] = None
     header_comments: typing_extensions.Annotated[
-        typing.Optional[typing.List[str]], FieldMetadata(alias="headerComments"), pydantic.Field(alias="headerComments")
+        typing.Optional[typing.List[str]],
+        FieldMetadata(alias="headerComments"),
+        pydantic.Field(alias="headerComments"),
     ] = None
     meta_comments: typing_extensions.Annotated[
-        typing.Optional[typing.List[str]], FieldMetadata(alias="metaComments"), pydantic.Field(alias="metaComments")
+        typing.Optional[typing.List[str]],
+        FieldMetadata(alias="metaComments"),
+        pydantic.Field(alias="metaComments"),
     ] = None
     alternate_names: typing_extensions.Annotated[
-        typing.Optional[typing.List[str]], FieldMetadata(alias="alternateNames"), pydantic.Field(alias="alternateNames")
+        typing.Optional[typing.List[str]],
+        FieldMetadata(alias="alternateNames"),
+        pydantic.Field(alias="alternateNames"),
     ] = None
     ops_status: typing_extensions.Annotated[
-        typing.Optional[typing.List[str]], FieldMetadata(alias="opsStatus"), pydantic.Field(alias="opsStatus")
+        typing.Optional[typing.List[str]],
+        FieldMetadata(alias="opsStatus"),
+        pydantic.Field(alias="opsStatus"),
     ] = None
     ocm_data_elements: typing_extensions.Annotated[
         typing.Optional[typing.List[str]],
@@ -478,20 +748,30 @@ class ConsolidatedOcm(UncheckedBaseModel):
         pydantic.Field(alias="ocmDataElements"),
     ] = None
     phys_comments: typing_extensions.Annotated[
-        typing.Optional[typing.List[str]], FieldMetadata(alias="physComments"), pydantic.Field(alias="physComments")
+        typing.Optional[typing.List[str]],
+        FieldMetadata(alias="physComments"),
+        pydantic.Field(alias="physComments"),
     ] = None
     pert_comments: typing_extensions.Annotated[
-        typing.Optional[typing.List[str]], FieldMetadata(alias="pertComments"), pydantic.Field(alias="pertComments")
+        typing.Optional[typing.List[str]],
+        FieldMetadata(alias="pertComments"),
+        pydantic.Field(alias="pertComments"),
     ] = None
     od_comments: typing_extensions.Annotated[
-        typing.Optional[typing.List[str]], FieldMetadata(alias="odComments"), pydantic.Field(alias="odComments")
+        typing.Optional[typing.List[str]],
+        FieldMetadata(alias="odComments"),
+        pydantic.Field(alias="odComments"),
     ] = None
     user_comments: typing_extensions.Annotated[
-        typing.Optional[typing.List[str]], FieldMetadata(alias="userComments"), pydantic.Field(alias="userComments")
+        typing.Optional[typing.List[str]],
+        FieldMetadata(alias="userComments"),
+        pydantic.Field(alias="userComments"),
     ] = None
 
     if IS_PYDANTIC_V2:
-        model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(extra="allow", frozen=True)  # type: ignore # Pydantic v2
+        model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(
+            extra="allow", frozen=True
+        )  # type: ignore # Pydantic v2
     else:
 
         class Config:

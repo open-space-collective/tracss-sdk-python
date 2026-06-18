@@ -42,7 +42,7 @@ class TipClient:
         size: typing.Optional[int] = None,
         page: typing.Optional[int] = None,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> typing.Any:
+    ) -> typing.Iterator[typing.Any]:
         """
         Find all TIP reports in the system or all reports that meet your search criteria defined by the query parameters.
 
@@ -99,9 +99,9 @@ class TipClient:
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
-        Returns
-        -------
-        typing.Any
+        Yields
+        ------
+        typing.Iterator[typing.Any]
             Ok - TIP(s) successfully retrieved.  Available formats are KVN (Text, Default), JSON, and XML.
 
         Examples
@@ -109,9 +109,9 @@ class TipClient:
         from tracss import TraCSS
 
         client = TraCSS(
-            token="YOUR_TOKEN",
+            client_id="YOUR_CLIENT_ID", client_secret="YOUR_CLIENT_SECRET",
         )
-        client.bulk_data.tip.stream(
+        response = client.bulk_data.tip.stream(
             norad_id="noradId=12345",
             id="id=87",
             msg_epoch="msgEpoch=2004-09-28T02:49:00.000Z",
@@ -127,8 +127,10 @@ class TipClient:
             high_interest="highInterest=Y",
             format="json",
         )
+        for chunk in response:
+            yield chunk
         """
-        _response = self._raw_client.stream(
+        with self._raw_client.stream(
             norad_id=norad_id,
             id=id,
             msg_epoch=msg_epoch,
@@ -146,8 +148,8 @@ class TipClient:
             size=size,
             page=page,
             request_options=request_options,
-        )
-        return _response.data
+        ) as r:
+            yield from r.data
 
 
 class AsyncTipClient:
@@ -185,7 +187,7 @@ class AsyncTipClient:
         size: typing.Optional[int] = None,
         page: typing.Optional[int] = None,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> typing.Any:
+    ) -> typing.AsyncIterator[typing.Any]:
         """
         Find all TIP reports in the system or all reports that meet your search criteria defined by the query parameters.
 
@@ -242,9 +244,9 @@ class AsyncTipClient:
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
-        Returns
-        -------
-        typing.Any
+        Yields
+        ------
+        typing.AsyncIterator[typing.Any]
             Ok - TIP(s) successfully retrieved.  Available formats are KVN (Text, Default), JSON, and XML.
 
         Examples
@@ -254,12 +256,12 @@ class AsyncTipClient:
         from tracss import AsyncTraCSS
 
         client = AsyncTraCSS(
-            token="YOUR_TOKEN",
+            client_id="YOUR_CLIENT_ID", client_secret="YOUR_CLIENT_SECRET",
         )
 
 
         async def main() -> None:
-            await client.bulk_data.tip.stream(
+            response = await client.bulk_data.tip.stream(
                 norad_id="noradId=12345",
                 id="id=87",
                 msg_epoch="msgEpoch=2004-09-28T02:49:00.000Z",
@@ -275,11 +277,13 @@ class AsyncTipClient:
                 high_interest="highInterest=Y",
                 format="json",
             )
+            async for chunk in response:
+                yield chunk
 
 
         asyncio.run(main())
         """
-        _response = await self._raw_client.stream(
+        async with self._raw_client.stream(
             norad_id=norad_id,
             id=id,
             msg_epoch=msg_epoch,
@@ -297,5 +301,6 @@ class AsyncTipClient:
             size=size,
             page=page,
             request_options=request_options,
-        )
-        return _response.data
+        ) as r:
+            async for _chunk in r.data:
+                yield _chunk

@@ -13,16 +13,22 @@ class Country(UncheckedBaseModel):
     code: typing.Optional[str] = None
     name: typing.Optional[str] = None
     code_alt: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="codeAlt"), pydantic.Field(alias="codeAlt")
+        typing.Optional[str],
+        FieldMetadata(alias="codeAlt"),
+        pydantic.Field(alias="codeAlt"),
     ] = None
     source: typing.Optional[str] = None
     data_mode: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="dataMode"), pydantic.Field(alias="dataMode")
+        typing.Optional[str],
+        FieldMetadata(alias="dataMode"),
+        pydantic.Field(alias="dataMode"),
     ] = None
     version: typing.Optional[int] = None
 
     if IS_PYDANTIC_V2:
-        model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(extra="allow", frozen=True)  # type: ignore # Pydantic v2
+        model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(
+            extra="allow", frozen=True
+        )  # type: ignore # Pydantic v2
     else:
 
         class Config:

@@ -28,7 +28,9 @@ class ListMessagesResponse(UncheckedBaseModel):
         pydantic.Field(alias="conjunctionDataEvent"),
     ] = None
     tip_reports: typing_extensions.Annotated[
-        typing.Optional[typing.List[TipReport]], FieldMetadata(alias="tipReports"), pydantic.Field(alias="tipReports")
+        typing.Optional[typing.List[TipReport]],
+        FieldMetadata(alias="tipReports"),
+        pydantic.Field(alias="tipReports"),
     ] = None
     anomaly_report: typing_extensions.Annotated[
         typing.Optional[typing.List[AnomalyReport]],
@@ -38,7 +40,9 @@ class ListMessagesResponse(UncheckedBaseModel):
     tracsscat: typing.Optional[typing.List[TracssCat]] = None
 
     if IS_PYDANTIC_V2:
-        model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(extra="allow", frozen=True)  # type: ignore # Pydantic v2
+        model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(
+            extra="allow", frozen=True
+        )  # type: ignore # Pydantic v2
     else:
 
         class Config:

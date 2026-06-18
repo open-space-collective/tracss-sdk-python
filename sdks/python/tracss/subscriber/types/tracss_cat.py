@@ -13,11 +13,15 @@ from .catalog_source import CatalogSource
 
 class TracssCat(UncheckedBaseModel):
     norad_id: typing_extensions.Annotated[
-        typing.Optional[int], FieldMetadata(alias="noradId"), pydantic.Field(alias="noradId")
+        typing.Optional[int],
+        FieldMetadata(alias="noradId"),
+        pydantic.Field(alias="noradId"),
     ] = None
     name: typing.Optional[str] = None
     alternate_names: typing_extensions.Annotated[
-        typing.Optional[typing.List[str]], FieldMetadata(alias="alternateNames"), pydantic.Field(alias="alternateNames")
+        typing.Optional[typing.List[str]],
+        FieldMetadata(alias="alternateNames"),
+        pydantic.Field(alias="alternateNames"),
     ] = None
     international_designator: typing_extensions.Annotated[
         typing.Optional[str],
@@ -26,14 +30,20 @@ class TracssCat(UncheckedBaseModel):
     ] = None
     organization: typing.Optional[str] = None
     launch_license: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="launchLicense"), pydantic.Field(alias="launchLicense")
+        typing.Optional[str],
+        FieldMetadata(alias="launchLicense"),
+        pydantic.Field(alias="launchLicense"),
     ] = None
     headquarters: typing.Optional[str] = None
     communication_license: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="communicationLicense"), pydantic.Field(alias="communicationLicense")
+        typing.Optional[str],
+        FieldMetadata(alias="communicationLicense"),
+        pydantic.Field(alias="communicationLicense"),
     ] = None
     remote_sensing_license: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="remoteSensingLicense"), pydantic.Field(alias="remoteSensingLicense")
+        typing.Optional[str],
+        FieldMetadata(alias="remoteSensingLicense"),
+        pydantic.Field(alias="remoteSensingLicense"),
     ] = None
     united_nations_registry: typing_extensions.Annotated[
         typing.Optional[str],
@@ -47,19 +57,29 @@ class TracssCat(UncheckedBaseModel):
     ] = None
     constellation: typing.Optional[str] = None
     launch_provider: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="launchProvider"), pydantic.Field(alias="launchProvider")
+        typing.Optional[str],
+        FieldMetadata(alias="launchProvider"),
+        pydantic.Field(alias="launchProvider"),
     ] = None
     launch_vehicle: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="launchVehicle"), pydantic.Field(alias="launchVehicle")
+        typing.Optional[str],
+        FieldMetadata(alias="launchVehicle"),
+        pydantic.Field(alias="launchVehicle"),
     ] = None
     launch_location: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="launchLocation"), pydantic.Field(alias="launchLocation")
+        typing.Optional[str],
+        FieldMetadata(alias="launchLocation"),
+        pydantic.Field(alias="launchLocation"),
     ] = None
     launch_date: typing_extensions.Annotated[
-        typing.Optional[dt.datetime], FieldMetadata(alias="launchDate"), pydantic.Field(alias="launchDate")
+        typing.Optional[dt.datetime],
+        FieldMetadata(alias="launchDate"),
+        pydantic.Field(alias="launchDate"),
     ] = None
     deployment_date: typing_extensions.Annotated[
-        typing.Optional[dt.datetime], FieldMetadata(alias="deploymentDate"), pydantic.Field(alias="deploymentDate")
+        typing.Optional[dt.datetime],
+        FieldMetadata(alias="deploymentDate"),
+        pydantic.Field(alias="deploymentDate"),
     ] = None
     additional_deployments: typing_extensions.Annotated[
         typing.Optional[str],
@@ -67,16 +87,24 @@ class TracssCat(UncheckedBaseModel):
         pydantic.Field(alias="additionalDeployments"),
     ] = None
     launch_name: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="launchName"), pydantic.Field(alias="launchName")
+        typing.Optional[str],
+        FieldMetadata(alias="launchName"),
+        pydantic.Field(alias="launchName"),
     ] = None
     general_function: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="generalFunction"), pydantic.Field(alias="generalFunction")
+        typing.Optional[str],
+        FieldMetadata(alias="generalFunction"),
+        pydantic.Field(alias="generalFunction"),
     ] = None
     object_type: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="objectType"), pydantic.Field(alias="objectType")
+        typing.Optional[str],
+        FieldMetadata(alias="objectType"),
+        pydantic.Field(alias="objectType"),
     ] = None
     decay_date: typing_extensions.Annotated[
-        typing.Optional[dt.datetime], FieldMetadata(alias="decayDate"), pydantic.Field(alias="decayDate")
+        typing.Optional[dt.datetime],
+        FieldMetadata(alias="decayDate"),
+        pydantic.Field(alias="decayDate"),
     ] = None
     estimated_time_on_orbit: typing_extensions.Annotated[
         typing.Optional[float],
@@ -88,7 +116,9 @@ class TracssCat(UncheckedBaseModel):
     apogee: typing.Optional[float] = None
     perigee: typing.Optional[float] = None
     planned_orbit_period: typing_extensions.Annotated[
-        typing.Optional[float], FieldMetadata(alias="plannedOrbitPeriod"), pydantic.Field(alias="plannedOrbitPeriod")
+        typing.Optional[float],
+        FieldMetadata(alias="plannedOrbitPeriod"),
+        pydantic.Field(alias="plannedOrbitPeriod"),
     ] = None
     planned_orbit_inclination: typing_extensions.Annotated[
         typing.Optional[float],
@@ -96,31 +126,49 @@ class TracssCat(UncheckedBaseModel):
         pydantic.Field(alias="plannedOrbitInclination"),
     ] = None
     planned_orbit_apogee: typing_extensions.Annotated[
-        typing.Optional[float], FieldMetadata(alias="plannedOrbitApogee"), pydantic.Field(alias="plannedOrbitApogee")
+        typing.Optional[float],
+        FieldMetadata(alias="plannedOrbitApogee"),
+        pydantic.Field(alias="plannedOrbitApogee"),
     ] = None
     planned_orbit_perigee: typing_extensions.Annotated[
-        typing.Optional[float], FieldMetadata(alias="plannedOrbitPerigee"), pydantic.Field(alias="plannedOrbitPerigee")
+        typing.Optional[float],
+        FieldMetadata(alias="plannedOrbitPerigee"),
+        pydantic.Field(alias="plannedOrbitPerigee"),
     ] = None
     rcs_value: typing_extensions.Annotated[
-        typing.Optional[float], FieldMetadata(alias="rcsValue"), pydantic.Field(alias="rcsValue")
+        typing.Optional[float],
+        FieldMetadata(alias="rcsValue"),
+        pydantic.Field(alias="rcsValue"),
     ] = None
     rcs_size: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="rcsSize"), pydantic.Field(alias="rcsSize")
+        typing.Optional[str],
+        FieldMetadata(alias="rcsSize"),
+        pydantic.Field(alias="rcsSize"),
     ] = None
     launch_piece: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="launchPiece"), pydantic.Field(alias="launchPiece")
+        typing.Optional[str],
+        FieldMetadata(alias="launchPiece"),
+        pydantic.Field(alias="launchPiece"),
     ] = None
     operational_status: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="operationalStatus"), pydantic.Field(alias="operationalStatus")
+        typing.Optional[str],
+        FieldMetadata(alias="operationalStatus"),
+        pydantic.Field(alias="operationalStatus"),
     ] = None
     orbital_regime: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="orbitalRegime"), pydantic.Field(alias="orbitalRegime")
+        typing.Optional[str],
+        FieldMetadata(alias="orbitalRegime"),
+        pydantic.Field(alias="orbitalRegime"),
     ] = None
     orbit_category: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="orbitCategory"), pydantic.Field(alias="orbitCategory")
+        typing.Optional[str],
+        FieldMetadata(alias="orbitCategory"),
+        pydantic.Field(alias="orbitCategory"),
     ] = None
     wet_mass: typing_extensions.Annotated[
-        typing.Optional[float], FieldMetadata(alias="wetMass"), pydantic.Field(alias="wetMass")
+        typing.Optional[float],
+        FieldMetadata(alias="wetMass"),
+        pydantic.Field(alias="wetMass"),
     ] = None
     hbr: typing.Optional[float] = None
     conjunction_mitigation_capabilities: typing_extensions.Annotated[
@@ -149,27 +197,39 @@ class TracssCat(UncheckedBaseModel):
         pydantic.Field(alias="secondDerivativeOfMeanMotion"),
     ] = None
     drag_term: typing_extensions.Annotated[
-        typing.Optional[float], FieldMetadata(alias="dragTerm"), pydantic.Field(alias="dragTerm")
+        typing.Optional[float],
+        FieldMetadata(alias="dragTerm"),
+        pydantic.Field(alias="dragTerm"),
     ] = None
     raan: typing.Optional[float] = None
     eccentricity: typing.Optional[float] = None
     arg_of_perigee: typing_extensions.Annotated[
-        typing.Optional[float], FieldMetadata(alias="argOfPerigee"), pydantic.Field(alias="argOfPerigee")
+        typing.Optional[float],
+        FieldMetadata(alias="argOfPerigee"),
+        pydantic.Field(alias="argOfPerigee"),
     ] = None
     mean_anomaly: typing_extensions.Annotated[
-        typing.Optional[float], FieldMetadata(alias="meanAnomaly"), pydantic.Field(alias="meanAnomaly")
+        typing.Optional[float],
+        FieldMetadata(alias="meanAnomaly"),
+        pydantic.Field(alias="meanAnomaly"),
     ] = None
     mean_motion: typing_extensions.Annotated[
-        typing.Optional[float], FieldMetadata(alias="meanMotion"), pydantic.Field(alias="meanMotion")
+        typing.Optional[float],
+        FieldMetadata(alias="meanMotion"),
+        pydantic.Field(alias="meanMotion"),
     ] = None
     rev_number_at_epoch: typing_extensions.Annotated[
-        typing.Optional[int], FieldMetadata(alias="revNumberAtEpoch"), pydantic.Field(alias="revNumberAtEpoch")
+        typing.Optional[int],
+        FieldMetadata(alias="revNumberAtEpoch"),
+        pydantic.Field(alias="revNumberAtEpoch"),
     ] = None
     source: typing.Optional[CatalogSource] = None
     offset: typing.Optional[int] = None
 
     if IS_PYDANTIC_V2:
-        model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(extra="allow", frozen=True)  # type: ignore # Pydantic v2
+        model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(
+            extra="allow", frozen=True
+        )  # type: ignore # Pydantic v2
     else:
 
         class Config:

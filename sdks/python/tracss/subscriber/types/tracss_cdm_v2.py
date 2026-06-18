@@ -12,41 +12,61 @@ from ...core.unchecked_base_model import UncheckedBaseModel
 
 class TracssCdmV2(UncheckedBaseModel):
     correlation_id: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="correlationId"), pydantic.Field(alias="correlationId")
+        typing.Optional[str],
+        FieldMetadata(alias="correlationId"),
+        pydantic.Field(alias="correlationId"),
     ] = None
     batch_id: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="batchId"), pydantic.Field(alias="batchId")
+        typing.Optional[str],
+        FieldMetadata(alias="batchId"),
+        pydantic.Field(alias="batchId"),
     ] = None
     run_id: typing_extensions.Annotated[
         typing.Optional[str], FieldMetadata(alias="runId"), pydantic.Field(alias="runId")
     ] = None
     counter: typing.Optional[str] = None
     ocm_message_id: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="ocmMessageId"), pydantic.Field(alias="ocmMessageId")
+        typing.Optional[str],
+        FieldMetadata(alias="ocmMessageId"),
+        pydantic.Field(alias="ocmMessageId"),
     ] = None
     ccsds_cdm_vers: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="ccsdsCdmVers"), pydantic.Field(alias="ccsdsCdmVers")
+        typing.Optional[str],
+        FieldMetadata(alias="ccsdsCdmVers"),
+        pydantic.Field(alias="ccsdsCdmVers"),
     ] = None
     classification: typing.Optional[str] = None
     creation_date: typing_extensions.Annotated[
-        typing.Optional[dt.datetime], FieldMetadata(alias="creationDate"), pydantic.Field(alias="creationDate")
+        typing.Optional[dt.datetime],
+        FieldMetadata(alias="creationDate"),
+        pydantic.Field(alias="creationDate"),
     ] = None
     originator: typing.Optional[str] = None
     message_for: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="messageFor"), pydantic.Field(alias="messageFor")
+        typing.Optional[str],
+        FieldMetadata(alias="messageFor"),
+        pydantic.Field(alias="messageFor"),
     ] = None
     message_id: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="messageId"), pydantic.Field(alias="messageId")
+        typing.Optional[str],
+        FieldMetadata(alias="messageId"),
+        pydantic.Field(alias="messageId"),
     ] = None
     conjunction_id: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="conjunctionId"), pydantic.Field(alias="conjunctionId")
+        typing.Optional[str],
+        FieldMetadata(alias="conjunctionId"),
+        pydantic.Field(alias="conjunctionId"),
     ] = None
     tca: typing.Optional[str] = None
     miss_distance_value: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="missDistanceValue"), pydantic.Field(alias="missDistanceValue")
+        typing.Optional[str],
+        FieldMetadata(alias="missDistanceValue"),
+        pydantic.Field(alias="missDistanceValue"),
     ] = None
     miss_distance_unit: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="missDistanceUnit"), pydantic.Field(alias="missDistanceUnit")
+        typing.Optional[str],
+        FieldMetadata(alias="missDistanceUnit"),
+        pydantic.Field(alias="missDistanceUnit"),
     ] = None
     mahalanobis_distance_value: typing_extensions.Annotated[
         typing.Optional[str],
@@ -59,10 +79,14 @@ class TracssCdmV2(UncheckedBaseModel):
         pydantic.Field(alias="mahalanobisDistanceUnit"),
     ] = None
     relative_speed_value: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="relativeSpeedValue"), pydantic.Field(alias="relativeSpeedValue")
+        typing.Optional[str],
+        FieldMetadata(alias="relativeSpeedValue"),
+        pydantic.Field(alias="relativeSpeedValue"),
     ] = None
     relative_speed_unit: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="relativeSpeedUnit"), pydantic.Field(alias="relativeSpeedUnit")
+        typing.Optional[str],
+        FieldMetadata(alias="relativeSpeedUnit"),
+        pydantic.Field(alias="relativeSpeedUnit"),
     ] = None
     relative_position_r_value: typing_extensions.Annotated[
         typing.Optional[str],
@@ -125,43 +149,69 @@ class TracssCdmV2(UncheckedBaseModel):
         pydantic.Field(alias="relativeVelocityNUnit"),
     ] = None
     approach_angle_value: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="approachAngleValue"), pydantic.Field(alias="approachAngleValue")
+        typing.Optional[str],
+        FieldMetadata(alias="approachAngleValue"),
+        pydantic.Field(alias="approachAngleValue"),
     ] = None
     approach_angle_unit: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="approachAngleUnit"), pydantic.Field(alias="approachAngleUnit")
+        typing.Optional[str],
+        FieldMetadata(alias="approachAngleUnit"),
+        pydantic.Field(alias="approachAngleUnit"),
     ] = None
     start_screening_period: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="startScreeningPeriod"), pydantic.Field(alias="startScreeningPeriod")
+        typing.Optional[str],
+        FieldMetadata(alias="startScreeningPeriod"),
+        pydantic.Field(alias="startScreeningPeriod"),
     ] = None
     stop_screening_period: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="stopScreeningPeriod"), pydantic.Field(alias="stopScreeningPeriod")
+        typing.Optional[str],
+        FieldMetadata(alias="stopScreeningPeriod"),
+        pydantic.Field(alias="stopScreeningPeriod"),
     ] = None
     screen_volume_frame: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="screenVolumeFrame"), pydantic.Field(alias="screenVolumeFrame")
+        typing.Optional[str],
+        FieldMetadata(alias="screenVolumeFrame"),
+        pydantic.Field(alias="screenVolumeFrame"),
     ] = None
     screen_volume_shape: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="screenVolumeShape"), pydantic.Field(alias="screenVolumeShape")
+        typing.Optional[str],
+        FieldMetadata(alias="screenVolumeShape"),
+        pydantic.Field(alias="screenVolumeShape"),
     ] = None
     screen_volume_x_value: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="screenVolumeXValue"), pydantic.Field(alias="screenVolumeXValue")
+        typing.Optional[str],
+        FieldMetadata(alias="screenVolumeXValue"),
+        pydantic.Field(alias="screenVolumeXValue"),
     ] = None
     screen_volume_x_unit: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="screenVolumeXUnit"), pydantic.Field(alias="screenVolumeXUnit")
+        typing.Optional[str],
+        FieldMetadata(alias="screenVolumeXUnit"),
+        pydantic.Field(alias="screenVolumeXUnit"),
     ] = None
     screen_volume_y_value: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="screenVolumeYValue"), pydantic.Field(alias="screenVolumeYValue")
+        typing.Optional[str],
+        FieldMetadata(alias="screenVolumeYValue"),
+        pydantic.Field(alias="screenVolumeYValue"),
     ] = None
     screen_volume_y_unit: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="screenVolumeYUnit"), pydantic.Field(alias="screenVolumeYUnit")
+        typing.Optional[str],
+        FieldMetadata(alias="screenVolumeYUnit"),
+        pydantic.Field(alias="screenVolumeYUnit"),
     ] = None
     screen_volume_z_value: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="screenVolumeZValue"), pydantic.Field(alias="screenVolumeZValue")
+        typing.Optional[str],
+        FieldMetadata(alias="screenVolumeZValue"),
+        pydantic.Field(alias="screenVolumeZValue"),
     ] = None
     screen_volume_z_unit: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="screenVolumeZUnit"), pydantic.Field(alias="screenVolumeZUnit")
+        typing.Optional[str],
+        FieldMetadata(alias="screenVolumeZUnit"),
+        pydantic.Field(alias="screenVolumeZUnit"),
     ] = None
     screen_pc_threshold: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="screenPcThreshold"), pydantic.Field(alias="screenPcThreshold")
+        typing.Optional[str],
+        FieldMetadata(alias="screenPcThreshold"),
+        pydantic.Field(alias="screenPcThreshold"),
     ] = None
     collision_probability_method: typing_extensions.Annotated[
         typing.Optional[str],
@@ -174,10 +224,14 @@ class TracssCdmV2(UncheckedBaseModel):
         pydantic.Field(alias="collisionMaxProbability"),
     ] = None
     collision_max_pc_method: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="collisionMaxPcMethod"), pydantic.Field(alias="collisionMaxPcMethod")
+        typing.Optional[str],
+        FieldMetadata(alias="collisionMaxPcMethod"),
+        pydantic.Field(alias="collisionMaxPcMethod"),
     ] = None
     object1object: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="object1Object"), pydantic.Field(alias="object1Object")
+        typing.Optional[str],
+        FieldMetadata(alias="object1Object"),
+        pydantic.Field(alias="object1Object"),
     ] = None
     object1object_designator: typing_extensions.Annotated[
         typing.Optional[str],
@@ -185,10 +239,14 @@ class TracssCdmV2(UncheckedBaseModel):
         pydantic.Field(alias="object1ObjectDesignator"),
     ] = None
     object1catalog_name: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="object1CatalogName"), pydantic.Field(alias="object1CatalogName")
+        typing.Optional[str],
+        FieldMetadata(alias="object1CatalogName"),
+        pydantic.Field(alias="object1CatalogName"),
     ] = None
     object1object_name: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="object1ObjectName"), pydantic.Field(alias="object1ObjectName")
+        typing.Optional[str],
+        FieldMetadata(alias="object1ObjectName"),
+        pydantic.Field(alias="object1ObjectName"),
     ] = None
     object1international_designator: typing_extensions.Annotated[
         typing.Optional[str],
@@ -196,10 +254,14 @@ class TracssCdmV2(UncheckedBaseModel):
         pydantic.Field(alias="object1InternationalDesignator"),
     ] = None
     object1object_type: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="object1ObjectType"), pydantic.Field(alias="object1ObjectType")
+        typing.Optional[str],
+        FieldMetadata(alias="object1ObjectType"),
+        pydantic.Field(alias="object1ObjectType"),
     ] = None
     object1ops_status: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="object1OpsStatus"), pydantic.Field(alias="object1OpsStatus")
+        typing.Optional[str],
+        FieldMetadata(alias="object1OpsStatus"),
+        pydantic.Field(alias="object1OpsStatus"),
     ] = None
     object1operator_organization: typing_extensions.Annotated[
         typing.Optional[str],
@@ -207,13 +269,19 @@ class TracssCdmV2(UncheckedBaseModel):
         pydantic.Field(alias="object1OperatorOrganization"),
     ] = None
     object1operator_phone: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="object1OperatorPhone"), pydantic.Field(alias="object1OperatorPhone")
+        typing.Optional[str],
+        FieldMetadata(alias="object1OperatorPhone"),
+        pydantic.Field(alias="object1OperatorPhone"),
     ] = None
     object1operator_email: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="object1OperatorEmail"), pydantic.Field(alias="object1OperatorEmail")
+        typing.Optional[str],
+        FieldMetadata(alias="object1OperatorEmail"),
+        pydantic.Field(alias="object1OperatorEmail"),
     ] = None
     object1ephemeris_name: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="object1EphemerisName"), pydantic.Field(alias="object1EphemerisName")
+        typing.Optional[str],
+        FieldMetadata(alias="object1EphemerisName"),
+        pydantic.Field(alias="object1EphemerisName"),
     ] = None
     object1covariance_method: typing_extensions.Annotated[
         typing.Optional[str],
@@ -221,16 +289,24 @@ class TracssCdmV2(UncheckedBaseModel):
         pydantic.Field(alias="object1CovarianceMethod"),
     ] = None
     object1maneuverable: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="object1Maneuverable"), pydantic.Field(alias="object1Maneuverable")
+        typing.Optional[str],
+        FieldMetadata(alias="object1Maneuverable"),
+        pydantic.Field(alias="object1Maneuverable"),
     ] = None
     object1orbit_center: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="object1OrbitCenter"), pydantic.Field(alias="object1OrbitCenter")
+        typing.Optional[str],
+        FieldMetadata(alias="object1OrbitCenter"),
+        pydantic.Field(alias="object1OrbitCenter"),
     ] = None
     object1ref_frame: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="object1RefFrame"), pydantic.Field(alias="object1RefFrame")
+        typing.Optional[str],
+        FieldMetadata(alias="object1RefFrame"),
+        pydantic.Field(alias="object1RefFrame"),
     ] = None
     object1gravity_model: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="object1GravityModel"), pydantic.Field(alias="object1GravityModel")
+        typing.Optional[str],
+        FieldMetadata(alias="object1GravityModel"),
+        pydantic.Field(alias="object1GravityModel"),
     ] = None
     object1atmospheric_model: typing_extensions.Annotated[
         typing.Optional[str],
@@ -248,10 +324,14 @@ class TracssCdmV2(UncheckedBaseModel):
         pydantic.Field(alias="object1SolarRadPressure"),
     ] = None
     object1earth_tides: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="object1EarthTides"), pydantic.Field(alias="object1EarthTides")
+        typing.Optional[str],
+        FieldMetadata(alias="object1EarthTides"),
+        pydantic.Field(alias="object1EarthTides"),
     ] = None
     object1intrack_thrust: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="object1IntrackThrust"), pydantic.Field(alias="object1IntrackThrust")
+        typing.Optional[str],
+        FieldMetadata(alias="object1IntrackThrust"),
+        pydantic.Field(alias="object1IntrackThrust"),
     ] = None
     object1time_lastob_start: typing_extensions.Annotated[
         typing.Optional[dt.datetime],
@@ -284,10 +364,14 @@ class TracssCdmV2(UncheckedBaseModel):
         pydantic.Field(alias="object1ActualODSpanUnit"),
     ] = None
     object1obs_available: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="object1ObsAvailable"), pydantic.Field(alias="object1ObsAvailable")
+        typing.Optional[str],
+        FieldMetadata(alias="object1ObsAvailable"),
+        pydantic.Field(alias="object1ObsAvailable"),
     ] = None
     object1obs_used: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="object1ObsUsed"), pydantic.Field(alias="object1ObsUsed")
+        typing.Optional[str],
+        FieldMetadata(alias="object1ObsUsed"),
+        pydantic.Field(alias="object1ObsUsed"),
     ] = None
     object1tracks_available: typing_extensions.Annotated[
         typing.Optional[str],
@@ -295,7 +379,9 @@ class TracssCdmV2(UncheckedBaseModel):
         pydantic.Field(alias="object1TracksAvailable"),
     ] = None
     object1tracks_used: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="object1TracksUsed"), pydantic.Field(alias="object1TracksUsed")
+        typing.Optional[str],
+        FieldMetadata(alias="object1TracksUsed"),
+        pydantic.Field(alias="object1TracksUsed"),
     ] = None
     object1residuals_accepted_value: typing_extensions.Annotated[
         typing.Optional[str],
@@ -308,25 +394,39 @@ class TracssCdmV2(UncheckedBaseModel):
         pydantic.Field(alias="object1ResidualsAcceptedUnit"),
     ] = None
     object1weighted_rms: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="object1WeightedRms"), pydantic.Field(alias="object1WeightedRms")
+        typing.Optional[str],
+        FieldMetadata(alias="object1WeightedRms"),
+        pydantic.Field(alias="object1WeightedRms"),
     ] = None
     object1area_pc_value: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="object1AreaPcValue"), pydantic.Field(alias="object1AreaPcValue")
+        typing.Optional[str],
+        FieldMetadata(alias="object1AreaPcValue"),
+        pydantic.Field(alias="object1AreaPcValue"),
     ] = None
     object1area_pc_unit: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="object1AreaPcUnit"), pydantic.Field(alias="object1AreaPcUnit")
+        typing.Optional[str],
+        FieldMetadata(alias="object1AreaPcUnit"),
+        pydantic.Field(alias="object1AreaPcUnit"),
     ] = None
     object1mass_value: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="object1MassValue"), pydantic.Field(alias="object1MassValue")
+        typing.Optional[str],
+        FieldMetadata(alias="object1MassValue"),
+        pydantic.Field(alias="object1MassValue"),
     ] = None
     object1mass_unit: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="object1MassUnit"), pydantic.Field(alias="object1MassUnit")
+        typing.Optional[str],
+        FieldMetadata(alias="object1MassUnit"),
+        pydantic.Field(alias="object1MassUnit"),
     ] = None
     object1hbr_value: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="object1HBRValue"), pydantic.Field(alias="object1HBRValue")
+        typing.Optional[str],
+        FieldMetadata(alias="object1HBRValue"),
+        pydantic.Field(alias="object1HBRValue"),
     ] = None
     object1hbr_unit: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="object1HBRUnit"), pydantic.Field(alias="object1HBRUnit")
+        typing.Optional[str],
+        FieldMetadata(alias="object1HBRUnit"),
+        pydantic.Field(alias="object1HBRUnit"),
     ] = None
     object1cd_area_over_mass_value: typing_extensions.Annotated[
         typing.Optional[str],
@@ -359,10 +459,14 @@ class TracssCdmV2(UncheckedBaseModel):
         pydantic.Field(alias="object1ThrustAccelerationUnit"),
     ] = None
     object1sedr_value: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="object1SedrValue"), pydantic.Field(alias="object1SedrValue")
+        typing.Optional[str],
+        FieldMetadata(alias="object1SedrValue"),
+        pydantic.Field(alias="object1SedrValue"),
     ] = None
     object1sedr_unit: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="object1SedrUnit"), pydantic.Field(alias="object1SedrUnit")
+        typing.Optional[str],
+        FieldMetadata(alias="object1SedrUnit"),
+        pydantic.Field(alias="object1SedrUnit"),
     ] = None
     object1apoapsis_altitude_value: typing_extensions.Annotated[
         typing.Optional[str],
@@ -395,94 +499,154 @@ class TracssCdmV2(UncheckedBaseModel):
         pydantic.Field(alias="object1InclinationUnit"),
     ] = None
     object1x_value: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="object1XValue"), pydantic.Field(alias="object1XValue")
+        typing.Optional[str],
+        FieldMetadata(alias="object1XValue"),
+        pydantic.Field(alias="object1XValue"),
     ] = None
     object1x_unit: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="object1XUnit"), pydantic.Field(alias="object1XUnit")
+        typing.Optional[str],
+        FieldMetadata(alias="object1XUnit"),
+        pydantic.Field(alias="object1XUnit"),
     ] = None
     object1y_value: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="object1YValue"), pydantic.Field(alias="object1YValue")
+        typing.Optional[str],
+        FieldMetadata(alias="object1YValue"),
+        pydantic.Field(alias="object1YValue"),
     ] = None
     object1y_unit: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="object1YUnit"), pydantic.Field(alias="object1YUnit")
+        typing.Optional[str],
+        FieldMetadata(alias="object1YUnit"),
+        pydantic.Field(alias="object1YUnit"),
     ] = None
     object1z_value: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="object1ZValue"), pydantic.Field(alias="object1ZValue")
+        typing.Optional[str],
+        FieldMetadata(alias="object1ZValue"),
+        pydantic.Field(alias="object1ZValue"),
     ] = None
     object1z_unit: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="object1ZUnit"), pydantic.Field(alias="object1ZUnit")
+        typing.Optional[str],
+        FieldMetadata(alias="object1ZUnit"),
+        pydantic.Field(alias="object1ZUnit"),
     ] = None
     object1x_dot_value: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="object1XDotValue"), pydantic.Field(alias="object1XDotValue")
+        typing.Optional[str],
+        FieldMetadata(alias="object1XDotValue"),
+        pydantic.Field(alias="object1XDotValue"),
     ] = None
     object1x_dot_unit: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="object1XDotUnit"), pydantic.Field(alias="object1XDotUnit")
+        typing.Optional[str],
+        FieldMetadata(alias="object1XDotUnit"),
+        pydantic.Field(alias="object1XDotUnit"),
     ] = None
     object1y_dot_value: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="object1YDotValue"), pydantic.Field(alias="object1YDotValue")
+        typing.Optional[str],
+        FieldMetadata(alias="object1YDotValue"),
+        pydantic.Field(alias="object1YDotValue"),
     ] = None
     object1y_dot_unit: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="object1YDotUnit"), pydantic.Field(alias="object1YDotUnit")
+        typing.Optional[str],
+        FieldMetadata(alias="object1YDotUnit"),
+        pydantic.Field(alias="object1YDotUnit"),
     ] = None
     object1z_dot_value: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="object1ZDotValue"), pydantic.Field(alias="object1ZDotValue")
+        typing.Optional[str],
+        FieldMetadata(alias="object1ZDotValue"),
+        pydantic.Field(alias="object1ZDotValue"),
     ] = None
     object1z_dot_unit: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="object1ZDotUnit"), pydantic.Field(alias="object1ZDotUnit")
+        typing.Optional[str],
+        FieldMetadata(alias="object1ZDotUnit"),
+        pydantic.Field(alias="object1ZDotUnit"),
     ] = None
     object1cr_r_value: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="object1CrRValue"), pydantic.Field(alias="object1CrRValue")
+        typing.Optional[str],
+        FieldMetadata(alias="object1CrRValue"),
+        pydantic.Field(alias="object1CrRValue"),
     ] = None
     object1cr_r_unit: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="object1CrRUnit"), pydantic.Field(alias="object1CrRUnit")
+        typing.Optional[str],
+        FieldMetadata(alias="object1CrRUnit"),
+        pydantic.Field(alias="object1CrRUnit"),
     ] = None
     object1ct_r_value: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="object1CtRValue"), pydantic.Field(alias="object1CtRValue")
+        typing.Optional[str],
+        FieldMetadata(alias="object1CtRValue"),
+        pydantic.Field(alias="object1CtRValue"),
     ] = None
     object1ct_r_unit: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="object1CtRUnit"), pydantic.Field(alias="object1CtRUnit")
+        typing.Optional[str],
+        FieldMetadata(alias="object1CtRUnit"),
+        pydantic.Field(alias="object1CtRUnit"),
     ] = None
     object1ct_t_value: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="object1CtTValue"), pydantic.Field(alias="object1CtTValue")
+        typing.Optional[str],
+        FieldMetadata(alias="object1CtTValue"),
+        pydantic.Field(alias="object1CtTValue"),
     ] = None
     object1ct_t_unit: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="object1CtTUnit"), pydantic.Field(alias="object1CtTUnit")
+        typing.Optional[str],
+        FieldMetadata(alias="object1CtTUnit"),
+        pydantic.Field(alias="object1CtTUnit"),
     ] = None
     object1cn_r_value: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="object1CnRValue"), pydantic.Field(alias="object1CnRValue")
+        typing.Optional[str],
+        FieldMetadata(alias="object1CnRValue"),
+        pydantic.Field(alias="object1CnRValue"),
     ] = None
     object1cn_r_unit: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="object1CnRUnit"), pydantic.Field(alias="object1CnRUnit")
+        typing.Optional[str],
+        FieldMetadata(alias="object1CnRUnit"),
+        pydantic.Field(alias="object1CnRUnit"),
     ] = None
     object1cn_t_value: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="object1CnTValue"), pydantic.Field(alias="object1CnTValue")
+        typing.Optional[str],
+        FieldMetadata(alias="object1CnTValue"),
+        pydantic.Field(alias="object1CnTValue"),
     ] = None
     object1cn_t_unit: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="object1CnTUnit"), pydantic.Field(alias="object1CnTUnit")
+        typing.Optional[str],
+        FieldMetadata(alias="object1CnTUnit"),
+        pydantic.Field(alias="object1CnTUnit"),
     ] = None
     object1cn_n_value: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="object1CnNValue"), pydantic.Field(alias="object1CnNValue")
+        typing.Optional[str],
+        FieldMetadata(alias="object1CnNValue"),
+        pydantic.Field(alias="object1CnNValue"),
     ] = None
     object1cn_n_unit: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="object1CnNUnit"), pydantic.Field(alias="object1CnNUnit")
+        typing.Optional[str],
+        FieldMetadata(alias="object1CnNUnit"),
+        pydantic.Field(alias="object1CnNUnit"),
     ] = None
     object1crdot_r_value: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="object1CrdotRValue"), pydantic.Field(alias="object1CrdotRValue")
+        typing.Optional[str],
+        FieldMetadata(alias="object1CrdotRValue"),
+        pydantic.Field(alias="object1CrdotRValue"),
     ] = None
     object1crdot_r_unit: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="object1CrdotRUnit"), pydantic.Field(alias="object1CrdotRUnit")
+        typing.Optional[str],
+        FieldMetadata(alias="object1CrdotRUnit"),
+        pydantic.Field(alias="object1CrdotRUnit"),
     ] = None
     object1crdot_t_value: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="object1CrdotTValue"), pydantic.Field(alias="object1CrdotTValue")
+        typing.Optional[str],
+        FieldMetadata(alias="object1CrdotTValue"),
+        pydantic.Field(alias="object1CrdotTValue"),
     ] = None
     object1crdot_t_unit: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="object1CrdotTUnit"), pydantic.Field(alias="object1CrdotTUnit")
+        typing.Optional[str],
+        FieldMetadata(alias="object1CrdotTUnit"),
+        pydantic.Field(alias="object1CrdotTUnit"),
     ] = None
     object1crdot_n_value: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="object1CrdotNValue"), pydantic.Field(alias="object1CrdotNValue")
+        typing.Optional[str],
+        FieldMetadata(alias="object1CrdotNValue"),
+        pydantic.Field(alias="object1CrdotNValue"),
     ] = None
     object1crdot_n_unit: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="object1CrdotNUnit"), pydantic.Field(alias="object1CrdotNUnit")
+        typing.Optional[str],
+        FieldMetadata(alias="object1CrdotNUnit"),
+        pydantic.Field(alias="object1CrdotNUnit"),
     ] = None
     object1crdot_r_dot_value: typing_extensions.Annotated[
         typing.Optional[str],
@@ -490,25 +654,39 @@ class TracssCdmV2(UncheckedBaseModel):
         pydantic.Field(alias="object1CrdotRDotValue"),
     ] = None
     object1crdot_r_dot_unit: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="object1CrdotRDotUnit"), pydantic.Field(alias="object1CrdotRDotUnit")
+        typing.Optional[str],
+        FieldMetadata(alias="object1CrdotRDotUnit"),
+        pydantic.Field(alias="object1CrdotRDotUnit"),
     ] = None
     object1ctdot_r_value: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="object1CtdotRValue"), pydantic.Field(alias="object1CtdotRValue")
+        typing.Optional[str],
+        FieldMetadata(alias="object1CtdotRValue"),
+        pydantic.Field(alias="object1CtdotRValue"),
     ] = None
     object1ctdot_r_unit: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="object1CtdotRUnit"), pydantic.Field(alias="object1CtdotRUnit")
+        typing.Optional[str],
+        FieldMetadata(alias="object1CtdotRUnit"),
+        pydantic.Field(alias="object1CtdotRUnit"),
     ] = None
     object1ctdot_t_value: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="object1CtdotTValue"), pydantic.Field(alias="object1CtdotTValue")
+        typing.Optional[str],
+        FieldMetadata(alias="object1CtdotTValue"),
+        pydantic.Field(alias="object1CtdotTValue"),
     ] = None
     object1ctdot_t_unit: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="object1CtdotTUnit"), pydantic.Field(alias="object1CtdotTUnit")
+        typing.Optional[str],
+        FieldMetadata(alias="object1CtdotTUnit"),
+        pydantic.Field(alias="object1CtdotTUnit"),
     ] = None
     object1ctdot_n_value: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="object1CtdotNValue"), pydantic.Field(alias="object1CtdotNValue")
+        typing.Optional[str],
+        FieldMetadata(alias="object1CtdotNValue"),
+        pydantic.Field(alias="object1CtdotNValue"),
     ] = None
     object1ctdot_n_unit: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="object1CtdotNUnit"), pydantic.Field(alias="object1CtdotNUnit")
+        typing.Optional[str],
+        FieldMetadata(alias="object1CtdotNUnit"),
+        pydantic.Field(alias="object1CtdotNUnit"),
     ] = None
     object1ctdot_r_dot_value: typing_extensions.Annotated[
         typing.Optional[str],
@@ -516,7 +694,9 @@ class TracssCdmV2(UncheckedBaseModel):
         pydantic.Field(alias="object1CtdotRDotValue"),
     ] = None
     object1ctdot_r_dot_unit: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="object1CtdotRDotUnit"), pydantic.Field(alias="object1CtdotRDotUnit")
+        typing.Optional[str],
+        FieldMetadata(alias="object1CtdotRDotUnit"),
+        pydantic.Field(alias="object1CtdotRDotUnit"),
     ] = None
     object1ctdot_t_dot_value: typing_extensions.Annotated[
         typing.Optional[str],
@@ -524,25 +704,39 @@ class TracssCdmV2(UncheckedBaseModel):
         pydantic.Field(alias="object1CtdotTDotValue"),
     ] = None
     object1ctdot_t_dot_unit: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="object1CtdotTDotUnit"), pydantic.Field(alias="object1CtdotTDotUnit")
+        typing.Optional[str],
+        FieldMetadata(alias="object1CtdotTDotUnit"),
+        pydantic.Field(alias="object1CtdotTDotUnit"),
     ] = None
     object1cndot_r_value: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="object1CndotRValue"), pydantic.Field(alias="object1CndotRValue")
+        typing.Optional[str],
+        FieldMetadata(alias="object1CndotRValue"),
+        pydantic.Field(alias="object1CndotRValue"),
     ] = None
     object1cndot_r_unit: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="object1CndotRUnit"), pydantic.Field(alias="object1CndotRUnit")
+        typing.Optional[str],
+        FieldMetadata(alias="object1CndotRUnit"),
+        pydantic.Field(alias="object1CndotRUnit"),
     ] = None
     object1cndot_t_value: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="object1CndotTValue"), pydantic.Field(alias="object1CndotTValue")
+        typing.Optional[str],
+        FieldMetadata(alias="object1CndotTValue"),
+        pydantic.Field(alias="object1CndotTValue"),
     ] = None
     object1cndot_t_unit: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="object1CndotTUnit"), pydantic.Field(alias="object1CndotTUnit")
+        typing.Optional[str],
+        FieldMetadata(alias="object1CndotTUnit"),
+        pydantic.Field(alias="object1CndotTUnit"),
     ] = None
     object1cndot_n_value: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="object1CndotNValue"), pydantic.Field(alias="object1CndotNValue")
+        typing.Optional[str],
+        FieldMetadata(alias="object1CndotNValue"),
+        pydantic.Field(alias="object1CndotNValue"),
     ] = None
     object1cndot_n_unit: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="object1CndotNUnit"), pydantic.Field(alias="object1CndotNUnit")
+        typing.Optional[str],
+        FieldMetadata(alias="object1CndotNUnit"),
+        pydantic.Field(alias="object1CndotNUnit"),
     ] = None
     object1cndot_r_dot_value: typing_extensions.Annotated[
         typing.Optional[str],
@@ -550,7 +744,9 @@ class TracssCdmV2(UncheckedBaseModel):
         pydantic.Field(alias="object1CndotRDotValue"),
     ] = None
     object1cndot_r_dot_unit: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="object1CndotRDotUnit"), pydantic.Field(alias="object1CndotRDotUnit")
+        typing.Optional[str],
+        FieldMetadata(alias="object1CndotRDotUnit"),
+        pydantic.Field(alias="object1CndotRDotUnit"),
     ] = None
     object1cndot_t_dot_value: typing_extensions.Annotated[
         typing.Optional[str],
@@ -558,7 +754,9 @@ class TracssCdmV2(UncheckedBaseModel):
         pydantic.Field(alias="object1CndotTDotValue"),
     ] = None
     object1cndot_t_dot_unit: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="object1CndotTDotUnit"), pydantic.Field(alias="object1CndotTDotUnit")
+        typing.Optional[str],
+        FieldMetadata(alias="object1CndotTDotUnit"),
+        pydantic.Field(alias="object1CndotTDotUnit"),
     ] = None
     object1cndot_n_dot_value: typing_extensions.Annotated[
         typing.Optional[str],
@@ -566,7 +764,9 @@ class TracssCdmV2(UncheckedBaseModel):
         pydantic.Field(alias="object1CndotNDotValue"),
     ] = None
     object1cndot_n_dot_unit: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="object1CndotNDotUnit"), pydantic.Field(alias="object1CndotNDotUnit")
+        typing.Optional[str],
+        FieldMetadata(alias="object1CndotNDotUnit"),
+        pydantic.Field(alias="object1CndotNDotUnit"),
     ] = None
     object1density_forecast_uncertainty: typing_extensions.Annotated[
         typing.Optional[str],
@@ -599,7 +799,9 @@ class TracssCdmV2(UncheckedBaseModel):
         pydantic.Field(alias="object1DcpSensitivityVectorVelocityUnit"),
     ] = None
     object2object: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="object2Object"), pydantic.Field(alias="object2Object")
+        typing.Optional[str],
+        FieldMetadata(alias="object2Object"),
+        pydantic.Field(alias="object2Object"),
     ] = None
     object2object_designator: typing_extensions.Annotated[
         typing.Optional[str],
@@ -607,10 +809,14 @@ class TracssCdmV2(UncheckedBaseModel):
         pydantic.Field(alias="object2ObjectDesignator"),
     ] = None
     object2catalog_name: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="object2CatalogName"), pydantic.Field(alias="object2CatalogName")
+        typing.Optional[str],
+        FieldMetadata(alias="object2CatalogName"),
+        pydantic.Field(alias="object2CatalogName"),
     ] = None
     object2object_name: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="object2ObjectName"), pydantic.Field(alias="object2ObjectName")
+        typing.Optional[str],
+        FieldMetadata(alias="object2ObjectName"),
+        pydantic.Field(alias="object2ObjectName"),
     ] = None
     object2international_designator: typing_extensions.Annotated[
         typing.Optional[str],
@@ -618,10 +824,14 @@ class TracssCdmV2(UncheckedBaseModel):
         pydantic.Field(alias="object2InternationalDesignator"),
     ] = None
     object2object_type: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="object2ObjectType"), pydantic.Field(alias="object2ObjectType")
+        typing.Optional[str],
+        FieldMetadata(alias="object2ObjectType"),
+        pydantic.Field(alias="object2ObjectType"),
     ] = None
     object2ops_status: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="object2OpsStatus"), pydantic.Field(alias="object2OpsStatus")
+        typing.Optional[str],
+        FieldMetadata(alias="object2OpsStatus"),
+        pydantic.Field(alias="object2OpsStatus"),
     ] = None
     object2operator_organization: typing_extensions.Annotated[
         typing.Optional[str],
@@ -629,13 +839,19 @@ class TracssCdmV2(UncheckedBaseModel):
         pydantic.Field(alias="object2OperatorOrganization"),
     ] = None
     object2operator_phone: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="object2OperatorPhone"), pydantic.Field(alias="object2OperatorPhone")
+        typing.Optional[str],
+        FieldMetadata(alias="object2OperatorPhone"),
+        pydantic.Field(alias="object2OperatorPhone"),
     ] = None
     object2operator_email: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="object2OperatorEmail"), pydantic.Field(alias="object2OperatorEmail")
+        typing.Optional[str],
+        FieldMetadata(alias="object2OperatorEmail"),
+        pydantic.Field(alias="object2OperatorEmail"),
     ] = None
     object2ephemeris_name: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="object2EphemerisName"), pydantic.Field(alias="object2EphemerisName")
+        typing.Optional[str],
+        FieldMetadata(alias="object2EphemerisName"),
+        pydantic.Field(alias="object2EphemerisName"),
     ] = None
     object2covariance_method: typing_extensions.Annotated[
         typing.Optional[str],
@@ -643,16 +859,24 @@ class TracssCdmV2(UncheckedBaseModel):
         pydantic.Field(alias="object2CovarianceMethod"),
     ] = None
     object2maneuverable: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="object2Maneuverable"), pydantic.Field(alias="object2Maneuverable")
+        typing.Optional[str],
+        FieldMetadata(alias="object2Maneuverable"),
+        pydantic.Field(alias="object2Maneuverable"),
     ] = None
     object2orbit_center: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="object2OrbitCenter"), pydantic.Field(alias="object2OrbitCenter")
+        typing.Optional[str],
+        FieldMetadata(alias="object2OrbitCenter"),
+        pydantic.Field(alias="object2OrbitCenter"),
     ] = None
     object2ref_frame: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="object2RefFrame"), pydantic.Field(alias="object2RefFrame")
+        typing.Optional[str],
+        FieldMetadata(alias="object2RefFrame"),
+        pydantic.Field(alias="object2RefFrame"),
     ] = None
     object2gravity_model: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="object2GravityModel"), pydantic.Field(alias="object2GravityModel")
+        typing.Optional[str],
+        FieldMetadata(alias="object2GravityModel"),
+        pydantic.Field(alias="object2GravityModel"),
     ] = None
     object2atmospheric_model: typing_extensions.Annotated[
         typing.Optional[str],
@@ -670,10 +894,14 @@ class TracssCdmV2(UncheckedBaseModel):
         pydantic.Field(alias="object2SolarRadPressure"),
     ] = None
     object2earth_tides: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="object2EarthTides"), pydantic.Field(alias="object2EarthTides")
+        typing.Optional[str],
+        FieldMetadata(alias="object2EarthTides"),
+        pydantic.Field(alias="object2EarthTides"),
     ] = None
     object2intrack_thrust: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="object2IntrackThrust"), pydantic.Field(alias="object2IntrackThrust")
+        typing.Optional[str],
+        FieldMetadata(alias="object2IntrackThrust"),
+        pydantic.Field(alias="object2IntrackThrust"),
     ] = None
     object2time_lastob_start: typing_extensions.Annotated[
         typing.Optional[dt.datetime],
@@ -706,10 +934,14 @@ class TracssCdmV2(UncheckedBaseModel):
         pydantic.Field(alias="object2ActualODSpanUnit"),
     ] = None
     object2obs_available: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="object2ObsAvailable"), pydantic.Field(alias="object2ObsAvailable")
+        typing.Optional[str],
+        FieldMetadata(alias="object2ObsAvailable"),
+        pydantic.Field(alias="object2ObsAvailable"),
     ] = None
     object2obs_used: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="object2ObsUsed"), pydantic.Field(alias="object2ObsUsed")
+        typing.Optional[str],
+        FieldMetadata(alias="object2ObsUsed"),
+        pydantic.Field(alias="object2ObsUsed"),
     ] = None
     object2tracks_available: typing_extensions.Annotated[
         typing.Optional[str],
@@ -717,7 +949,9 @@ class TracssCdmV2(UncheckedBaseModel):
         pydantic.Field(alias="object2TracksAvailable"),
     ] = None
     object2tracks_used: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="object2TracksUsed"), pydantic.Field(alias="object2TracksUsed")
+        typing.Optional[str],
+        FieldMetadata(alias="object2TracksUsed"),
+        pydantic.Field(alias="object2TracksUsed"),
     ] = None
     object2residuals_accepted_value: typing_extensions.Annotated[
         typing.Optional[str],
@@ -730,25 +964,39 @@ class TracssCdmV2(UncheckedBaseModel):
         pydantic.Field(alias="object2ResidualsAcceptedUnit"),
     ] = None
     object2weighted_rms: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="object2WeightedRms"), pydantic.Field(alias="object2WeightedRms")
+        typing.Optional[str],
+        FieldMetadata(alias="object2WeightedRms"),
+        pydantic.Field(alias="object2WeightedRms"),
     ] = None
     object2area_pc_value: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="object2AreaPcValue"), pydantic.Field(alias="object2AreaPcValue")
+        typing.Optional[str],
+        FieldMetadata(alias="object2AreaPcValue"),
+        pydantic.Field(alias="object2AreaPcValue"),
     ] = None
     object2area_pc_unit: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="object2AreaPcUnit"), pydantic.Field(alias="object2AreaPcUnit")
+        typing.Optional[str],
+        FieldMetadata(alias="object2AreaPcUnit"),
+        pydantic.Field(alias="object2AreaPcUnit"),
     ] = None
     object2mass_value: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="object2MassValue"), pydantic.Field(alias="object2MassValue")
+        typing.Optional[str],
+        FieldMetadata(alias="object2MassValue"),
+        pydantic.Field(alias="object2MassValue"),
     ] = None
     object2mass_unit: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="object2MassUnit"), pydantic.Field(alias="object2MassUnit")
+        typing.Optional[str],
+        FieldMetadata(alias="object2MassUnit"),
+        pydantic.Field(alias="object2MassUnit"),
     ] = None
     object2hbr_value: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="object2HBRValue"), pydantic.Field(alias="object2HBRValue")
+        typing.Optional[str],
+        FieldMetadata(alias="object2HBRValue"),
+        pydantic.Field(alias="object2HBRValue"),
     ] = None
     object2hbr_unit: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="object2HBRUnit"), pydantic.Field(alias="object2HBRUnit")
+        typing.Optional[str],
+        FieldMetadata(alias="object2HBRUnit"),
+        pydantic.Field(alias="object2HBRUnit"),
     ] = None
     object2cd_area_over_mass_value: typing_extensions.Annotated[
         typing.Optional[str],
@@ -781,10 +1029,14 @@ class TracssCdmV2(UncheckedBaseModel):
         pydantic.Field(alias="object2ThrustAccelerationUnit"),
     ] = None
     object2sedr_value: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="object2SedrValue"), pydantic.Field(alias="object2SedrValue")
+        typing.Optional[str],
+        FieldMetadata(alias="object2SedrValue"),
+        pydantic.Field(alias="object2SedrValue"),
     ] = None
     object2sedr_unit: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="object2SedrUnit"), pydantic.Field(alias="object2SedrUnit")
+        typing.Optional[str],
+        FieldMetadata(alias="object2SedrUnit"),
+        pydantic.Field(alias="object2SedrUnit"),
     ] = None
     object2apoapsis_altitude_value: typing_extensions.Annotated[
         typing.Optional[str],
@@ -817,94 +1069,154 @@ class TracssCdmV2(UncheckedBaseModel):
         pydantic.Field(alias="object2InclinationUnit"),
     ] = None
     object2x_value: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="object2XValue"), pydantic.Field(alias="object2XValue")
+        typing.Optional[str],
+        FieldMetadata(alias="object2XValue"),
+        pydantic.Field(alias="object2XValue"),
     ] = None
     object2x_unit: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="object2XUnit"), pydantic.Field(alias="object2XUnit")
+        typing.Optional[str],
+        FieldMetadata(alias="object2XUnit"),
+        pydantic.Field(alias="object2XUnit"),
     ] = None
     object2y_value: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="object2YValue"), pydantic.Field(alias="object2YValue")
+        typing.Optional[str],
+        FieldMetadata(alias="object2YValue"),
+        pydantic.Field(alias="object2YValue"),
     ] = None
     object2y_unit: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="object2YUnit"), pydantic.Field(alias="object2YUnit")
+        typing.Optional[str],
+        FieldMetadata(alias="object2YUnit"),
+        pydantic.Field(alias="object2YUnit"),
     ] = None
     object2z_value: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="object2ZValue"), pydantic.Field(alias="object2ZValue")
+        typing.Optional[str],
+        FieldMetadata(alias="object2ZValue"),
+        pydantic.Field(alias="object2ZValue"),
     ] = None
     object2z_unit: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="object2ZUnit"), pydantic.Field(alias="object2ZUnit")
+        typing.Optional[str],
+        FieldMetadata(alias="object2ZUnit"),
+        pydantic.Field(alias="object2ZUnit"),
     ] = None
     object2x_dot_value: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="object2XDotValue"), pydantic.Field(alias="object2XDotValue")
+        typing.Optional[str],
+        FieldMetadata(alias="object2XDotValue"),
+        pydantic.Field(alias="object2XDotValue"),
     ] = None
     object2x_dot_unit: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="object2XDotUnit"), pydantic.Field(alias="object2XDotUnit")
+        typing.Optional[str],
+        FieldMetadata(alias="object2XDotUnit"),
+        pydantic.Field(alias="object2XDotUnit"),
     ] = None
     object2y_dot_value: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="object2YDotValue"), pydantic.Field(alias="object2YDotValue")
+        typing.Optional[str],
+        FieldMetadata(alias="object2YDotValue"),
+        pydantic.Field(alias="object2YDotValue"),
     ] = None
     object2y_dot_unit: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="object2YDotUnit"), pydantic.Field(alias="object2YDotUnit")
+        typing.Optional[str],
+        FieldMetadata(alias="object2YDotUnit"),
+        pydantic.Field(alias="object2YDotUnit"),
     ] = None
     object2z_dot_value: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="object2ZDotValue"), pydantic.Field(alias="object2ZDotValue")
+        typing.Optional[str],
+        FieldMetadata(alias="object2ZDotValue"),
+        pydantic.Field(alias="object2ZDotValue"),
     ] = None
     object2z_dot_unit: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="object2ZDotUnit"), pydantic.Field(alias="object2ZDotUnit")
+        typing.Optional[str],
+        FieldMetadata(alias="object2ZDotUnit"),
+        pydantic.Field(alias="object2ZDotUnit"),
     ] = None
     object2cr_r_value: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="object2CrRValue"), pydantic.Field(alias="object2CrRValue")
+        typing.Optional[str],
+        FieldMetadata(alias="object2CrRValue"),
+        pydantic.Field(alias="object2CrRValue"),
     ] = None
     object2cr_r_unit: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="object2CrRUnit"), pydantic.Field(alias="object2CrRUnit")
+        typing.Optional[str],
+        FieldMetadata(alias="object2CrRUnit"),
+        pydantic.Field(alias="object2CrRUnit"),
     ] = None
     object2ct_r_value: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="object2CtRValue"), pydantic.Field(alias="object2CtRValue")
+        typing.Optional[str],
+        FieldMetadata(alias="object2CtRValue"),
+        pydantic.Field(alias="object2CtRValue"),
     ] = None
     object2ct_r_unit: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="object2CtRUnit"), pydantic.Field(alias="object2CtRUnit")
+        typing.Optional[str],
+        FieldMetadata(alias="object2CtRUnit"),
+        pydantic.Field(alias="object2CtRUnit"),
     ] = None
     object2ct_t_value: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="object2CtTValue"), pydantic.Field(alias="object2CtTValue")
+        typing.Optional[str],
+        FieldMetadata(alias="object2CtTValue"),
+        pydantic.Field(alias="object2CtTValue"),
     ] = None
     object2ct_t_unit: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="object2CtTUnit"), pydantic.Field(alias="object2CtTUnit")
+        typing.Optional[str],
+        FieldMetadata(alias="object2CtTUnit"),
+        pydantic.Field(alias="object2CtTUnit"),
     ] = None
     object2cn_r_value: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="object2CnRValue"), pydantic.Field(alias="object2CnRValue")
+        typing.Optional[str],
+        FieldMetadata(alias="object2CnRValue"),
+        pydantic.Field(alias="object2CnRValue"),
     ] = None
     object2cn_r_unit: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="object2CnRUnit"), pydantic.Field(alias="object2CnRUnit")
+        typing.Optional[str],
+        FieldMetadata(alias="object2CnRUnit"),
+        pydantic.Field(alias="object2CnRUnit"),
     ] = None
     object2cn_t_value: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="object2CnTValue"), pydantic.Field(alias="object2CnTValue")
+        typing.Optional[str],
+        FieldMetadata(alias="object2CnTValue"),
+        pydantic.Field(alias="object2CnTValue"),
     ] = None
     object2cn_t_unit: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="object2CnTUnit"), pydantic.Field(alias="object2CnTUnit")
+        typing.Optional[str],
+        FieldMetadata(alias="object2CnTUnit"),
+        pydantic.Field(alias="object2CnTUnit"),
     ] = None
     object2cn_n_value: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="object2CnNValue"), pydantic.Field(alias="object2CnNValue")
+        typing.Optional[str],
+        FieldMetadata(alias="object2CnNValue"),
+        pydantic.Field(alias="object2CnNValue"),
     ] = None
     object2cn_n_unit: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="object2CnNUnit"), pydantic.Field(alias="object2CnNUnit")
+        typing.Optional[str],
+        FieldMetadata(alias="object2CnNUnit"),
+        pydantic.Field(alias="object2CnNUnit"),
     ] = None
     object2crdot_r_value: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="object2CrdotRValue"), pydantic.Field(alias="object2CrdotRValue")
+        typing.Optional[str],
+        FieldMetadata(alias="object2CrdotRValue"),
+        pydantic.Field(alias="object2CrdotRValue"),
     ] = None
     object2crdot_r_unit: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="object2CrdotRUnit"), pydantic.Field(alias="object2CrdotRUnit")
+        typing.Optional[str],
+        FieldMetadata(alias="object2CrdotRUnit"),
+        pydantic.Field(alias="object2CrdotRUnit"),
     ] = None
     object2crdot_t_value: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="object2CrdotTValue"), pydantic.Field(alias="object2CrdotTValue")
+        typing.Optional[str],
+        FieldMetadata(alias="object2CrdotTValue"),
+        pydantic.Field(alias="object2CrdotTValue"),
     ] = None
     object2crdot_t_unit: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="object2CrdotTUnit"), pydantic.Field(alias="object2CrdotTUnit")
+        typing.Optional[str],
+        FieldMetadata(alias="object2CrdotTUnit"),
+        pydantic.Field(alias="object2CrdotTUnit"),
     ] = None
     object2crdot_n_value: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="object2CrdotNValue"), pydantic.Field(alias="object2CrdotNValue")
+        typing.Optional[str],
+        FieldMetadata(alias="object2CrdotNValue"),
+        pydantic.Field(alias="object2CrdotNValue"),
     ] = None
     object2crdot_n_unit: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="object2CrdotNUnit"), pydantic.Field(alias="object2CrdotNUnit")
+        typing.Optional[str],
+        FieldMetadata(alias="object2CrdotNUnit"),
+        pydantic.Field(alias="object2CrdotNUnit"),
     ] = None
     object2crdot_r_dot_value: typing_extensions.Annotated[
         typing.Optional[str],
@@ -912,25 +1224,39 @@ class TracssCdmV2(UncheckedBaseModel):
         pydantic.Field(alias="object2CrdotRDotValue"),
     ] = None
     object2crdot_r_dot_unit: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="object2CrdotRDotUnit"), pydantic.Field(alias="object2CrdotRDotUnit")
+        typing.Optional[str],
+        FieldMetadata(alias="object2CrdotRDotUnit"),
+        pydantic.Field(alias="object2CrdotRDotUnit"),
     ] = None
     object2ctdot_r_value: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="object2CtdotRValue"), pydantic.Field(alias="object2CtdotRValue")
+        typing.Optional[str],
+        FieldMetadata(alias="object2CtdotRValue"),
+        pydantic.Field(alias="object2CtdotRValue"),
     ] = None
     object2ctdot_r_unit: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="object2CtdotRUnit"), pydantic.Field(alias="object2CtdotRUnit")
+        typing.Optional[str],
+        FieldMetadata(alias="object2CtdotRUnit"),
+        pydantic.Field(alias="object2CtdotRUnit"),
     ] = None
     object2ctdot_t_value: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="object2CtdotTValue"), pydantic.Field(alias="object2CtdotTValue")
+        typing.Optional[str],
+        FieldMetadata(alias="object2CtdotTValue"),
+        pydantic.Field(alias="object2CtdotTValue"),
     ] = None
     object2ctdot_t_unit: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="object2CtdotTUnit"), pydantic.Field(alias="object2CtdotTUnit")
+        typing.Optional[str],
+        FieldMetadata(alias="object2CtdotTUnit"),
+        pydantic.Field(alias="object2CtdotTUnit"),
     ] = None
     object2ctdot_n_value: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="object2CtdotNValue"), pydantic.Field(alias="object2CtdotNValue")
+        typing.Optional[str],
+        FieldMetadata(alias="object2CtdotNValue"),
+        pydantic.Field(alias="object2CtdotNValue"),
     ] = None
     object2ctdot_n_unit: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="object2CtdotNUnit"), pydantic.Field(alias="object2CtdotNUnit")
+        typing.Optional[str],
+        FieldMetadata(alias="object2CtdotNUnit"),
+        pydantic.Field(alias="object2CtdotNUnit"),
     ] = None
     object2ctdot_r_dot_value: typing_extensions.Annotated[
         typing.Optional[str],
@@ -938,7 +1264,9 @@ class TracssCdmV2(UncheckedBaseModel):
         pydantic.Field(alias="object2CtdotRDotValue"),
     ] = None
     object2ctdot_r_dot_unit: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="object2CtdotRDotUnit"), pydantic.Field(alias="object2CtdotRDotUnit")
+        typing.Optional[str],
+        FieldMetadata(alias="object2CtdotRDotUnit"),
+        pydantic.Field(alias="object2CtdotRDotUnit"),
     ] = None
     object2ctdot_t_dot_value: typing_extensions.Annotated[
         typing.Optional[str],
@@ -946,25 +1274,39 @@ class TracssCdmV2(UncheckedBaseModel):
         pydantic.Field(alias="object2CtdotTDotValue"),
     ] = None
     object2ctdot_t_dot_unit: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="object2CtdotTDotUnit"), pydantic.Field(alias="object2CtdotTDotUnit")
+        typing.Optional[str],
+        FieldMetadata(alias="object2CtdotTDotUnit"),
+        pydantic.Field(alias="object2CtdotTDotUnit"),
     ] = None
     object2cndot_r_value: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="object2CndotRValue"), pydantic.Field(alias="object2CndotRValue")
+        typing.Optional[str],
+        FieldMetadata(alias="object2CndotRValue"),
+        pydantic.Field(alias="object2CndotRValue"),
     ] = None
     object2cndot_r_unit: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="object2CndotRUnit"), pydantic.Field(alias="object2CndotRUnit")
+        typing.Optional[str],
+        FieldMetadata(alias="object2CndotRUnit"),
+        pydantic.Field(alias="object2CndotRUnit"),
     ] = None
     object2cndot_t_value: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="object2CndotTValue"), pydantic.Field(alias="object2CndotTValue")
+        typing.Optional[str],
+        FieldMetadata(alias="object2CndotTValue"),
+        pydantic.Field(alias="object2CndotTValue"),
     ] = None
     object2cndot_t_unit: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="object2CndotTUnit"), pydantic.Field(alias="object2CndotTUnit")
+        typing.Optional[str],
+        FieldMetadata(alias="object2CndotTUnit"),
+        pydantic.Field(alias="object2CndotTUnit"),
     ] = None
     object2cndot_n_value: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="object2CndotNValue"), pydantic.Field(alias="object2CndotNValue")
+        typing.Optional[str],
+        FieldMetadata(alias="object2CndotNValue"),
+        pydantic.Field(alias="object2CndotNValue"),
     ] = None
     object2cndot_n_unit: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="object2CndotNUnit"), pydantic.Field(alias="object2CndotNUnit")
+        typing.Optional[str],
+        FieldMetadata(alias="object2CndotNUnit"),
+        pydantic.Field(alias="object2CndotNUnit"),
     ] = None
     object2cndot_r_dot_value: typing_extensions.Annotated[
         typing.Optional[str],
@@ -972,7 +1314,9 @@ class TracssCdmV2(UncheckedBaseModel):
         pydantic.Field(alias="object2CndotRDotValue"),
     ] = None
     object2cndot_r_dot_unit: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="object2CndotRDotUnit"), pydantic.Field(alias="object2CndotRDotUnit")
+        typing.Optional[str],
+        FieldMetadata(alias="object2CndotRDotUnit"),
+        pydantic.Field(alias="object2CndotRDotUnit"),
     ] = None
     object2cndot_t_dot_value: typing_extensions.Annotated[
         typing.Optional[str],
@@ -980,7 +1324,9 @@ class TracssCdmV2(UncheckedBaseModel):
         pydantic.Field(alias="object2CndotTDotValue"),
     ] = None
     object2cndot_t_dot_unit: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="object2CndotTDotUnit"), pydantic.Field(alias="object2CndotTDotUnit")
+        typing.Optional[str],
+        FieldMetadata(alias="object2CndotTDotUnit"),
+        pydantic.Field(alias="object2CndotTDotUnit"),
     ] = None
     object2cndot_n_dot_value: typing_extensions.Annotated[
         typing.Optional[str],
@@ -988,7 +1334,9 @@ class TracssCdmV2(UncheckedBaseModel):
         pydantic.Field(alias="object2CndotNDotValue"),
     ] = None
     object2cndot_n_dot_unit: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="object2CndotNDotUnit"), pydantic.Field(alias="object2CndotNDotUnit")
+        typing.Optional[str],
+        FieldMetadata(alias="object2CndotNDotUnit"),
+        pydantic.Field(alias="object2CndotNDotUnit"),
     ] = None
     object2density_forecast_uncertainty: typing_extensions.Annotated[
         typing.Optional[str],
@@ -1026,7 +1374,9 @@ class TracssCdmV2(UncheckedBaseModel):
         pydantic.Field(alias="userDefinedMeetsAlertableCriteria"),
     ] = None
     user_defined_run_id: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="userDefinedRunId"), pydantic.Field(alias="userDefinedRunId")
+        typing.Optional[str],
+        FieldMetadata(alias="userDefinedRunId"),
+        pydantic.Field(alias="userDefinedRunId"),
     ] = None
     user_defined_correlation_id: typing_extensions.Annotated[
         typing.Optional[str],
@@ -1061,7 +1411,9 @@ class TracssCdmV2(UncheckedBaseModel):
     ] = None
 
     if IS_PYDANTIC_V2:
-        model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(extra="allow", frozen=True)  # type: ignore # Pydantic v2
+        model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(
+            extra="allow", frozen=True
+        )  # type: ignore # Pydantic v2
     else:
 
         class Config:

@@ -13,17 +13,25 @@ class CdmHeaderV2Dto(UncheckedBaseModel):
     object1: typing.Optional[str] = None
     object2: typing.Optional[str] = None
     message_id: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="messageId"), pydantic.Field(alias="messageId")
+        typing.Optional[str],
+        FieldMetadata(alias="messageId"),
+        pydantic.Field(alias="messageId"),
+    ] = None
+    miss_distance: typing_extensions.Annotated[
+        typing.Optional[str],
+        FieldMetadata(alias="missDistance"),
+        pydantic.Field(alias="missDistance"),
     ] = None
     tca: typing.Optional[str] = None
-    miss_distance: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="missDistance"), pydantic.Field(alias="missDistance")
-    ] = None
     collision_probability: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="collisionProbability"), pydantic.Field(alias="collisionProbability")
+        typing.Optional[str],
+        FieldMetadata(alias="collisionProbability"),
+        pydantic.Field(alias="collisionProbability"),
     ] = None
     correlation_id: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="correlationId"), pydantic.Field(alias="correlationId")
+        typing.Optional[str],
+        FieldMetadata(alias="correlationId"),
+        pydantic.Field(alias="correlationId"),
     ] = None
     user_defined_meets_alertable_criteria: typing_extensions.Annotated[
         typing.Optional[str],
@@ -31,14 +39,20 @@ class CdmHeaderV2Dto(UncheckedBaseModel):
         pydantic.Field(alias="userDefinedMeetsAlertableCriteria"),
     ] = None
     ocm_message_id: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="ocmMessageId"), pydantic.Field(alias="ocmMessageId")
+        typing.Optional[str],
+        FieldMetadata(alias="ocmMessageId"),
+        pydantic.Field(alias="ocmMessageId"),
     ] = None
     conjunction_id: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="conjunctionId"), pydantic.Field(alias="conjunctionId")
+        typing.Optional[str],
+        FieldMetadata(alias="conjunctionId"),
+        pydantic.Field(alias="conjunctionId"),
     ] = None
 
     if IS_PYDANTIC_V2:
-        model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(extra="allow", frozen=True)  # type: ignore # Pydantic v2
+        model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(
+            extra="allow", frozen=True
+        )  # type: ignore # Pydantic v2
     else:
 
         class Config:
