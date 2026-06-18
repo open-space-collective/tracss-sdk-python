@@ -22,6 +22,7 @@ dev = [
     { name = "pytest", specifier = ">=8" },
     { name = "pytest-asyncio", specifier = ">=0.23" },
     { name = "pytest-cov", specifier = ">=5" },
+    { name = "pyyaml", specifier = ">=6" },
     { name = "respx", specifier = ">=0.21" },
     { name = "ruff", specifier = ">=0.4" },
     { name = "twine", specifier = ">=5" },
@@ -1649,7 +1650,6 @@ wheels = [
 
 [[package]]
 name = "tracss"
-version = "0.1.0"
 source = { editable = "sdks/python" }
 dependencies = [
     { name = "httpx" },

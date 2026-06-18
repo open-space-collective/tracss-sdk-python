@@ -75,7 +75,11 @@ class BaseTraCSS:
         logging: typing.Optional[typing.Union[LogConfig, Logger]] = None,
     ):
         _defaulted_timeout = (
-            timeout if timeout is not None else 60 if httpx_client is None else httpx_client.timeout.read
+            timeout
+            if timeout is not None
+            else 60
+            if httpx_client is None
+            else httpx_client.timeout.read
         )
         _defaulted_max_retries = max_retries if max_retries is not None else 2
         self._client_wrapper = SyncClientWrapper(
@@ -84,7 +88,9 @@ class BaseTraCSS:
             headers=headers,
             httpx_client=httpx_client
             if httpx_client is not None
-            else httpx.Client(timeout=_defaulted_timeout, follow_redirects=follow_redirects)
+            else httpx.Client(
+                timeout=_defaulted_timeout, follow_redirects=follow_redirects
+            )
             if follow_redirects is not None
             else httpx.Client(timeout=_defaulted_timeout),
             timeout=_defaulted_timeout,
@@ -130,7 +136,9 @@ def _make_default_async_client(
         pass
     else:
         if follow_redirects is not None:
-            return httpx_aiohttp.HttpxAiohttpClient(timeout=timeout, follow_redirects=follow_redirects)
+            return httpx_aiohttp.HttpxAiohttpClient(
+                timeout=timeout, follow_redirects=follow_redirects
+            )
         return httpx_aiohttp.HttpxAiohttpClient(timeout=timeout)
 
     if follow_redirects is not None:
@@ -202,7 +210,11 @@ class AsyncBaseTraCSS:
         logging: typing.Optional[typing.Union[LogConfig, Logger]] = None,
     ):
         _defaulted_timeout = (
-            timeout if timeout is not None else 60 if httpx_client is None else httpx_client.timeout.read
+            timeout
+            if timeout is not None
+            else 60
+            if httpx_client is None
+            else httpx_client.timeout.read
         )
         _defaulted_max_retries = max_retries if max_retries is not None else 2
         self._client_wrapper = AsyncClientWrapper(
@@ -212,7 +224,9 @@ class AsyncBaseTraCSS:
             async_token=async_token,
             httpx_client=httpx_client
             if httpx_client is not None
-            else _make_default_async_client(timeout=_defaulted_timeout, follow_redirects=follow_redirects),
+            else _make_default_async_client(
+                timeout=_defaulted_timeout, follow_redirects=follow_redirects
+            ),
             timeout=_defaulted_timeout,
             max_retries=_defaulted_max_retries,
             logging=logging,
@@ -246,10 +260,14 @@ class AsyncBaseTraCSS:
         return self._subscriber
 
 
-def _get_base_url(*, base_url: typing.Optional[str] = None, environment: TraCSSEnvironment) -> str:
+def _get_base_url(
+    *, base_url: typing.Optional[str] = None, environment: TraCSSEnvironment
+) -> str:
     if base_url is not None:
         return base_url
     elif environment is not None:
         return environment.value
     else:
-        raise Exception("Please pass in either base_url or environment to construct the client")
+        raise Exception(
+            "Please pass in either base_url or environment to construct the client"
+        )

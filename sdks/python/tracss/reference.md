@@ -1,6 +1,6 @@
 # Reference
 ## BulkData Tip
-<details><summary><code>client.bulk_data.tip.<a href="src/tracss/bulk_data/tip/client.py">stream</a>(...) -> typing.Any</code></summary>
+<details><summary><code>client.bulk_data.tip.<a href="src/tracss/bulk_data/tip/client.py">stream</a>(...) -> typing.Iterator[bytes]</code></summary>
 <dl>
 <dd>
 

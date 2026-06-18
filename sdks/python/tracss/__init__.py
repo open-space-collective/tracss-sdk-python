@@ -8,24 +8,28 @@ from importlib import import_module
 if typing.TYPE_CHECKING:
     from . import bulk_data, metadata, subscriber
     from ._default_clients import DefaultAioHttpClient, DefaultAsyncHttpxClient
-    from .client import AsyncTraCSS, TraCSS
+    from .client import AsyncTraCSS, RawResponse, TraCSS
     from .environment import TraCSSEnvironment
 _dynamic_imports: typing.Dict[str, str] = {
     "AsyncTraCSS": ".client",
     "DefaultAioHttpClient": "._default_clients",
     "DefaultAsyncHttpxClient": "._default_clients",
+    "RawResponse": ".client",
     "TraCSS": ".client",
     "TraCSSEnvironment": ".environment",
     "bulk_data": ".bulk_data",
     "metadata": ".metadata",
     "subscriber": ".subscriber",
+    "__version__": "._version",
 }
 
 
 def __getattr__(attr_name: str) -> typing.Any:
     module_name = _dynamic_imports.get(attr_name)
     if module_name is None:
-        raise AttributeError(f"No {attr_name} found in _dynamic_imports for module name -> {__name__}")
+        raise AttributeError(
+            f"No {attr_name} found in _dynamic_imports for module name -> {__name__}"
+        )
     try:
         module = import_module(module_name, __package__)
         if module_name == f".{attr_name}":
@@ -47,6 +51,7 @@ __all__ = [
     "AsyncTraCSS",
     "DefaultAioHttpClient",
     "DefaultAsyncHttpxClient",
+    "RawResponse",
     "TraCSS",
     "TraCSSEnvironment",
     "bulk_data",

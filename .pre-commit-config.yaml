@@ -12,7 +12,7 @@ repos:
         name: ruff-format
         language: system
         entry: uv run ruff format
-        files: "^(sdks/python/tracss/client\\.py|tests/)"
+        files: "^(sdks/python/tracss/|tests/)"
         types: [python]
 
       - id: bandit

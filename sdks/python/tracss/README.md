@@ -1,12 +1,52 @@
-# Tracss Python Library
+# TraCSS Python Library
 
-[![fern shield](https://img.shields.io/badge/%F0%9F%8C%BF-Built%20with%20Fern-brightgreen)](https://buildwithfern.com?utm_source=github&utm_medium=github&utm_campaign=readme&utm_source=Tracss%2FPython)
+[![fern shield](https://img.shields.io/badge/%F0%9F%8C%BF-Built%20with%20Fern-brightgreen)](https://buildwithfern.com?utm_source=github&utm_medium=github&utm_campaign=readme&utm_source=OpenSpaceCollective%2FPython)
 [![pypi](https://img.shields.io/pypi/v/tracss)](https://pypi.python.org/pypi/tracss)
 
-The Tracss Python library provides convenient access to the Tracss APIs from Python.
+> [!IMPORTANT]
+> **Code samples might show `token="YOUR_TOKEN"`. Do not use `token="YOUR_TOKEN"`.**
+> The published SDK exports `TraCSS` (not `BaseTraCSS`), which handles
+> Okta client-credentials auth automatically.
+> You never construct or refresh a token yourself:
+>
+> ```python
+> from tracss import TraCSS
+>
+> client = TraCSS(
+>     client_id="…",       # or env TRACSS_CLIENT_ID
+>     client_secret="…",   # or env TRACSS_CLIENT_SECRET
+> )
+>
+> # Bulk Data
+> for record in client.bulk_data.cdm.stream(...):
+>     ...
+>
+> # Metadata - JSON is the default; no format= required
+> results = client.metadata.cdm.list(...)
+>
+> # Subscriber
+> topics = client.subscriber.topics.list()
+> ```
+>
+> Tokens are fetched lazily on the first request and refreshed 30s before
+> expiry. `AsyncTraCSS` is also available for async/await usage.
+>
+> ---
+>
+> **Metadata responses default to JSON.** The SDK ships
+> `_MetadataWithJsonDefaults`, a subclass of the generated `MetadataClient`
+> that silently injects `format="json"` on every `cdm` and `ocm` list call.
+> Without this, the TraCSS API returns CCSDS KVN text that the Fern-generated
+> response parser cannot handle. You do not need to pass `format=` at all for
+> JSON since it is the default. To receive raw KVN, XML, or CSV instead, pass
+> `format="KVN"` (or `"xml"`, `"csv"`) explicitly; the SDK catches the
+> resulting `ApiError(status_code=200)` and returns `error.body` as a plain
+> string (for Status OK responses only).
+
 
 ## Table of Contents
 
+- [Documentation](#documentation)
 - [Installation](#installation)
 - [Reference](#reference)
 - [Usage](#usage)
@@ -20,6 +60,10 @@ The Tracss Python library provides convenient access to the Tracss APIs from Pyt
   - [Timeouts](#timeouts)
   - [Custom Client](#custom-client)
 - [Contributing](#contributing)
+
+## Documentation
+
+API reference documentation is available [here](https://open-space-collective.docs.buildwithfern.com).
 
 ## Installation
 
@@ -39,11 +83,24 @@ Instantiate and use the client with the following:
 from tracss import TraCSS
 
 client = TraCSS(
-    token="<token>",
+    client_id="YOUR_CLIENT_ID", client_secret="YOUR_CLIENT_SECRET",
 )
 
-client.metadata.ocm.upload(
-    file="example_file",
+client.bulk_data.cdm.stream(
+    message_id="000043928_conj_000054603_2024329195621",
+    tca="2024-314T07:41:39.411",
+    creation_date="2024-09-04T18:37:01Z",
+    message_for="IRIDIUM 161",
+    screening_option="Covariance",
+    screen_volume_shape="Box, Ellipsoid, Deep Space",
+    object1type="Payload",
+    object1international_designator="2019-002A",
+    object1operator_organization="Iridium",
+    object1ephemeris_name="NONE",
+    object2type="Payload",
+    object2international_designator="2019-002A",
+    object2operator_organization="Iridium",
+    object2ephemeris_name="NONE",
 )
 ```
 
@@ -70,13 +127,26 @@ import asyncio
 from tracss import AsyncTraCSS
 
 client = AsyncTraCSS(
-    token="<token>",
+    client_id="YOUR_CLIENT_ID", client_secret="YOUR_CLIENT_SECRET",
 )
 
 
 async def main() -> None:
-    await client.metadata.ocm.upload(
-        file="example_file",
+    await client.bulk_data.cdm.stream(
+        message_id="000043928_conj_000054603_2024329195621",
+        tca="2024-314T07:41:39.411",
+        creation_date="2024-09-04T18:37:01Z",
+        message_for="IRIDIUM 161",
+        screening_option="Covariance",
+        screen_volume_shape="Box, Ellipsoid, Deep Space",
+        object1type="Payload",
+        object1international_designator="2019-002A",
+        object1operator_organization="Iridium",
+        object1ephemeris_name="NONE",
+        object2type="Payload",
+        object2international_designator="2019-002A",
+        object2operator_organization="Iridium",
+        object2ephemeris_name="NONE",
     )
 
 
@@ -92,7 +162,7 @@ will be thrown.
 from tracss.core.api_error import ApiError
 
 try:
-    client.metadata.ocm.upload(...)
+    client.bulk_data.cdm.stream(...)
 except ApiError as e:
     print(e.status_code)
     print(e.body)
@@ -106,15 +176,24 @@ The SDK supports streaming responses, as well, the response will be a generator 
 from tracss import TraCSS
 
 client = TraCSS(
-    token="<token>",
+    client_id="YOUR_CLIENT_ID", client_secret="YOUR_CLIENT_SECRET",
 )
 
-client.bulk_data.ocm.stream(
-    created_by="some_ephem.ocm",
-    creation_date="2024-09-04T18:37:01Z",
+client.bulk_data.cdm.stream(
     message_id="000043928_conj_000054603_2024329195621",
-    operator="some_user",
-    owner="some_user",
+    tca="2024-314T07:41:39.411",
+    creation_date="2024-09-04T18:37:01Z",
+    message_for="IRIDIUM 161",
+    screening_option="Covariance",
+    screen_volume_shape="Box, Ellipsoid, Deep Space",
+    object1type="Payload",
+    object1international_designator="2019-002A",
+    object1operator_organization="Iridium",
+    object1ephemeris_name="NONE",
+    object2type="Payload",
+    object2international_designator="2019-002A",
+    object2operator_organization="Iridium",
+    object2ephemeris_name="NONE",
 )
 ```
 
@@ -129,7 +208,7 @@ The `.with_raw_response` property returns a "raw" client that can be used to acc
 from tracss import TraCSS
 
 client = TraCSS(...)
-response = client.metadata.ocm.with_raw_response.upload(...)
+response = client.bulk_data.cdm.with_raw_response.stream(...)
 print(response.headers)  # access the response headers
 print(response.status_code)  # access the response status code
 print(response.data)  # access the underlying object
@@ -160,7 +239,7 @@ Which status codes are retried depends on the `retryStatusCodes` generator confi
 Use the `max_retries` request option to configure this behavior.
 
 ```python
-client.metadata.ocm.upload(..., request_options={
+client.bulk_data.cdm.stream(..., request_options={
     "max_retries": 1
 })
 ```
@@ -175,7 +254,7 @@ from tracss import TraCSS
 client = TraCSS(..., timeout=20.0)
 
 # Override timeout for a specific method
-client.metadata.ocm.upload(..., request_options={
+client.bulk_data.cdm.stream(..., request_options={
     "timeout_in_seconds": 1
 })
 ```

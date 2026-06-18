@@ -70,6 +70,9 @@ post-generate: ## Fix generated artifacts
 	@# client_id/client_secret.  Patch every generated */client.py docstring.
 	@find sdks/python/tracss -name 'client.py' ! -path '*/tracss/client.py' \
 	    -exec sed -i 's/token="YOUR_TOKEN"/client_id="YOUR_CLIENT_ID", client_secret="YOUR_CLIENT_SECRET"/g' {} +
+	@# Same fix for README.md: Fern usage examples show token="<token>" which is wrong.
+	@sed -i 's/token="<token>"/client_id="YOUR_CLIENT_ID", client_secret="YOUR_CLIENT_SECRET"/g' \
+	    sdks/python/tracss/README.md
 	@# Wire __version__ into the lazy-loader so `tracss.__version__` works at runtime.
 	@# _version.py is protected by .fernignore; __init__.py is regenerated each run.
 	@sed -i 's/"subscriber": ".subscriber"}/"subscriber": ".subscriber", "__version__": "._version"}/' \
@@ -108,15 +111,16 @@ fern-stop: ## Stop any background fern docs server
 install: ## Install workspace dependencies
 	uv sync
 
-LINT_TARGETS := sdks/python/tracss/client.py tests/
+LINT_TARGETS   := sdks/python/tracss/client.py tests/
+FORMAT_TARGETS := sdks/python/tracss/ tests/
 
 .PHONY: lint
-lint: ## Lint + format check (hand-written files only)
+lint: ## Lint + format check
 	uv run ruff check $(LINT_TARGETS)
-	uv run ruff format --check $(LINT_TARGETS)
+	uv run ruff format --check $(FORMAT_TARGETS)
 
-format: ## Auto-fix lint + formatting (hand-written files only)
-	uv run ruff format $(LINT_TARGETS)
+format: ## Auto-fix lint + format all Python files
+	uv run ruff format $(FORMAT_TARGETS)
 	uv run ruff check --fix $(LINT_TARGETS)
 .PHONY: format
 
