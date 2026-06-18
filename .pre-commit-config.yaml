@@ -35,8 +35,9 @@ repos:
       - id: commitlint
         name: commitlint
         language: node
-        entry: npx --no -- commitlint --edit
+        entry: commitlint
         stages: [commit-msg]
+        args: ["--config", ".commitlintrc.yml", "--edit"]
         additional_dependencies:
           - "@commitlint/cli@19"
           - "@commitlint/config-conventional@19"

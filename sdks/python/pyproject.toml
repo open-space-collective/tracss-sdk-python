@@ -1,10 +1,10 @@
 [build-system]
-requires = ["hatchling"]
+requires = ["hatchling", "hatch-vcs"]
 build-backend = "hatchling.build"
 
 [project]
 name = "tracss"
-version = "0.1.0"
+dynamic = ["version"]
 description = "Python SDK for the TraCSS REST APIs"
 requires-python = ">=3.10"
 dependencies = [
@@ -26,7 +26,11 @@ text = "Apache-2.0"
 Homepage = "https://github.com/open-space-collective/tracss-sdk-python"
 Repository = "https://github.com/open-space-collective/tracss-sdk-python"
 Issues = "https://github.com/open-space-collective/tracss-sdk-python/issues"
-Documentation = "https://tracss.docs.buildwithfern.com"
+Documentation = "https://open-space-collective.docs.buildwithfern.com"
 
 [tool.hatch.build.targets.wheel]
 packages = ["tracss"]
+
+[tool.hatch.version]
+source = "vcs"
+raw-options = { root = "../.." }

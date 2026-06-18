@@ -1,4 +1,6 @@
 # Hand-written Okta auth wrapper. Do not overwrite!
 client.py
-# PEP 561 marker, signals this package ships inline types.
+# PEP 561 marker. Signals this package ships inline types.
 py.typed
+# Runtime __version__ attribute. post-generate wires it into __init__.py.
+_version.py
