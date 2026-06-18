@@ -1,10 +1,10 @@
 .DEFAULT_GOAL := help
 
 
-.PHONY: help
 help:
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) \
 	| awk 'BEGIN {FS = ":.*?## "}; {printf "  \033[36m%-20s\033[0m %s\n", $$1, $$2}'
+.PHONY: help
 
 
 SPEC_PAIRS := \
@@ -20,9 +20,24 @@ specs: ## Fetch OpenAPI specs from TraCSS
 	url=$$(echo $$pair | cut -d: -f3-); \
 	echo "- fern/openapi/$$name/openapi.json ($$url)"; \
 	mkdir -p fern/openapi/$$name; \
-	curl -fsSL "$$url" -o fern/openapi/$$name/openapi.json; \
+	curl -fsSL --connect-timeout 10 --max-time 30 "$$url" -o fern/openapi/$$name/openapi.json; \
 	done
-	@python3 -c "import json,pathlib; f=pathlib.Path('fern/openapi/subscriber/openapi.json'); d=json.loads(f.read_text()); [p.update({'required':False}) for p in d['paths']['/subscriber/messages']['get']['parameters'] if p.get('name')=='fields' and p.get('in')=='query']; f.write_text(json.dumps(d,indent=2)); print('  - subscriber/openapi.json: fields param set optional')"
+	# Patch subscriber/openapi.json to make the 'fields' query param optional
+	@python3 -c "\
+import json,pathlib; \
+f=pathlib.Path('fern/openapi/subscriber/openapi.json'); \
+d=json.loads(f.read_text()); \
+params=d['paths']['/subscriber/messages']['get']['parameters']; \
+patched=[p for p in params if p.get('name')=='fields' and p.get('in')=='query']; \
+assert len(patched)==1, f'Expected exactly 1 fields query param to patch; found {len(patched)}'; \
+[p.update({'required':False}) for p in patched]; \
+f.write_text(json.dumps(d,indent=2)); \
+print('  - subscriber/openapi.json: fields param set optional')"
+	# Prettify bulk_data/openapi.json and metadata/openapi.json
+	@python3 -c "\
+import json,pathlib; \
+[pathlib.Path(p).write_text(json.dumps(json.loads(pathlib.Path(p).read_text()),indent=2)) \
+ for p in ['fern/openapi/bulk_data/openapi.json','fern/openapi/metadata/openapi.json']]"
 	@echo -n "Specs updated"
 	@if ! git diff --quiet fern/openapi/; then \
 	echo "."; \
@@ -37,14 +52,41 @@ check: ## Validate Fern config (no generation)
 	fern check
 
 .PHONY: generate
-generate: ## Generate SDK (requires fern login)
+generate: ## Generate SDK (requires fern login or FERN_TOKEN)
 	fern generate --group python-sdk --local
-	$(MAKE) fern-stop
 	$(MAKE) post-generate
 
 .PHONY: post-generate
-post-generate: ## Modernize type hints in generated files (ruff UP rules)
-	uv run ruff check --fix --select UP --config 'lint.per-file-ignores={}' sdks/python/tracss/
+post-generate: ## Fix generated artifacts
+	@# fern-python-sdk bug: uses Fern org name (open-space-collective) as Python module
+	@# name in test_aiohttp_autodetect.py instead of the configured package_name.
+	@# Patch before ruff runs so it doesn't trip on the invalid identifier.
+	@if [ -f sdks/python/tracss/tests/test_aiohttp_autodetect.py ]; then \
+	    sed -i 's/open-space-collective/tracss/g' \
+	        sdks/python/tracss/tests/test_aiohttp_autodetect.py; \
+	fi
+	@# Fern generates docstring examples using `token="YOUR_TOKEN"` which is the
+	@# generated BaseTraCSS interface, not the public TraCSS constructor that takes
+	@# client_id/client_secret.  Patch every generated */client.py docstring.
+	@find sdks/python/tracss -name 'client.py' ! -path '*/tracss/client.py' \
+	    -exec sed -i 's/token="YOUR_TOKEN"/client_id="YOUR_CLIENT_ID", client_secret="YOUR_CLIENT_SECRET"/g' {} +
+	@# Wire __version__ into the lazy-loader so `tracss.__version__` works at runtime.
+	@# _version.py is protected by .fernignore; __init__.py is regenerated each run.
+	@sed -i 's/"subscriber": ".subscriber"}/"subscriber": ".subscriber", "__version__": "._version"}/' \
+	    sdks/python/tracss/__init__.py
+	@# Expose hand-written RawResponse (from client.py) via the top-level package.
+	@# Three patches: _dynamic_imports dict, __all__ list, TYPE_CHECKING import.
+	@sed -i 's/"TraCSS": ".client"/"RawResponse": ".client", "TraCSS": ".client"/' \
+	    sdks/python/tracss/__init__.py
+	@sed -i 's/"TraCSS", "TraCSSEnvironment"/"RawResponse", "TraCSS", "TraCSSEnvironment"/' \
+	    sdks/python/tracss/__init__.py
+	@sed -i 's/from .client import AsyncTraCSS, TraCSS/from .client import AsyncTraCSS, RawResponse, TraCSS/' \
+	    sdks/python/tracss/__init__.py
+	# No longer apply UP modernizations; they'd introduce discrepancies between the generated
+	# and hand-written code and the docstrings.
+	# @# --exit-zero: apply safe UP modernizations but don't fail when some violations
+	# @# require unsafe fixes or Python 3.12+ syntax (UP040/UP042/UP046/UP047).
+	# uv run ruff check --fix --select UP --exit-zero --config 'lint.per-file-ignores={}' sdks/python/tracss/
 
 
 .PHONY: docs-dev
@@ -54,6 +96,12 @@ docs-dev: ## Start local docs preview server at localhost:3000
 .PHONY: docs-preview
 docs-preview: ## Generate shareable docs preview URL (requires FERN_TOKEN or fern login)
 	fern generate --docs --preview
+
+
+.PHONY: fern-stop
+fern-stop: ## Stop any background fern docs server
+	-pkill -f "fern docs" 2>/dev/null || true
+	@printf '\n'
 
 
 .PHONY: install
@@ -67,10 +115,10 @@ lint: ## Lint + format check (hand-written files only)
 	uv run ruff check $(LINT_TARGETS)
 	uv run ruff format --check $(LINT_TARGETS)
 
-.PHONY: fmt
-fmt: ## Auto-fix lint + formatting (hand-written files only)
+format: ## Auto-fix lint + formatting (hand-written files only)
 	uv run ruff format $(LINT_TARGETS)
 	uv run ruff check --fix $(LINT_TARGETS)
+.PHONY: format
 
 .PHONY: pre-commit
 pre-commit: ## Run all pre-commit hooks against all files
@@ -82,7 +130,7 @@ typecheck: ## Run mypy on hand-written files
 
 .PHONY: test
 test: ## Run unit tests with coverage
-	uv run pytest tests/unit/ -v
+	uv run pytest tests/unit/ -v --cov=tracss.client --cov-report=term-missing --cov-fail-under=90
 
 
 SUBSCRIBER_PORT ?= 4010
@@ -91,23 +139,24 @@ METADATA_PORT   ?= 4012
 
 .PHONY: prism-install
 prism-install: ## Install Prism mock server globally (run once before prism-all)
-	npm install -g @stoplight/prism-cli@5
+	npm install -g @stoplight/prism-cli@5.15.11
 
 .PHONY: prism-subscriber
-prism-subscriber: ## Start Prism mock server for subscriber (port 4010)
+prism-subscriber: ## Start Prism mock server for subscriber (defaults to port 4010)
 	prism mock fern/openapi/subscriber/openapi.json --port $(SUBSCRIBER_PORT)
 
 .PHONY: prism-bulkdata
-prism-bulkdata: ## Start Prism mock server for bulkdata (port 4011)
+prism-bulkdata: ## Start Prism mock server for bulkdata (defaults to port 4011)
 	prism mock fern/openapi/bulk_data/openapi.json --port $(BULKDATA_PORT)
 
 .PHONY: prism-metadata
-prism-metadata: ## Start Prism mock server for metadata (port 4012)
+prism-metadata: ## Start Prism mock server for metadata (defaults to port 4012)
 	prism mock fern/openapi/metadata/openapi.json --port $(METADATA_PORT)
 
 .PHONY: prism-all
 prism-all: ## Start all three Prism mock servers in the background and wait for readiness
 	@command -v prism > /dev/null 2>&1 || { echo "Prism not found. Run: make prism-install" >&2; exit 1; }
+	@rm -f .prism.pids
 	@for spec_port in \
 		"fern/openapi/subscriber/openapi.json:::$(SUBSCRIBER_PORT)" \
 		"fern/openapi/bulk_data/openapi.json:::$(BULKDATA_PORT)" \
@@ -116,6 +165,7 @@ prism-all: ## Start all three Prism mock servers in the background and wait for 
 		port=$$(echo $$spec_port | cut -d: -f4-); \
 		if ! curl -s --max-time 0.5 http://localhost:$$port > /dev/null 2>&1; then \
 			prism mock "$$spec" --port $$port > /dev/null 2>&1 & \
+			echo $$! >> .prism.pids; \
 		fi; \
 	done
 	@for port in $(SUBSCRIBER_PORT) $(BULKDATA_PORT) $(METADATA_PORT); do \
@@ -126,13 +176,12 @@ prism-all: ## Start all three Prism mock servers in the background and wait for 
 
 .PHONY: prism-stop
 prism-stop: ## Stop all Prism mock servers
-	-pkill -f "prism mock" 2>/dev/null || true
+	@if [ -f .prism.pids ]; then \
+		xargs kill < .prism.pids 2>/dev/null || true; \
+		rm -f .prism.pids; \
+	fi
 	@printf '\n'
 
-.PHONY: fern-stop
-fern-stop: ## Stop any background fern docs server
-	-pkill -f "fern docs" 2>/dev/null || true
-	@printf '\n'
 
 .PHONY: integration
 integration: ## Run integration tests (requires prism-all running)
@@ -150,8 +199,8 @@ build: ## Build distribution wheel and validate with twine
 	uv run twine check dist/*
 
 .PHONY: publish
-publish: build ## Publish to PyPI (requires PYPI_TOKEN env var)
-	uv publish --token $$PYPI_TOKEN
+publish: build ## Publish to PyPI via OIDC (CI) or UV_PUBLISH_TOKEN (local)
+	uv publish
 
 .PHONY: clean
 clean: ## Remove build artifacts and caches

@@ -21,8 +21,14 @@ groups:
   python-sdk:
     generators:
       - name: fernapi/fern-python-sdk
-        version: 5.12.11
+        version: 5.14.19 # 5.12.11
         config:
+          # fern-python-sdk bug: test_aiohttp_autodetect.py is generated with the Fern
+          # org name ("open-space-collective") as a Python import instead of package_name
+          # ("tracss"). The hyphens make it an invalid identifier, so in-container ruff
+          # exits 1 before files are extracted. Disabling in-container formatting lets
+          # generation complete; post-generate sed + ruff handle the fix on the host side.
+          skip_formatting: true
           package_name: tracss
 
           client:
@@ -46,54 +52,14 @@ groups:
           # NOTE: verify these land after `fern generate`; if unsupported in 5.12.11
           # add a `post-generate` Makefile target to patch pyproject.toml instead.
           pyproject_toml: |
+            [build-system]
+            requires = ["hatchling", "hatch-vcs"]
+            build-backend = "hatchling.build"
+
             [project]
             description = "Python SDK for the TraCSS REST APIs"
             requires-python = ">=3.10"
-            classifiers = [
-              "Development Status :: 4 - Beta",
-              "Intended Audience :: Developers",
-              "License :: OSI Approved :: Apache Software License",
-              "Programming Language :: Python :: 3",
-              "Typing :: Typed"
-            ]
-
-            [project.license]
-            text = "Apache-2.0"
-
-            [project.urls]
-            Homepage = "https://github.com/open-space-collective/tracss-sdk-python"
-            Repository = "https://github.com/open-space-collective/tracss-sdk-python"
-            Issues = "https://github.com/open-space-collective/tracss-sdk-python/issues"
-
-        output:
-          location: local-file-system
-          path: ../sdks/python/tracss
-
-  publish:
-    generators:
-      - name: fernapi/fern-python-sdk
-        version: 5.12.11
-        config:
-          package_name: tracss
-
-          client:
-            filename: base_client.py
-            class_name: BaseTraCSS
-            exported_filename: client.py
-            exported_class_name: TraCSS
-
-          flat_layout: true
-
-          pydantic_config:
-            use_str_enums: true
-            enum_type: forward_compatible_python_enums
-            skip_validation: true
-            use_typeddict_requests: false
-
-          pyproject_toml: |
-            [project]
-            description = "Python SDK for the TraCSS REST APIs"
-            requires-python = ">=3.10"
+            dynamic = ["version"]
             classifiers = [
               "Development Status :: 4 - Beta",
               "Intended Audience :: Developers",
@@ -111,7 +77,14 @@ groups:
             Issues = "https://github.com/open-space-collective/tracss-sdk-python/issues"
             Documentation = "https://open-space-collective.docs.buildwithfern.com"
 
+            [tool.hatch.build.targets.wheel]
+            packages = ["tracss"]
+
+            [tool.hatch.version]
+            source = "vcs"
+            raw-options = { root = "../.." }
+
         output:
-          location: pypi
-          package-name: tracss
-          token: ${PYPI_TOKEN}
+          location: local-file-system
+          path: ../sdks/python/tracss
+
