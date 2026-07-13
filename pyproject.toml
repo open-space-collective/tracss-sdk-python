@@ -1,8 +1,6 @@
-requires-python = ">=3.10"
-dependencies = [
-    "httpx>=0.28.1",
-    "pydantic>=2.13.4",
-]
+# This is the uv workspace root and tooling config only - it is not a distributable
+# package, so it intentionally has no [project] table. The published package and its
+# runtime dependencies (httpx, pydantic) live in sdks/python/pyproject.toml.
 
 [[tool.uv.index]]
 url = "https://pypi.org/simple"
@@ -110,7 +108,7 @@ convention = "google"
     "PLC0415", # import-not-at-top, lazy imports inside test functions are intentional
     "D102",    # public-method-docstring, test methods are self-documenting by name
     "D103",    # public-function-docstring, test functions are self-documenting by name
-    "PERF203", # try-except-in-loop, intentional in tests that simulate generator behaviour
+    "PERF203", # try-except-in-loop, intentional in tests that simulate generator behavior
 ]
 
 "scripts/**" = [

@@ -4,7 +4,7 @@ description: Installs Node.js and the pinned fern-api CLI version
 inputs:
   node-version:
     description: Node.js version
-    default: "20"
+    default: "24"
   fern-version:
     description: fern-api npm package version
     default: "5.46.0"
@@ -15,6 +15,5 @@ runs:
     - uses: actions/setup-node@v4
       with:
         node-version: ${{ inputs.node-version }}
-        cache: npm
     - run: npm install -g fern-api@${{ inputs.fern-version }}
       shell: bash
