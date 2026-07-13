@@ -78,10 +78,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: ./.github/actions/setup-fern
-      - uses: astral-sh/setup-uv@v4
-        with:
-          enable-cache: true
-      - run: uv sync --frozen
+      - uses: ./.github/actions/setup-python-uv
       - name: Regenerate SDK
         run: |
           make generate
@@ -101,27 +98,25 @@ jobs:
     timeout-minutes: 15
     strategy:
       matrix:
-        python-version: ["3.10", "3.11", "3.12", "3.13", "3.14"]
+        # Floor (requires-python) + latest stable. Add interim minors if a
+        # version-specific regression ever warrants it.
+        python-version: ["3.10", "3.14"]
     steps:
       - uses: actions/checkout@v4
-      - uses: astral-sh/setup-uv@v4
+      - uses: ./.github/actions/setup-python-uv
         with:
-          enable-cache: true
           python-version: ${{ matrix.python-version }}
-      - run: uv sync --frozen
       - run: make lint
       - run: make test
 
-  security:
-    name: Security scan
+  static-analysis:
+    name: Static analysis (mypy, bandit, pip-audit)
     runs-on: ubuntu-24.04
     timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
-      - uses: astral-sh/setup-uv@v4
-        with:
-          enable-cache: true
-      - run: uv sync --frozen
+      - uses: ./.github/actions/setup-python-uv
+      - run: make typecheck
       - run: uv run bandit -r sdks/python/tracss/client.py tests/ -ll
       - run: uv run pip-audit --vulnerability-service osv
 
@@ -138,30 +133,14 @@ jobs:
         with:
           configFile: .commitlintrc.yml
 
-  typecheck:
-    name: Type checking (mypy)
-    needs: [lint-and-test]
-    runs-on: ubuntu-24.04
-    timeout-minutes: 15
-    steps:
-      - uses: actions/checkout@v4
-      - uses: astral-sh/setup-uv@v4
-        with:
-          enable-cache: true
-      - run: uv sync --frozen
-      - run: make typecheck
-
   build:
     name: Build & validate wheel
-    needs: [lint-and-test, security]
+    needs: [lint-and-test, static-analysis]
     runs-on: ubuntu-24.04
     timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
-      - uses: astral-sh/setup-uv@v4
-        with:
-          enable-cache: true
-      - run: uv sync --frozen
+      - uses: ./.github/actions/setup-python-uv
       - run: make build
       - run: uv run pip-licenses --fail-on="GPL" --ignore-packages tracss
       - uses: actions/upload-artifact@v4
@@ -179,10 +158,7 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: "24"
-      - uses: astral-sh/setup-uv@v4
-        with:
-          enable-cache: true
-      - run: uv sync --frozen
+      - uses: ./.github/actions/setup-python-uv
       - name: Install Prism mock server
         run: npm install -g @stoplight/prism-cli@5.15.11
       - name: Start Prism mock servers
