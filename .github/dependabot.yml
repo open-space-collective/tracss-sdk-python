@@ -22,3 +22,6 @@ updates:
       github-actions:
         patterns:
           - "*"
+    open-pull-requests-limit: 5
+    labels:
+      - dependencies
