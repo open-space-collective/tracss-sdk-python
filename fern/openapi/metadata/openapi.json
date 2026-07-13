@@ -4486,10 +4486,10 @@
           "messageId": {
             "type": "string"
           },
-          "creationDate": {
+          "cdmFound": {
             "type": "string"
           },
-          "cdmFound": {
+          "creationDate": {
             "type": "string"
           },
           "trajBasis": {
@@ -4692,13 +4692,13 @@
           "noradId": {
             "type": "string"
           },
-          "orbitalRegime": {
-            "type": "string"
-          },
           "satelliteName": {
             "type": "string"
           },
           "internationalDesignator": {
+            "type": "string"
+          },
+          "orbitalRegime": {
             "type": "string"
           }
         }
@@ -5007,11 +5007,11 @@
       "ConjunctionCountSummary": {
         "type": "object",
         "properties": {
-          "conjunctionDataEventTotal": {
+          "messageIdTotal": {
             "type": "integer",
             "format": "int64"
           },
-          "messageIdTotal": {
+          "conjunctionDataEventTotal": {
             "type": "integer",
             "format": "int64"
           }
@@ -5099,10 +5099,10 @@
               "NotFoundErrorExamples": {
                 "summary": "Not Found",
                 "value": {
+                  "status": 404,
                   "error": "Not Found",
                   "timestamp": "2026-06-03T14:58:13.644Z",
-                  "path": "/bogus/api",
-                  "status": 404
+                  "path": "/bogus/api"
                 }
               }
             }
@@ -5117,10 +5117,10 @@
               "MethodNotAllowedExamples": {
                 "summary": "Method Not Allowed",
                 "value": {
+                  "status": 405,
                   "error": "Method Not Allowed",
                   "timestamp": "2026-06-03T15:00:29.730Z",
-                  "path": "/bogus/api",
-                  "status": 405
+                  "path": "/bogus/api"
                 }
               }
             }
@@ -5135,10 +5135,10 @@
               "InvalidResourceUsageExamples": {
                 "summary": "Invalid Resource Usage",
                 "value": {
+                  "status": 417,
                   "error": "An unexpected error occurred while processing your request.",
                   "message": "Invalid resource usage.",
-                  "path": "/path/to/api",
-                  "status": 417
+                  "path": "/path/to/api"
                 }
               }
             }

@@ -10,15 +10,15 @@ from ...core.unchecked_base_model import UncheckedBaseModel
 
 
 class ConjunctionCountSummary(UncheckedBaseModel):
-    conjunction_data_event_total: typing_extensions.Annotated[
-        typing.Optional[int],
-        FieldMetadata(alias="conjunctionDataEventTotal"),
-        pydantic.Field(alias="conjunctionDataEventTotal"),
-    ] = None
     message_id_total: typing_extensions.Annotated[
         typing.Optional[int],
         FieldMetadata(alias="messageIdTotal"),
         pydantic.Field(alias="messageIdTotal"),
+    ] = None
+    conjunction_data_event_total: typing_extensions.Annotated[
+        typing.Optional[int],
+        FieldMetadata(alias="conjunctionDataEventTotal"),
+        pydantic.Field(alias="conjunctionDataEventTotal"),
     ] = None
 
     if IS_PYDANTIC_V2:

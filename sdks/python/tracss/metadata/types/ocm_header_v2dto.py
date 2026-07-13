@@ -16,15 +16,15 @@ class OcmHeaderV2Dto(UncheckedBaseModel):
         FieldMetadata(alias="messageId"),
         pydantic.Field(alias="messageId"),
     ] = None
-    creation_date: typing_extensions.Annotated[
-        typing.Optional[str],
-        FieldMetadata(alias="creationDate"),
-        pydantic.Field(alias="creationDate"),
-    ] = None
     cdm_found: typing_extensions.Annotated[
         typing.Optional[str],
         FieldMetadata(alias="cdmFound"),
         pydantic.Field(alias="cdmFound"),
+    ] = None
+    creation_date: typing_extensions.Annotated[
+        typing.Optional[str],
+        FieldMetadata(alias="creationDate"),
+        pydantic.Field(alias="creationDate"),
     ] = None
     traj_basis: typing_extensions.Annotated[
         typing.Optional[str],
