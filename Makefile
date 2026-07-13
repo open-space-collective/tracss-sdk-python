@@ -20,33 +20,20 @@ specs: ## Fetch OpenAPI specs from TraCSS
 	url=$$(echo $$pair | cut -d: -f3-); \
 	echo "- fern/openapi/$$name/openapi.json ($$url)"; \
 	mkdir -p fern/openapi/$$name; \
-	curl -fsSL --connect-timeout 10 --max-time 30 "$$url" -o fern/openapi/$$name/openapi.json; \
+	tmp=fern/openapi/$$name/openapi.json.tmp; \
+	if curl -fsSL --connect-timeout 10 --max-time 30 --retry 3 --retry-delay 2 --retry-all-errors "$$url" -o "$$tmp" \
+		&& python3 -m json.tool "$$tmp" > /dev/null 2>&1; then \
+		mv "$$tmp" fern/openapi/$$name/openapi.json; \
+	else \
+		rm -f "$$tmp"; \
+		echo "  ! failed to fetch $$name from $$url (unreachable, error, or non-JSON response)" >&2; \
+		exit 1; \
+	fi; \
 	done
-	# Patch subscriber/openapi.json to make the 'fields' query param optional
-	@python3 -c "\
-import json,pathlib; \
-f=pathlib.Path('fern/openapi/subscriber/openapi.json'); \
-d=json.loads(f.read_text()); \
-params=d['paths']['/subscriber/messages']['get']['parameters']; \
-patched=[p for p in params if p.get('name')=='fields' and p.get('in')=='query']; \
-assert len(patched)==1, f'Expected exactly 1 fields query param to patch; found {len(patched)}'; \
-[p.update({'required':False}) for p in patched]; \
-f.write_text(json.dumps(d,indent=2)); \
-print('  - subscriber/openapi.json: fields param set optional')"
-	# Patch metadata/openapi.json: the tracssCat CSV upload multipart body is typed as a
-	# bare binary string, so Fern emits no file parameter (sends data={}) and Prism rejects
-	# the upload. Rewrite it to a named object property so the SDK generates upload_csv(file=...)
-	# and Prism mocks a proper multipart file field.
-	@python3 -c "\
-import json,pathlib; \
-f=pathlib.Path('fern/openapi/metadata/openapi.json'); \
-d=json.loads(f.read_text()); \
-mp=d['paths']['/metadata/tracssCat/update/csv']['post']['requestBody']['content']['multipart/form-data']; \
-sch=mp['schema']; \
-assert sch.get('type')=='string' and sch.get('format')=='binary', f'Unexpected CSV upload schema, patch may be obsolete: {sch}'; \
-mp['schema']={'type':'object','properties':{'file':{'type':'string','format':'binary','description':sch.get('description','')}},'required':['file']}; \
-f.write_text(json.dumps(d,indent=2)); \
-print('  - metadata/openapi.json: tracssCat CSV upload body -> object{file}')"
+	# Apply local spec patches (subscriber 'fields' optional, metadata CSV upload body).
+	# Logic lives in scripts/patch_specs.py so it can be unit-tested and fail with a
+	# clear message naming what changed - see tests/unit/test_patch_specs.py.
+	@python3 scripts/patch_specs.py
 	# Prettify bulk_data/openapi.json and metadata/openapi.json
 	@python3 -c "\
 import json,pathlib; \
