@@ -21,6 +21,11 @@ class TracssCatHeaderDto(UncheckedBaseModel):
         FieldMetadata(alias="noradId"),
         pydantic.Field(alias="noradId"),
     ] = None
+    orbital_regime: typing_extensions.Annotated[
+        typing.Optional[str],
+        FieldMetadata(alias="orbitalRegime"),
+        pydantic.Field(alias="orbitalRegime"),
+    ] = None
     satellite_name: typing_extensions.Annotated[
         typing.Optional[str],
         FieldMetadata(alias="satelliteName"),
@@ -30,11 +35,6 @@ class TracssCatHeaderDto(UncheckedBaseModel):
         typing.Optional[str],
         FieldMetadata(alias="internationalDesignator"),
         pydantic.Field(alias="internationalDesignator"),
-    ] = None
-    orbital_regime: typing_extensions.Annotated[
-        typing.Optional[str],
-        FieldMetadata(alias="orbitalRegime"),
-        pydantic.Field(alias="orbitalRegime"),
     ] = None
 
     if IS_PYDANTIC_V2:

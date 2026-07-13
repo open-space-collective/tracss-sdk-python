@@ -16,20 +16,15 @@ class OcmHeaderV2Dto(UncheckedBaseModel):
         FieldMetadata(alias="messageId"),
         pydantic.Field(alias="messageId"),
     ] = None
-    cdm_found: typing_extensions.Annotated[
-        typing.Optional[str],
-        FieldMetadata(alias="cdmFound"),
-        pydantic.Field(alias="cdmFound"),
-    ] = None
     creation_date: typing_extensions.Annotated[
         typing.Optional[str],
         FieldMetadata(alias="creationDate"),
         pydantic.Field(alias="creationDate"),
     ] = None
-    traj_basis: typing_extensions.Annotated[
+    cdm_found: typing_extensions.Annotated[
         typing.Optional[str],
-        FieldMetadata(alias="trajBasis"),
-        pydantic.Field(alias="trajBasis"),
+        FieldMetadata(alias="cdmFound"),
+        pydantic.Field(alias="cdmFound"),
     ] = None
     object_designator: typing_extensions.Annotated[
         typing.Optional[str],
@@ -45,6 +40,11 @@ class OcmHeaderV2Dto(UncheckedBaseModel):
         typing.Optional[str],
         FieldMetadata(alias="useableStopTime"),
         pydantic.Field(alias="useableStopTime"),
+    ] = None
+    traj_basis: typing_extensions.Annotated[
+        typing.Optional[str],
+        FieldMetadata(alias="trajBasis"),
+        pydantic.Field(alias="trajBasis"),
     ] = None
     operator: typing.Optional[str] = None
     start_time: typing_extensions.Annotated[

@@ -20,7 +20,7 @@
     },
     "pyproject_toml": "[build-system]\nrequires = [\"hatchling\", \"hatch-vcs\"]\nbuild-backend = \"hatchling.build\"\n\n[project]\ndescription = \"Python SDK for the TraCSS REST APIs\"\nauthors = [{ name = \"Open Space Collective\" }]\nreadme = \"tracss/README.md\"\nrequires-python = \">=3.10\"\ndynamic = [\"version\"]\nclassifiers = [\n  \"Development Status :: 4 - Beta\",\n  \"Intended Audience :: Developers\",\n  \"License :: OSI Approved :: Apache Software License\",\n  \"Programming Language :: Python :: 3\",\n  \"Typing :: Typed\"\n]\n\n[project.license]\ntext = \"Apache-2.0\"\n\n[project.urls]\nHomepage = \"https://github.com/open-space-collective/tracss-sdk-python\"\nRepository = \"https://github.com/open-space-collective/tracss-sdk-python\"\nIssues = \"https://github.com/open-space-collective/tracss-sdk-python/issues\"\nDocumentation = \"https://open-space-collective.docs.buildwithfern.com\"\n\n[tool.hatch.build.targets.wheel]\npackages = [\"tracss\"]\n\n[tool.hatch.version]\nsource = \"vcs\"\nraw-options = { root = \"../..\" }\n"
   },
-  "originGitCommit": "ded1f4fc1779f2debe10bfc38f42174650eed177",
+  "originGitCommit": "d5e6e4788d014df781cf24f0a72d9521ea543e96",
   "originGitCommitIsDirty": true,
   "invokedBy": "manual"
 }

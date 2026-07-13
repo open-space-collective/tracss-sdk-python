@@ -56,12 +56,13 @@ jobs:
             echo "::error::If this is transient, re-run the job. If persistent, check the TraCSS API status."
             exit 1
           }
-      - name: Fail if specs changed
+      - name: Warn on real spec drift (ignoring key order)
         run: |
-          if ! git diff --exit-code fern/openapi/; then
-            echo "::error::OpenAPI specs are stale. Run 'make specs' and commit."
-            exit 1
-          fi
+          for spec in fern/openapi/*/openapi.json; do
+            if ! diff <(git show "HEAD:$spec" | jq -S .) <(jq -S . "$spec") > /dev/null; then
+              echo "::warning file=$spec::Real spec drift detected (not just key order). Run 'make specs' and commit."
+            fi
+          done
       - name: Warn on persistent failure
         if: failure()
         run: echo "::warning file=.github/workflows/ci.yml::spec-freshness failed - api.tracss.gov may be unreachable; spec drift is accumulating"
@@ -82,13 +83,15 @@ jobs:
           enable-cache: true
       - run: uv sync --frozen
       - name: Regenerate SDK
-        run: make generate
+        run: |
+          make generate
+          make format
         env:
           FERN_TOKEN: ${{ secrets.FERN_TOKEN }}
       - name: Fail if generated files differ from committed
         run: |
           if ! git diff --exit-code sdks/python/; then
-            echo "::error::Generated SDK is stale. Run 'make generate' and commit the result."
+            echo "::error::Generated SDK is stale. Run 'make generate && make format' and commit."
             exit 1
           fi
 

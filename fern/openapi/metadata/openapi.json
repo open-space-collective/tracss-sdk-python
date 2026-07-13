@@ -4486,13 +4486,10 @@
           "messageId": {
             "type": "string"
           },
-          "cdmFound": {
-            "type": "string"
-          },
           "creationDate": {
             "type": "string"
           },
-          "trajBasis": {
+          "cdmFound": {
             "type": "string"
           },
           "objectDesignator": {
@@ -4502,6 +4499,9 @@
             "type": "string"
           },
           "useableStopTime": {
+            "type": "string"
+          },
+          "trajBasis": {
             "type": "string"
           },
           "operator": {
@@ -4692,13 +4692,13 @@
           "noradId": {
             "type": "string"
           },
+          "orbitalRegime": {
+            "type": "string"
+          },
           "satelliteName": {
             "type": "string"
           },
           "internationalDesignator": {
-            "type": "string"
-          },
-          "orbitalRegime": {
             "type": "string"
           }
         }
@@ -5007,11 +5007,11 @@
       "ConjunctionCountSummary": {
         "type": "object",
         "properties": {
-          "messageIdTotal": {
+          "conjunctionDataEventTotal": {
             "type": "integer",
             "format": "int64"
           },
-          "conjunctionDataEventTotal": {
+          "messageIdTotal": {
             "type": "integer",
             "format": "int64"
           }
@@ -5099,9 +5099,9 @@
               "NotFoundErrorExamples": {
                 "summary": "Not Found",
                 "value": {
-                  "status": 404,
-                  "error": "Not Found",
                   "timestamp": "2026-06-03T14:58:13.644Z",
+                  "error": "Not Found",
+                  "status": 404,
                   "path": "/bogus/api"
                 }
               }
@@ -5117,9 +5117,9 @@
               "MethodNotAllowedExamples": {
                 "summary": "Method Not Allowed",
                 "value": {
-                  "status": 405,
-                  "error": "Method Not Allowed",
                   "timestamp": "2026-06-03T15:00:29.730Z",
+                  "error": "Method Not Allowed",
+                  "status": 405,
                   "path": "/bogus/api"
                 }
               }
@@ -5135,9 +5135,9 @@
               "InvalidResourceUsageExamples": {
                 "summary": "Invalid Resource Usage",
                 "value": {
-                  "status": 417,
-                  "error": "An unexpected error occurred while processing your request.",
                   "message": "Invalid resource usage.",
+                  "error": "An unexpected error occurred while processing your request.",
+                  "status": 417,
                   "path": "/path/to/api"
                 }
               }

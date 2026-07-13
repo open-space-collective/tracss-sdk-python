@@ -2138,10 +2138,10 @@
               "NotFoundErrorExamples": {
                 "summary": "Not Found",
                 "value": {
-                  "status": 404,
-                  "error": "Not Found",
+                  "path": "/bogus/api",
                   "timestamp": "2026-06-03T14:58:13.644Z",
-                  "path": "/bogus/api"
+                  "error": "Not Found",
+                  "status": 404
                 }
               }
             }
@@ -2156,10 +2156,10 @@
               "MethodNotAllowedExamples": {
                 "summary": "Method Not Allowed",
                 "value": {
-                  "status": 405,
-                  "error": "Method Not Allowed",
+                  "path": "/bogus/api",
                   "timestamp": "2026-06-03T15:00:29.730Z",
-                  "path": "/bogus/api"
+                  "error": "Method Not Allowed",
+                  "status": 405
                 }
               }
             }
@@ -2174,10 +2174,10 @@
               "InvalidResourceUsageExamples": {
                 "summary": "Invalid Resource Usage",
                 "value": {
-                  "status": 417,
-                  "error": "An unexpected error occurred while processing your request.",
+                  "path": "/path/to/api",
                   "message": "Invalid resource usage.",
-                  "path": "/path/to/api"
+                  "error": "An unexpected error occurred while processing your request.",
+                  "status": 417
                 }
               }
             }
