@@ -12,6 +12,9 @@ dist/
 # Fern
 **/.preview/
 **/.definition/
+# Regenerated each run with non-deterministic provenance (origin git commit,
+# invokedBy manual/ci); the meaningful config lives in fern/generators.yml.
+sdks/python/tracss/.fern/metadata.json
 
 # Local secrets
 .env
