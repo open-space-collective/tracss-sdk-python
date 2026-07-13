@@ -19,7 +19,7 @@ jobs:
     # Prevent forks from failing with missing secrets instead of skipping.
     if: github.repository == 'open-space-collective/tracss-sdk-python'
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - uses: astral-sh/setup-uv@v4
         with:
           enable-cache: true
