@@ -3,6 +3,13 @@
 All notable changes to this project will be documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## 0.1.0 (2026-07-13)
+
+
+### Features
+
+* establish TraCSS Python SDK with generated client, CI/CD, and test infrastructure ([#1](https://github.com/open-space-collective/tracss-sdk-python/issues/1)) ([2125450](https://github.com/open-space-collective/tracss-sdk-python/commit/21254503669037d4ffd8c2b30647c9125627d1de))
+
 ## [Unreleased]
 
 ## [0.1.0] 2026-06-11
