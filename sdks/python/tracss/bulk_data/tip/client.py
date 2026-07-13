@@ -44,7 +44,7 @@ class TipClient:
         request_options: typing.Optional[RequestOptions] = None,
     ) -> typing.Iterator[typing.Any]:
         """
-        Find all TIP reports in the system or all reports that meet your search criteria defined by the query parameters.
+        Find all TIP reports in the system or all reports that meet your search criteria defined by the query parameters
 
         Parameters
         ----------
@@ -189,7 +189,7 @@ class AsyncTipClient:
         request_options: typing.Optional[RequestOptions] = None,
     ) -> typing.AsyncIterator[typing.Any]:
         """
-        Find all TIP reports in the system or all reports that meet your search criteria defined by the query parameters.
+        Find all TIP reports in the system or all reports that meet your search criteria defined by the query parameters
 
         Parameters
         ----------

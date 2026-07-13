@@ -33,6 +33,20 @@ assert len(patched)==1, f'Expected exactly 1 fields query param to patch; found 
 [p.update({'required':False}) for p in patched]; \
 f.write_text(json.dumps(d,indent=2)); \
 print('  - subscriber/openapi.json: fields param set optional')"
+	# Patch metadata/openapi.json: the tracssCat CSV upload multipart body is typed as a
+	# bare binary string, so Fern emits no file parameter (sends data={}) and Prism rejects
+	# the upload. Rewrite it to a named object property so the SDK generates upload_csv(file=...)
+	# and Prism mocks a proper multipart file field.
+	@python3 -c "\
+import json,pathlib; \
+f=pathlib.Path('fern/openapi/metadata/openapi.json'); \
+d=json.loads(f.read_text()); \
+mp=d['paths']['/metadata/tracssCat/update/csv']['post']['requestBody']['content']['multipart/form-data']; \
+sch=mp['schema']; \
+assert sch.get('type')=='string' and sch.get('format')=='binary', f'Unexpected CSV upload schema, patch may be obsolete: {sch}'; \
+mp['schema']={'type':'object','properties':{'file':{'type':'string','format':'binary','description':sch.get('description','')}},'required':['file']}; \
+f.write_text(json.dumps(d,indent=2)); \
+print('  - metadata/openapi.json: tracssCat CSV upload body -> object{file}')"
 	# Prettify bulk_data/openapi.json and metadata/openapi.json
 	@python3 -c "\
 import json,pathlib; \
@@ -70,21 +84,43 @@ post-generate: ## Fix generated artifacts
 	@# client_id/client_secret.  Patch every generated */client.py docstring.
 	@find sdks/python/tracss -name 'client.py' ! -path '*/tracss/client.py' \
 	    -exec sed -i 's/token="YOUR_TOKEN"/client_id="YOUR_CLIENT_ID", client_secret="YOUR_CLIENT_SECRET"/g' {} +
-	@# Same fix for README.md: Fern usage examples show token="<token>" which is wrong.
+	@# Same fix for README.md and reference.md: Fern usage examples show
+	@# token="<token>", which raises TypeError against the public TraCSS constructor
+	@# (it forwards **kwargs into BaseTraCSS(token=...) -> duplicate 'token' argument).
 	@sed -i 's/token="<token>"/client_id="YOUR_CLIENT_ID", client_secret="YOUR_CLIENT_SECRET"/g' \
-	    sdks/python/tracss/README.md
+	    sdks/python/tracss/README.md \
+	    sdks/python/tracss/reference.md
 	@# Wire __version__ into the lazy-loader so `tracss.__version__` works at runtime.
 	@# _version.py is protected by .fernignore; __init__.py is regenerated each run.
 	@sed -i 's/"subscriber": ".subscriber"}/"subscriber": ".subscriber", "__version__": "._version"}/' \
 	    sdks/python/tracss/__init__.py
 	@# Expose hand-written RawResponse (from client.py) via the top-level package.
 	@# Three patches: _dynamic_imports dict, __all__ list, TYPE_CHECKING import.
-	@sed -i 's/"TraCSS": ".client"/"RawResponse": ".client", "TraCSS": ".client"/' \
-	    sdks/python/tracss/__init__.py
-	@sed -i 's/"TraCSS", "TraCSSEnvironment"/"RawResponse", "TraCSS", "TraCSSEnvironment"/' \
-	    sdks/python/tracss/__init__.py
-	@sed -i 's/from .client import AsyncTraCSS, TraCSS/from .client import AsyncTraCSS, RawResponse, TraCSS/' \
-	    sdks/python/tracss/__init__.py
+	@grep -qF '"RawResponse": ".client", "TraCSS"' sdks/python/tracss/__init__.py || \
+	    sed -i 's/"TraCSS": ".client"/"RawResponse": ".client", "TraCSS": ".client"/' \
+	        sdks/python/tracss/__init__.py
+	@# Idempotency guards: these seds run every invocation, so without a guard a
+	@# re-run would append "RawResponse" to __all__ a second time (duplicate entry).
+	@grep -qF '"RawResponse", "TraCSS", "TraCSSEnvironment"' sdks/python/tracss/__init__.py || \
+	    sed -i 's/"TraCSS", "TraCSSEnvironment"/"RawResponse", "TraCSS", "TraCSSEnvironment"/' \
+	        sdks/python/tracss/__init__.py
+	@grep -qF 'from .client import AsyncTraCSS, RawResponse, TraCSS' sdks/python/tracss/__init__.py || \
+	    sed -i 's/from .client import AsyncTraCSS, TraCSS/from .client import AsyncTraCSS, RawResponse, TraCSS/' \
+	        sdks/python/tracss/__init__.py
+	@# Verify that all patches actually matched something.  sed exits 0 even when
+	@# it replaces nothing, so we check the expected strings are present afterwards.
+	@python3 -c "\
+import sys, pathlib; \
+init = pathlib.Path('sdks/python/tracss/__init__.py').read_text(); \
+errors = []; \
+'\"RawResponse\"' in init or errors.append('RawResponse export patch (post-generate step 2) failed'); \
+init.count('\"RawResponse\"') == 2 or errors.append(f'RawResponse should appear exactly twice in __init__.py (_dynamic_imports + __all__), found {init.count(chr(34)+\"RawResponse\"+chr(34))}'); \
+'\"__version__\"' in init or errors.append('__version__ patch (post-generate step 1) failed'); \
+aio = pathlib.Path('sdks/python/tracss/tests/test_aiohttp_autodetect.py'); \
+(not aio.exists() or 'open-space-collective' not in aio.read_text()) or errors.append('org-name patch (post-generate step 0) failed'); \
+[('token=\"<token>\"' not in pathlib.Path(p).read_text()) or errors.append(f'{p}: token=<token> doc fix failed') for p in ('sdks/python/tracss/README.md','sdks/python/tracss/reference.md')]; \
+errors and (print('post-generate verification failed:\n  ' + '\n  '.join(errors), file=sys.stderr) or sys.exit(1)); \
+print('post-generate patches verified.')"
 	# No longer apply UP modernizations; they'd introduce discrepancies between the generated
 	# and hand-written code and the docstrings.
 	# @# --exit-zero: apply safe UP modernizations but don't fail when some violations

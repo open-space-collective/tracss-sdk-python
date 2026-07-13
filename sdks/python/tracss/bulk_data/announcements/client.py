@@ -28,9 +28,9 @@ class AnnouncementsClient:
         type: typing.Optional[str] = None,
         size: typing.Optional[int] = None,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> str:
+    ) -> typing.List[typing.Dict[str, typing.Any]]:
         """
-        Fetches a list of announcements data from cloud storage.
+        Retrieve Space-Track Announcements that have been given to TraCSS
 
         Parameters
         ----------
@@ -45,7 +45,7 @@ class AnnouncementsClient:
 
         Returns
         -------
-        str
+        typing.List[typing.Dict[str, typing.Any]]
             OK - Successfully retrieved the Announcement data. Returns a JSON array of Announcement objects.
 
         Examples
@@ -86,9 +86,9 @@ class AsyncAnnouncementsClient:
         type: typing.Optional[str] = None,
         size: typing.Optional[int] = None,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> str:
+    ) -> typing.List[typing.Dict[str, typing.Any]]:
         """
-        Fetches a list of announcements data from cloud storage.
+        Retrieve Space-Track Announcements that have been given to TraCSS
 
         Parameters
         ----------
@@ -103,7 +103,7 @@ class AsyncAnnouncementsClient:
 
         Returns
         -------
-        str
+        typing.List[typing.Dict[str, typing.Any]]
             OK - Successfully retrieved the Announcement data. Returns a JSON array of Announcement objects.
 
         Examples

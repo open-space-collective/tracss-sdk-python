@@ -11,9 +11,17 @@ from ...core.http_response import AsyncHttpResponse, HttpResponse
 from ...core.parse_error import ParsingError
 from ...core.request_options import RequestOptions
 from ...core.unchecked_base_model import construct_type
+from ..errors.bad_gateway_error import BadGatewayError
 from ..errors.bad_request_error import BadRequestError
+from ..errors.expectation_failed_error import ExpectationFailedError
+from ..errors.forbidden_error import ForbiddenError
 from ..errors.internal_server_error import InternalServerError
+from ..errors.method_not_allowed_error import MethodNotAllowedError
+from ..errors.not_found_error import NotFoundError
+from ..errors.service_unavailable_error import ServiceUnavailableError
+from ..errors.too_many_requests_error import TooManyRequestsError
 from ..errors.unauthorized_error import UnauthorizedError
+from ..types.error_response import ErrorResponse
 from pydantic import ValidationError
 
 
@@ -44,7 +52,7 @@ class RawTipClient:
         request_options: typing.Optional[RequestOptions] = None,
     ) -> typing.Iterator[HttpResponse[typing.Iterator[typing.Any]]]:
         """
-        Find all TIP reports in the system or all reports that meet your search criteria defined by the query parameters.
+        Find all TIP reports in the system or all reports that meet your search criteria defined by the query parameters
 
         Parameters
         ----------
@@ -172,6 +180,61 @@ class RawTipClient:
                                 ),
                             ),
                         )
+                    if _response.status_code == 403:
+                        raise ForbiddenError(
+                            headers=dict(_response.headers),
+                            body=typing.cast(
+                                typing.Any,
+                                construct_type(
+                                    type_=typing.Any,  # type: ignore
+                                    object_=_response.json(),
+                                ),
+                            ),
+                        )
+                    if _response.status_code == 404:
+                        raise NotFoundError(
+                            headers=dict(_response.headers),
+                            body=typing.cast(
+                                typing.Any,
+                                construct_type(
+                                    type_=typing.Any,  # type: ignore
+                                    object_=_response.json(),
+                                ),
+                            ),
+                        )
+                    if _response.status_code == 405:
+                        raise MethodNotAllowedError(
+                            headers=dict(_response.headers),
+                            body=typing.cast(
+                                typing.Any,
+                                construct_type(
+                                    type_=typing.Any,  # type: ignore
+                                    object_=_response.json(),
+                                ),
+                            ),
+                        )
+                    if _response.status_code == 417:
+                        raise ExpectationFailedError(
+                            headers=dict(_response.headers),
+                            body=typing.cast(
+                                typing.Any,
+                                construct_type(
+                                    type_=typing.Any,  # type: ignore
+                                    object_=_response.json(),
+                                ),
+                            ),
+                        )
+                    if _response.status_code == 429:
+                        raise TooManyRequestsError(
+                            headers=dict(_response.headers),
+                            body=typing.cast(
+                                typing.Any,
+                                construct_type(
+                                    type_=typing.Any,  # type: ignore
+                                    object_=_response.json(),
+                                ),
+                            ),
+                        )
                     if _response.status_code == 500:
                         raise InternalServerError(
                             headers=dict(_response.headers),
@@ -179,6 +242,28 @@ class RawTipClient:
                                 typing.Any,
                                 construct_type(
                                     type_=typing.Any,  # type: ignore
+                                    object_=_response.json(),
+                                ),
+                            ),
+                        )
+                    if _response.status_code == 502:
+                        raise BadGatewayError(
+                            headers=dict(_response.headers),
+                            body=typing.cast(
+                                ErrorResponse,
+                                construct_type(
+                                    type_=ErrorResponse,  # type: ignore
+                                    object_=_response.json(),
+                                ),
+                            ),
+                        )
+                    if _response.status_code == 503:
+                        raise ServiceUnavailableError(
+                            headers=dict(_response.headers),
+                            body=typing.cast(
+                                ErrorResponse,
+                                construct_type(
+                                    type_=ErrorResponse,  # type: ignore
                                     object_=_response.json(),
                                 ),
                             ),
@@ -233,7 +318,7 @@ class AsyncRawTipClient:
         request_options: typing.Optional[RequestOptions] = None,
     ) -> typing.AsyncIterator[AsyncHttpResponse[typing.AsyncIterator[typing.Any]]]:
         """
-        Find all TIP reports in the system or all reports that meet your search criteria defined by the query parameters.
+        Find all TIP reports in the system or all reports that meet your search criteria defined by the query parameters
 
         Parameters
         ----------
@@ -361,6 +446,61 @@ class AsyncRawTipClient:
                                 ),
                             ),
                         )
+                    if _response.status_code == 403:
+                        raise ForbiddenError(
+                            headers=dict(_response.headers),
+                            body=typing.cast(
+                                typing.Any,
+                                construct_type(
+                                    type_=typing.Any,  # type: ignore
+                                    object_=_response.json(),
+                                ),
+                            ),
+                        )
+                    if _response.status_code == 404:
+                        raise NotFoundError(
+                            headers=dict(_response.headers),
+                            body=typing.cast(
+                                typing.Any,
+                                construct_type(
+                                    type_=typing.Any,  # type: ignore
+                                    object_=_response.json(),
+                                ),
+                            ),
+                        )
+                    if _response.status_code == 405:
+                        raise MethodNotAllowedError(
+                            headers=dict(_response.headers),
+                            body=typing.cast(
+                                typing.Any,
+                                construct_type(
+                                    type_=typing.Any,  # type: ignore
+                                    object_=_response.json(),
+                                ),
+                            ),
+                        )
+                    if _response.status_code == 417:
+                        raise ExpectationFailedError(
+                            headers=dict(_response.headers),
+                            body=typing.cast(
+                                typing.Any,
+                                construct_type(
+                                    type_=typing.Any,  # type: ignore
+                                    object_=_response.json(),
+                                ),
+                            ),
+                        )
+                    if _response.status_code == 429:
+                        raise TooManyRequestsError(
+                            headers=dict(_response.headers),
+                            body=typing.cast(
+                                typing.Any,
+                                construct_type(
+                                    type_=typing.Any,  # type: ignore
+                                    object_=_response.json(),
+                                ),
+                            ),
+                        )
                     if _response.status_code == 500:
                         raise InternalServerError(
                             headers=dict(_response.headers),
@@ -368,6 +508,28 @@ class AsyncRawTipClient:
                                 typing.Any,
                                 construct_type(
                                     type_=typing.Any,  # type: ignore
+                                    object_=_response.json(),
+                                ),
+                            ),
+                        )
+                    if _response.status_code == 502:
+                        raise BadGatewayError(
+                            headers=dict(_response.headers),
+                            body=typing.cast(
+                                ErrorResponse,
+                                construct_type(
+                                    type_=ErrorResponse,  # type: ignore
+                                    object_=_response.json(),
+                                ),
+                            ),
+                        )
+                    if _response.status_code == 503:
+                        raise ServiceUnavailableError(
+                            headers=dict(_response.headers),
+                            body=typing.cast(
+                                ErrorResponse,
+                                construct_type(
+                                    type_=ErrorResponse,  # type: ignore
                                     object_=_response.json(),
                                 ),
                             ),

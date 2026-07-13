@@ -9,9 +9,9 @@ The Metadata API gives you read and write access to the TraCSS data catalog. Use
 
 | Group | Methods | Description |
 |---|---|---|
-| `client.metadata.ocm` | `upload()`, `list()`, `list_by_operational_batch()` | Object Catalog Messages |
-| `client.metadata.cdm` | `list()`, `list_by_operational_batch()` | Conjunction Data Messages |
-| `client.metadata.tracss_cat` | `list()`, `upload_csv()` | TraCSS satellite catalog |
+| `client.metadata.ocm` | `upload()`, `upload_v1()`, `list()`, `list_v1()`, `list_by_operational_batch()`, `list_by_operational_batch_v1()` | Object Catalog Messages |
+| `client.metadata.cdm` | `list()`, `list_v1()`, `list_by_operational_batch()`, `list_by_operational_batch_v1()` | Conjunction Data Messages |
+| `client.metadata.tracss_cat` | `list()`, `upload_csv()` | TraCSS satellite catalog (see quirks below) |
 | `client.metadata.contact_directory` | `list_operational()`, `update_operational()` | Operational contact directory |
 | `client.metadata.tip_reports` | `list()` | Tasking Information Package reports |
 | `client.metadata.conjunction_events` | `list()` | Conjunction data events |
@@ -46,15 +46,21 @@ API returns CCSDS KVN (`text/plain`) by default when `format` is omitted, but th
 automatically sends `format=json` so callers always get a typed response object.
 
 ```python
-# Default — format=json injected automatically, returns a typed response object
+# Default - format=json injected automatically, returns a typed response object
 cdms = client.metadata.cdm.list()
 ocms = client.metadata.ocm.list()
 tips = client.metadata.tip_reports.list()
 
-# Explicit non-JSON format — returns raw str
-kvn_text = client.metadata.cdm.list(format="KVN")   # CCSDS KVN
-xml_text = client.metadata.cdm.list(format="xml")
-csv_text = client.metadata.cdm.list(format="csv")   # CDM only
+# Explicit non-JSON format - returns a RawResponse object
+from tracss.client import RawResponse
+
+raw = client.metadata.cdm.list(format="KVN")   # CCSDS KVN
+assert isinstance(raw, RawResponse)
+kvn_text: str = raw.body      # access the raw string body
+# str(raw) also returns the body
+
+raw_xml = client.metadata.cdm.list(format="xml")
+raw_csv = client.metadata.cdm.list(format="csv")   # CDM only
 ```
 
 | Method group | Supported `format=` values |
@@ -65,9 +71,23 @@ csv_text = client.metadata.cdm.list(format="csv")   # CDM only
 | `ocm.list_by_operational_batch()` | JSON only |
 | `tip_reports.list()` | `json` (default), `KVN`, `xml` |
 
-When a non-JSON format is requested, the method returns a raw `str` containing the
-response body. All other errors (4xx, 5xx) are raised as `ApiError` unchanged.
+When a non-JSON format is requested, the method returns a `RawResponse` object (from
+`tracss.client`). Access the body as a string via `.body` or `str(response)`. All other
+errors (4xx, 5xx) are raised as `ApiError` unchanged.
+
+### 204 No Content
+
+`list_by_operational_batch()` and `list_by_operational_batch_v1()` return an **empty list
+`[]`** when the server has no matching batches (HTTP 204 No Content). This is a normal
+"no results" response; it is not raised as an error.
+
+### TraCSS Catalog quirk
+
+`tracss_cat.list()` returns `list[dict]` rather than a named typed model. The live API
+returns a JSON array but the generated SDK model expects a JSON object; the SDK bypasses
+the model and returns the raw dicts. Do not annotate the result against a named response
+type; treat it as `list[dict]`.
 
 ## Authentication
 
-All endpoints require a valid Okta access token. The SDK fetches and refreshes tokens automatically — see [Authentication](/authentication) for details.
+All endpoints require a valid Okta access token. The SDK fetches and refreshes tokens automatically - see [Authentication](/authentication) for details.

@@ -6,7 +6,6 @@ from ...core.client_wrapper import AsyncClientWrapper, SyncClientWrapper
 from ...core.request_options import RequestOptions
 from .raw_client import AsyncRawOcmClient, RawOcmClient
 from .types.stream_ocm_response import StreamOcmResponse
-from .types.stream_v1ocm_response import StreamV1OcmResponse
 
 
 class OcmClient:
@@ -45,7 +44,16 @@ class OcmClient:
         request_options: typing.Optional[RequestOptions] = None,
     ) -> typing.Iterator[StreamOcmResponse]:
         """
-        Retrieve one or more TraCSS V2 OCMs from TRACSS cloud storage.
+        Retrieve OCMs that have been uploaded to TraCSS
+
+
+        Example Scripts:
+
+
+        | Guide                                                            | Script                                                               |
+        |------------------------------------------------------------------|----------------------------------------------------------------------|
+        | [Pull Max OCMs Guide](/bulkdata/scripts/README_pull_max_ocms.md) | [Pull Max OCMs Script (Python)](/bulkdata/scripts/pull_max_ocms.py)  |
+
 
         Parameters
         ----------
@@ -61,7 +69,7 @@ class OcmClient:
             Message Id of the OCM. A value with an optional operator that may be pre-pended to the value. Valid operators are: Not Equal (<>Value), In (Value1,Value2) , Like (\\*Value), Not Like(~*Value)
 
         object_designator : typing.Optional[str]
-            The designator for OCM object.A value with an optional operator that may be pre-pended to the value. Valid operators are: Greater Than (>Value), Less Than (<Value), Greater Than or Equal (>=Value), Less Than or Equal (<=Value), Not Equal (<>Value), In (Value1,Value2), Between (Value1...Value2) (smaller value first), Like (\\*Value), Not Like(~*Value)
+            The designator for OCM object.A value with an optional operator that may be pre-pended to the value. Valid operators are: Greater Than (>Value), Less Than (<Value), Greater Than or Equal (>=Value), Less Than or Equal (<=Value), Not Equal (<>Value), In (Value1,Value2), Between (Value1...Value2) (smaller value first)
 
         operator : typing.Optional[str]
             Name of operator.A value with an optional operator that may be pre-pended to the value. Valid operators are: Not Equal (<>Value), In (Value1,Value2) , Like (\\*Value), Not Like(~*Value)
@@ -134,119 +142,6 @@ class OcmClient:
         ) as r:
             yield from r.data
 
-    def stream_v1(
-        self,
-        *,
-        constellation: typing.Optional[str] = None,
-        created_by: typing.Optional[str] = None,
-        creation_date: typing.Optional[str] = None,
-        message_id: typing.Optional[str] = None,
-        object_designator: typing.Optional[str] = None,
-        operator: typing.Optional[str] = None,
-        owner: typing.Optional[str] = None,
-        start_time: typing.Optional[str] = None,
-        stop_time: typing.Optional[str] = None,
-        traj_basis: typing.Optional[str] = None,
-        tech_org: typing.Optional[str] = None,
-        tech_poc: typing.Optional[str] = None,
-        size: typing.Optional[int] = None,
-        page: typing.Optional[int] = None,
-        headers_only: typing.Optional[bool] = None,
-        format: typing.Optional[str] = None,
-        request_options: typing.Optional[RequestOptions] = None,
-    ) -> typing.Iterator[StreamV1OcmResponse]:
-        """
-        Retrieve one or more TraCSS V1 OCMs from TRACSS cloud storage.
-
-        Parameters
-        ----------
-        constellation : typing.Optional[str]
-
-        created_by : typing.Optional[str]
-            Filename of the file that created the OCM.A value with an optional operator that may be pre-pended to the value. Valid operators are: Not Equal (<>Value), In (Value1,Value2) , Like (\\*Value), Not Like(~*Value)
-
-        creation_date : typing.Optional[str]
-            Creation Date of the OCM. A value with an optional operator that may be pre-pended to the value. Valid operators are: Greater Than (>Value), Less Than (<Value), Greater Than or Equal (>=Value), Less Than or Equal (<=Value), Not Equal (<>Value) and Between (Value1...Value2) (smaller value first)
-
-        message_id : typing.Optional[str]
-            Message Id of the OCM. A value with an optional operator that may be pre-pended to the value. Valid operators are: Not Equal (<>Value), In (Value1,Value2) , Like (\\*Value), Not Like(~*Value)
-
-        object_designator : typing.Optional[str]
-            The designator for OCM object.A value with an optional operator that may be pre-pended to the value. Valid operators are: Greater Than (>Value), Less Than (<Value), Greater Than or Equal (>=Value), Less Than or Equal (<=Value), Not Equal (<>Value), In (Value1,Value2), Between (Value1...Value2) (smaller value first), Like (\\*Value), Not Like(~*Value)
-
-        operator : typing.Optional[str]
-            Name of operator.A value with an optional operator that may be pre-pended to the value. Valid operators are: Not Equal (<>Value), In (Value1,Value2) , Like (\\*Value), Not Like(~*Value)
-
-        owner : typing.Optional[str]
-            Name of the object owner.A value with an optional operator that may be pre-pended to the value. Valid operators are: Not Equal (<>Value), In (Value1,Value2) , Like (\\*Value), Not Like(~*Value)
-
-        start_time : typing.Optional[str]
-
-        stop_time : typing.Optional[str]
-
-        traj_basis : typing.Optional[str]
-
-        tech_org : typing.Optional[str]
-
-        tech_poc : typing.Optional[str]
-
-        size : typing.Optional[int]
-            Number of results to return.  Default of 0 means return all possible results.
-
-        page : typing.Optional[int]
-            Page number for the queried OCM(s), indexed by 0 (first page). Default is 0
-
-        headers_only : typing.Optional[bool]
-            Return a reduced object. works with filters messageId, creationDate, objectDesignator, operator
-
-        format : typing.Optional[str]
-
-        request_options : typing.Optional[RequestOptions]
-            Request-specific configuration.
-
-        Yields
-        ------
-        typing.Iterator[StreamV1OcmResponse]
-            NDJSON Stream for V1 OCMs
-
-        Examples
-        --------
-        from tracss import TraCSS
-
-        client = TraCSS(
-            client_id="YOUR_CLIENT_ID", client_secret="YOUR_CLIENT_SECRET",
-        )
-        response = client.bulk_data.ocm.stream_v1(
-            created_by="some_ephem.ocm",
-            creation_date="2024-09-04T18:37:01Z",
-            message_id="000043928_conj_000054603_2024329195621",
-            operator="some_user",
-            owner="some_user",
-        )
-        for chunk in response:
-            yield chunk
-        """
-        with self._raw_client.stream_v1(
-            constellation=constellation,
-            created_by=created_by,
-            creation_date=creation_date,
-            message_id=message_id,
-            object_designator=object_designator,
-            operator=operator,
-            owner=owner,
-            start_time=start_time,
-            stop_time=stop_time,
-            traj_basis=traj_basis,
-            tech_org=tech_org,
-            tech_poc=tech_poc,
-            size=size,
-            page=page,
-            headers_only=headers_only,
-            format=format,
-            request_options=request_options,
-        ) as r:
-            yield from r.data
-
 
 class AsyncOcmClient:
     def __init__(self, *, client_wrapper: AsyncClientWrapper):
@@ -284,7 +179,16 @@ class AsyncOcmClient:
         request_options: typing.Optional[RequestOptions] = None,
     ) -> typing.AsyncIterator[StreamOcmResponse]:
         """
-        Retrieve one or more TraCSS V2 OCMs from TRACSS cloud storage.
+        Retrieve OCMs that have been uploaded to TraCSS
+
+
+        Example Scripts:
+
+
+        | Guide                                                            | Script                                                               |
+        |------------------------------------------------------------------|----------------------------------------------------------------------|
+        | [Pull Max OCMs Guide](/bulkdata/scripts/README_pull_max_ocms.md) | [Pull Max OCMs Script (Python)](/bulkdata/scripts/pull_max_ocms.py)  |
+
 
         Parameters
         ----------
@@ -300,7 +204,7 @@ class AsyncOcmClient:
             Message Id of the OCM. A value with an optional operator that may be pre-pended to the value. Valid operators are: Not Equal (<>Value), In (Value1,Value2) , Like (\\*Value), Not Like(~*Value)
 
         object_designator : typing.Optional[str]
-            The designator for OCM object.A value with an optional operator that may be pre-pended to the value. Valid operators are: Greater Than (>Value), Less Than (<Value), Greater Than or Equal (>=Value), Less Than or Equal (<=Value), Not Equal (<>Value), In (Value1,Value2), Between (Value1...Value2) (smaller value first), Like (\\*Value), Not Like(~*Value)
+            The designator for OCM object.A value with an optional operator that may be pre-pended to the value. Valid operators are: Greater Than (>Value), Less Than (<Value), Greater Than or Equal (>=Value), Less Than or Equal (<=Value), Not Equal (<>Value), In (Value1,Value2), Between (Value1...Value2) (smaller value first)
 
         operator : typing.Optional[str]
             Name of operator.A value with an optional operator that may be pre-pended to the value. Valid operators are: Not Equal (<>Value), In (Value1,Value2) , Like (\\*Value), Not Like(~*Value)
@@ -373,128 +277,6 @@ class AsyncOcmClient:
             stop_time=stop_time,
             traj_basis=traj_basis,
             max_creation_date=max_creation_date,
-            size=size,
-            page=page,
-            headers_only=headers_only,
-            format=format,
-            request_options=request_options,
-        ) as r:
-            async for _chunk in r.data:
-                yield _chunk
-
-    async def stream_v1(
-        self,
-        *,
-        constellation: typing.Optional[str] = None,
-        created_by: typing.Optional[str] = None,
-        creation_date: typing.Optional[str] = None,
-        message_id: typing.Optional[str] = None,
-        object_designator: typing.Optional[str] = None,
-        operator: typing.Optional[str] = None,
-        owner: typing.Optional[str] = None,
-        start_time: typing.Optional[str] = None,
-        stop_time: typing.Optional[str] = None,
-        traj_basis: typing.Optional[str] = None,
-        tech_org: typing.Optional[str] = None,
-        tech_poc: typing.Optional[str] = None,
-        size: typing.Optional[int] = None,
-        page: typing.Optional[int] = None,
-        headers_only: typing.Optional[bool] = None,
-        format: typing.Optional[str] = None,
-        request_options: typing.Optional[RequestOptions] = None,
-    ) -> typing.AsyncIterator[StreamV1OcmResponse]:
-        """
-        Retrieve one or more TraCSS V1 OCMs from TRACSS cloud storage.
-
-        Parameters
-        ----------
-        constellation : typing.Optional[str]
-
-        created_by : typing.Optional[str]
-            Filename of the file that created the OCM.A value with an optional operator that may be pre-pended to the value. Valid operators are: Not Equal (<>Value), In (Value1,Value2) , Like (\\*Value), Not Like(~*Value)
-
-        creation_date : typing.Optional[str]
-            Creation Date of the OCM. A value with an optional operator that may be pre-pended to the value. Valid operators are: Greater Than (>Value), Less Than (<Value), Greater Than or Equal (>=Value), Less Than or Equal (<=Value), Not Equal (<>Value) and Between (Value1...Value2) (smaller value first)
-
-        message_id : typing.Optional[str]
-            Message Id of the OCM. A value with an optional operator that may be pre-pended to the value. Valid operators are: Not Equal (<>Value), In (Value1,Value2) , Like (\\*Value), Not Like(~*Value)
-
-        object_designator : typing.Optional[str]
-            The designator for OCM object.A value with an optional operator that may be pre-pended to the value. Valid operators are: Greater Than (>Value), Less Than (<Value), Greater Than or Equal (>=Value), Less Than or Equal (<=Value), Not Equal (<>Value), In (Value1,Value2), Between (Value1...Value2) (smaller value first), Like (\\*Value), Not Like(~*Value)
-
-        operator : typing.Optional[str]
-            Name of operator.A value with an optional operator that may be pre-pended to the value. Valid operators are: Not Equal (<>Value), In (Value1,Value2) , Like (\\*Value), Not Like(~*Value)
-
-        owner : typing.Optional[str]
-            Name of the object owner.A value with an optional operator that may be pre-pended to the value. Valid operators are: Not Equal (<>Value), In (Value1,Value2) , Like (\\*Value), Not Like(~*Value)
-
-        start_time : typing.Optional[str]
-
-        stop_time : typing.Optional[str]
-
-        traj_basis : typing.Optional[str]
-
-        tech_org : typing.Optional[str]
-
-        tech_poc : typing.Optional[str]
-
-        size : typing.Optional[int]
-            Number of results to return.  Default of 0 means return all possible results.
-
-        page : typing.Optional[int]
-            Page number for the queried OCM(s), indexed by 0 (first page). Default is 0
-
-        headers_only : typing.Optional[bool]
-            Return a reduced object. works with filters messageId, creationDate, objectDesignator, operator
-
-        format : typing.Optional[str]
-
-        request_options : typing.Optional[RequestOptions]
-            Request-specific configuration.
-
-        Yields
-        ------
-        typing.AsyncIterator[StreamV1OcmResponse]
-            NDJSON Stream for V1 OCMs
-
-        Examples
-        --------
-        import asyncio
-
-        from tracss import AsyncTraCSS
-
-        client = AsyncTraCSS(
-            client_id="YOUR_CLIENT_ID", client_secret="YOUR_CLIENT_SECRET",
-        )
-
-
-        async def main() -> None:
-            response = await client.bulk_data.ocm.stream_v1(
-                created_by="some_ephem.ocm",
-                creation_date="2024-09-04T18:37:01Z",
-                message_id="000043928_conj_000054603_2024329195621",
-                operator="some_user",
-                owner="some_user",
-            )
-            async for chunk in response:
-                yield chunk
-
-
-        asyncio.run(main())
-        """
-        async with self._raw_client.stream_v1(
-            constellation=constellation,
-            created_by=created_by,
-            creation_date=creation_date,
-            message_id=message_id,
-            object_designator=object_designator,
-            operator=operator,
-            owner=owner,
-            start_time=start_time,
-            stop_time=stop_time,
-            traj_basis=traj_basis,
-            tech_org=tech_org,
-            tech_poc=tech_poc,
             size=size,
             page=page,
             headers_only=headers_only,

@@ -44,7 +44,7 @@ class ConjunctionEventsClient:
         request_options: typing.Optional[RequestOptions] = None,
     ) -> ListConjunctionEventsResponse:
         """
-        Retrieve one or more Evolving Conjunctions events from TRACSS.
+        Retrieve CDEs generated from the TraCSS System. It is highly suggested to make use of different min/max params, as this endpoint can return a lot of data
 
         Parameters
         ----------
@@ -174,7 +174,7 @@ class AsyncConjunctionEventsClient:
         request_options: typing.Optional[RequestOptions] = None,
     ) -> ListConjunctionEventsResponse:
         """
-        Retrieve one or more Evolving Conjunctions events from TRACSS.
+        Retrieve CDEs generated from the TraCSS System. It is highly suggested to make use of different min/max params, as this endpoint can return a lot of data
 
         Parameters
         ----------

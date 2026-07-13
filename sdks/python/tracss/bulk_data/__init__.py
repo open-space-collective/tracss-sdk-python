@@ -6,20 +6,41 @@ import typing
 from importlib import import_module
 
 if typing.TYPE_CHECKING:
-    from .errors import BadRequestError, InternalServerError, UnauthorizedError
-    from . import announcements, cdm, ocm, tip
+    from .types import ErrorResponse, SchemaResponse
+    from .errors import (
+        BadGatewayError,
+        BadRequestError,
+        ExpectationFailedError,
+        ForbiddenError,
+        InternalServerError,
+        MethodNotAllowedError,
+        NotFoundError,
+        ServiceUnavailableError,
+        TooManyRequestsError,
+        UnauthorizedError,
+    )
+    from . import announcements, cdm, ocm, schemas, tip
     from .cdm import StreamCdmResponse
-    from .ocm import StreamOcmResponse, StreamV1OcmResponse
+    from .ocm import StreamOcmResponse
 _dynamic_imports: typing.Dict[str, str] = {
+    "BadGatewayError": ".errors",
     "BadRequestError": ".errors",
+    "ErrorResponse": ".types",
+    "ExpectationFailedError": ".errors",
+    "ForbiddenError": ".errors",
     "InternalServerError": ".errors",
+    "MethodNotAllowedError": ".errors",
+    "NotFoundError": ".errors",
+    "SchemaResponse": ".types",
+    "ServiceUnavailableError": ".errors",
     "StreamCdmResponse": ".cdm",
     "StreamOcmResponse": ".ocm",
-    "StreamV1OcmResponse": ".ocm",
+    "TooManyRequestsError": ".errors",
     "UnauthorizedError": ".errors",
     "announcements": ".announcements",
     "cdm": ".cdm",
     "ocm": ".ocm",
+    "schemas": ".schemas",
     "tip": ".tip",
 }
 
@@ -48,14 +69,23 @@ def __dir__():
 
 
 __all__ = [
+    "BadGatewayError",
     "BadRequestError",
+    "ErrorResponse",
+    "ExpectationFailedError",
+    "ForbiddenError",
     "InternalServerError",
+    "MethodNotAllowedError",
+    "NotFoundError",
+    "SchemaResponse",
+    "ServiceUnavailableError",
     "StreamCdmResponse",
     "StreamOcmResponse",
-    "StreamV1OcmResponse",
+    "TooManyRequestsError",
     "UnauthorizedError",
     "announcements",
     "cdm",
     "ocm",
+    "schemas",
     "tip",
 ]

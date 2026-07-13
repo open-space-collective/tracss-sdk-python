@@ -2,10 +2,10 @@
 
 import typing
 
+from ... import core
 from ...core.client_wrapper import AsyncClientWrapper, SyncClientWrapper
 from ...core.request_options import RequestOptions
 from .raw_client import AsyncRawTracssCatClient, RawTracssCatClient
-from .types.list_tracss_cat_response import ListTracssCatResponse
 
 # this is used as the default value for optional parameters
 OMIT = typing.cast(typing.Any, ...)
@@ -27,13 +27,16 @@ class TracssCatClient:
         return self._raw_client
 
     def upload_csv(
-        self, *, request_options: typing.Optional[RequestOptions] = None
+        self, *, file: core.File, request_options: typing.Optional[RequestOptions] = None
     ) -> typing.Any:
         """
         Upload a CSV file to update the TraCSS catalog. The CSV must include a noradId column as the minimum required header; all other fields are optional. Rows with noradIds your organization does not own will generate change requests pending TraCSS Operations approval. See tracss.gov for the full list of valid fields and accepted date formats.
 
         Parameters
         ----------
+        file : core.File
+            See core.File for more documentation
+
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
@@ -51,7 +54,9 @@ class TracssCatClient:
         )
         client.metadata.tracss_cat.upload_csv()
         """
-        _response = self._raw_client.upload_csv(request_options=request_options)
+        _response = self._raw_client.upload_csv(
+            file=file, request_options=request_options
+        )
         return _response.data
 
     def list(
@@ -62,16 +67,26 @@ class TracssCatClient:
         organization: typing.Optional[str] = None,
         object_type: typing.Optional[str] = None,
         orbital_regime: typing.Optional[str] = None,
+        countries_of_affiliation: typing.Optional[str] = None,
+        international_designator: typing.Optional[str] = None,
+        operational_status: typing.Optional[str] = None,
+        conjunction_mitigation_capabilities: typing.Optional[str] = None,
+        rcs_size: typing.Optional[str] = None,
+        launch_location: typing.Optional[str] = None,
+        constellation: typing.Optional[str] = None,
         count_only: typing.Optional[bool] = None,
         fields: typing.Optional[str] = None,
         headers_only: typing.Optional[bool] = None,
+        include_metadata: typing.Optional[bool] = None,
+        countries_of_affiliation_tag_mode: typing.Optional[str] = None,
+        conjunction_mitigation_capabilities_tag_mode: typing.Optional[str] = None,
         sort: typing.Optional[str] = None,
         page: typing.Optional[int] = None,
         size: typing.Optional[int] = None,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> ListTracssCatResponse:
+    ) -> typing.List[typing.Dict[str, typing.Any]]:
         """
-        Retrieve one or more TraCSSCats based on query parameters. <b>All fields may be pre-pended with the following optional operators</b>: <br>Equal - (=Value) This is default and does not need to be included.
+        Retrieve TraCSSCAT records based on query parameters. <b>All fields may be pre-pended with the following optional operators</b>: <br>Equal - (=Value) This is default and does not need to be included.
         <br>Not Equal (<>Value)
         <br>Greater Than (>Value)
         <br>Greater Than or Equal (>=Value)
@@ -92,7 +107,7 @@ class TracssCatClient:
             Norad ID, or list of comma separated ids, of the TracssCat object(s). A value with an optional operator that may be pre-pended to the value. Valid operators are: Greater Than (>Value), Less Than (<Value), Greater Than or Equal (>=Value), Less Than or Equal (<=Value), Not Equal (<>Value), In (Value1,Value2) , Between (Value1...Value2) (smaller value first), Like (\\*Value), Not Like(~*Value)
 
         satellite_name : typing.Optional[str]
-            Name of the TracssCat object. A value with an optional operator that may be pre-pended to the value. Valid operators are: Not Equal (<>Value), In (Value1,Value2) , Between (Value1...Value2) (smaller value first), Like (\\*Value), Not Like(~*Value)
+            Name of the TracssCat object. A value with an optional operator that may be pre-pended to the value. Valid operators are: Not Equal (<>Value), In (Value1,Value2), Like (\\*Value), Not Like(~*Value)
 
         organization : typing.Optional[str]
             Organization name, or list of comma separated organization names, responsible for the TracssCat object. A value with an optional operator that may be pre-pended to the value. Valid operators are: Not Equal (<>Value), In (Value1,Value2) , Like (\\*Value), Not Like(~*Value)
@@ -101,14 +116,46 @@ class TracssCatClient:
             Object Type of the TracssCat(s) object. A value with an optional operator that may be pre-pended to the value. Valid operators are: Not Equal (<>Value), In (Value1,Value2) , Like (\\*Value), Not Like(~*Value)
 
         orbital_regime : typing.Optional[str]
+            Derived orbital regime of the TracssCat(s) object.A value with an optional operator that may be pre-pended to the value. Valid operators are: Not Equal (<>Value), In (Value1,Value2) , Like (\\*Value), Not Like(~*Value)
+
+        countries_of_affiliation : typing.Optional[str]
+            Countries affiliated with the TracssCat(s) object.This value defaults to an OR query, records that contain ANY of the values provided in the query string. If looking for an exact match, see the description of countriesOfAffiliationTagMode.
+
+        international_designator : typing.Optional[str]
+            International Designator of the TracssCat(s) object.A value with an optional operator that may be pre-pended to the value. Valid operators are: Not Equal (<>Value), In (Value1,Value2) , Like (\\*Value), Not Like(~*Value)
+
+        operational_status : typing.Optional[str]
+            Operational status of the TracssCat(s) object.A value with an optional operator that may be pre-pended to the value. Valid operators are: Not Equal (<>Value), In (Value1,Value2) , Like (\\*Value), Not Like(~*Value)
+
+        conjunction_mitigation_capabilities : typing.Optional[str]
+            Onboard conjunction mitigation capabilities of the TracssCat(s) object.This value defaults to an OR query, records that contain ANY of the values provided in the query string. If looking for an exact match, see the description of countriesOfAffiliationTagMode.
+
+        rcs_size : typing.Optional[str]
+            Derived radar cross section size of the TracssCat(s) object.A value with an optional operator that may be pre-pended to the value. Valid operators are: Not Equal (<>Value), In (Value1,Value2) , Like (\\*Value), Not Like(~*Value)
+
+        launch_location : typing.Optional[str]
+            Launch location of the TracssCat(s) object.A value with an optional operator that may be pre-pended to the value. Valid operators are: Not Equal (<>Value), In (Value1,Value2) , Like (\\*Value), Not Like(~*Value) This parameter accepts launch location codes as well as fully qualified names. If the value being provided to the query contains a comma, the value must be wrapped in quotes - "Cape Canaveral/Eastern Test Range, United States of America".
+
+        constellation : typing.Optional[str]
+            Constellation the TracssCat(s) object are part of.A value with an optional operator that may be pre-pended to the value. Valid operators are: Not Equal (<>Value), In (Value1,Value2) , Like (\\*Value), Not Like(~*Value)
 
         count_only : typing.Optional[bool]
+            Returns the total count of objects matching your query parameters
 
         fields : typing.Optional[str]
             a comma separated list of fields to return a limited TraCSSCAT object
 
         headers_only : typing.Optional[bool]
             return only key fields from tracsscat in json format. Does not work with any filters
+
+        include_metadata : typing.Optional[bool]
+            Returns the last update time, data source, and organization that last updated each field, along with the actual TracssCat data.
+
+        countries_of_affiliation_tag_mode : typing.Optional[str]
+            Describes how to query on the countriesOfAffiliation field.Valid values are OR and ALL. The value will default to OR if not provided. This parameter will change how the countriesOfAffiliation field is queried. If the value is OR it will return all records containing ANY of the values provided in the countriesOfAffiliation field. If the value is ALL, it will return only records that contain ALL of the values in the countriesOfAffiliation field.
+
+        conjunction_mitigation_capabilities_tag_mode : typing.Optional[str]
+            Describes how to query on the conjunctionMitigationCapabilities field.Valid values are OR and ALL. The value will default to OR if not provided. This parameter will change how the conjunctionMitigationCapabilities field is queried. If the value is OR it will return all records containing ANY of the values provided in the conjunctionMitigationCapabilities field. If the value is ALL, it will return only records that contain ALL of the values in the conjunctionMitigationCapabilities field.
 
         sort : typing.Optional[str]
             Desired sort field and direction (Ascending = ASC, Descending = DESC), separated by a comma.
@@ -124,7 +171,7 @@ class TracssCatClient:
 
         Returns
         -------
-        ListTracssCatResponse
+        typing.List[typing.Dict[str, typing.Any]]
             Ok - TracssCat(s) successfully retrieved.  Will return JSON representation of the object(s).
 
         Examples
@@ -139,7 +186,17 @@ class TracssCatClient:
             satellite_name="THEMIS A",
             organization="nasa, or nasa,iridium",
             object_type="Payload",
+            orbital_regime="LEO1",
+            countries_of_affiliation="US,UK",
+            international_designator="2026-001A",
+            operational_status="OPERATIONAL_MANEUVERABLE",
+            conjunction_mitigation_capabilities="chemical propulsion",
+            rcs_size="Medium",
+            launch_location="AFETR",
+            constellation="Starlink",
             fields="noradId,objectType",
+            countries_of_affiliation_tag_mode="ALL",
+            conjunction_mitigation_capabilities_tag_mode="ALL",
             sort="noradId,ASC",
         )
         """
@@ -149,9 +206,19 @@ class TracssCatClient:
             organization=organization,
             object_type=object_type,
             orbital_regime=orbital_regime,
+            countries_of_affiliation=countries_of_affiliation,
+            international_designator=international_designator,
+            operational_status=operational_status,
+            conjunction_mitigation_capabilities=conjunction_mitigation_capabilities,
+            rcs_size=rcs_size,
+            launch_location=launch_location,
+            constellation=constellation,
             count_only=count_only,
             fields=fields,
             headers_only=headers_only,
+            include_metadata=include_metadata,
+            countries_of_affiliation_tag_mode=countries_of_affiliation_tag_mode,
+            conjunction_mitigation_capabilities_tag_mode=conjunction_mitigation_capabilities_tag_mode,
             sort=sort,
             page=page,
             size=size,
@@ -176,13 +243,16 @@ class AsyncTracssCatClient:
         return self._raw_client
 
     async def upload_csv(
-        self, *, request_options: typing.Optional[RequestOptions] = None
+        self, *, file: core.File, request_options: typing.Optional[RequestOptions] = None
     ) -> typing.Any:
         """
         Upload a CSV file to update the TraCSS catalog. The CSV must include a noradId column as the minimum required header; all other fields are optional. Rows with noradIds your organization does not own will generate change requests pending TraCSS Operations approval. See tracss.gov for the full list of valid fields and accepted date formats.
 
         Parameters
         ----------
+        file : core.File
+            See core.File for more documentation
+
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
@@ -208,7 +278,9 @@ class AsyncTracssCatClient:
 
         asyncio.run(main())
         """
-        _response = await self._raw_client.upload_csv(request_options=request_options)
+        _response = await self._raw_client.upload_csv(
+            file=file, request_options=request_options
+        )
         return _response.data
 
     async def list(
@@ -219,16 +291,26 @@ class AsyncTracssCatClient:
         organization: typing.Optional[str] = None,
         object_type: typing.Optional[str] = None,
         orbital_regime: typing.Optional[str] = None,
+        countries_of_affiliation: typing.Optional[str] = None,
+        international_designator: typing.Optional[str] = None,
+        operational_status: typing.Optional[str] = None,
+        conjunction_mitigation_capabilities: typing.Optional[str] = None,
+        rcs_size: typing.Optional[str] = None,
+        launch_location: typing.Optional[str] = None,
+        constellation: typing.Optional[str] = None,
         count_only: typing.Optional[bool] = None,
         fields: typing.Optional[str] = None,
         headers_only: typing.Optional[bool] = None,
+        include_metadata: typing.Optional[bool] = None,
+        countries_of_affiliation_tag_mode: typing.Optional[str] = None,
+        conjunction_mitigation_capabilities_tag_mode: typing.Optional[str] = None,
         sort: typing.Optional[str] = None,
         page: typing.Optional[int] = None,
         size: typing.Optional[int] = None,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> ListTracssCatResponse:
+    ) -> typing.List[typing.Dict[str, typing.Any]]:
         """
-        Retrieve one or more TraCSSCats based on query parameters. <b>All fields may be pre-pended with the following optional operators</b>: <br>Equal - (=Value) This is default and does not need to be included.
+        Retrieve TraCSSCAT records based on query parameters. <b>All fields may be pre-pended with the following optional operators</b>: <br>Equal - (=Value) This is default and does not need to be included.
         <br>Not Equal (<>Value)
         <br>Greater Than (>Value)
         <br>Greater Than or Equal (>=Value)
@@ -249,7 +331,7 @@ class AsyncTracssCatClient:
             Norad ID, or list of comma separated ids, of the TracssCat object(s). A value with an optional operator that may be pre-pended to the value. Valid operators are: Greater Than (>Value), Less Than (<Value), Greater Than or Equal (>=Value), Less Than or Equal (<=Value), Not Equal (<>Value), In (Value1,Value2) , Between (Value1...Value2) (smaller value first), Like (\\*Value), Not Like(~*Value)
 
         satellite_name : typing.Optional[str]
-            Name of the TracssCat object. A value with an optional operator that may be pre-pended to the value. Valid operators are: Not Equal (<>Value), In (Value1,Value2) , Between (Value1...Value2) (smaller value first), Like (\\*Value), Not Like(~*Value)
+            Name of the TracssCat object. A value with an optional operator that may be pre-pended to the value. Valid operators are: Not Equal (<>Value), In (Value1,Value2), Like (\\*Value), Not Like(~*Value)
 
         organization : typing.Optional[str]
             Organization name, or list of comma separated organization names, responsible for the TracssCat object. A value with an optional operator that may be pre-pended to the value. Valid operators are: Not Equal (<>Value), In (Value1,Value2) , Like (\\*Value), Not Like(~*Value)
@@ -258,14 +340,46 @@ class AsyncTracssCatClient:
             Object Type of the TracssCat(s) object. A value with an optional operator that may be pre-pended to the value. Valid operators are: Not Equal (<>Value), In (Value1,Value2) , Like (\\*Value), Not Like(~*Value)
 
         orbital_regime : typing.Optional[str]
+            Derived orbital regime of the TracssCat(s) object.A value with an optional operator that may be pre-pended to the value. Valid operators are: Not Equal (<>Value), In (Value1,Value2) , Like (\\*Value), Not Like(~*Value)
+
+        countries_of_affiliation : typing.Optional[str]
+            Countries affiliated with the TracssCat(s) object.This value defaults to an OR query, records that contain ANY of the values provided in the query string. If looking for an exact match, see the description of countriesOfAffiliationTagMode.
+
+        international_designator : typing.Optional[str]
+            International Designator of the TracssCat(s) object.A value with an optional operator that may be pre-pended to the value. Valid operators are: Not Equal (<>Value), In (Value1,Value2) , Like (\\*Value), Not Like(~*Value)
+
+        operational_status : typing.Optional[str]
+            Operational status of the TracssCat(s) object.A value with an optional operator that may be pre-pended to the value. Valid operators are: Not Equal (<>Value), In (Value1,Value2) , Like (\\*Value), Not Like(~*Value)
+
+        conjunction_mitigation_capabilities : typing.Optional[str]
+            Onboard conjunction mitigation capabilities of the TracssCat(s) object.This value defaults to an OR query, records that contain ANY of the values provided in the query string. If looking for an exact match, see the description of countriesOfAffiliationTagMode.
+
+        rcs_size : typing.Optional[str]
+            Derived radar cross section size of the TracssCat(s) object.A value with an optional operator that may be pre-pended to the value. Valid operators are: Not Equal (<>Value), In (Value1,Value2) , Like (\\*Value), Not Like(~*Value)
+
+        launch_location : typing.Optional[str]
+            Launch location of the TracssCat(s) object.A value with an optional operator that may be pre-pended to the value. Valid operators are: Not Equal (<>Value), In (Value1,Value2) , Like (\\*Value), Not Like(~*Value) This parameter accepts launch location codes as well as fully qualified names. If the value being provided to the query contains a comma, the value must be wrapped in quotes - "Cape Canaveral/Eastern Test Range, United States of America".
+
+        constellation : typing.Optional[str]
+            Constellation the TracssCat(s) object are part of.A value with an optional operator that may be pre-pended to the value. Valid operators are: Not Equal (<>Value), In (Value1,Value2) , Like (\\*Value), Not Like(~*Value)
 
         count_only : typing.Optional[bool]
+            Returns the total count of objects matching your query parameters
 
         fields : typing.Optional[str]
             a comma separated list of fields to return a limited TraCSSCAT object
 
         headers_only : typing.Optional[bool]
             return only key fields from tracsscat in json format. Does not work with any filters
+
+        include_metadata : typing.Optional[bool]
+            Returns the last update time, data source, and organization that last updated each field, along with the actual TracssCat data.
+
+        countries_of_affiliation_tag_mode : typing.Optional[str]
+            Describes how to query on the countriesOfAffiliation field.Valid values are OR and ALL. The value will default to OR if not provided. This parameter will change how the countriesOfAffiliation field is queried. If the value is OR it will return all records containing ANY of the values provided in the countriesOfAffiliation field. If the value is ALL, it will return only records that contain ALL of the values in the countriesOfAffiliation field.
+
+        conjunction_mitigation_capabilities_tag_mode : typing.Optional[str]
+            Describes how to query on the conjunctionMitigationCapabilities field.Valid values are OR and ALL. The value will default to OR if not provided. This parameter will change how the conjunctionMitigationCapabilities field is queried. If the value is OR it will return all records containing ANY of the values provided in the conjunctionMitigationCapabilities field. If the value is ALL, it will return only records that contain ALL of the values in the conjunctionMitigationCapabilities field.
 
         sort : typing.Optional[str]
             Desired sort field and direction (Ascending = ASC, Descending = DESC), separated by a comma.
@@ -281,7 +395,7 @@ class AsyncTracssCatClient:
 
         Returns
         -------
-        ListTracssCatResponse
+        typing.List[typing.Dict[str, typing.Any]]
             Ok - TracssCat(s) successfully retrieved.  Will return JSON representation of the object(s).
 
         Examples
@@ -301,7 +415,17 @@ class AsyncTracssCatClient:
                 satellite_name="THEMIS A",
                 organization="nasa, or nasa,iridium",
                 object_type="Payload",
+                orbital_regime="LEO1",
+                countries_of_affiliation="US,UK",
+                international_designator="2026-001A",
+                operational_status="OPERATIONAL_MANEUVERABLE",
+                conjunction_mitigation_capabilities="chemical propulsion",
+                rcs_size="Medium",
+                launch_location="AFETR",
+                constellation="Starlink",
                 fields="noradId,objectType",
+                countries_of_affiliation_tag_mode="ALL",
+                conjunction_mitigation_capabilities_tag_mode="ALL",
                 sort="noradId,ASC",
             )
 
@@ -314,9 +438,19 @@ class AsyncTracssCatClient:
             organization=organization,
             object_type=object_type,
             orbital_regime=orbital_regime,
+            countries_of_affiliation=countries_of_affiliation,
+            international_designator=international_designator,
+            operational_status=operational_status,
+            conjunction_mitigation_capabilities=conjunction_mitigation_capabilities,
+            rcs_size=rcs_size,
+            launch_location=launch_location,
+            constellation=constellation,
             count_only=count_only,
             fields=fields,
             headers_only=headers_only,
+            include_metadata=include_metadata,
+            countries_of_affiliation_tag_mode=countries_of_affiliation_tag_mode,
+            conjunction_mitigation_capabilities_tag_mode=conjunction_mitigation_capabilities_tag_mode,
             sort=sort,
             page=page,
             size=size,

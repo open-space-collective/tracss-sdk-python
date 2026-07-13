@@ -35,7 +35,11 @@ class TestMakeDefaultAsyncClientWithoutAiohttp(unittest.TestCase):
         explicit_client = httpx.AsyncClient(timeout=120)
         with mock.patch("tracss.base_client._make_default_async_client") as mock_make:
             # Replicate the generated conditional: httpx_client if httpx_client is not None else _make_default_async_client(...)
-            result = explicit_client if explicit_client is not None else mock_make(timeout=60, follow_redirects=True)
+            result = (
+                explicit_client
+                if explicit_client is not None
+                else mock_make(timeout=60, follow_redirects=True)
+            )
             mock_make.assert_not_called()
         self.assertIs(result, explicit_client)
 

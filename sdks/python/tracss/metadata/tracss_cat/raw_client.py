@@ -3,16 +3,24 @@
 import typing
 from json.decoder import JSONDecodeError
 
+from ... import core
 from ...core.api_error import ApiError
 from ...core.client_wrapper import AsyncClientWrapper, SyncClientWrapper
 from ...core.http_response import AsyncHttpResponse, HttpResponse
 from ...core.parse_error import ParsingError
 from ...core.request_options import RequestOptions
 from ...core.unchecked_base_model import construct_type
+from ..errors.bad_gateway_error import BadGatewayError
 from ..errors.bad_request_error import BadRequestError
+from ..errors.expectation_failed_error import ExpectationFailedError
+from ..errors.forbidden_error import ForbiddenError
 from ..errors.internal_server_error import InternalServerError
+from ..errors.method_not_allowed_error import MethodNotAllowedError
 from ..errors.not_found_error import NotFoundError
-from .types.list_tracss_cat_response import ListTracssCatResponse
+from ..errors.service_unavailable_error import ServiceUnavailableError
+from ..errors.too_many_requests_error import TooManyRequestsError
+from ..errors.unauthorized_error import UnauthorizedError
+from ..types.error_response import ErrorResponse
 from pydantic import ValidationError
 
 # this is used as the default value for optional parameters
@@ -24,13 +32,16 @@ class RawTracssCatClient:
         self._client_wrapper = client_wrapper
 
     def upload_csv(
-        self, *, request_options: typing.Optional[RequestOptions] = None
+        self, *, file: core.File, request_options: typing.Optional[RequestOptions] = None
     ) -> HttpResponse[typing.Any]:
         """
         Upload a CSV file to update the TraCSS catalog. The CSV must include a noradId column as the minimum required header; all other fields are optional. Rows with noradIds your organization does not own will generate change requests pending TraCSS Operations approval. See tracss.gov for the full list of valid fields and accepted date formats.
 
         Parameters
         ----------
+        file : core.File
+            See core.File for more documentation
+
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
@@ -43,7 +54,9 @@ class RawTracssCatClient:
             "metadata/tracssCat/update/csv",
             method="POST",
             data={},
-            files={},
+            files={
+                "file": file,
+            },
             request_options=request_options,
             omit=OMIT,
             force_multipart=True,
@@ -71,6 +84,72 @@ class RawTracssCatClient:
                         ),
                     ),
                 )
+            if _response.status_code == 401:
+                raise UnauthorizedError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        construct_type(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 403:
+                raise ForbiddenError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        construct_type(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 404:
+                raise NotFoundError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        construct_type(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 405:
+                raise MethodNotAllowedError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        construct_type(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 417:
+                raise ExpectationFailedError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        construct_type(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 429:
+                raise TooManyRequestsError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        construct_type(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
             if _response.status_code == 500:
                 raise InternalServerError(
                     headers=dict(_response.headers),
@@ -78,6 +157,28 @@ class RawTracssCatClient:
                         typing.Any,
                         construct_type(
                             type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 502:
+                raise BadGatewayError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorResponse,
+                        construct_type(
+                            type_=ErrorResponse,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 503:
+                raise ServiceUnavailableError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorResponse,
+                        construct_type(
+                            type_=ErrorResponse,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
@@ -110,16 +211,26 @@ class RawTracssCatClient:
         organization: typing.Optional[str] = None,
         object_type: typing.Optional[str] = None,
         orbital_regime: typing.Optional[str] = None,
+        countries_of_affiliation: typing.Optional[str] = None,
+        international_designator: typing.Optional[str] = None,
+        operational_status: typing.Optional[str] = None,
+        conjunction_mitigation_capabilities: typing.Optional[str] = None,
+        rcs_size: typing.Optional[str] = None,
+        launch_location: typing.Optional[str] = None,
+        constellation: typing.Optional[str] = None,
         count_only: typing.Optional[bool] = None,
         fields: typing.Optional[str] = None,
         headers_only: typing.Optional[bool] = None,
+        include_metadata: typing.Optional[bool] = None,
+        countries_of_affiliation_tag_mode: typing.Optional[str] = None,
+        conjunction_mitigation_capabilities_tag_mode: typing.Optional[str] = None,
         sort: typing.Optional[str] = None,
         page: typing.Optional[int] = None,
         size: typing.Optional[int] = None,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> HttpResponse[ListTracssCatResponse]:
+    ) -> HttpResponse[typing.List[typing.Dict[str, typing.Any]]]:
         """
-        Retrieve one or more TraCSSCats based on query parameters. <b>All fields may be pre-pended with the following optional operators</b>: <br>Equal - (=Value) This is default and does not need to be included.
+        Retrieve TraCSSCAT records based on query parameters. <b>All fields may be pre-pended with the following optional operators</b>: <br>Equal - (=Value) This is default and does not need to be included.
         <br>Not Equal (<>Value)
         <br>Greater Than (>Value)
         <br>Greater Than or Equal (>=Value)
@@ -140,7 +251,7 @@ class RawTracssCatClient:
             Norad ID, or list of comma separated ids, of the TracssCat object(s). A value with an optional operator that may be pre-pended to the value. Valid operators are: Greater Than (>Value), Less Than (<Value), Greater Than or Equal (>=Value), Less Than or Equal (<=Value), Not Equal (<>Value), In (Value1,Value2) , Between (Value1...Value2) (smaller value first), Like (\\*Value), Not Like(~*Value)
 
         satellite_name : typing.Optional[str]
-            Name of the TracssCat object. A value with an optional operator that may be pre-pended to the value. Valid operators are: Not Equal (<>Value), In (Value1,Value2) , Between (Value1...Value2) (smaller value first), Like (\\*Value), Not Like(~*Value)
+            Name of the TracssCat object. A value with an optional operator that may be pre-pended to the value. Valid operators are: Not Equal (<>Value), In (Value1,Value2), Like (\\*Value), Not Like(~*Value)
 
         organization : typing.Optional[str]
             Organization name, or list of comma separated organization names, responsible for the TracssCat object. A value with an optional operator that may be pre-pended to the value. Valid operators are: Not Equal (<>Value), In (Value1,Value2) , Like (\\*Value), Not Like(~*Value)
@@ -149,14 +260,46 @@ class RawTracssCatClient:
             Object Type of the TracssCat(s) object. A value with an optional operator that may be pre-pended to the value. Valid operators are: Not Equal (<>Value), In (Value1,Value2) , Like (\\*Value), Not Like(~*Value)
 
         orbital_regime : typing.Optional[str]
+            Derived orbital regime of the TracssCat(s) object.A value with an optional operator that may be pre-pended to the value. Valid operators are: Not Equal (<>Value), In (Value1,Value2) , Like (\\*Value), Not Like(~*Value)
+
+        countries_of_affiliation : typing.Optional[str]
+            Countries affiliated with the TracssCat(s) object.This value defaults to an OR query, records that contain ANY of the values provided in the query string. If looking for an exact match, see the description of countriesOfAffiliationTagMode.
+
+        international_designator : typing.Optional[str]
+            International Designator of the TracssCat(s) object.A value with an optional operator that may be pre-pended to the value. Valid operators are: Not Equal (<>Value), In (Value1,Value2) , Like (\\*Value), Not Like(~*Value)
+
+        operational_status : typing.Optional[str]
+            Operational status of the TracssCat(s) object.A value with an optional operator that may be pre-pended to the value. Valid operators are: Not Equal (<>Value), In (Value1,Value2) , Like (\\*Value), Not Like(~*Value)
+
+        conjunction_mitigation_capabilities : typing.Optional[str]
+            Onboard conjunction mitigation capabilities of the TracssCat(s) object.This value defaults to an OR query, records that contain ANY of the values provided in the query string. If looking for an exact match, see the description of countriesOfAffiliationTagMode.
+
+        rcs_size : typing.Optional[str]
+            Derived radar cross section size of the TracssCat(s) object.A value with an optional operator that may be pre-pended to the value. Valid operators are: Not Equal (<>Value), In (Value1,Value2) , Like (\\*Value), Not Like(~*Value)
+
+        launch_location : typing.Optional[str]
+            Launch location of the TracssCat(s) object.A value with an optional operator that may be pre-pended to the value. Valid operators are: Not Equal (<>Value), In (Value1,Value2) , Like (\\*Value), Not Like(~*Value) This parameter accepts launch location codes as well as fully qualified names. If the value being provided to the query contains a comma, the value must be wrapped in quotes - "Cape Canaveral/Eastern Test Range, United States of America".
+
+        constellation : typing.Optional[str]
+            Constellation the TracssCat(s) object are part of.A value with an optional operator that may be pre-pended to the value. Valid operators are: Not Equal (<>Value), In (Value1,Value2) , Like (\\*Value), Not Like(~*Value)
 
         count_only : typing.Optional[bool]
+            Returns the total count of objects matching your query parameters
 
         fields : typing.Optional[str]
             a comma separated list of fields to return a limited TraCSSCAT object
 
         headers_only : typing.Optional[bool]
             return only key fields from tracsscat in json format. Does not work with any filters
+
+        include_metadata : typing.Optional[bool]
+            Returns the last update time, data source, and organization that last updated each field, along with the actual TracssCat data.
+
+        countries_of_affiliation_tag_mode : typing.Optional[str]
+            Describes how to query on the countriesOfAffiliation field.Valid values are OR and ALL. The value will default to OR if not provided. This parameter will change how the countriesOfAffiliation field is queried. If the value is OR it will return all records containing ANY of the values provided in the countriesOfAffiliation field. If the value is ALL, it will return only records that contain ALL of the values in the countriesOfAffiliation field.
+
+        conjunction_mitigation_capabilities_tag_mode : typing.Optional[str]
+            Describes how to query on the conjunctionMitigationCapabilities field.Valid values are OR and ALL. The value will default to OR if not provided. This parameter will change how the conjunctionMitigationCapabilities field is queried. If the value is OR it will return all records containing ANY of the values provided in the conjunctionMitigationCapabilities field. If the value is ALL, it will return only records that contain ALL of the values in the conjunctionMitigationCapabilities field.
 
         sort : typing.Optional[str]
             Desired sort field and direction (Ascending = ASC, Descending = DESC), separated by a comma.
@@ -172,7 +315,7 @@ class RawTracssCatClient:
 
         Returns
         -------
-        HttpResponse[ListTracssCatResponse]
+        HttpResponse[typing.List[typing.Dict[str, typing.Any]]]
             Ok - TracssCat(s) successfully retrieved.  Will return JSON representation of the object(s).
         """
         _response = self._client_wrapper.httpx_client.request(
@@ -184,9 +327,19 @@ class RawTracssCatClient:
                 "organization": organization,
                 "objectType": object_type,
                 "orbitalRegime": orbital_regime,
+                "countriesOfAffiliation": countries_of_affiliation,
+                "internationalDesignator": international_designator,
+                "operationalStatus": operational_status,
+                "conjunctionMitigationCapabilities": conjunction_mitigation_capabilities,
+                "rcsSize": rcs_size,
+                "launchLocation": launch_location,
+                "constellation": constellation,
                 "countOnly": count_only,
                 "fields": fields,
                 "headersOnly": headers_only,
+                "includeMetadata": include_metadata,
+                "countriesOfAffiliationTagMode": countries_of_affiliation_tag_mode,
+                "conjunctionMitigationCapabilitiesTagMode": conjunction_mitigation_capabilities_tag_mode,
                 "sort": sort,
                 "page": page,
                 "size": size,
@@ -196,15 +349,37 @@ class RawTracssCatClient:
         try:
             if 200 <= _response.status_code < 300:
                 _data = typing.cast(
-                    ListTracssCatResponse,
+                    typing.List[typing.Dict[str, typing.Any]],
                     construct_type(
-                        type_=ListTracssCatResponse,  # type: ignore
+                        type_=typing.List[typing.Dict[str, typing.Any]],  # type: ignore
                         object_=_response.json(),
                     ),
                 )
                 return HttpResponse(response=_response, data=_data)
             if _response.status_code == 400:
                 raise BadRequestError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        construct_type(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 401:
+                raise UnauthorizedError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        construct_type(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 403:
+                raise ForbiddenError(
                     headers=dict(_response.headers),
                     body=typing.cast(
                         typing.Any,
@@ -225,6 +400,39 @@ class RawTracssCatClient:
                         ),
                     ),
                 )
+            if _response.status_code == 405:
+                raise MethodNotAllowedError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        construct_type(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 417:
+                raise ExpectationFailedError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        construct_type(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 429:
+                raise TooManyRequestsError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        construct_type(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
             if _response.status_code == 500:
                 raise InternalServerError(
                     headers=dict(_response.headers),
@@ -232,6 +440,28 @@ class RawTracssCatClient:
                         typing.Any,
                         construct_type(
                             type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 502:
+                raise BadGatewayError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorResponse,
+                        construct_type(
+                            type_=ErrorResponse,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 503:
+                raise ServiceUnavailableError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorResponse,
+                        construct_type(
+                            type_=ErrorResponse,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
@@ -262,13 +492,16 @@ class AsyncRawTracssCatClient:
         self._client_wrapper = client_wrapper
 
     async def upload_csv(
-        self, *, request_options: typing.Optional[RequestOptions] = None
+        self, *, file: core.File, request_options: typing.Optional[RequestOptions] = None
     ) -> AsyncHttpResponse[typing.Any]:
         """
         Upload a CSV file to update the TraCSS catalog. The CSV must include a noradId column as the minimum required header; all other fields are optional. Rows with noradIds your organization does not own will generate change requests pending TraCSS Operations approval. See tracss.gov for the full list of valid fields and accepted date formats.
 
         Parameters
         ----------
+        file : core.File
+            See core.File for more documentation
+
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
@@ -281,7 +514,9 @@ class AsyncRawTracssCatClient:
             "metadata/tracssCat/update/csv",
             method="POST",
             data={},
-            files={},
+            files={
+                "file": file,
+            },
             request_options=request_options,
             omit=OMIT,
             force_multipart=True,
@@ -309,6 +544,72 @@ class AsyncRawTracssCatClient:
                         ),
                     ),
                 )
+            if _response.status_code == 401:
+                raise UnauthorizedError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        construct_type(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 403:
+                raise ForbiddenError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        construct_type(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 404:
+                raise NotFoundError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        construct_type(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 405:
+                raise MethodNotAllowedError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        construct_type(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 417:
+                raise ExpectationFailedError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        construct_type(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 429:
+                raise TooManyRequestsError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        construct_type(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
             if _response.status_code == 500:
                 raise InternalServerError(
                     headers=dict(_response.headers),
@@ -316,6 +617,28 @@ class AsyncRawTracssCatClient:
                         typing.Any,
                         construct_type(
                             type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 502:
+                raise BadGatewayError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorResponse,
+                        construct_type(
+                            type_=ErrorResponse,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 503:
+                raise ServiceUnavailableError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorResponse,
+                        construct_type(
+                            type_=ErrorResponse,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
@@ -348,16 +671,26 @@ class AsyncRawTracssCatClient:
         organization: typing.Optional[str] = None,
         object_type: typing.Optional[str] = None,
         orbital_regime: typing.Optional[str] = None,
+        countries_of_affiliation: typing.Optional[str] = None,
+        international_designator: typing.Optional[str] = None,
+        operational_status: typing.Optional[str] = None,
+        conjunction_mitigation_capabilities: typing.Optional[str] = None,
+        rcs_size: typing.Optional[str] = None,
+        launch_location: typing.Optional[str] = None,
+        constellation: typing.Optional[str] = None,
         count_only: typing.Optional[bool] = None,
         fields: typing.Optional[str] = None,
         headers_only: typing.Optional[bool] = None,
+        include_metadata: typing.Optional[bool] = None,
+        countries_of_affiliation_tag_mode: typing.Optional[str] = None,
+        conjunction_mitigation_capabilities_tag_mode: typing.Optional[str] = None,
         sort: typing.Optional[str] = None,
         page: typing.Optional[int] = None,
         size: typing.Optional[int] = None,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> AsyncHttpResponse[ListTracssCatResponse]:
+    ) -> AsyncHttpResponse[typing.List[typing.Dict[str, typing.Any]]]:
         """
-        Retrieve one or more TraCSSCats based on query parameters. <b>All fields may be pre-pended with the following optional operators</b>: <br>Equal - (=Value) This is default and does not need to be included.
+        Retrieve TraCSSCAT records based on query parameters. <b>All fields may be pre-pended with the following optional operators</b>: <br>Equal - (=Value) This is default and does not need to be included.
         <br>Not Equal (<>Value)
         <br>Greater Than (>Value)
         <br>Greater Than or Equal (>=Value)
@@ -378,7 +711,7 @@ class AsyncRawTracssCatClient:
             Norad ID, or list of comma separated ids, of the TracssCat object(s). A value with an optional operator that may be pre-pended to the value. Valid operators are: Greater Than (>Value), Less Than (<Value), Greater Than or Equal (>=Value), Less Than or Equal (<=Value), Not Equal (<>Value), In (Value1,Value2) , Between (Value1...Value2) (smaller value first), Like (\\*Value), Not Like(~*Value)
 
         satellite_name : typing.Optional[str]
-            Name of the TracssCat object. A value with an optional operator that may be pre-pended to the value. Valid operators are: Not Equal (<>Value), In (Value1,Value2) , Between (Value1...Value2) (smaller value first), Like (\\*Value), Not Like(~*Value)
+            Name of the TracssCat object. A value with an optional operator that may be pre-pended to the value. Valid operators are: Not Equal (<>Value), In (Value1,Value2), Like (\\*Value), Not Like(~*Value)
 
         organization : typing.Optional[str]
             Organization name, or list of comma separated organization names, responsible for the TracssCat object. A value with an optional operator that may be pre-pended to the value. Valid operators are: Not Equal (<>Value), In (Value1,Value2) , Like (\\*Value), Not Like(~*Value)
@@ -387,14 +720,46 @@ class AsyncRawTracssCatClient:
             Object Type of the TracssCat(s) object. A value with an optional operator that may be pre-pended to the value. Valid operators are: Not Equal (<>Value), In (Value1,Value2) , Like (\\*Value), Not Like(~*Value)
 
         orbital_regime : typing.Optional[str]
+            Derived orbital regime of the TracssCat(s) object.A value with an optional operator that may be pre-pended to the value. Valid operators are: Not Equal (<>Value), In (Value1,Value2) , Like (\\*Value), Not Like(~*Value)
+
+        countries_of_affiliation : typing.Optional[str]
+            Countries affiliated with the TracssCat(s) object.This value defaults to an OR query, records that contain ANY of the values provided in the query string. If looking for an exact match, see the description of countriesOfAffiliationTagMode.
+
+        international_designator : typing.Optional[str]
+            International Designator of the TracssCat(s) object.A value with an optional operator that may be pre-pended to the value. Valid operators are: Not Equal (<>Value), In (Value1,Value2) , Like (\\*Value), Not Like(~*Value)
+
+        operational_status : typing.Optional[str]
+            Operational status of the TracssCat(s) object.A value with an optional operator that may be pre-pended to the value. Valid operators are: Not Equal (<>Value), In (Value1,Value2) , Like (\\*Value), Not Like(~*Value)
+
+        conjunction_mitigation_capabilities : typing.Optional[str]
+            Onboard conjunction mitigation capabilities of the TracssCat(s) object.This value defaults to an OR query, records that contain ANY of the values provided in the query string. If looking for an exact match, see the description of countriesOfAffiliationTagMode.
+
+        rcs_size : typing.Optional[str]
+            Derived radar cross section size of the TracssCat(s) object.A value with an optional operator that may be pre-pended to the value. Valid operators are: Not Equal (<>Value), In (Value1,Value2) , Like (\\*Value), Not Like(~*Value)
+
+        launch_location : typing.Optional[str]
+            Launch location of the TracssCat(s) object.A value with an optional operator that may be pre-pended to the value. Valid operators are: Not Equal (<>Value), In (Value1,Value2) , Like (\\*Value), Not Like(~*Value) This parameter accepts launch location codes as well as fully qualified names. If the value being provided to the query contains a comma, the value must be wrapped in quotes - "Cape Canaveral/Eastern Test Range, United States of America".
+
+        constellation : typing.Optional[str]
+            Constellation the TracssCat(s) object are part of.A value with an optional operator that may be pre-pended to the value. Valid operators are: Not Equal (<>Value), In (Value1,Value2) , Like (\\*Value), Not Like(~*Value)
 
         count_only : typing.Optional[bool]
+            Returns the total count of objects matching your query parameters
 
         fields : typing.Optional[str]
             a comma separated list of fields to return a limited TraCSSCAT object
 
         headers_only : typing.Optional[bool]
             return only key fields from tracsscat in json format. Does not work with any filters
+
+        include_metadata : typing.Optional[bool]
+            Returns the last update time, data source, and organization that last updated each field, along with the actual TracssCat data.
+
+        countries_of_affiliation_tag_mode : typing.Optional[str]
+            Describes how to query on the countriesOfAffiliation field.Valid values are OR and ALL. The value will default to OR if not provided. This parameter will change how the countriesOfAffiliation field is queried. If the value is OR it will return all records containing ANY of the values provided in the countriesOfAffiliation field. If the value is ALL, it will return only records that contain ALL of the values in the countriesOfAffiliation field.
+
+        conjunction_mitigation_capabilities_tag_mode : typing.Optional[str]
+            Describes how to query on the conjunctionMitigationCapabilities field.Valid values are OR and ALL. The value will default to OR if not provided. This parameter will change how the conjunctionMitigationCapabilities field is queried. If the value is OR it will return all records containing ANY of the values provided in the conjunctionMitigationCapabilities field. If the value is ALL, it will return only records that contain ALL of the values in the conjunctionMitigationCapabilities field.
 
         sort : typing.Optional[str]
             Desired sort field and direction (Ascending = ASC, Descending = DESC), separated by a comma.
@@ -410,7 +775,7 @@ class AsyncRawTracssCatClient:
 
         Returns
         -------
-        AsyncHttpResponse[ListTracssCatResponse]
+        AsyncHttpResponse[typing.List[typing.Dict[str, typing.Any]]]
             Ok - TracssCat(s) successfully retrieved.  Will return JSON representation of the object(s).
         """
         _response = await self._client_wrapper.httpx_client.request(
@@ -422,9 +787,19 @@ class AsyncRawTracssCatClient:
                 "organization": organization,
                 "objectType": object_type,
                 "orbitalRegime": orbital_regime,
+                "countriesOfAffiliation": countries_of_affiliation,
+                "internationalDesignator": international_designator,
+                "operationalStatus": operational_status,
+                "conjunctionMitigationCapabilities": conjunction_mitigation_capabilities,
+                "rcsSize": rcs_size,
+                "launchLocation": launch_location,
+                "constellation": constellation,
                 "countOnly": count_only,
                 "fields": fields,
                 "headersOnly": headers_only,
+                "includeMetadata": include_metadata,
+                "countriesOfAffiliationTagMode": countries_of_affiliation_tag_mode,
+                "conjunctionMitigationCapabilitiesTagMode": conjunction_mitigation_capabilities_tag_mode,
                 "sort": sort,
                 "page": page,
                 "size": size,
@@ -434,15 +809,37 @@ class AsyncRawTracssCatClient:
         try:
             if 200 <= _response.status_code < 300:
                 _data = typing.cast(
-                    ListTracssCatResponse,
+                    typing.List[typing.Dict[str, typing.Any]],
                     construct_type(
-                        type_=ListTracssCatResponse,  # type: ignore
+                        type_=typing.List[typing.Dict[str, typing.Any]],  # type: ignore
                         object_=_response.json(),
                     ),
                 )
                 return AsyncHttpResponse(response=_response, data=_data)
             if _response.status_code == 400:
                 raise BadRequestError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        construct_type(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 401:
+                raise UnauthorizedError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        construct_type(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 403:
+                raise ForbiddenError(
                     headers=dict(_response.headers),
                     body=typing.cast(
                         typing.Any,
@@ -463,6 +860,39 @@ class AsyncRawTracssCatClient:
                         ),
                     ),
                 )
+            if _response.status_code == 405:
+                raise MethodNotAllowedError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        construct_type(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 417:
+                raise ExpectationFailedError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        construct_type(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 429:
+                raise TooManyRequestsError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        construct_type(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
             if _response.status_code == 500:
                 raise InternalServerError(
                     headers=dict(_response.headers),
@@ -470,6 +900,28 @@ class AsyncRawTracssCatClient:
                         typing.Any,
                         construct_type(
                             type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 502:
+                raise BadGatewayError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorResponse,
+                        construct_type(
+                            type_=ErrorResponse,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 503:
+                raise ServiceUnavailableError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorResponse,
+                        construct_type(
+                            type_=ErrorResponse,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),

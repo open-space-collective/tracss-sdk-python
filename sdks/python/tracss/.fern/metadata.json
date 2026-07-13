@@ -18,9 +18,9 @@
       "skip_validation": true,
       "use_typeddict_requests": false
     },
-    "pyproject_toml": "[build-system]\nrequires = [\"hatchling\", \"hatch-vcs\"]\nbuild-backend = \"hatchling.build\"\n\n[project]\ndescription = \"Python SDK for the TraCSS REST APIs\"\nrequires-python = \">=3.10\"\ndynamic = [\"version\"]\nclassifiers = [\n  \"Development Status :: 4 - Beta\",\n  \"Intended Audience :: Developers\",\n  \"License :: OSI Approved :: Apache Software License\",\n  \"Programming Language :: Python :: 3\",\n  \"Typing :: Typed\"\n]\n\n[project.license]\ntext = \"Apache-2.0\"\n\n[project.urls]\nHomepage = \"https://github.com/open-space-collective/tracss-sdk-python\"\nRepository = \"https://github.com/open-space-collective/tracss-sdk-python\"\nIssues = \"https://github.com/open-space-collective/tracss-sdk-python/issues\"\nDocumentation = \"https://open-space-collective.docs.buildwithfern.com\"\n\n[tool.hatch.build.targets.wheel]\npackages = [\"tracss\"]\n\n[tool.hatch.version]\nsource = \"vcs\"\nraw-options = { root = \"../..\" }\n"
+    "pyproject_toml": "[build-system]\nrequires = [\"hatchling\", \"hatch-vcs\"]\nbuild-backend = \"hatchling.build\"\n\n[project]\ndescription = \"Python SDK for the TraCSS REST APIs\"\nauthors = [{ name = \"Open Space Collective\" }]\nreadme = \"tracss/README.md\"\nrequires-python = \">=3.10\"\ndynamic = [\"version\"]\nclassifiers = [\n  \"Development Status :: 4 - Beta\",\n  \"Intended Audience :: Developers\",\n  \"License :: OSI Approved :: Apache Software License\",\n  \"Programming Language :: Python :: 3\",\n  \"Typing :: Typed\"\n]\n\n[project.license]\ntext = \"Apache-2.0\"\n\n[project.urls]\nHomepage = \"https://github.com/open-space-collective/tracss-sdk-python\"\nRepository = \"https://github.com/open-space-collective/tracss-sdk-python\"\nIssues = \"https://github.com/open-space-collective/tracss-sdk-python/issues\"\nDocumentation = \"https://open-space-collective.docs.buildwithfern.com\"\n\n[tool.hatch.build.targets.wheel]\npackages = [\"tracss\"]\n\n[tool.hatch.version]\nsource = \"vcs\"\nraw-options = { root = \"../..\" }\n"
   },
-  "originGitCommit": "ed1e4aa083fc625f551e65d93f0083806cb79ee5",
+  "originGitCommit": "b1c30bc518e94e3beab0178e17d532866cb66b5e",
   "originGitCommitIsDirty": true,
   "invokedBy": "manual"
 }

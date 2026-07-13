@@ -9,9 +9,17 @@ from ...core.http_response import AsyncHttpResponse, HttpResponse
 from ...core.parse_error import ParsingError
 from ...core.request_options import RequestOptions
 from ...core.unchecked_base_model import construct_type
+from ..errors.bad_gateway_error import BadGatewayError
 from ..errors.bad_request_error import BadRequestError
+from ..errors.expectation_failed_error import ExpectationFailedError
+from ..errors.forbidden_error import ForbiddenError
 from ..errors.internal_server_error import InternalServerError
+from ..errors.method_not_allowed_error import MethodNotAllowedError
+from ..errors.not_found_error import NotFoundError
+from ..errors.service_unavailable_error import ServiceUnavailableError
+from ..errors.too_many_requests_error import TooManyRequestsError
 from ..errors.unauthorized_error import UnauthorizedError
+from ..types.error_response import ErrorResponse
 from .types.list_messages_response import ListMessagesResponse
 from pydantic import ValidationError
 
@@ -24,25 +32,25 @@ class RawMessagesClient:
         self,
         *,
         topic: str,
-        offset: str,
+        offset: typing.Optional[str] = None,
         max_results: typing.Optional[str] = None,
         filter_designators: typing.Optional[str] = None,
         fields: typing.Optional[str] = None,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> HttpResponse[ListMessagesResponse]:
         """
-        Retrieve messages from a given topic starting at a given offset. Available topics are:                            gov.tracss.parsed.elsetCsv,                            gov.tracss.tracss.v1.cdms,                            gov.tracss.tracss.v2.cdms,                            gov.tracss.parsed.v1.ocms,                            gov.tracss.parsed.v2.ocms,                            gov.tracss.parsed.spVectors,                            gov.tracss.parsed.tracsscat                            gov.tracss.conjunction.data.event
+        Retrieve messages from a given topic starting at a given offset. Available topics are:                            gov.tracss.parsed.elsetCsv,                            gov.tracss.tracss.v2.cdms,                            gov.tracss.parsed.v2.ocms,                            gov.tracss.parsed.spVectors,                            gov.tracss.parsed.tracsscat                            gov.tracss.conjunction.data.event
 
         Parameters
         ----------
         topic : str
             Topic to retrieve messages from
 
-        offset : str
+        offset : typing.Optional[str]
             Offset to begin retrieving messages from - represents the starting point. Defaults to 0
 
         max_results : typing.Optional[str]
-            Optional - max amount of messages to retrieve. If not provided, defaults to 1000, or 25 for gov.tracss.parsed.v1.ocms. This limits the number of results in the response - not number of messages looked at
+            Optional - max amount of messages to retrieve. If not provided, defaults to 1000, or 25 for gov.tracss.parsed.v2.ocms. This limits the number of results in the response - not number of messages looked at
 
         filter_designators : typing.Optional[str]
             Comma separated list of Object Designators to filter the request by. Can be combined with operators for more refined filtering.  Valid operators include:
@@ -122,6 +130,61 @@ class RawMessagesClient:
                         ),
                     ),
                 )
+            if _response.status_code == 403:
+                raise ForbiddenError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        construct_type(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 404:
+                raise NotFoundError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        construct_type(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 405:
+                raise MethodNotAllowedError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        construct_type(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 417:
+                raise ExpectationFailedError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        construct_type(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 429:
+                raise TooManyRequestsError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        construct_type(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
             if _response.status_code == 500:
                 raise InternalServerError(
                     headers=dict(_response.headers),
@@ -129,6 +192,28 @@ class RawMessagesClient:
                         typing.Any,
                         construct_type(
                             type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 502:
+                raise BadGatewayError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorResponse,
+                        construct_type(
+                            type_=ErrorResponse,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 503:
+                raise ServiceUnavailableError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorResponse,
+                        construct_type(
+                            type_=ErrorResponse,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
@@ -162,25 +247,25 @@ class AsyncRawMessagesClient:
         self,
         *,
         topic: str,
-        offset: str,
+        offset: typing.Optional[str] = None,
         max_results: typing.Optional[str] = None,
         filter_designators: typing.Optional[str] = None,
         fields: typing.Optional[str] = None,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> AsyncHttpResponse[ListMessagesResponse]:
         """
-        Retrieve messages from a given topic starting at a given offset. Available topics are:                            gov.tracss.parsed.elsetCsv,                            gov.tracss.tracss.v1.cdms,                            gov.tracss.tracss.v2.cdms,                            gov.tracss.parsed.v1.ocms,                            gov.tracss.parsed.v2.ocms,                            gov.tracss.parsed.spVectors,                            gov.tracss.parsed.tracsscat                            gov.tracss.conjunction.data.event
+        Retrieve messages from a given topic starting at a given offset. Available topics are:                            gov.tracss.parsed.elsetCsv,                            gov.tracss.tracss.v2.cdms,                            gov.tracss.parsed.v2.ocms,                            gov.tracss.parsed.spVectors,                            gov.tracss.parsed.tracsscat                            gov.tracss.conjunction.data.event
 
         Parameters
         ----------
         topic : str
             Topic to retrieve messages from
 
-        offset : str
+        offset : typing.Optional[str]
             Offset to begin retrieving messages from - represents the starting point. Defaults to 0
 
         max_results : typing.Optional[str]
-            Optional - max amount of messages to retrieve. If not provided, defaults to 1000, or 25 for gov.tracss.parsed.v1.ocms. This limits the number of results in the response - not number of messages looked at
+            Optional - max amount of messages to retrieve. If not provided, defaults to 1000, or 25 for gov.tracss.parsed.v2.ocms. This limits the number of results in the response - not number of messages looked at
 
         filter_designators : typing.Optional[str]
             Comma separated list of Object Designators to filter the request by. Can be combined with operators for more refined filtering.  Valid operators include:
@@ -260,6 +345,61 @@ class AsyncRawMessagesClient:
                         ),
                     ),
                 )
+            if _response.status_code == 403:
+                raise ForbiddenError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        construct_type(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 404:
+                raise NotFoundError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        construct_type(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 405:
+                raise MethodNotAllowedError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        construct_type(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 417:
+                raise ExpectationFailedError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        construct_type(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 429:
+                raise TooManyRequestsError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        construct_type(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
             if _response.status_code == 500:
                 raise InternalServerError(
                     headers=dict(_response.headers),
@@ -267,6 +407,28 @@ class AsyncRawMessagesClient:
                         typing.Any,
                         construct_type(
                             type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 502:
+                raise BadGatewayError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorResponse,
+                        construct_type(
+                            type_=ErrorResponse,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 503:
+                raise ServiceUnavailableError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorResponse,
+                        construct_type(
+                            type_=ErrorResponse,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),

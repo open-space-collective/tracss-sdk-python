@@ -29,9 +29,9 @@ class SpaceTrackClient:
         *,
         id: typing.Optional[str] = None,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> typing.Optional[typing.List[SpaceTrack]]:
+    ) -> typing.List[SpaceTrack]:
         """
-        Retrieves Space-track data based on a given correlationId
+        Retrieves Space-track Package Data
 
         Parameters
         ----------
@@ -43,7 +43,7 @@ class SpaceTrackClient:
 
         Returns
         -------
-        typing.Optional[typing.List[SpaceTrack]]
+        typing.List[SpaceTrack]
             OK - Successfully retrieved the space tracks. Returns a JSON array of SpaceTrack objects.
 
         Examples
@@ -65,7 +65,7 @@ class SpaceTrackClient:
         request_options: typing.Optional[RequestOptions] = None,
     ) -> typing.List[SpaceTrackNestedDto]:
         """
-        Retrieve Space Track Package Data with all tar files combined in response
+        Retrieve Space Track Package Data in a condensed object format
 
         Parameters
         ----------
@@ -113,9 +113,9 @@ class AsyncSpaceTrackClient:
         *,
         id: typing.Optional[str] = None,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> typing.Optional[typing.List[SpaceTrack]]:
+    ) -> typing.List[SpaceTrack]:
         """
-        Retrieves Space-track data based on a given correlationId
+        Retrieves Space-track Package Data
 
         Parameters
         ----------
@@ -127,7 +127,7 @@ class AsyncSpaceTrackClient:
 
         Returns
         -------
-        typing.Optional[typing.List[SpaceTrack]]
+        typing.List[SpaceTrack]
             OK - Successfully retrieved the space tracks. Returns a JSON array of SpaceTrack objects.
 
         Examples
@@ -157,7 +157,7 @@ class AsyncSpaceTrackClient:
         request_options: typing.Optional[RequestOptions] = None,
     ) -> typing.List[SpaceTrackNestedDto]:
         """
-        Retrieve Space Track Package Data with all tar files combined in response
+        Retrieve Space Track Package Data in a condensed object format
 
         Parameters
         ----------

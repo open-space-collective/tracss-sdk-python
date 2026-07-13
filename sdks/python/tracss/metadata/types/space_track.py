@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import datetime as dt
 import typing
 
 import pydantic
@@ -47,6 +48,16 @@ class SpaceTrack(UncheckedBaseModel):
         typing.Optional[str],
         FieldMetadata(alias="startTime"),
         pydantic.Field(alias="startTime"),
+    ] = None
+    decoration_started_at: typing_extensions.Annotated[
+        typing.Optional[dt.datetime],
+        FieldMetadata(alias="decorationStartedAt"),
+        pydantic.Field(alias="decorationStartedAt"),
+    ] = None
+    decoration_finished_at: typing_extensions.Annotated[
+        typing.Optional[dt.datetime],
+        FieldMetadata(alias="decorationFinishedAt"),
+        pydantic.Field(alias="decorationFinishedAt"),
     ] = None
     space_tracks: typing_extensions.Annotated[
         typing.Optional[typing.List["SpaceTrack"]],

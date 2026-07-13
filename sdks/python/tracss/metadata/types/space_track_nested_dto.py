@@ -30,6 +30,16 @@ class SpaceTrackNestedDto(UncheckedBaseModel):
         FieldMetadata(alias="runType"),
         pydantic.Field(alias="runType"),
     ] = None
+    decoration_started_at: typing_extensions.Annotated[
+        typing.Optional[str],
+        FieldMetadata(alias="decorationStartedAt"),
+        pydantic.Field(alias="decorationStartedAt"),
+    ] = None
+    decoration_finished_at: typing_extensions.Annotated[
+        typing.Optional[str],
+        FieldMetadata(alias="decorationFinishedAt"),
+        pydantic.Field(alias="decorationFinishedAt"),
+    ] = None
     included_files: typing_extensions.Annotated[
         typing.Optional[str],
         FieldMetadata(alias="includedFiles"),

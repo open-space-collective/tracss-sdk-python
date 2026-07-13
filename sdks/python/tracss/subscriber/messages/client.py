@@ -27,25 +27,25 @@ class MessagesClient:
         self,
         *,
         topic: str,
-        offset: str,
+        offset: typing.Optional[str] = None,
         max_results: typing.Optional[str] = None,
         filter_designators: typing.Optional[str] = None,
         fields: typing.Optional[str] = None,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> ListMessagesResponse:
         """
-        Retrieve messages from a given topic starting at a given offset. Available topics are:                            gov.tracss.parsed.elsetCsv,                            gov.tracss.tracss.v1.cdms,                            gov.tracss.tracss.v2.cdms,                            gov.tracss.parsed.v1.ocms,                            gov.tracss.parsed.v2.ocms,                            gov.tracss.parsed.spVectors,                            gov.tracss.parsed.tracsscat                            gov.tracss.conjunction.data.event
+        Retrieve messages from a given topic starting at a given offset. Available topics are:                            gov.tracss.parsed.elsetCsv,                            gov.tracss.tracss.v2.cdms,                            gov.tracss.parsed.v2.ocms,                            gov.tracss.parsed.spVectors,                            gov.tracss.parsed.tracsscat                            gov.tracss.conjunction.data.event
 
         Parameters
         ----------
         topic : str
             Topic to retrieve messages from
 
-        offset : str
+        offset : typing.Optional[str]
             Offset to begin retrieving messages from - represents the starting point. Defaults to 0
 
         max_results : typing.Optional[str]
-            Optional - max amount of messages to retrieve. If not provided, defaults to 1000, or 25 for gov.tracss.parsed.v1.ocms. This limits the number of results in the response - not number of messages looked at
+            Optional - max amount of messages to retrieve. If not provided, defaults to 1000, or 25 for gov.tracss.parsed.v2.ocms. This limits the number of results in the response - not number of messages looked at
 
         filter_designators : typing.Optional[str]
             Comma separated list of Object Designators to filter the request by. Can be combined with operators for more refined filtering.  Valid operators include:
@@ -89,8 +89,7 @@ class MessagesClient:
             client_id="YOUR_CLIENT_ID", client_secret="YOUR_CLIENT_SECRET",
         )
         client.subscriber.messages.list(
-            topic="gov.tracss.tracss.v1.cdms",
-            offset="offset",
+            topic="gov.tracss.tracss.v2.cdms",
             fields="missDistance, collisionProbability",
         )
         """
@@ -124,25 +123,25 @@ class AsyncMessagesClient:
         self,
         *,
         topic: str,
-        offset: str,
+        offset: typing.Optional[str] = None,
         max_results: typing.Optional[str] = None,
         filter_designators: typing.Optional[str] = None,
         fields: typing.Optional[str] = None,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> ListMessagesResponse:
         """
-        Retrieve messages from a given topic starting at a given offset. Available topics are:                            gov.tracss.parsed.elsetCsv,                            gov.tracss.tracss.v1.cdms,                            gov.tracss.tracss.v2.cdms,                            gov.tracss.parsed.v1.ocms,                            gov.tracss.parsed.v2.ocms,                            gov.tracss.parsed.spVectors,                            gov.tracss.parsed.tracsscat                            gov.tracss.conjunction.data.event
+        Retrieve messages from a given topic starting at a given offset. Available topics are:                            gov.tracss.parsed.elsetCsv,                            gov.tracss.tracss.v2.cdms,                            gov.tracss.parsed.v2.ocms,                            gov.tracss.parsed.spVectors,                            gov.tracss.parsed.tracsscat                            gov.tracss.conjunction.data.event
 
         Parameters
         ----------
         topic : str
             Topic to retrieve messages from
 
-        offset : str
+        offset : typing.Optional[str]
             Offset to begin retrieving messages from - represents the starting point. Defaults to 0
 
         max_results : typing.Optional[str]
-            Optional - max amount of messages to retrieve. If not provided, defaults to 1000, or 25 for gov.tracss.parsed.v1.ocms. This limits the number of results in the response - not number of messages looked at
+            Optional - max amount of messages to retrieve. If not provided, defaults to 1000, or 25 for gov.tracss.parsed.v2.ocms. This limits the number of results in the response - not number of messages looked at
 
         filter_designators : typing.Optional[str]
             Comma separated list of Object Designators to filter the request by. Can be combined with operators for more refined filtering.  Valid operators include:
@@ -191,8 +190,7 @@ class AsyncMessagesClient:
 
         async def main() -> None:
             await client.subscriber.messages.list(
-                topic="gov.tracss.tracss.v1.cdms",
-                offset="offset",
+                topic="gov.tracss.tracss.v2.cdms",
                 fields="missDistance, collisionProbability",
             )
 

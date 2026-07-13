@@ -21,27 +21,50 @@ paths:
       x-fern-sdk-method-name: stream
       x-fern-streaming: true
 
-  /bulkdata/ocm/v1/stream:
-    get:
-      x-fern-sdk-group-name: [ocm]
-      x-fern-sdk-method-name: stream_v1
-      x-fern-availability: legacy
-      x-fern-streaming: true
-
   /bulkdata/cdm/v2/stream:
     get:
       x-fern-sdk-group-name: [cdm]
       x-fern-sdk-method-name: stream
       x-fern-streaming: true
 
-  /bulkdata/cdm/v1/stream:
-    get:
-      x-fern-sdk-group-name: [cdm]
-      x-fern-sdk-method-name: stream_v1
-      x-fern-availability: legacy
-      x-fern-streaming: true
-
+  # The OpenAPI spec declares the 200 response as `content: */*` with
+  # `schema: {type: string}`, but the live API returns a bare JSON array.
+  # This override corrects the schema so Fern generates the right return
+  # type and construct_type() never coerces the array into a repr string.
+  # After regeneration, _AnnouncementsClient / _AsyncAnnouncementsClient in
+  # client.py can be deleted (same pattern as the tracssCat fix in
+  # metadata-overrides.yaml).
   /bulkdata/announcements:
     get:
       x-fern-sdk-group-name: [announcements]
       x-fern-sdk-method-name: list
+      responses:
+        "200":
+          content:
+            "*/*":
+              schema:
+                type: array
+                items:
+                  type: object
+                  additionalProperties: true
+
+  # ── Schemas ────────────────────────────────────────────────────────────
+  /bulkdata/schemas/json:
+    get:
+      x-fern-sdk-group-name: [schemas]
+      x-fern-sdk-method-name: get_json
+
+  /bulkdata/schemas/json/download/{filename}:
+    get:
+      x-fern-sdk-group-name: [schemas]
+      x-fern-sdk-method-name: download_json
+
+  /bulkdata/schemas/xsd:
+    get:
+      x-fern-sdk-group-name: [schemas]
+      x-fern-sdk-method-name: get_xsd
+
+  /bulkdata/schemas/xsd/download/{filename}:
+    get:
+      x-fern-sdk-group-name: [schemas]
+      x-fern-sdk-method-name: download_xsd

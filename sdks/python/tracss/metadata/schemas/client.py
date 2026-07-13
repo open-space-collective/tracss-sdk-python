@@ -4,6 +4,7 @@ import typing
 
 from ...core.client_wrapper import AsyncClientWrapper, SyncClientWrapper
 from ...core.request_options import RequestOptions
+from ..types.schema_response import SchemaResponse
 from .raw_client import AsyncRawSchemasClient, RawSchemasClient
 
 
@@ -24,7 +25,7 @@ class SchemasClient:
 
     def get_xsd(
         self, *, request_options: typing.Optional[RequestOptions] = None
-    ) -> typing.List[str]:
+    ) -> typing.List[SchemaResponse]:
         """
         Parameters
         ----------
@@ -33,7 +34,7 @@ class SchemasClient:
 
         Returns
         -------
-        typing.List[str]
+        typing.List[SchemaResponse]
             OK
 
         Examples
@@ -48,9 +49,41 @@ class SchemasClient:
         _response = self._raw_client.get_xsd(request_options=request_options)
         return _response.data
 
+    def download_xsd(
+        self, filename: str, *, request_options: typing.Optional[RequestOptions] = None
+    ) -> typing.Iterator[bytes]:
+        """
+        Parameters
+        ----------
+        filename : str
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration. You can pass in configuration such as `chunk_size`, and more to customize the request and response.
+
+        Returns
+        -------
+        typing.Iterator[bytes]
+            OK
+
+        Examples
+        --------
+        from tracss import TraCSS
+
+        client = TraCSS(
+            client_id="YOUR_CLIENT_ID", client_secret="YOUR_CLIENT_SECRET",
+        )
+        client.metadata.schemas.download_xsd(
+            filename="filename",
+        )
+        """
+        with self._raw_client.download_xsd(
+            filename, request_options=request_options
+        ) as r:
+            yield from r.data
+
     def get_json(
         self, *, request_options: typing.Optional[RequestOptions] = None
-    ) -> typing.List[str]:
+    ) -> typing.List[SchemaResponse]:
         """
         Parameters
         ----------
@@ -59,7 +92,7 @@ class SchemasClient:
 
         Returns
         -------
-        typing.List[str]
+        typing.List[SchemaResponse]
             OK
 
         Examples
@@ -73,6 +106,38 @@ class SchemasClient:
         """
         _response = self._raw_client.get_json(request_options=request_options)
         return _response.data
+
+    def download_json(
+        self, filename: str, *, request_options: typing.Optional[RequestOptions] = None
+    ) -> typing.Iterator[bytes]:
+        """
+        Parameters
+        ----------
+        filename : str
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration. You can pass in configuration such as `chunk_size`, and more to customize the request and response.
+
+        Returns
+        -------
+        typing.Iterator[bytes]
+            OK
+
+        Examples
+        --------
+        from tracss import TraCSS
+
+        client = TraCSS(
+            client_id="YOUR_CLIENT_ID", client_secret="YOUR_CLIENT_SECRET",
+        )
+        client.metadata.schemas.download_json(
+            filename="filename",
+        )
+        """
+        with self._raw_client.download_json(
+            filename, request_options=request_options
+        ) as r:
+            yield from r.data
 
 
 class AsyncSchemasClient:
@@ -92,7 +157,7 @@ class AsyncSchemasClient:
 
     async def get_xsd(
         self, *, request_options: typing.Optional[RequestOptions] = None
-    ) -> typing.List[str]:
+    ) -> typing.List[SchemaResponse]:
         """
         Parameters
         ----------
@@ -101,7 +166,7 @@ class AsyncSchemasClient:
 
         Returns
         -------
-        typing.List[str]
+        typing.List[SchemaResponse]
             OK
 
         Examples
@@ -124,9 +189,50 @@ class AsyncSchemasClient:
         _response = await self._raw_client.get_xsd(request_options=request_options)
         return _response.data
 
+    async def download_xsd(
+        self, filename: str, *, request_options: typing.Optional[RequestOptions] = None
+    ) -> typing.AsyncIterator[bytes]:
+        """
+        Parameters
+        ----------
+        filename : str
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration. You can pass in configuration such as `chunk_size`, and more to customize the request and response.
+
+        Returns
+        -------
+        typing.AsyncIterator[bytes]
+            OK
+
+        Examples
+        --------
+        import asyncio
+
+        from tracss import AsyncTraCSS
+
+        client = AsyncTraCSS(
+            client_id="YOUR_CLIENT_ID", client_secret="YOUR_CLIENT_SECRET",
+        )
+
+
+        async def main() -> None:
+            await client.metadata.schemas.download_xsd(
+                filename="filename",
+            )
+
+
+        asyncio.run(main())
+        """
+        async with self._raw_client.download_xsd(
+            filename, request_options=request_options
+        ) as r:
+            async for _chunk in r.data:
+                yield _chunk
+
     async def get_json(
         self, *, request_options: typing.Optional[RequestOptions] = None
-    ) -> typing.List[str]:
+    ) -> typing.List[SchemaResponse]:
         """
         Parameters
         ----------
@@ -135,7 +241,7 @@ class AsyncSchemasClient:
 
         Returns
         -------
-        typing.List[str]
+        typing.List[SchemaResponse]
             OK
 
         Examples
@@ -157,3 +263,44 @@ class AsyncSchemasClient:
         """
         _response = await self._raw_client.get_json(request_options=request_options)
         return _response.data
+
+    async def download_json(
+        self, filename: str, *, request_options: typing.Optional[RequestOptions] = None
+    ) -> typing.AsyncIterator[bytes]:
+        """
+        Parameters
+        ----------
+        filename : str
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration. You can pass in configuration such as `chunk_size`, and more to customize the request and response.
+
+        Returns
+        -------
+        typing.AsyncIterator[bytes]
+            OK
+
+        Examples
+        --------
+        import asyncio
+
+        from tracss import AsyncTraCSS
+
+        client = AsyncTraCSS(
+            client_id="YOUR_CLIENT_ID", client_secret="YOUR_CLIENT_SECRET",
+        )
+
+
+        async def main() -> None:
+            await client.metadata.schemas.download_json(
+                filename="filename",
+            )
+
+
+        asyncio.run(main())
+        """
+        async with self._raw_client.download_json(
+            filename, request_options=request_options
+        ) as r:
+            async for _chunk in r.data:
+                yield _chunk

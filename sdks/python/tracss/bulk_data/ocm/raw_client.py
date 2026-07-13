@@ -11,10 +11,18 @@ from ...core.http_response import AsyncHttpResponse, HttpResponse
 from ...core.parse_error import ParsingError
 from ...core.request_options import RequestOptions
 from ...core.unchecked_base_model import construct_type
+from ..errors.bad_gateway_error import BadGatewayError
 from ..errors.bad_request_error import BadRequestError
+from ..errors.expectation_failed_error import ExpectationFailedError
+from ..errors.forbidden_error import ForbiddenError
+from ..errors.internal_server_error import InternalServerError
+from ..errors.method_not_allowed_error import MethodNotAllowedError
+from ..errors.not_found_error import NotFoundError
+from ..errors.service_unavailable_error import ServiceUnavailableError
+from ..errors.too_many_requests_error import TooManyRequestsError
 from ..errors.unauthorized_error import UnauthorizedError
+from ..types.error_response import ErrorResponse
 from .types.stream_ocm_response import StreamOcmResponse
-from .types.stream_v1ocm_response import StreamV1OcmResponse
 from pydantic import ValidationError
 
 
@@ -44,7 +52,16 @@ class RawOcmClient:
         request_options: typing.Optional[RequestOptions] = None,
     ) -> typing.Iterator[HttpResponse[typing.Iterator[StreamOcmResponse]]]:
         """
-        Retrieve one or more TraCSS V2 OCMs from TRACSS cloud storage.
+        Retrieve OCMs that have been uploaded to TraCSS
+
+
+        Example Scripts:
+
+
+        | Guide                                                            | Script                                                               |
+        |------------------------------------------------------------------|----------------------------------------------------------------------|
+        | [Pull Max OCMs Guide](/bulkdata/scripts/README_pull_max_ocms.md) | [Pull Max OCMs Script (Python)](/bulkdata/scripts/pull_max_ocms.py)  |
+
 
         Parameters
         ----------
@@ -60,7 +77,7 @@ class RawOcmClient:
             Message Id of the OCM. A value with an optional operator that may be pre-pended to the value. Valid operators are: Not Equal (<>Value), In (Value1,Value2) , Like (\\*Value), Not Like(~*Value)
 
         object_designator : typing.Optional[str]
-            The designator for OCM object.A value with an optional operator that may be pre-pended to the value. Valid operators are: Greater Than (>Value), Less Than (<Value), Greater Than or Equal (>=Value), Less Than or Equal (<=Value), Not Equal (<>Value), In (Value1,Value2), Between (Value1...Value2) (smaller value first), Like (\\*Value), Not Like(~*Value)
+            The designator for OCM object.A value with an optional operator that may be pre-pended to the value. Valid operators are: Greater Than (>Value), Less Than (<Value), Greater Than or Equal (>=Value), Less Than or Equal (<=Value), Not Equal (<>Value), In (Value1,Value2), Between (Value1...Value2) (smaller value first)
 
         operator : typing.Optional[str]
             Name of operator.A value with an optional operator that may be pre-pended to the value. Valid operators are: Not Equal (<>Value), In (Value1,Value2) , Like (\\*Value), Not Like(~*Value)
@@ -152,152 +169,8 @@ class RawOcmClient:
                                 ),
                             ),
                         )
-                    _response_json = _response.json()
-                except JSONDecodeError:
-                    raise ApiError(
-                        status_code=_response.status_code,
-                        headers=dict(_response.headers),
-                        body=_response.text,
-                    )
-                except ValidationError as e:
-                    raise ParsingError(
-                        status_code=_response.status_code,
-                        headers=dict(_response.headers),
-                        body=_response.json(),
-                        cause=e,
-                    )
-                raise ApiError(
-                    status_code=_response.status_code,
-                    headers=dict(_response.headers),
-                    body=_response_json,
-                )
-
-            yield _stream()
-
-    @contextlib.contextmanager
-    def stream_v1(
-        self,
-        *,
-        constellation: typing.Optional[str] = None,
-        created_by: typing.Optional[str] = None,
-        creation_date: typing.Optional[str] = None,
-        message_id: typing.Optional[str] = None,
-        object_designator: typing.Optional[str] = None,
-        operator: typing.Optional[str] = None,
-        owner: typing.Optional[str] = None,
-        start_time: typing.Optional[str] = None,
-        stop_time: typing.Optional[str] = None,
-        traj_basis: typing.Optional[str] = None,
-        tech_org: typing.Optional[str] = None,
-        tech_poc: typing.Optional[str] = None,
-        size: typing.Optional[int] = None,
-        page: typing.Optional[int] = None,
-        headers_only: typing.Optional[bool] = None,
-        format: typing.Optional[str] = None,
-        request_options: typing.Optional[RequestOptions] = None,
-    ) -> typing.Iterator[HttpResponse[typing.Iterator[StreamV1OcmResponse]]]:
-        """
-        Retrieve one or more TraCSS V1 OCMs from TRACSS cloud storage.
-
-        Parameters
-        ----------
-        constellation : typing.Optional[str]
-
-        created_by : typing.Optional[str]
-            Filename of the file that created the OCM.A value with an optional operator that may be pre-pended to the value. Valid operators are: Not Equal (<>Value), In (Value1,Value2) , Like (\\*Value), Not Like(~*Value)
-
-        creation_date : typing.Optional[str]
-            Creation Date of the OCM. A value with an optional operator that may be pre-pended to the value. Valid operators are: Greater Than (>Value), Less Than (<Value), Greater Than or Equal (>=Value), Less Than or Equal (<=Value), Not Equal (<>Value) and Between (Value1...Value2) (smaller value first)
-
-        message_id : typing.Optional[str]
-            Message Id of the OCM. A value with an optional operator that may be pre-pended to the value. Valid operators are: Not Equal (<>Value), In (Value1,Value2) , Like (\\*Value), Not Like(~*Value)
-
-        object_designator : typing.Optional[str]
-            The designator for OCM object.A value with an optional operator that may be pre-pended to the value. Valid operators are: Greater Than (>Value), Less Than (<Value), Greater Than or Equal (>=Value), Less Than or Equal (<=Value), Not Equal (<>Value), In (Value1,Value2), Between (Value1...Value2) (smaller value first), Like (\\*Value), Not Like(~*Value)
-
-        operator : typing.Optional[str]
-            Name of operator.A value with an optional operator that may be pre-pended to the value. Valid operators are: Not Equal (<>Value), In (Value1,Value2) , Like (\\*Value), Not Like(~*Value)
-
-        owner : typing.Optional[str]
-            Name of the object owner.A value with an optional operator that may be pre-pended to the value. Valid operators are: Not Equal (<>Value), In (Value1,Value2) , Like (\\*Value), Not Like(~*Value)
-
-        start_time : typing.Optional[str]
-
-        stop_time : typing.Optional[str]
-
-        traj_basis : typing.Optional[str]
-
-        tech_org : typing.Optional[str]
-
-        tech_poc : typing.Optional[str]
-
-        size : typing.Optional[int]
-            Number of results to return.  Default of 0 means return all possible results.
-
-        page : typing.Optional[int]
-            Page number for the queried OCM(s), indexed by 0 (first page). Default is 0
-
-        headers_only : typing.Optional[bool]
-            Return a reduced object. works with filters messageId, creationDate, objectDesignator, operator
-
-        format : typing.Optional[str]
-
-        request_options : typing.Optional[RequestOptions]
-            Request-specific configuration.
-
-        Yields
-        ------
-        typing.Iterator[HttpResponse[typing.Iterator[StreamV1OcmResponse]]]
-            NDJSON Stream for V1 OCMs
-        """
-        with self._client_wrapper.httpx_client.stream(
-            "bulkdata/ocm/v1/stream",
-            method="GET",
-            params={
-                "constellation": constellation,
-                "createdBy": created_by,
-                "creationDate": creation_date,
-                "messageId": message_id,
-                "objectDesignator": object_designator,
-                "operator": operator,
-                "owner": owner,
-                "startTime": start_time,
-                "stopTime": stop_time,
-                "trajBasis": traj_basis,
-                "techOrg": tech_org,
-                "techPoc": tech_poc,
-                "size": size,
-                "page": page,
-                "headersOnly": headers_only,
-                "format": format,
-            },
-            request_options=request_options,
-        ) as _response:
-
-            def _stream() -> HttpResponse[typing.Iterator[StreamV1OcmResponse]]:
-                try:
-                    if 200 <= _response.status_code < 300:
-
-                        def _iter():
-                            for _text in _response.iter_lines():
-                                try:
-                                    if len(_text) == 0:
-                                        continue
-                                    yield typing.cast(
-                                        StreamV1OcmResponse,
-                                        construct_type(
-                                            type_=StreamV1OcmResponse,  # type: ignore
-                                            object_=json.loads(_text),
-                                        ),
-                                    )
-                                except Exception:
-                                    pass
-                            return
-
-                        return HttpResponse(response=_response, data=_iter())
-                    _response.read()
-                    if _response.status_code == 400:
-                        raise BadRequestError(
+                    if _response.status_code == 401:
+                        raise UnauthorizedError(
                             headers=dict(_response.headers),
                             body=typing.cast(
                                 typing.Any,
@@ -307,13 +180,90 @@ class RawOcmClient:
                                 ),
                             ),
                         )
-                    if _response.status_code == 401:
-                        raise UnauthorizedError(
+                    if _response.status_code == 403:
+                        raise ForbiddenError(
                             headers=dict(_response.headers),
                             body=typing.cast(
                                 typing.Any,
                                 construct_type(
                                     type_=typing.Any,  # type: ignore
+                                    object_=_response.json(),
+                                ),
+                            ),
+                        )
+                    if _response.status_code == 404:
+                        raise NotFoundError(
+                            headers=dict(_response.headers),
+                            body=typing.cast(
+                                typing.Any,
+                                construct_type(
+                                    type_=typing.Any,  # type: ignore
+                                    object_=_response.json(),
+                                ),
+                            ),
+                        )
+                    if _response.status_code == 405:
+                        raise MethodNotAllowedError(
+                            headers=dict(_response.headers),
+                            body=typing.cast(
+                                typing.Any,
+                                construct_type(
+                                    type_=typing.Any,  # type: ignore
+                                    object_=_response.json(),
+                                ),
+                            ),
+                        )
+                    if _response.status_code == 417:
+                        raise ExpectationFailedError(
+                            headers=dict(_response.headers),
+                            body=typing.cast(
+                                typing.Any,
+                                construct_type(
+                                    type_=typing.Any,  # type: ignore
+                                    object_=_response.json(),
+                                ),
+                            ),
+                        )
+                    if _response.status_code == 429:
+                        raise TooManyRequestsError(
+                            headers=dict(_response.headers),
+                            body=typing.cast(
+                                typing.Any,
+                                construct_type(
+                                    type_=typing.Any,  # type: ignore
+                                    object_=_response.json(),
+                                ),
+                            ),
+                        )
+                    if _response.status_code == 500:
+                        raise InternalServerError(
+                            headers=dict(_response.headers),
+                            body=typing.cast(
+                                typing.Any,
+                                construct_type(
+                                    type_=typing.Any,  # type: ignore
+                                    object_=_response.json(),
+                                ),
+                            ),
+                        )
+                    if _response.status_code == 502:
+                        raise BadGatewayError(
+                            headers=dict(_response.headers),
+                            body=typing.cast(
+                                ErrorResponse,
+                                construct_type(
+                                    type_=ErrorResponse,  # type: ignore
+                                    object_=_response.json(),
+                                ),
+                            ),
+                        )
+                    if _response.status_code == 503:
+                        raise ServiceUnavailableError(
+                            headers=dict(_response.headers),
+                            body=typing.cast(
+                                ErrorResponse,
+                                construct_type(
+                                    type_=ErrorResponse,  # type: ignore
                                     object_=_response.json(),
                                 ),
                             ),
@@ -367,7 +317,16 @@ class AsyncRawOcmClient:
         request_options: typing.Optional[RequestOptions] = None,
     ) -> typing.AsyncIterator[AsyncHttpResponse[typing.AsyncIterator[StreamOcmResponse]]]:
         """
-        Retrieve one or more TraCSS V2 OCMs from TRACSS cloud storage.
+        Retrieve OCMs that have been uploaded to TraCSS
+
+
+        Example Scripts:
+
+
+        | Guide                                                            | Script                                                               |
+        |------------------------------------------------------------------|----------------------------------------------------------------------|
+        | [Pull Max OCMs Guide](/bulkdata/scripts/README_pull_max_ocms.md) | [Pull Max OCMs Script (Python)](/bulkdata/scripts/pull_max_ocms.py)  |
+
 
         Parameters
         ----------
@@ -383,7 +342,7 @@ class AsyncRawOcmClient:
             Message Id of the OCM. A value with an optional operator that may be pre-pended to the value. Valid operators are: Not Equal (<>Value), In (Value1,Value2) , Like (\\*Value), Not Like(~*Value)
 
         object_designator : typing.Optional[str]
-            The designator for OCM object.A value with an optional operator that may be pre-pended to the value. Valid operators are: Greater Than (>Value), Less Than (<Value), Greater Than or Equal (>=Value), Less Than or Equal (<=Value), Not Equal (<>Value), In (Value1,Value2), Between (Value1...Value2) (smaller value first), Like (\\*Value), Not Like(~*Value)
+            The designator for OCM object.A value with an optional operator that may be pre-pended to the value. Valid operators are: Greater Than (>Value), Less Than (<Value), Greater Than or Equal (>=Value), Less Than or Equal (<=Value), Not Equal (<>Value), In (Value1,Value2), Between (Value1...Value2) (smaller value first)
 
         operator : typing.Optional[str]
             Name of operator.A value with an optional operator that may be pre-pended to the value. Valid operators are: Not Equal (<>Value), In (Value1,Value2) , Like (\\*Value), Not Like(~*Value)
@@ -477,156 +436,8 @@ class AsyncRawOcmClient:
                                 ),
                             ),
                         )
-                    _response_json = _response.json()
-                except JSONDecodeError:
-                    raise ApiError(
-                        status_code=_response.status_code,
-                        headers=dict(_response.headers),
-                        body=_response.text,
-                    )
-                except ValidationError as e:
-                    raise ParsingError(
-                        status_code=_response.status_code,
-                        headers=dict(_response.headers),
-                        body=_response.json(),
-                        cause=e,
-                    )
-                raise ApiError(
-                    status_code=_response.status_code,
-                    headers=dict(_response.headers),
-                    body=_response_json,
-                )
-
-            yield await _stream()
-
-    @contextlib.asynccontextmanager
-    async def stream_v1(
-        self,
-        *,
-        constellation: typing.Optional[str] = None,
-        created_by: typing.Optional[str] = None,
-        creation_date: typing.Optional[str] = None,
-        message_id: typing.Optional[str] = None,
-        object_designator: typing.Optional[str] = None,
-        operator: typing.Optional[str] = None,
-        owner: typing.Optional[str] = None,
-        start_time: typing.Optional[str] = None,
-        stop_time: typing.Optional[str] = None,
-        traj_basis: typing.Optional[str] = None,
-        tech_org: typing.Optional[str] = None,
-        tech_poc: typing.Optional[str] = None,
-        size: typing.Optional[int] = None,
-        page: typing.Optional[int] = None,
-        headers_only: typing.Optional[bool] = None,
-        format: typing.Optional[str] = None,
-        request_options: typing.Optional[RequestOptions] = None,
-    ) -> typing.AsyncIterator[
-        AsyncHttpResponse[typing.AsyncIterator[StreamV1OcmResponse]]
-    ]:
-        """
-        Retrieve one or more TraCSS V1 OCMs from TRACSS cloud storage.
-
-        Parameters
-        ----------
-        constellation : typing.Optional[str]
-
-        created_by : typing.Optional[str]
-            Filename of the file that created the OCM.A value with an optional operator that may be pre-pended to the value. Valid operators are: Not Equal (<>Value), In (Value1,Value2) , Like (\\*Value), Not Like(~*Value)
-
-        creation_date : typing.Optional[str]
-            Creation Date of the OCM. A value with an optional operator that may be pre-pended to the value. Valid operators are: Greater Than (>Value), Less Than (<Value), Greater Than or Equal (>=Value), Less Than or Equal (<=Value), Not Equal (<>Value) and Between (Value1...Value2) (smaller value first)
-
-        message_id : typing.Optional[str]
-            Message Id of the OCM. A value with an optional operator that may be pre-pended to the value. Valid operators are: Not Equal (<>Value), In (Value1,Value2) , Like (\\*Value), Not Like(~*Value)
-
-        object_designator : typing.Optional[str]
-            The designator for OCM object.A value with an optional operator that may be pre-pended to the value. Valid operators are: Greater Than (>Value), Less Than (<Value), Greater Than or Equal (>=Value), Less Than or Equal (<=Value), Not Equal (<>Value), In (Value1,Value2), Between (Value1...Value2) (smaller value first), Like (\\*Value), Not Like(~*Value)
-
-        operator : typing.Optional[str]
-            Name of operator.A value with an optional operator that may be pre-pended to the value. Valid operators are: Not Equal (<>Value), In (Value1,Value2) , Like (\\*Value), Not Like(~*Value)
-
-        owner : typing.Optional[str]
-            Name of the object owner.A value with an optional operator that may be pre-pended to the value. Valid operators are: Not Equal (<>Value), In (Value1,Value2) , Like (\\*Value), Not Like(~*Value)
-
-        start_time : typing.Optional[str]
-
-        stop_time : typing.Optional[str]
-
-        traj_basis : typing.Optional[str]
-
-        tech_org : typing.Optional[str]
-
-        tech_poc : typing.Optional[str]
-
-        size : typing.Optional[int]
-            Number of results to return.  Default of 0 means return all possible results.
-
-        page : typing.Optional[int]
-            Page number for the queried OCM(s), indexed by 0 (first page). Default is 0
-
-        headers_only : typing.Optional[bool]
-            Return a reduced object. works with filters messageId, creationDate, objectDesignator, operator
-
-        format : typing.Optional[str]
-
-        request_options : typing.Optional[RequestOptions]
-            Request-specific configuration.
-
-        Yields
-        ------
-        typing.AsyncIterator[AsyncHttpResponse[typing.AsyncIterator[StreamV1OcmResponse]]]
-            NDJSON Stream for V1 OCMs
-        """
-        async with self._client_wrapper.httpx_client.stream(
-            "bulkdata/ocm/v1/stream",
-            method="GET",
-            params={
-                "constellation": constellation,
-                "createdBy": created_by,
-                "creationDate": creation_date,
-                "messageId": message_id,
-                "objectDesignator": object_designator,
-                "operator": operator,
-                "owner": owner,
-                "startTime": start_time,
-                "stopTime": stop_time,
-                "trajBasis": traj_basis,
-                "techOrg": tech_org,
-                "techPoc": tech_poc,
-                "size": size,
-                "page": page,
-                "headersOnly": headers_only,
-                "format": format,
-            },
-            request_options=request_options,
-        ) as _response:
-
-            async def _stream() -> AsyncHttpResponse[
-                typing.AsyncIterator[StreamV1OcmResponse]
-            ]:
-                try:
-                    if 200 <= _response.status_code < 300:
-
-                        async def _iter():
-                            async for _text in _response.aiter_lines():
-                                try:
-                                    if len(_text) == 0:
-                                        continue
-                                    yield typing.cast(
-                                        StreamV1OcmResponse,
-                                        construct_type(
-                                            type_=StreamV1OcmResponse,  # type: ignore
-                                            object_=json.loads(_text),
-                                        ),
-                                    )
-                                except Exception:
-                                    pass
-                            return
-
-                        return AsyncHttpResponse(response=_response, data=_iter())
-                    await _response.aread()
-                    if _response.status_code == 400:
-                        raise BadRequestError(
+                    if _response.status_code == 401:
+                        raise UnauthorizedError(
                             headers=dict(_response.headers),
                             body=typing.cast(
                                 typing.Any,
@@ -636,13 +447,90 @@ class AsyncRawOcmClient:
                                 ),
                             ),
                         )
-                    if _response.status_code == 401:
-                        raise UnauthorizedError(
+                    if _response.status_code == 403:
+                        raise ForbiddenError(
                             headers=dict(_response.headers),
                             body=typing.cast(
                                 typing.Any,
                                 construct_type(
                                     type_=typing.Any,  # type: ignore
+                                    object_=_response.json(),
+                                ),
+                            ),
+                        )
+                    if _response.status_code == 404:
+                        raise NotFoundError(
+                            headers=dict(_response.headers),
+                            body=typing.cast(
+                                typing.Any,
+                                construct_type(
+                                    type_=typing.Any,  # type: ignore
+                                    object_=_response.json(),
+                                ),
+                            ),
+                        )
+                    if _response.status_code == 405:
+                        raise MethodNotAllowedError(
+                            headers=dict(_response.headers),
+                            body=typing.cast(
+                                typing.Any,
+                                construct_type(
+                                    type_=typing.Any,  # type: ignore
+                                    object_=_response.json(),
+                                ),
+                            ),
+                        )
+                    if _response.status_code == 417:
+                        raise ExpectationFailedError(
+                            headers=dict(_response.headers),
+                            body=typing.cast(
+                                typing.Any,
+                                construct_type(
+                                    type_=typing.Any,  # type: ignore
+                                    object_=_response.json(),
+                                ),
+                            ),
+                        )
+                    if _response.status_code == 429:
+                        raise TooManyRequestsError(
+                            headers=dict(_response.headers),
+                            body=typing.cast(
+                                typing.Any,
+                                construct_type(
+                                    type_=typing.Any,  # type: ignore
+                                    object_=_response.json(),
+                                ),
+                            ),
+                        )
+                    if _response.status_code == 500:
+                        raise InternalServerError(
+                            headers=dict(_response.headers),
+                            body=typing.cast(
+                                typing.Any,
+                                construct_type(
+                                    type_=typing.Any,  # type: ignore
+                                    object_=_response.json(),
+                                ),
+                            ),
+                        )
+                    if _response.status_code == 502:
+                        raise BadGatewayError(
+                            headers=dict(_response.headers),
+                            body=typing.cast(
+                                ErrorResponse,
+                                construct_type(
+                                    type_=ErrorResponse,  # type: ignore
+                                    object_=_response.json(),
+                                ),
+                            ),
+                        )
+                    if _response.status_code == 503:
+                        raise ServiceUnavailableError(
+                            headers=dict(_response.headers),
+                            body=typing.cast(
+                                ErrorResponse,
+                                construct_type(
+                                    type_=ErrorResponse,  # type: ignore
                                     object_=_response.json(),
                                 ),
                             ),

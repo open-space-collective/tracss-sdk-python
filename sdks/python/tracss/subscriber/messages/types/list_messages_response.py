@@ -9,18 +9,14 @@ from ....core.serialization import FieldMetadata
 from ....core.unchecked_base_model import UncheckedBaseModel
 from ...types.anomaly_report import AnomalyReport
 from ...types.conjunction_data_event import ConjunctionDataEvent
-from ...types.consolidated_ocm import ConsolidatedOcm
 from ...types.consolidated_ocm_v2 import ConsolidatedOcmV2
 from ...types.tip_report import TipReport
 from ...types.tracss_cat import TracssCat
-from ...types.tracss_cdm import TracssCdm
 from ...types.tracss_cdm_v2 import TracssCdmV2
 
 
 class ListMessagesResponse(UncheckedBaseModel):
-    cdm_v1: typing.Optional[typing.List[TracssCdm]] = None
     cdm_v2: typing.Optional[typing.List[TracssCdmV2]] = None
-    ocm_v1: typing.Optional[typing.List[ConsolidatedOcm]] = None
     ocm_v2: typing.Optional[typing.List[ConsolidatedOcmV2]] = None
     conjunction_data_event: typing_extensions.Annotated[
         typing.Optional[typing.List[ConjunctionDataEvent]],

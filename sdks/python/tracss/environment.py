@@ -4,4 +4,4 @@ import enum
 
 
 class TraCSSEnvironment(enum.Enum):
-    DEFAULT = "https://api.tracss.gov:443"
+    DEFAULT = "https://api.tracss.gov"

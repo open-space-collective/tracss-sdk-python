@@ -53,8 +53,9 @@ for chunk in client.bulk_data.cdm.stream():
 for chunk in client.bulk_data.ocm.stream():
     process(chunk)
 
-# Stream TIP tasking reports (returns a response object, not an iterator)
-tip_data = client.bulk_data.tip.stream()
+# Stream TIP tasking reports
+for report in client.bulk_data.tip.stream():
+    process(report)
 ```
 
 ### Metadata
@@ -74,13 +75,13 @@ records = client.metadata.cdm.list_by_operational_batch(...)
 client.metadata.contact_directory.update_operational(...)
 
 # Update TraCSS catalog from CSV
-client.metadata.tracss_cat.update_from_csv(...)
+client.metadata.tracss_cat.upload_csv(...)
 ```
 
 ### Subscriber
 
 ```python
-# List available topics
+# List available topics (returns a JSON-encoded string, not a dict)
 topics = client.subscriber.topics.list()
 
 # Get offset for a topic
@@ -89,6 +90,11 @@ offset = client.subscriber.topics.get_offset(topic="my-topic")
 # Read messages from a topic
 messages = client.subscriber.messages.list(topic="my-topic", offset=0)
 ```
+
+<Note>
+`topics.list()` returns a JSON-encoded string. Use `json.loads()` before iterating topic
+names or counts. See the [Subscriber guide](./subscriber) for a full example.
+</Note>
 
 ## Async Client
 
@@ -101,3 +107,12 @@ async def main():
     client = AsyncTraCSS()
     topics = await client.subscriber.topics.list()
 ```
+
+## Errors
+
+Two exception types cover the common failure cases:
+
+- **`httpx.HTTPStatusError`**: raised when the Okta token request fails (non-200 from Okta). This means authentication could not complete; check your credentials and Okta connectivity.
+- **`ApiError`**: raised on 4xx/5xx responses from TraCSS (`from tracss.core import ApiError`). `e.status_code` holds the HTTP status; `e.body` holds the response body.
+
+The SDK has no built-in retry logic. See [Authentication](/authentication) for retry guidance.

@@ -6,9 +6,11 @@ import typing
 from importlib import import_module
 
 if typing.TYPE_CHECKING:
-    from .list_tracss_cat_response import ListTracssCatResponse
+    from .error_response import ErrorResponse
+    from .schema_response import SchemaResponse
 _dynamic_imports: typing.Dict[str, str] = {
-    "ListTracssCatResponse": ".list_tracss_cat_response"
+    "ErrorResponse": ".error_response",
+    "SchemaResponse": ".schema_response",
 }
 
 
@@ -35,4 +37,4 @@ def __dir__():
     return sorted(lazy_attrs)
 
 
-__all__ = ["ListTracssCatResponse"]
+__all__ = ["ErrorResponse", "SchemaResponse"]

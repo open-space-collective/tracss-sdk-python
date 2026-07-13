@@ -57,9 +57,9 @@ readme:
     >
     > **Metadata responses default to JSON.** The SDK ships
     > `_MetadataWithJsonDefaults`, a subclass of the generated `MetadataClient`
-    > that silently injects `format="json"` on every `cdm` and `ocm` list call.
-    > Without this, the TraCSS API returns CCSDS KVN text that the Fern-generated
-    > response parser cannot handle. You do not need to pass `format=` at all for
+    > that silently injects `format="json"` on every `cdm`, `ocm`, and `tip_reports` list call.
+    > Without this, those metadata list endpoints return CCSDS KVN text by default that the Fern-generated
+    > response parser cannot handle. (The other metadata endpoints are JSON-only.) You do not need to pass `format=` at all for
     > JSON since it is the default. To receive raw KVN, XML, or CSV instead, pass
     > `format="KVN"` (or `"xml"`, `"csv"`) explicitly; the SDK catches the
     > resulting `ApiError(status_code=200)` and returns `error.body` as a plain
@@ -130,7 +130,7 @@ groups:
   python-sdk:
     generators:
       - name: fernapi/fern-python-sdk
-        version: 5.14.19 # 5.12.11
+        version: 5.14.19
         config:
           # fern-python-sdk bug: test_aiohttp_autodetect.py is generated with the Fern
           # org name ("open-space-collective") as a Python import instead of package_name
@@ -154,12 +154,7 @@ groups:
             skip_validation: true
             use_typeddict_requests: false
 
-          # Apache 2.0 header on generated files (supported since fern-python-sdk 5.x)
-          # license: "Apache-2.0"
-
           # Inject metadata into the generated pyproject.toml.
-          # NOTE: verify these land after `fern generate`; if unsupported in 5.12.11
-          # add a `post-generate` Makefile target to patch pyproject.toml instead.
           pyproject_toml: |
             [build-system]
             requires = ["hatchling", "hatch-vcs"]
@@ -167,6 +162,8 @@ groups:
 
             [project]
             description = "Python SDK for the TraCSS REST APIs"
+            authors = [{ name = "Open Space Collective" }]
+            readme = "tracss/README.md"
             requires-python = ">=3.10"
             dynamic = ["version"]
             classifiers = [

@@ -20,12 +20,17 @@ class ConjunctionDataEventDto(UncheckedBaseModel):
         FieldMetadata(alias="creationDate"),
         pydantic.Field(alias="creationDate"),
     ] = None
+    conjunction_id: typing_extensions.Annotated[
+        typing.Optional[str],
+        FieldMetadata(alias="conjunctionId"),
+        pydantic.Field(alias="conjunctionId"),
+    ] = None
+    tca: typing.Optional[str] = None
     miss_distance: typing_extensions.Annotated[
         typing.Optional[float],
         FieldMetadata(alias="missDistance"),
         pydantic.Field(alias="missDistance"),
     ] = None
-    tca: typing.Optional[str] = None
     collision_probability: typing_extensions.Annotated[
         typing.Optional[float],
         FieldMetadata(alias="collisionProbability"),
@@ -36,15 +41,20 @@ class ConjunctionDataEventDto(UncheckedBaseModel):
         FieldMetadata(alias="object2ObjectDesignator"),
         pydantic.Field(alias="object2ObjectDesignator"),
     ] = None
-    conjunction_id: typing_extensions.Annotated[
-        typing.Optional[str],
-        FieldMetadata(alias="conjunctionId"),
-        pydantic.Field(alias="conjunctionId"),
-    ] = None
     cdm_message_ids: typing_extensions.Annotated[
         typing.Optional[typing.List[str]],
         FieldMetadata(alias="cdmMessageIds"),
         pydantic.Field(alias="cdmMessageIds"),
+    ] = None
+    most_recent_cdms_creation_date: typing_extensions.Annotated[
+        typing.Optional[str],
+        FieldMetadata(alias="mostRecentCdmsCreationDate"),
+        pydantic.Field(alias="mostRecentCdmsCreationDate"),
+    ] = None
+    most_recent_cdm_message_id: typing_extensions.Annotated[
+        typing.Optional[str],
+        FieldMetadata(alias="mostRecentCdmMessageId"),
+        pydantic.Field(alias="mostRecentCdmMessageId"),
     ] = None
 
     if IS_PYDANTIC_V2:

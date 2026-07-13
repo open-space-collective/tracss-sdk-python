@@ -1,6 +1,6 @@
 # tracss
 
-Python SDK for the three [TraCSS](https://tracss.gov) REST APIs — Bulk Data, Metadata, and Subscriber.
+Python SDK for the three [TraCSS](https://tracss.gov) REST APIs - Bulk Data, Metadata, and Subscriber.
 
 [![CI](https://github.com/open-space-collective/tracss-sdk-python/actions/workflows/ci.yml/badge.svg)](https://github.com/open-space-collective/tracss-sdk-python/actions/workflows/ci.yml)
 [![PyPI](https://img.shields.io/pypi/v/tracss)](https://pypi.org/project/tracss/)
@@ -13,7 +13,7 @@ Python SDK for the three [TraCSS](https://tracss.gov) REST APIs — Bulk Data, M
 > using [Fern](https://buildwithfern.com). Not affiliated with, endorsed by, or
 > officially supported by the Office of Space Commerce (OSC) or NOAA.
 
-> **0.x alpha** — the API surface is stabilising; breaking changes are possible before 1.0.
+> **0.x alpha** - the API surface is stabilising; breaking changes are possible before 1.0.
 
 ## Install
 
@@ -41,10 +41,14 @@ cdms = client.metadata.cdm.list()
 The async client works the same way:
 
 ```python
+import asyncio
 from tracss import AsyncTraCSS
 
-async with AsyncTraCSS() as client:
+async def main():
+    client = AsyncTraCSS()  # reads TRACSS_CLIENT_ID and TRACSS_CLIENT_SECRET from env
     topics = await client.subscriber.topics.list()
+
+asyncio.run(main())
 ```
 
 ## Auth
@@ -56,7 +60,7 @@ export TRACSS_CLIENT_ID=your-client-id
 export TRACSS_CLIENT_SECRET=your-client-secret
 ```
 
-Tokens are fetched lazily and refreshed automatically — you never touch auth in application code. See the [authentication docs](https://tracss.docs.buildwithfern.com/authentication) for full details, including custom Okta domains.
+Tokens are fetched lazily and refreshed automatically - you never touch auth in application code. See the [authentication docs](https://tracss.docs.buildwithfern.com/authentication) for full details, including custom Okta domains.
 
 ## What's in the box
 
@@ -90,7 +94,7 @@ TraCSS OpenAPI specs ──► fern generate ──► sdks/python/  (committed)
                                             per endpoint
 ```
 
-The three OpenAPI specs live under `fern/openapi/*/`. A daily scheduled workflow (`spec-refresh.yml`) fetches them from the live API, regenerates the SDK with [Fern](https://buildwithfern.com), and opens a PR. The only hand-written file in the SDK is `sdks/python/tracss/client.py` — the Okta auth wrapper.
+The three OpenAPI specs live under `fern/openapi/*/`. A daily scheduled workflow (`spec-refresh.yml`) fetches them from the live API, regenerates the SDK with [Fern](https://buildwithfern.com), and opens a PR. The only hand-written file in the SDK is `sdks/python/tracss/client.py` - the Okta auth wrapper.
 
 ## Docs site
 
@@ -100,10 +104,28 @@ The docs site at [tracss.docs.buildwithfern.com](https://tracss.docs.buildwithfe
 |---|---|
 | `fern/docs.yml` | Navigation structure, colors, logo |
 | `fern/docs/pages/*.mdx` | Prose pages (Getting Started, Authentication) |
-| `fern/openapi/*/openapi.json` | API reference — same specs `make specs` refreshes |
+| `fern/openapi/*/openapi.json` | API reference - same specs `make specs` refreshes |
 | `fern/sdks/*-overrides.yaml` | Method names applied to both SDK and docs |
 
 Every API endpoint page automatically shows a Python SDK code snippet (e.g. `client.subscriber.topics.list()`) alongside the HTTP reference. These are generated from the `snippets: python: tracss` entry in `docs.yml` and the `x-fern-sdk-*` method-name overrides.
+
+## Local testing
+
+Point the client at a [Prism](https://stoplight.io/open-source/prism) mock server for
+development and integration testing without hitting the live TraCSS API:
+
+```python
+from tracss import TraCSS
+
+client = TraCSS(
+    client_id="fake",
+    client_secret="fake",
+    base_url="http://localhost:4010",  # Prism subscriber mock (see make prism-all)
+)
+```
+
+`make prism-all` starts mock servers for all three APIs on ports 4010–4012. The per-API
+ports are shown in `make help`.
 
 ## Dev setup
 
@@ -142,7 +164,7 @@ make generate      # regenerate SDK locally
 make build         # build + validate the wheel
 
 # Docs
-make docs-dev      # live preview at localhost:3000 — hot-reloads on file changes
+make docs-dev      # live preview at localhost:3000 - hot-reloads on file changes
 make docs-preview  # shareable staging URL (needs FERN_TOKEN or: fern login first)
 
 # Live API
@@ -153,4 +175,4 @@ make smoke         # smoke tests (needs real TRACSS_* credentials)
 
 ## Contributing
 
-See [CONTRIBUTING.md](CONTRIBUTING.md). The short version: most of `sdks/python/` is generated — changes there are overwritten on the next `fern generate`. If you want to change SDK behavior, start with `fern/sdks/` (method-name overrides) or open an issue.
+See [CONTRIBUTING.md](CONTRIBUTING.md). The short version: most of `sdks/python/` is generated - changes there are overwritten on the next `fern generate`. If you want to change SDK behavior, start with `fern/sdks/` (method-name overrides) or open an issue.

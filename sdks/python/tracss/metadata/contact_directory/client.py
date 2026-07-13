@@ -35,7 +35,7 @@ class ContactDirectoryClient:
         request_options: typing.Optional[RequestOptions] = None,
     ) -> Operator:
         """
-        Updates an existing Satellite Operator record in the database based on the provided noradId(s) and data in the request body. Returns the updated Operator object as JSON.
+        Updates an existing Satellite Operator record in the database based on the provided noradId(s) and data in the request body. Returns the updated Operator object as JSON
 
         Parameters
         ----------
@@ -138,7 +138,7 @@ class AsyncContactDirectoryClient:
         request_options: typing.Optional[RequestOptions] = None,
     ) -> Operator:
         """
-        Updates an existing Satellite Operator record in the database based on the provided noradId(s) and data in the request body. Returns the updated Operator object as JSON.
+        Updates an existing Satellite Operator record in the database based on the provided noradId(s) and data in the request body. Returns the updated Operator object as JSON
 
         Parameters
         ----------

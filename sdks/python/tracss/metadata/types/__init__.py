@@ -6,19 +6,18 @@ import typing
 from importlib import import_module
 
 if typing.TYPE_CHECKING:
-    from .cdm_header import CdmHeader
     from .cdm_header_v2dto import CdmHeaderV2Dto
     from .conjunction_count_summary import ConjunctionCountSummary
     from .conjunction_data_event_dto import ConjunctionDataEventDto
     from .conjunction_data_event_header_dto import ConjunctionDataEventHeaderDto
+    from .conjunction_data_event_main import ConjunctionDataEventMain
+    from .conjunction_data_event_sat_list import ConjunctionDataEventSatList
+    from .conjunction_event import ConjunctionEvent
     from .country import Country
     from .country_dto import CountryDto
-    from .csv_registration_request import CsvRegistrationRequest
-    from .ocm_header_dto import OcmHeaderDto
+    from .error_response import ErrorResponse
     from .ocm_header_v2dto import OcmHeaderV2Dto
-    from .ocm_metadata_by_startand_end_date_dto import OcmMetadataByStartandEndDateDto
     from .ocm_metadata_by_startand_end_date_v2dto import OcmMetadataByStartandEndDateV2Dto
-    from .ocm_metadata_dto import OcmMetadataDto
     from .ocm_metadata_v2dto import OcmMetadataV2Dto
     from .operational_contact_info_dto import OperationalContactInfoDto
     from .operational_on_demand_batch_dto import OperationalOnDemandBatchDto
@@ -29,25 +28,26 @@ if typing.TYPE_CHECKING:
     from .organization_dto import OrganizationDto
     from .organization_name_dto import OrganizationNameDto
     from .satellite_characteristics_dto import SatelliteCharacteristicsDto
+    from .schema_response import SchemaResponse
+    from .secondary_object import SecondaryObject
     from .space_track import SpaceTrack
     from .space_track_announcement import SpaceTrackAnnouncement
     from .space_track_nested_dto import SpaceTrackNestedDto
     from .tracss_cat_header_dto import TracssCatHeaderDto
     from .tracss_file import TracssFile
 _dynamic_imports: typing.Dict[str, str] = {
-    "CdmHeader": ".cdm_header",
     "CdmHeaderV2Dto": ".cdm_header_v2dto",
     "ConjunctionCountSummary": ".conjunction_count_summary",
     "ConjunctionDataEventDto": ".conjunction_data_event_dto",
     "ConjunctionDataEventHeaderDto": ".conjunction_data_event_header_dto",
+    "ConjunctionDataEventMain": ".conjunction_data_event_main",
+    "ConjunctionDataEventSatList": ".conjunction_data_event_sat_list",
+    "ConjunctionEvent": ".conjunction_event",
     "Country": ".country",
     "CountryDto": ".country_dto",
-    "CsvRegistrationRequest": ".csv_registration_request",
-    "OcmHeaderDto": ".ocm_header_dto",
+    "ErrorResponse": ".error_response",
     "OcmHeaderV2Dto": ".ocm_header_v2dto",
-    "OcmMetadataByStartandEndDateDto": ".ocm_metadata_by_startand_end_date_dto",
     "OcmMetadataByStartandEndDateV2Dto": ".ocm_metadata_by_startand_end_date_v2dto",
-    "OcmMetadataDto": ".ocm_metadata_dto",
     "OcmMetadataV2Dto": ".ocm_metadata_v2dto",
     "OperationalContactInfoDto": ".operational_contact_info_dto",
     "OperationalOnDemandBatchDto": ".operational_on_demand_batch_dto",
@@ -58,6 +58,8 @@ _dynamic_imports: typing.Dict[str, str] = {
     "OrganizationDto": ".organization_dto",
     "OrganizationNameDto": ".organization_name_dto",
     "SatelliteCharacteristicsDto": ".satellite_characteristics_dto",
+    "SchemaResponse": ".schema_response",
+    "SecondaryObject": ".secondary_object",
     "SpaceTrack": ".space_track",
     "SpaceTrackAnnouncement": ".space_track_announcement",
     "SpaceTrackNestedDto": ".space_track_nested_dto",
@@ -90,19 +92,18 @@ def __dir__():
 
 
 __all__ = [
-    "CdmHeader",
     "CdmHeaderV2Dto",
     "ConjunctionCountSummary",
     "ConjunctionDataEventDto",
     "ConjunctionDataEventHeaderDto",
+    "ConjunctionDataEventMain",
+    "ConjunctionDataEventSatList",
+    "ConjunctionEvent",
     "Country",
     "CountryDto",
-    "CsvRegistrationRequest",
-    "OcmHeaderDto",
+    "ErrorResponse",
     "OcmHeaderV2Dto",
-    "OcmMetadataByStartandEndDateDto",
     "OcmMetadataByStartandEndDateV2Dto",
-    "OcmMetadataDto",
     "OcmMetadataV2Dto",
     "OperationalContactInfoDto",
     "OperationalOnDemandBatchDto",
@@ -113,6 +114,8 @@ __all__ = [
     "OrganizationDto",
     "OrganizationNameDto",
     "SatelliteCharacteristicsDto",
+    "SchemaResponse",
+    "SecondaryObject",
     "SpaceTrack",
     "SpaceTrackAnnouncement",
     "SpaceTrackNestedDto",

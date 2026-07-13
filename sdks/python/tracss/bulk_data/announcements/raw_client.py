@@ -9,9 +9,17 @@ from ...core.http_response import AsyncHttpResponse, HttpResponse
 from ...core.parse_error import ParsingError
 from ...core.request_options import RequestOptions
 from ...core.unchecked_base_model import construct_type
+from ..errors.bad_gateway_error import BadGatewayError
 from ..errors.bad_request_error import BadRequestError
+from ..errors.expectation_failed_error import ExpectationFailedError
+from ..errors.forbidden_error import ForbiddenError
 from ..errors.internal_server_error import InternalServerError
+from ..errors.method_not_allowed_error import MethodNotAllowedError
+from ..errors.not_found_error import NotFoundError
+from ..errors.service_unavailable_error import ServiceUnavailableError
+from ..errors.too_many_requests_error import TooManyRequestsError
 from ..errors.unauthorized_error import UnauthorizedError
+from ..types.error_response import ErrorResponse
 from pydantic import ValidationError
 
 
@@ -25,9 +33,9 @@ class RawAnnouncementsClient:
         type: typing.Optional[str] = None,
         size: typing.Optional[int] = None,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> HttpResponse[str]:
+    ) -> HttpResponse[typing.List[typing.Dict[str, typing.Any]]]:
         """
-        Fetches a list of announcements data from cloud storage.
+        Retrieve Space-Track Announcements that have been given to TraCSS
 
         Parameters
         ----------
@@ -42,7 +50,7 @@ class RawAnnouncementsClient:
 
         Returns
         -------
-        HttpResponse[str]
+        HttpResponse[typing.List[typing.Dict[str, typing.Any]]]
             OK - Successfully retrieved the Announcement data. Returns a JSON array of Announcement objects.
         """
         _response = self._client_wrapper.httpx_client.request(
@@ -57,9 +65,9 @@ class RawAnnouncementsClient:
         try:
             if 200 <= _response.status_code < 300:
                 _data = typing.cast(
-                    str,
+                    typing.List[typing.Dict[str, typing.Any]],
                     construct_type(
-                        type_=str,  # type: ignore
+                        type_=typing.List[typing.Dict[str, typing.Any]],  # type: ignore
                         object_=_response.json(),
                     ),
                 )
@@ -86,6 +94,61 @@ class RawAnnouncementsClient:
                         ),
                     ),
                 )
+            if _response.status_code == 403:
+                raise ForbiddenError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        construct_type(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 404:
+                raise NotFoundError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        construct_type(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 405:
+                raise MethodNotAllowedError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        construct_type(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 417:
+                raise ExpectationFailedError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        construct_type(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 429:
+                raise TooManyRequestsError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        construct_type(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
             if _response.status_code == 500:
                 raise InternalServerError(
                     headers=dict(_response.headers),
@@ -93,6 +156,28 @@ class RawAnnouncementsClient:
                         typing.Any,
                         construct_type(
                             type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 502:
+                raise BadGatewayError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorResponse,
+                        construct_type(
+                            type_=ErrorResponse,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 503:
+                raise ServiceUnavailableError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorResponse,
+                        construct_type(
+                            type_=ErrorResponse,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
@@ -128,9 +213,9 @@ class AsyncRawAnnouncementsClient:
         type: typing.Optional[str] = None,
         size: typing.Optional[int] = None,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> AsyncHttpResponse[str]:
+    ) -> AsyncHttpResponse[typing.List[typing.Dict[str, typing.Any]]]:
         """
-        Fetches a list of announcements data from cloud storage.
+        Retrieve Space-Track Announcements that have been given to TraCSS
 
         Parameters
         ----------
@@ -145,7 +230,7 @@ class AsyncRawAnnouncementsClient:
 
         Returns
         -------
-        AsyncHttpResponse[str]
+        AsyncHttpResponse[typing.List[typing.Dict[str, typing.Any]]]
             OK - Successfully retrieved the Announcement data. Returns a JSON array of Announcement objects.
         """
         _response = await self._client_wrapper.httpx_client.request(
@@ -160,9 +245,9 @@ class AsyncRawAnnouncementsClient:
         try:
             if 200 <= _response.status_code < 300:
                 _data = typing.cast(
-                    str,
+                    typing.List[typing.Dict[str, typing.Any]],
                     construct_type(
-                        type_=str,  # type: ignore
+                        type_=typing.List[typing.Dict[str, typing.Any]],  # type: ignore
                         object_=_response.json(),
                     ),
                 )
@@ -189,6 +274,61 @@ class AsyncRawAnnouncementsClient:
                         ),
                     ),
                 )
+            if _response.status_code == 403:
+                raise ForbiddenError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        construct_type(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 404:
+                raise NotFoundError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        construct_type(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 405:
+                raise MethodNotAllowedError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        construct_type(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 417:
+                raise ExpectationFailedError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        construct_type(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 429:
+                raise TooManyRequestsError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        construct_type(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
             if _response.status_code == 500:
                 raise InternalServerError(
                     headers=dict(_response.headers),
@@ -196,6 +336,28 @@ class AsyncRawAnnouncementsClient:
                         typing.Any,
                         construct_type(
                             type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 502:
+                raise BadGatewayError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorResponse,
+                        construct_type(
+                            type_=ErrorResponse,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 503:
+                raise ServiceUnavailableError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorResponse,
+                        construct_type(
+                            type_=ErrorResponse,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),

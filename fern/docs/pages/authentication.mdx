@@ -9,7 +9,7 @@ the SDK.
 </Note>
 
 TraCSS uses an **Okta client-credentials** OAuth 2.0 flow. The SDK handles the entire token
-lifecycle automatically — callers never need to manage tokens directly.
+lifecycle automatically - callers never need to manage tokens directly.
 
 ## Obtaining Credentials
 
@@ -20,8 +20,8 @@ lifecycle automatically — callers never need to manage tokens directly.
 
 | Variable | Required | Default | Description |
 |---|---|---|---|
-| `TRACSS_CLIENT_ID` | Yes | — | OAuth client ID |
-| `TRACSS_CLIENT_SECRET` | Yes | — | OAuth client secret |
+| `TRACSS_CLIENT_ID` | Yes | - | OAuth client ID |
+| `TRACSS_CLIENT_SECRET` | Yes | - | OAuth client secret |
 | `TRACSS_OKTA_DOMAIN` | No | `tracssamu.okta-gov.com` | Okta domain |
 | `TRACSS_OKTA_AUTH_SERVER_ID` | No | `aus1358llxDldKxE80j7` | Okta authorization server ID |
 | `TRACSS_OKTA_SCOPE` | No | `tracssusername` | OAuth scope |
@@ -54,10 +54,13 @@ client = TraCSS(
 
 - **Lazy fetch**: The token is not fetched at construction time. The first API call triggers
   the credential exchange.
-- **Automatic refresh**: Tokens have a 24-hour TTL. The SDK refreshes the token automatically
-  30 seconds before expiry so requests never fail mid-session.
-- **Thread safety**: A reentrant lock ensures a single token fetch even under concurrent
-  requests.
+- **Automatic refresh**: Token lifetime is set by Okta's `expires_in` response (falling back to
+  1 hour if the IdP omits it). The SDK refreshes the token automatically 30 seconds before expiry
+  so requests never fail mid-session.
+- **Thread safety**: A `threading.Lock` (non-reentrant) serializes token fetches. Concurrent
+  callers queue on the lock; only one fetch runs at a time. There is no deadlock risk because
+  nothing inside the token-fetch path calls `_get_token()` recursively.
+- **Token fetch timeout**: Token requests to Okta have a 10-second network timeout.
 
 The token endpoint used is:
 
@@ -66,6 +69,30 @@ POST https://{okta_domain}/oauth2/{okta_auth_server_id}/v1/token
 ```
 
 Credentials are sent as HTTP Basic Auth (`Authorization: Basic base64(client_id:client_secret)`).
+
+## Errors & Retry
+
+The SDK has **no built-in retry logic** for token acquisition or API calls.
+
+| Situation | What is raised |
+|---|---|
+| Okta returns a non-200 status | `httpx.HTTPStatusError` |
+| Okta 200 body is missing `access_token` | `ValueError` (with the actual keys returned) |
+| Okta 200 body is not valid JSON | `ValueError` (with the Okta URL) |
+
+For automated pipelines, wrap calls with a retry library such as
+[tenacity](https://tenacity.readthedocs.io):
+
+```python
+from tenacity import retry, stop_after_attempt, wait_exponential
+from tracss import TraCSS
+
+client = TraCSS()
+
+@retry(stop=stop_after_attempt(3), wait=wait_exponential(multiplier=1, min=2, max=10))
+def fetch_cdms():
+    return list(client.bulk_data.cdm.stream())
+```
 
 ## Async Client
 

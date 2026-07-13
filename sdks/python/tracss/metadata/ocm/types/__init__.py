@@ -7,11 +7,7 @@ from importlib import import_module
 
 if typing.TYPE_CHECKING:
     from .list_ocm_response import ListOcmResponse
-    from .list_v1ocm_response import ListV1OcmResponse
-_dynamic_imports: typing.Dict[str, str] = {
-    "ListOcmResponse": ".list_ocm_response",
-    "ListV1OcmResponse": ".list_v1ocm_response",
-}
+_dynamic_imports: typing.Dict[str, str] = {"ListOcmResponse": ".list_ocm_response"}
 
 
 def __getattr__(attr_name: str) -> typing.Any:
@@ -37,4 +33,4 @@ def __dir__():
     return sorted(lazy_attrs)
 
 
-__all__ = ["ListOcmResponse", "ListV1OcmResponse"]
+__all__ = ["ListOcmResponse"]

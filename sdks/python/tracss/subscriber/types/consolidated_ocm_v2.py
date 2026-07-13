@@ -711,12 +711,12 @@ class ConsolidatedOcmV2(UncheckedBaseModel):
     trajectories: typing.Optional[str] = None
     covariances: typing.Optional[str] = None
     maneuvers: typing.Optional[str] = None
-    iyz: typing.Optional[str] = None
     ixx: typing.Optional[str] = None
     iyy: typing.Optional[str] = None
     izz: typing.Optional[str] = None
     ixy: typing.Optional[str] = None
     ixz: typing.Optional[str] = None
+    iyz: typing.Optional[str] = None
     nbody_pertubations_raw: typing_extensions.Annotated[
         typing.Optional[typing.List[str]],
         FieldMetadata(alias="nbodyPertubationsRaw"),

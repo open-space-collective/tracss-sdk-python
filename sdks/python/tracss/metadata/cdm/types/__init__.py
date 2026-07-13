@@ -7,16 +7,10 @@ from importlib import import_module
 
 if typing.TYPE_CHECKING:
     from .list_by_operational_batch_cdm_response import ListByOperationalBatchCdmResponse
-    from .list_by_operational_batch_v1cdm_response import (
-        ListByOperationalBatchV1CdmResponse,
-    )
     from .list_cdm_response import ListCdmResponse
-    from .list_v1cdm_response import ListV1CdmResponse
 _dynamic_imports: typing.Dict[str, str] = {
     "ListByOperationalBatchCdmResponse": ".list_by_operational_batch_cdm_response",
-    "ListByOperationalBatchV1CdmResponse": ".list_by_operational_batch_v1cdm_response",
     "ListCdmResponse": ".list_cdm_response",
-    "ListV1CdmResponse": ".list_v1cdm_response",
 }
 
 
@@ -43,9 +37,4 @@ def __dir__():
     return sorted(lazy_attrs)
 
 
-__all__ = [
-    "ListByOperationalBatchCdmResponse",
-    "ListByOperationalBatchV1CdmResponse",
-    "ListCdmResponse",
-    "ListV1CdmResponse",
-]
+__all__ = ["ListByOperationalBatchCdmResponse", "ListCdmResponse"]

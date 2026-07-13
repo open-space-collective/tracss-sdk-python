@@ -34,25 +34,6 @@ paths:
       x-fern-sdk-group-name: [ocm]
       x-fern-sdk-method-name: upload
 
-  # ── OCM (v1 legacy) ────────────────────────────────────────────────────
-  /metadata/ocm:
-    get:
-      x-fern-sdk-group-name: [ocm]
-      x-fern-sdk-method-name: list_v1
-      x-fern-availability: legacy
-
-  /metadata/ocm/operationalBatch:
-    get:
-      x-fern-sdk-group-name: [ocm]
-      x-fern-sdk-method-name: list_by_operational_batch_v1
-      x-fern-availability: legacy
-
-  /metadata/ocm/upload:
-    post:
-      x-fern-sdk-group-name: [ocm]
-      x-fern-sdk-method-name: upload_v1
-      x-fern-availability: legacy
-
   # ── CDM (v2 default) ───────────────────────────────────────────────────
   /metadata/v2/tracssCdm:
     get:
@@ -64,24 +45,26 @@ paths:
       x-fern-sdk-group-name: [cdm]
       x-fern-sdk-method-name: list_by_operational_batch
 
-  # ── CDM (v1 legacy) ────────────────────────────────────────────────────
-  /metadata/tracssCdm:
-    get:
-      x-fern-sdk-group-name: [cdm]
-      x-fern-sdk-method-name: list_v1
-      x-fern-availability: legacy
-
-  /metadata/tracssCdmByOperationalBatch:
-    get:
-      x-fern-sdk-group-name: [cdm]
-      x-fern-sdk-method-name: list_by_operational_batch_v1
-      x-fern-availability: legacy
-
   # ── TraCSS CAT ─────────────────────────────────────────────────────────
+  # The OpenAPI spec declares the 200 response as `type: object` with a
+  # `default` property, but the live API returns a bare JSON array.
+  # This override corrects the schema so Fern generates the right return
+  # type and construct_type() never tries model_construct(**list).
+  # After regeneration _ListTracssCatClient can use _raw_client like
+  # _AnnouncementsClient does and the hardcoded path bypass can be removed.
   /metadata/tracssCat:
     get:
       x-fern-sdk-group-name: [tracss_cat]
       x-fern-sdk-method-name: list
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  additionalProperties: true
 
   /metadata/tracssCat/update/csv:
     post:
@@ -116,10 +99,26 @@ paths:
       x-fern-sdk-group-name: [schemas]
       x-fern-sdk-method-name: get_xsd
 
+  /metadata/schemas/xsd/download/{filename}:
+    get:
+      x-fern-sdk-group-name: [schemas]
+      x-fern-sdk-method-name: download_xsd
+
   /metadata/schemas/json:
     get:
       x-fern-sdk-group-name: [schemas]
       x-fern-sdk-method-name: get_json
+
+  /metadata/schemas/json/download/{filename}:
+    get:
+      x-fern-sdk-group-name: [schemas]
+      x-fern-sdk-method-name: download_json
+
+  # ── Translation Errors ─────────────────────────────────────────────────
+  /metadata/v2/translationErrors:
+    get:
+      x-fern-sdk-group-name: [translation_errors]
+      x-fern-sdk-method-name: list
 
   # ── Conjunction Events ─────────────────────────────────────────────────
   /metadata/conjunctionDataEvents:

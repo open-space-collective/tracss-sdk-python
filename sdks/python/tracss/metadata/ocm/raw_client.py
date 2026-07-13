@@ -10,14 +10,19 @@ from ...core.http_response import AsyncHttpResponse, HttpResponse
 from ...core.parse_error import ParsingError
 from ...core.request_options import RequestOptions
 from ...core.unchecked_base_model import construct_type
+from ..errors.bad_gateway_error import BadGatewayError
 from ..errors.bad_request_error import BadRequestError
+from ..errors.expectation_failed_error import ExpectationFailedError
+from ..errors.forbidden_error import ForbiddenError
 from ..errors.internal_server_error import InternalServerError
+from ..errors.method_not_allowed_error import MethodNotAllowedError
 from ..errors.not_found_error import NotFoundError
+from ..errors.service_unavailable_error import ServiceUnavailableError
+from ..errors.too_many_requests_error import TooManyRequestsError
 from ..errors.unauthorized_error import UnauthorizedError
-from ..errors.unprocessable_entity_error import UnprocessableEntityError
+from ..types.error_response import ErrorResponse
 from ..types.operational_on_demand_batch_dto import OperationalOnDemandBatchDto
 from .types.list_ocm_response import ListOcmResponse
-from .types.list_v1ocm_response import ListV1OcmResponse
 from pydantic import ValidationError
 
 # this is used as the default value for optional parameters
@@ -37,7 +42,9 @@ class RawOcmClient:
         request_options: typing.Optional[RequestOptions] = None,
     ) -> HttpResponse[typing.Dict[str, typing.Any]]:
         """
-        Upload a V2 OCM or zip file of OCMs (file param in formData). If you wish to update the database, use a header of updateDatabase with a value of true.The following will be used from the OCM:
+        Upload an OCM or zip file of OCMs (file param in formData). OCM files / zips have a limit of 4000mbs, if you're batch is larger than 4000mbs, it must be split into smaller batches. These OCMs must follow the latest TraCSS OCM spec for succesful results. Format issues will be returned after the upload has finished, listing validation issues (if any) with the uploaded OCM(s).
+        If you wish to update the TraCSS CAT and Operator contact info, use a header of updateDatabase with a value of true.
+        The following will be used from the OCM:
         * Tech POC
         * Tech Org
         * Tech Position
@@ -123,8 +130,52 @@ class RawOcmClient:
                         ),
                     ),
                 )
-            if _response.status_code == 422:
-                raise UnprocessableEntityError(
+            if _response.status_code == 403:
+                raise ForbiddenError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        construct_type(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 404:
+                raise NotFoundError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        construct_type(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 405:
+                raise MethodNotAllowedError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        construct_type(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 417:
+                raise ExpectationFailedError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        construct_type(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 429:
+                raise TooManyRequestsError(
                     headers=dict(_response.headers),
                     body=typing.cast(
                         typing.Any,
@@ -145,139 +196,24 @@ class RawOcmClient:
                         ),
                     ),
                 )
-            _response_json = _response.json()
-        except JSONDecodeError:
-            raise ApiError(
-                status_code=_response.status_code,
-                headers=dict(_response.headers),
-                body=_response.text,
-            )
-        except ValidationError as e:
-            raise ParsingError(
-                status_code=_response.status_code,
-                headers=dict(_response.headers),
-                body=_response.json(),
-                cause=e,
-            )
-        raise ApiError(
-            status_code=_response.status_code,
-            headers=dict(_response.headers),
-            body=_response_json,
-        )
-
-    def upload_v1(
-        self,
-        *,
-        file: core.File,
-        trigger_ca: typing.Optional[bool] = None,
-        update_database: typing.Optional[str] = None,
-        request_options: typing.Optional[RequestOptions] = None,
-    ) -> HttpResponse[typing.Dict[str, typing.Any]]:
-        """
-        Upload an OCM or zip file of OCMs (file param in formData). If you wish to update the database, use a header of updateDatabase with a value of true.The following will be used from the OCM:
-        * Tech POC
-        * Tech Org
-        * Tech Position
-        * Tech Phone
-        * Tech Email
-        * Tech Address
-        * Originator POC
-        * Originator Position
-        * Originator Phone
-        * Originator Email
-        * Originator Address
-        * Ops Status
-        * Orbit Category
-        * Wet mass
-        * Hard Body Radius
-
-        Parameters
-        ----------
-        file : core.File
-            See core.File for more documentation
-
-        trigger_ca : typing.Optional[bool]
-            Whether to trigger CA with uploaded OCM(s). Defaults to false. NOTE: This only affects OPERATIONAL OCMs, CANDIDATE OCMs will always trigger on-demand CA NOTE: If two Operational OCMs with the same objectId are uploaded, only the most recently created OCM will be screened for on demand.
-
-        update_database : typing.Optional[str]
-
-        request_options : typing.Optional[RequestOptions]
-            Request-specific configuration.
-
-        Returns
-        -------
-        HttpResponse[typing.Dict[str, typing.Any]]
-            Created - OCM successfully stored, trigger CA, with errors. Has two successful statuses. The first status indicates the API was hit without error. The second indicates the OCM(s) were persisted to the system without error
-        """
-        _response = self._client_wrapper.httpx_client.request(
-            "metadata/ocm/upload",
-            method="POST",
-            params={
-                "triggerCA": trigger_ca,
-            },
-            data={},
-            files={
-                "file": file,
-            },
-            headers={
-                "updateDatabase": str(update_database)
-                if update_database is not None
-                else None,
-            },
-            request_options=request_options,
-            omit=OMIT,
-            force_multipart=True,
-        )
-        try:
-            if 200 <= _response.status_code < 300:
-                _data = typing.cast(
-                    typing.Dict[str, typing.Any],
-                    construct_type(
-                        type_=typing.Dict[str, typing.Any],  # type: ignore
-                        object_=_response.json(),
-                    ),
-                )
-                return HttpResponse(response=_response, data=_data)
-            if _response.status_code == 400:
-                raise BadRequestError(
+            if _response.status_code == 502:
+                raise BadGatewayError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        typing.Any,
+                        ErrorResponse,
                         construct_type(
-                            type_=typing.Any,  # type: ignore
+                            type_=ErrorResponse,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
                 )
-            if _response.status_code == 401:
-                raise UnauthorizedError(
+            if _response.status_code == 503:
+                raise ServiceUnavailableError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        typing.Any,
+                        ErrorResponse,
                         construct_type(
-                            type_=typing.Any,  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 422:
-                raise UnprocessableEntityError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Any,
-                        construct_type(
-                            type_=typing.Any,  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 500:
-                raise InternalServerError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Any,
-                        construct_type(
-                            type_=typing.Any,  # type: ignore
+                            type_=ErrorResponse,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
@@ -321,7 +257,16 @@ class RawOcmClient:
         request_options: typing.Optional[RequestOptions] = None,
     ) -> HttpResponse[ListOcmResponse]:
         """
-        Retrieve one or more OCMs from TRACSS. If no parameters are provided, the system will default to the header of all OCMs currently stored.
+        Retrieve OCMs that have been uploaded to TraCSS
+
+
+        Example Scripts:
+
+
+        | Guide                                           | Script                                             |
+        |-------------------------------------------------|----------------------------------------------------|
+        | [Pull OCMs Guide](/metadata/scripts/README_pull_ocms.md) | [Pull OCMs Script (Python)](/metadata/scripts/pull_ocms.py)  |
+
 
         Parameters
         ----------
@@ -451,6 +396,17 @@ class RawOcmClient:
                         ),
                     ),
                 )
+            if _response.status_code == 403:
+                raise ForbiddenError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        construct_type(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
             if _response.status_code == 404:
                 raise NotFoundError(
                     headers=dict(_response.headers),
@@ -462,8 +418,30 @@ class RawOcmClient:
                         ),
                     ),
                 )
-            if _response.status_code == 422:
-                raise UnprocessableEntityError(
+            if _response.status_code == 405:
+                raise MethodNotAllowedError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        construct_type(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 417:
+                raise ExpectationFailedError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        construct_type(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 429:
+                raise TooManyRequestsError(
                     headers=dict(_response.headers),
                     body=typing.cast(
                         typing.Any,
@@ -480,6 +458,28 @@ class RawOcmClient:
                         typing.Any,
                         construct_type(
                             type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 502:
+                raise BadGatewayError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorResponse,
+                        construct_type(
+                            type_=ErrorResponse,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 503:
+                raise ServiceUnavailableError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorResponse,
+                        construct_type(
+                            type_=ErrorResponse,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
@@ -522,7 +522,7 @@ class RawOcmClient:
         request_options: typing.Optional[RequestOptions] = None,
     ) -> HttpResponse[typing.List[OperationalOnDemandBatchDto]]:
         """
-        Retrieve one or more On Demand Batches.
+        Retrieve info on On Demand Batches that have been submitted to TraCSS. Includes info on if CDMs were generated by a batch
 
         Parameters
         ----------
@@ -621,199 +621,8 @@ class RawOcmClient:
                         ),
                     ),
                 )
-            if _response.status_code == 404:
-                raise NotFoundError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Any,
-                        construct_type(
-                            type_=typing.Any,  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 422:
-                raise UnprocessableEntityError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Any,
-                        construct_type(
-                            type_=typing.Any,  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 500:
-                raise InternalServerError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Any,
-                        construct_type(
-                            type_=typing.Any,  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            _response_json = _response.json()
-        except JSONDecodeError:
-            raise ApiError(
-                status_code=_response.status_code,
-                headers=dict(_response.headers),
-                body=_response.text,
-            )
-        except ValidationError as e:
-            raise ParsingError(
-                status_code=_response.status_code,
-                headers=dict(_response.headers),
-                body=_response.json(),
-                cause=e,
-            )
-        raise ApiError(
-            status_code=_response.status_code,
-            headers=dict(_response.headers),
-            body=_response_json,
-        )
-
-    def list_v1(
-        self,
-        *,
-        owner: typing.Optional[str] = None,
-        operator: typing.Optional[str] = None,
-        object_designator: typing.Optional[str] = None,
-        message_id: typing.Optional[str] = None,
-        file_name: typing.Optional[str] = None,
-        creation_date: typing.Optional[str] = None,
-        headers_only: typing.Optional[bool] = None,
-        max_creation_date: typing.Optional[bool] = None,
-        format: typing.Optional[str] = None,
-        sort: typing.Optional[str] = None,
-        fields: typing.Optional[str] = None,
-        page: typing.Optional[int] = None,
-        size: typing.Optional[int] = None,
-        request_options: typing.Optional[RequestOptions] = None,
-    ) -> HttpResponse[ListV1OcmResponse]:
-        """
-        Retrieve one or more OCMs from TRACSS. If no parameters are provided, the system will default to the header of all OCMs currently stored.
-
-        Parameters
-        ----------
-        owner : typing.Optional[str]
-            Owner of the satellite. A value with an optional operator that may be pre-pended to the value. Valid operators are: Not Equal (<>Value), In (Value1,Value2) , Like (\\*Value), Not Like(~*Value)
-
-        operator : typing.Optional[str]
-            Operator of the satellite. A value with an optional operator that may be pre-pended to the value. Valid operators are: Not Equal (<>Value), In (Value1,Value2) , Like (\\*Value), Not Like(~*Value)
-
-        object_designator : typing.Optional[str]
-            Object Designator (Satellite Number). A value with an optional operator that may be pre-pended to the value. Valid operators are: Greater Than (>Value), Less Than (<Value), Greater Than or Equal (>=Value), Less Than or Equal (<=Value), Not Equal (<>Value), In (Value1,Value2), Between (Value1...Value2) (smaller value first), Like (\\*Value), Not Like(~*Value)
-
-        message_id : typing.Optional[str]
-            Message Id (UUID) of the OCM. A value with an optional operator that may be pre-pended to the value. Valid operators are: Not Equal (<>Value), In (Value1,Value2), Like (\\*Value), Not Like(~*Value)
-
-        file_name : typing.Optional[str]
-            File name of the OCM. A value with an optional operator that may be pre-pended to the value. Valid operators are: Not Equal (<>Value), In (Value1,Value2), Like (\\*Value), Not Like(~*Value) and Between (Value1...Value2) (smaller value first)
-
-        creation_date : typing.Optional[str]
-            Creation Date of the OCM. A value with an optional operator that may be pre-pended to the value. Valid operators are: Greater Than (>Value), Less Than (<Value), Greater Than or Equal (>=Value), Less Than or Equal (<=Value), Not Equal (<>Value)
-
-        headers_only : typing.Optional[bool]
-            Only get the header key fields of the object being asked for. Default is false. If set to true, format will be overwritten to JSON. Does not work with any filters
-
-        max_creation_date : typing.Optional[bool]
-            Retrieve only the latest OCM per object designator.
-
-        format : typing.Optional[str]
-            Desired format of the returned OCM(s). Options are KVN (Default), JSON or XML.
-
-        sort : typing.Optional[str]
-            Desired sort field and direction (ASC, DESC).
-
-        fields : typing.Optional[str]
-            Comma separated list of specific fields to include in the response.  Valid fields for JSON and XML are: cdmMsgLink, oebQ3, oebQ2, oebQ1, oebParentFrameEpoch, internationalDesignator, nextMessageEpoch, constellation, oebQC, gravAssistName, orbitCategory, dcPaStopAngle, covUnits, techOrg, fixedGeomagKp, shadowModel, oebInt, celestialSource, manNextId, dcRefTime, nextLeapEpoch, swDataSource, trajBasisId, originatorPhone, manId, dragUncertainty, covOrdering, oebMin, originatorAddress, dcMinCycles, tracksUsed, covBasisId,
-             oblateFlattening, sensorsN, fixedM10P7Mean, dcBodyTrigger, solarRadCoeff, sedr, dcPaStartAngle, taimUtcAtT0, trajBasis, rcs, vmApparentMin, manBasisId, dcType, avgManeuverFreq, orbRevNum, manPurpose, ut1MUtcAtT0, solidTidesModel, tdmMsgLink, swInterpMethod, alternateNames, fixedY10P7, manNextEpoch, dryMass, dvBol, initialWetMass, maxThrust, country, techPosition, manUnits, albedoModel, attPointing, interpMethodEop
-            , opsStatus, operator, objectType, areaTypForPc, eopSource, busModel, vmAbsolute, fixedGeomagDst, trajValues, atmosphericModel, fixedY10P7Mean, epochT0, objectDesignator, wetMass, recommendedOdSpan, odEpochElGMAJ, oebParentFrame, areaMaxForPc, rcsMin, manBasis, dcWinOpen, solarRadUncertainty, odMethod, covRefFrame, dcMaxCycles, prevMessageId, useableStartTime, nextMessageId, trajFrameEpoch, originatorPoc, dragCoeff
-            , trajId, areaAlongOebMin, propagator, originator, sclkOffsetAtEpoch, trajUnits, covValues, timeSystem, trajPrevId, nBodyPertubations, fixedF10P7, covScaleMin, odMaxPredEigMAJ, dcExecStart, owner, reflectance, gm, dcTimePulsePeriod, covPrevId, areaMinForPc, dcTimePulseDuration, tracksAvailable, interpolation, dcRefDir, fixedS10P7Mean, covType, dragConstArea, manPredSource, trajType, nextLeapTaimUtc, reductionTheory
-            , covFrameEpoch, manDeviceId, fixedGeomagAp, fixedS10P7, manComposition, techAddress, iXX, iXZ, weightedRms, iXY, classification, attControlMode, originatorPosition, previousMessageEpoch, gravityModel, prmMsgLink, odEpochElGINT, trajNextId, iYY, originatorEmail, iYZ, gdop, manufacturer, dcBodyFrame, dataTypes, orbRevNumBasis, obsUsed, dockedWith, startTime, oebMax, srpConstArea, ocmDataElements, areaAlongOebInt, so
-            lveN, solveStates, iZZ, manPrevEpoch, odPrevId, dcExecStop, orbAveraging, considerParams, trajRefFrame, vmApparentMax, equatorialRadius, daysSinceFirstObs, interpolationDegree, techPoc, covNextId, srpModel, techPhone, fixedF10P7Mean, attActuatorType, considerN, odEpochElGMIN, rcsMax, timeSpan, oceanTidesModel, daysSinceLastObs, odConfidence, odMaxPredEigMIN, dcWinClose, messageId, centralBodyRotation, creationDate,
-             admMsgLink, catalogName, fixedM10P7, manValues, attControl, manFrameEpoch, manRefFrame, rdmMsgLink, centerName, swDataEpoch, covBasis, odEpoch, sclkSecPerSiSec, attKnowledge, shadowBodies, stopTime, covScaleMax, covId, odId, obsAvailable, covConfidence, maxObsGap, useableStopTime, sensors, manPrevId, albedoGridSize, areaAlongOebMax, objectName, user, vmApparent, dvRemaining, techEmail, cdmMsgLink, oebQ3, oebQ2, oe
-            bQ1, oebParentFrameEpoch, internationalDesignator, nextMessageEpoch, constellation, oebQC, gravAssistName, orbitCategory, dcPaStopAngle, covUnits, techOrg, fixedGeomagKp, shadowModel, oebInt, celestialSource, manNextId, dcRefTime, nextLeapEpoch, swDataSource, trajBasisId, originatorPhone, manId, dragUncertainty, covOrdering, oebMin, originatorAddress, dcMinCycles, tracksUsed, covBasisId, oblateFlattening, sensorsN,
-             fixedM10P7Mean, dcBodyTrigger, solarRadCoeff, sedr, dcPaStartAngle, taimUtcAtT0, trajBasis, rcs, vmApparentMin, manBasisId, dcType, avgManeuverFreq, orbRevNum, manPurpose, ut1MUtcAtT0, solidTidesModel, tdmMsgLink, swInterpMethod, alternateNames, fixedY10P7, manNextEpoch, dryMass, dvBol, initialWetMass, maxThrust, country, techPosition, manUnits, albedoModel, attPointing, interpMethodEop, opsStatus, operator, objec
-            tType, areaTypForPc, eopSource, busModel, vmAbsolute, fixedGeomagDst, trajValues, atmosphericModel, fixedY10P7Mean, epochT0, objectDesignator, wetMass, recommendedOdSpan, odEpochElGMAJ, oebParentFrame, areaMaxForPc, rcsMin, manBasis, dcWinOpen, solarRadUncertainty, odMethod, covRefFrame, dcMaxCycles, prevMessageId, useableStartTime, nextMessageId, trajFrameEpoch, originatorPoc, dragCoeff, trajId, areaAlongOebMin, p
-            ropagator, originator, sclkOffsetAtEpoch, trajUnits, covValues, timeSystem, trajPrevId, nBodyPertubations, fixedF10P7, covScaleMin, odMaxPredEigMAJ, dcExecStart, owner, reflectance, gm, dcTimePulsePeriod, covPrevId, areaMinForPc, dcTimePulseDuration, tracksAvailable, interpolation, dcRefDir, fixedS10P7Mean, covType, dragConstArea, manPredSource, trajType, nextLeapTaimUtc, reductionTheory, covFrameEpoch, manDeviceId
-            , fixedGeomagAp, fixedS10P7, manComposition, techAddress, iXX, iXZ, weightedRms, iXY, classification, attControlMode, originatorPosition, previousMessageEpoch, gravityModel, prmMsgLink, odEpochElGINT, trajNextId, iYY, originatorEmail, iYZ, gdop, manufacturer, dcBodyFrame, dataTypes, orbRevNumBasis, obsUsed, dockedWith, startTime, oebMax, srpConstArea, ocmDataElements, areaAlongOebInt, solveN, solveStates, iZZ, manP
-            revEpoch, odPrevId, dcExecStop, orbAveraging, considerParams, trajRefFrame, vmApparentMax, equatorialRadius, daysSinceFirstObs, interpolationDegree, techPoc, covNextId, srpModel, techPhone, fixedF10P7Mean, attActuatorType, considerN, odEpochElGMIN, rcsMax, timeSpan, oceanTidesModel, daysSinceLastObs, odConfidence, odMaxPredEigMIN, dcWinClose, messageId, centralBodyRotation, creationDate, admMsgLink, catalogName, fixedM10P7, manValues, attControl, manFrameEpoch, manRefFrame, rdmMsgLink, centerName, swDataEpoch, covBasis, odEpoch, sclkSecPerSiSec, attKnowledge, shadowBodies, stopTime, covScaleMax, covId, odId, obsAvailable, covConfidence, maxObsGap, useableStopTime, sensors, manPrevId, albedoGridSize, areaAlongOebMax, objectName, user, vmApparent, dvRemaining, techEmail,
-            CDM_MSG_LINK, OEB_Q3, OEB_Q2, OEB_Q1, OEB_PARENT_FRAME_EPOCH, INTERNATIONAL_DESIGNATOR, NEXT_MESSAGE_EPOCH, CONSTELLATION, OEB_QC, GRAV_ASSIST_NAME, ORBIT_CATEGORY, DC_PA_STOP_ANGLE, COV_UNITS, TECH_ORG, FIXED_GEOMAG_KP, SHADOW_MODEL, OEB_INT, CELESTIAL_SOURCE, MAN_NEXT_ID, DC_REF_TIME, NEXT_LEAP_EPOCH, SW_DATA_SOURCE, TRAJ_BASIS_ID, ORIGINATOR_PHONE, MAN_ID, DRAG_UNCERTAINTY, COV_ORDERING, OEB_MIN, ORIGINATOR_ADDR
-            ESS, DC_MIN_CYCLES, TRACKS_USED, COV_BASIS_ID, OBLATE_FLATTENING, SENSORS_N, FIXED_M10P7_MEAN, DC_BODY_TRIGGER, SOLAR_RAD_COEFF, SEDR, DC_PA_START_ANGLE, TAIMUTC_AT_TZERO, TRAJ_BASIS, RCS, VM_APPARENT_MIN, MAN_BASIS_ID, DC_TYPE, AVG_MANEUVER_FREQ, ORB_REVNUM, MAN_PURPOSE, UT1MUTC_AT_TZERO, SOLID_TIDES_MODEL, TDM_MSG_LINK, SW_INTERP_METHOD, ALTERNATE_NAMES, FIXED_Y10P7, MAN_NEXT_EPOCH, DRY_MASS, DV_BOL, INITIAL_WET_
-            MASS, MAX_THRUST, COUNTRY, TECH_POSITION, MAN_UNITS, ALBEDO_MODEL, ATT_POINTING, INTERP_METHOD_EOP, OPS_STATUS, OPERATOR, OBJECT_TYPE, AREA_TYP_FOR_PC, EOP_SOURCE, BUS_MODEL, VM_ABSOLUTE, FIXED_GEOMAG_DST, TRAJ_VALUES, ATMOSPHERIC_MODEL, FIXED_Y10P7_MEAN, EPOCH_TZERO, OBJECT_DESIGNATOR, WET_MASS, RECOMMENDED_OD_SPAN, OD_EPOCH_EIGMAJ, OEB_PARENT_FRAME, AREA_MAX_FOR_PC, RCS_MIN, MAN_BASIS, DC_WIN_OPEN, SOLAR_RAD_UNCE
-            RTAINTY, OD_METHOD, COV_REF_FRAME, DC_MAX_CYCLES, PREVIOUS_MESSAGE_ID, USEABLE_START_TIME, NEXT_MESSAGE_ID, TRAJ_FRAME_EPOCH, ORIGINATOR_POC, DRAG_COEFF_NOM, TRAJ_ID, AREA_ALONG_OEB_MIN, PROPAGATOR, ORIGINATOR, SCLK_OFFSET_AT_EPOCH, TRAJ_UNITS, covValues, TIME_SYSTEM, TRAJ_PREV_ID, N_BODY_PERTURBATIONS, FIXED_F10P7, COV_SCALE_MIN, OD_MAX_PRED_EIGMAJ, DC_EXEC_START, OWNER, REFLECTANCE, GM, DC_TIME_PULSE_PERIOD, COV_
-            PREV_ID, AREA_MIN_FOR_PC, DC_TIME_PULSE_DURATION, TRACKS_AVAILABLE, INTERPOLATION, DC_REF_DIR, FIXED_S10P7_MEAN, COV_TYPE, DRAG_CONST_AREA, MAN_PRED_SOURCE, TRAJ_TYPE, NEXT_LEAP_TAIMUTC, REDUCTION_THEORY, COV_FRAME_EPOCH, MAN_DEVICE_ID, FIXED_GEOMAG_AP, FIXED_S10P7, MAN_COMPOSITION, TECH_ADDRESS, IXX, IXZ, WEIGHTED_RMS, IXY, CLASSIFICATION, ATT_CONTROL_MODE, ORIGINATOR_POSITION, PREVIOUS_MESSAGE_EPOCH, GRAVITY_MODE
-            L, PRM_MSG_LINK, OD_EPOCH_EIGINT, TRAJ_NEXT_ID, IYY, ORIGINATOR_EMAIL, IYZ, GDOP, MANUFACTURER, DC_BODY_FRAME, DATA_TYPES, ORB_REVNUM_BASIS, OBS_USED, DOCKED_WITH, START_TIME, OEB_MAX, SRP_CONST_AREA, OCM_DATA_ELEMENTS, AREA_ALONG_OEB_INT, SOLVE_N, SOLVE_STATES, IZZ, MAN_PREV_EPOCH, OD_PREV_ID, DC_EXEC_STOP, ORB_AVERAGING, CONSIDER_PARAMS, TRAJ_REF_FRAME, VM_APPARENT_MAX, EQUATORIAL_RADIUS, DAYS_SINCE_FIRST_OBS, IN
-            TERPOLATION_DEGREE, TECH_POC, COV_NEXT_ID, SRP_MODEL, TECH_PHONE, FIXED_F10P7_MEAN, ATT_ACTUATOR_TYPE, CONSIDER_N, OD_EPOCH_EIGMIN, RCS_MAX, TIME_SPAN, OCEAN_TIDES_MODEL, DAYS_SINCE_LAST_OBS, OD_CONFIDENCE, OD_MIN_PRED_EIGMIN, DC_WIN_CLOSE, MESSAGE_ID, CENTRAL_BODY_ROTATION, CREATION_DATE, ADM_MSG_LINK, CATALOG_NAME, FIXED_M10P7, manValues, ATT_CONTROL, MAN_FRAME_EPOCH, MAN_REF_FRAME, RDM_MSG_LINK, CENTER_NAME, SW_
-            DATA_EPOCH, COV_BASIS, OD_EPOCH, SCLK_SEC_PER_SI_SEC, ATT_KNOWLEDGE, SHADOW_BODIES, STOP_TIME, COV_SCALE_MAX, COV_ID, OD_ID, OBS_AVAILABLE, COV_CONFIDENCE, MAXIMUM_OBS_GAP, USEABLE_STOP_TIME, SENSORS, MAN_PREV_ID, ALBEDO_GRID_SIZE, AREA_ALONG_OEB_MAX, OBJECT_NAME, USER_DATA, VM_APPARENT, DV_REMAINING, TECH_EMAIL, CDM_MSG_LINK, OEB_Q3, OEB_Q2, OEB_Q1, OEB_PARENT_FRAME_EPOCH, INTERNATIONAL_DESIGNATOR, NEXT_MESSAGE_EP
-            OCH, CONSTELLATION, OEB_QC, GRAV_ASSIST_NAME, ORBIT_CATEGORY, DC_PA_STOP_ANGLE, COV_UNITS, TECH_ORG, FIXED_GEOMAG_KP, SHADOW_MODEL, OEB_INT, CELESTIAL_SOURCE, MAN_NEXT_ID, DC_REF_TIME, NEXT_LEAP_EPOCH, SW_DATA_SOURCE, TRAJ_BASIS_ID, ORIGINATOR_PHONE, MAN_ID, DRAG_UNCERTAINTY, COV_ORDERING, OEB_MIN, ORIGINATOR_ADDRESS, DC_MIN_CYCLES, TRACKS_USED, COV_BASIS_ID, OBLATE_FLATTENING, SENSORS_N, FIXED_M10P7_MEAN, DC_BODY_
-            TRIGGER, SOLAR_RAD_COEFF, SEDR, DC_PA_START_ANGLE, TAIMUTC_AT_TZERO, TRAJ_BASIS, RCS, VM_APPARENT_MIN, MAN_BASIS_ID, DC_TYPE, AVG_MANEUVER_FREQ, ORB_REVNUM, MAN_PURPOSE, UT1MUTC_AT_TZERO, SOLID_TIDES_MODEL, TDM_MSG_LINK, SW_INTERP_METHOD, ALTERNATE_NAMES, FIXED_Y10P7, MAN_NEXT_EPOCH, DRY_MASS, DV_BOL, INITIAL_WET_MASS, MAX_THRUST, COUNTRY, TECH_POSITION, MAN_UNITS, ALBEDO_MODEL, ATT_POINTING, INTERP_METHOD_EOP, OPS
-            _STATUS, OPERATOR, OBJECT_TYPE, AREA_TYP_FOR_PC, EOP_SOURCE, BUS_MODEL, VM_ABSOLUTE, FIXED_GEOMAG_DST, TRAJ_VALUES, ATMOSPHERIC_MODEL, FIXED_Y10P7_MEAN, EPOCH_TZERO, OBJECT_DESIGNATOR, WET_MASS, RECOMMENDED_OD_SPAN, OD_EPOCH_EIGMAJ, OEB_PARENT_FRAME, AREA_MAX_FOR_PC, RCS_MIN, MAN_BASIS, DC_WIN_OPEN, SOLAR_RAD_UNCERTAINTY, OD_METHOD, COV_REF_FRAME, DC_MAX_CYCLES, PREVIOUS_MESSAGE_ID, USEABLE_START_TIME, NEXT_MESSAGE
-            _ID, TRAJ_FRAME_EPOCH, ORIGINATOR_POC, DRAG_COEFF_NOM, TRAJ_ID, AREA_ALONG_OEB_MIN, PROPAGATOR, ORIGINATOR, SCLK_OFFSET_AT_EPOCH, TRAJ_UNITS, covValues, TIME_SYSTEM, TRAJ_PREV_ID, N_BODY_PERTURBATIONS, FIXED_F10P7, COV_SCALE_MIN, OD_MAX_PRED_EIGMAJ, DC_EXEC_START, OWNER, REFLECTANCE, GM, DC_TIME_PULSE_PERIOD, COV_PREV_ID, AREA_MIN_FOR_PC, DC_TIME_PULSE_DURATION, TRACKS_AVAILABLE, INTERPOLATION, DC_REF_DIR, FIXED_S1
-            0P7_MEAN, COV_TYPE, DRAG_CONST_AREA, MAN_PRED_SOURCE, TRAJ_TYPE, NEXT_LEAP_TAIMUTC, REDUCTION_THEORY, COV_FRAME_EPOCH, MAN_DEVICE_ID, FIXED_GEOMAG_AP, FIXED_S10P7, MAN_COMPOSITION, TECH_ADDRESS, IXX, IXZ, WEIGHTED_RMS, IXY, CLASSIFICATION, ATT_CONTROL_MODE, ORIGINATOR_POSITION, PREVIOUS_MESSAGE_EPOCH, GRAVITY_MODEL, PRM_MSG_LINK, OD_EPOCH_EIGINT, TRAJ_NEXT_ID, IYY, ORIGINATOR_EMAIL, IYZ, GDOP, MANUFACTURER, DC_BODY
-            _FRAME, DATA_TYPES, ORB_REVNUM_BASIS, OBS_USED, DOCKED_WITH, START_TIME, OEB_MAX, SRP_CONST_AREA, OCM_DATA_ELEMENTS, AREA_ALONG_OEB_INT, SOLVE_N, SOLVE_STATES, IZZ, MAN_PREV_EPOCH, OD_PREV_ID, DC_EXEC_STOP, ORB_AVERAGING, CONSIDER_PARAMS, TRAJ_REF_FRAME, VM_APPARENT_MAX, EQUATORIAL_RADIUS, DAYS_SINCE_FIRST_OBS, INTERPOLATION_DEGREE, TECH_POC, COV_NEXT_ID, SRP_MODEL, TECH_PHONE, FIXED_F10P7_MEAN, ATT_ACTUATOR_TYPE,
-            CONSIDER_N, OD_EPOCH_EIGMIN, RCS_MAX, TIME_SPAN, OCEAN_TIDES_MODEL, DAYS_SINCE_LAST_OBS, OD_CONFIDENCE, OD_MIN_PRED_EIGMIN, DC_WIN_CLOSE, MESSAGE_ID, CENTRAL_BODY_ROTATION, CREATION_DATE, ADM_MSG_LINK, CATALOG_NAME, FIXED_M10P7, manValues, ATT_CONTROL, MAN_FRAME_EPOCH, MAN_REF_FRAME, RDM_MSG_LINK, CENTER_NAME, SW_DATA_EPOCH, COV_BASIS, OD_EPOCH, SCLK_SEC_PER_SI_SEC, ATT_KNOWLEDGE, SHADOW_BODIES, STOP_TIME, COV_SCALE_MAX, COV_ID, OD_ID, OBS_AVAILABLE, COV_CONFIDENCE, MAXIMUM_OBS_GAP, USEABLE_STOP_TIME, SENSORS, MAN_PREV_ID, ALBEDO_GRID_SIZE, AREA_ALONG_OEB_MAX, OBJECT_NAME, USER_DATA, VM_APPARENT, DV_REMAINING, TECH_EMAIL
-
-        page : typing.Optional[int]
-            Page number for the queried OCM(s). Default is 0
-
-        size : typing.Optional[int]
-            Number of OCM(s) per page.  Max is 10
-
-        request_options : typing.Optional[RequestOptions]
-            Request-specific configuration.
-
-        Returns
-        -------
-        HttpResponse[ListV1OcmResponse]
-            Ok - OCM(s) successfully retrieved.  Available formats are KVN (Text, Default), JSON, and XML.
-        """
-        _response = self._client_wrapper.httpx_client.request(
-            "metadata/ocm",
-            method="GET",
-            params={
-                "owner": owner,
-                "operator": operator,
-                "objectDesignator": object_designator,
-                "messageId": message_id,
-                "fileName": file_name,
-                "creationDate": creation_date,
-                "headersOnly": headers_only,
-                "maxCreationDate": max_creation_date,
-                "format": format,
-                "sort": sort,
-                "fields": fields,
-                "page": page,
-                "size": size,
-            },
-            request_options=request_options,
-        )
-        try:
-            if 200 <= _response.status_code < 300:
-                _data = typing.cast(
-                    ListV1OcmResponse,
-                    construct_type(
-                        type_=ListV1OcmResponse,  # type: ignore
-                        object_=_response.json(),
-                    ),
-                )
-                return HttpResponse(response=_response, data=_data)
-            if _response.status_code == 400:
-                raise BadRequestError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Any,
-                        construct_type(
-                            type_=typing.Any,  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 401:
-                raise UnauthorizedError(
+            if _response.status_code == 403:
+                raise ForbiddenError(
                     headers=dict(_response.headers),
                     body=typing.cast(
                         typing.Any,
@@ -834,8 +643,30 @@ class RawOcmClient:
                         ),
                     ),
                 )
-            if _response.status_code == 422:
-                raise UnprocessableEntityError(
+            if _response.status_code == 405:
+                raise MethodNotAllowedError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        construct_type(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 417:
+                raise ExpectationFailedError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        construct_type(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 429:
+                raise TooManyRequestsError(
                     headers=dict(_response.headers),
                     body=typing.cast(
                         typing.Any,
@@ -856,172 +687,24 @@ class RawOcmClient:
                         ),
                     ),
                 )
-            _response_json = _response.json()
-        except JSONDecodeError:
-            raise ApiError(
-                status_code=_response.status_code,
-                headers=dict(_response.headers),
-                body=_response.text,
-            )
-        except ValidationError as e:
-            raise ParsingError(
-                status_code=_response.status_code,
-                headers=dict(_response.headers),
-                body=_response.json(),
-                cause=e,
-            )
-        raise ApiError(
-            status_code=_response.status_code,
-            headers=dict(_response.headers),
-            body=_response_json,
-        )
-
-    def list_by_operational_batch_v1(
-        self,
-        *,
-        message_id: typing.Optional[str] = None,
-        batch_id: typing.Optional[str] = None,
-        sat_no: typing.Optional[str] = None,
-        upload_date: typing.Optional[str] = None,
-        usable_start_time: typing.Optional[str] = None,
-        usable_stop_time: typing.Optional[str] = None,
-        creation_date: typing.Optional[str] = None,
-        cdm_found: typing.Optional[str] = None,
-        created_by: typing.Optional[str] = None,
-        sort: typing.Optional[str] = None,
-        page: typing.Optional[int] = None,
-        size: typing.Optional[int] = None,
-        request_options: typing.Optional[RequestOptions] = None,
-    ) -> HttpResponse[typing.List[OperationalOnDemandBatchDto]]:
-        """
-        Retrieve one or more On Demand Batches.
-
-        Parameters
-        ----------
-        message_id : typing.Optional[str]
-            Message Id (generated) from ASW that processed the CDM during super combo processing. A value with an optional operator that may be pre-pended to the value. Valid operators are: Not Equal (<>Value), In (Value1,Value2), Like (\\*Value), Not Like(~*Value)
-
-        batch_id : typing.Optional[str]
-            Batch Id from the batch of OCMs that was uploaded. A value with an optional operator that may be pre-pended to the value. Valid operators are: Not Equal (<>Value), In (Value1,Value2), Like (\\*Value), Not Like(~*Value)
-
-        sat_no : typing.Optional[str]
-            SatNo from the OCM that was uploaded as part of the batch. A value with an optional operator that may be pre-pended to the value. Valid operators are: Not Equal (<>Value), In (Value1,Value2), Like (\\*Value), Not Like(~*Value)
-
-        upload_date : typing.Optional[str]
-            Upload Date from the OCM batch that was uploaded. Valid operators are: Greater Than (>Value), Less Than (<Value), Greater Than or Equal (>=Value), Less Than or Equal (<=Value), and Between (Value1...Value2) (smaller value first)
-
-        usable_start_time : typing.Optional[str]
-            usableStartTime from an OCM that was uploaded as part of the batch. Valid operators are: Greater Than (>Value), Less Than (<Value), Greater Than or Equal (>=Value), Less Than or Equal (<=Value), and Between (Value1...Value2) (smaller value first)
-
-        usable_stop_time : typing.Optional[str]
-            usableStopTime from an OCM that was uploaded as part of the batch. Valid operators are: Greater Than (>Value), Less Than (<Value), Greater Than or Equal (>=Value), Less Than or Equal (<=Value), and Between (Value1...Value2) (smaller value first)
-
-        creation_date : typing.Optional[str]
-            creationDate from an OCM that was uploaded as part of the batch. Valid operators are: Greater Than (>Value), Less Than (<Value), Greater Than or Equal (>=Value), Less Than or Equal (<=Value), and Between (Value1...Value2) (smaller value first)
-
-        cdm_found : typing.Optional[str]
-            If a cdm is found as part of the batch on-demand run. Valid operators are: Not Equal (<>Value)
-
-        created_by : typing.Optional[str]
-            Username of batches to find. Can be a specific username or 'all' for all users. Defaults to requesting user's username
-
-        sort : typing.Optional[str]
-            Desired sort field and direction (Ascending = ASC, Descending = DESC), separated by a comma.
-
-        page : typing.Optional[int]
-            Page number for the queried TraCSS CDM(s). Default is 0
-
-        size : typing.Optional[int]
-            Number of TraCSS CDMs per page.  Max is 100000
-
-        request_options : typing.Optional[RequestOptions]
-            Request-specific configuration.
-
-        Returns
-        -------
-        HttpResponse[typing.List[OperationalOnDemandBatchDto]]
-            Ok - CDM(s) successfully retrieved.  Available formats are KVN (Text, Default), JSON, and XML.
-        """
-        _response = self._client_wrapper.httpx_client.request(
-            "metadata/ocm/operationalBatch",
-            method="GET",
-            params={
-                "messageId": message_id,
-                "batchId": batch_id,
-                "satNo": sat_no,
-                "uploadDate": upload_date,
-                "usableStartTime": usable_start_time,
-                "usableStopTime": usable_stop_time,
-                "creationDate": creation_date,
-                "cdmFound": cdm_found,
-                "createdBy": created_by,
-                "sort": sort,
-                "page": page,
-                "size": size,
-            },
-            request_options=request_options,
-        )
-        try:
-            if 200 <= _response.status_code < 300:
-                _data = typing.cast(
-                    typing.List[OperationalOnDemandBatchDto],
-                    construct_type(
-                        type_=typing.List[OperationalOnDemandBatchDto],  # type: ignore
-                        object_=_response.json(),
-                    ),
-                )
-                return HttpResponse(response=_response, data=_data)
-            if _response.status_code == 400:
-                raise BadRequestError(
+            if _response.status_code == 502:
+                raise BadGatewayError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        typing.Any,
+                        ErrorResponse,
                         construct_type(
-                            type_=typing.Any,  # type: ignore
+                            type_=ErrorResponse,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
                 )
-            if _response.status_code == 401:
-                raise UnauthorizedError(
+            if _response.status_code == 503:
+                raise ServiceUnavailableError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        typing.Any,
+                        ErrorResponse,
                         construct_type(
-                            type_=typing.Any,  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 404:
-                raise NotFoundError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Any,
-                        construct_type(
-                            type_=typing.Any,  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 422:
-                raise UnprocessableEntityError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Any,
-                        construct_type(
-                            type_=typing.Any,  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 500:
-                raise InternalServerError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Any,
-                        construct_type(
-                            type_=typing.Any,  # type: ignore
+                            type_=ErrorResponse,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
@@ -1060,7 +743,9 @@ class AsyncRawOcmClient:
         request_options: typing.Optional[RequestOptions] = None,
     ) -> AsyncHttpResponse[typing.Dict[str, typing.Any]]:
         """
-        Upload a V2 OCM or zip file of OCMs (file param in formData). If you wish to update the database, use a header of updateDatabase with a value of true.The following will be used from the OCM:
+        Upload an OCM or zip file of OCMs (file param in formData). OCM files / zips have a limit of 4000mbs, if you're batch is larger than 4000mbs, it must be split into smaller batches. These OCMs must follow the latest TraCSS OCM spec for succesful results. Format issues will be returned after the upload has finished, listing validation issues (if any) with the uploaded OCM(s).
+        If you wish to update the TraCSS CAT and Operator contact info, use a header of updateDatabase with a value of true.
+        The following will be used from the OCM:
         * Tech POC
         * Tech Org
         * Tech Position
@@ -1146,8 +831,52 @@ class AsyncRawOcmClient:
                         ),
                     ),
                 )
-            if _response.status_code == 422:
-                raise UnprocessableEntityError(
+            if _response.status_code == 403:
+                raise ForbiddenError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        construct_type(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 404:
+                raise NotFoundError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        construct_type(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 405:
+                raise MethodNotAllowedError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        construct_type(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 417:
+                raise ExpectationFailedError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        construct_type(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 429:
+                raise TooManyRequestsError(
                     headers=dict(_response.headers),
                     body=typing.cast(
                         typing.Any,
@@ -1168,139 +897,24 @@ class AsyncRawOcmClient:
                         ),
                     ),
                 )
-            _response_json = _response.json()
-        except JSONDecodeError:
-            raise ApiError(
-                status_code=_response.status_code,
-                headers=dict(_response.headers),
-                body=_response.text,
-            )
-        except ValidationError as e:
-            raise ParsingError(
-                status_code=_response.status_code,
-                headers=dict(_response.headers),
-                body=_response.json(),
-                cause=e,
-            )
-        raise ApiError(
-            status_code=_response.status_code,
-            headers=dict(_response.headers),
-            body=_response_json,
-        )
-
-    async def upload_v1(
-        self,
-        *,
-        file: core.File,
-        trigger_ca: typing.Optional[bool] = None,
-        update_database: typing.Optional[str] = None,
-        request_options: typing.Optional[RequestOptions] = None,
-    ) -> AsyncHttpResponse[typing.Dict[str, typing.Any]]:
-        """
-        Upload an OCM or zip file of OCMs (file param in formData). If you wish to update the database, use a header of updateDatabase with a value of true.The following will be used from the OCM:
-        * Tech POC
-        * Tech Org
-        * Tech Position
-        * Tech Phone
-        * Tech Email
-        * Tech Address
-        * Originator POC
-        * Originator Position
-        * Originator Phone
-        * Originator Email
-        * Originator Address
-        * Ops Status
-        * Orbit Category
-        * Wet mass
-        * Hard Body Radius
-
-        Parameters
-        ----------
-        file : core.File
-            See core.File for more documentation
-
-        trigger_ca : typing.Optional[bool]
-            Whether to trigger CA with uploaded OCM(s). Defaults to false. NOTE: This only affects OPERATIONAL OCMs, CANDIDATE OCMs will always trigger on-demand CA NOTE: If two Operational OCMs with the same objectId are uploaded, only the most recently created OCM will be screened for on demand.
-
-        update_database : typing.Optional[str]
-
-        request_options : typing.Optional[RequestOptions]
-            Request-specific configuration.
-
-        Returns
-        -------
-        AsyncHttpResponse[typing.Dict[str, typing.Any]]
-            Created - OCM successfully stored, trigger CA, with errors. Has two successful statuses. The first status indicates the API was hit without error. The second indicates the OCM(s) were persisted to the system without error
-        """
-        _response = await self._client_wrapper.httpx_client.request(
-            "metadata/ocm/upload",
-            method="POST",
-            params={
-                "triggerCA": trigger_ca,
-            },
-            data={},
-            files={
-                "file": file,
-            },
-            headers={
-                "updateDatabase": str(update_database)
-                if update_database is not None
-                else None,
-            },
-            request_options=request_options,
-            omit=OMIT,
-            force_multipart=True,
-        )
-        try:
-            if 200 <= _response.status_code < 300:
-                _data = typing.cast(
-                    typing.Dict[str, typing.Any],
-                    construct_type(
-                        type_=typing.Dict[str, typing.Any],  # type: ignore
-                        object_=_response.json(),
-                    ),
-                )
-                return AsyncHttpResponse(response=_response, data=_data)
-            if _response.status_code == 400:
-                raise BadRequestError(
+            if _response.status_code == 502:
+                raise BadGatewayError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        typing.Any,
+                        ErrorResponse,
                         construct_type(
-                            type_=typing.Any,  # type: ignore
+                            type_=ErrorResponse,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
                 )
-            if _response.status_code == 401:
-                raise UnauthorizedError(
+            if _response.status_code == 503:
+                raise ServiceUnavailableError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        typing.Any,
+                        ErrorResponse,
                         construct_type(
-                            type_=typing.Any,  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 422:
-                raise UnprocessableEntityError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Any,
-                        construct_type(
-                            type_=typing.Any,  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 500:
-                raise InternalServerError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Any,
-                        construct_type(
-                            type_=typing.Any,  # type: ignore
+                            type_=ErrorResponse,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
@@ -1344,7 +958,16 @@ class AsyncRawOcmClient:
         request_options: typing.Optional[RequestOptions] = None,
     ) -> AsyncHttpResponse[ListOcmResponse]:
         """
-        Retrieve one or more OCMs from TRACSS. If no parameters are provided, the system will default to the header of all OCMs currently stored.
+        Retrieve OCMs that have been uploaded to TraCSS
+
+
+        Example Scripts:
+
+
+        | Guide                                           | Script                                             |
+        |-------------------------------------------------|----------------------------------------------------|
+        | [Pull OCMs Guide](/metadata/scripts/README_pull_ocms.md) | [Pull OCMs Script (Python)](/metadata/scripts/pull_ocms.py)  |
+
 
         Parameters
         ----------
@@ -1474,6 +1097,17 @@ class AsyncRawOcmClient:
                         ),
                     ),
                 )
+            if _response.status_code == 403:
+                raise ForbiddenError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        construct_type(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
             if _response.status_code == 404:
                 raise NotFoundError(
                     headers=dict(_response.headers),
@@ -1485,8 +1119,30 @@ class AsyncRawOcmClient:
                         ),
                     ),
                 )
-            if _response.status_code == 422:
-                raise UnprocessableEntityError(
+            if _response.status_code == 405:
+                raise MethodNotAllowedError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        construct_type(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 417:
+                raise ExpectationFailedError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        construct_type(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 429:
+                raise TooManyRequestsError(
                     headers=dict(_response.headers),
                     body=typing.cast(
                         typing.Any,
@@ -1503,6 +1159,28 @@ class AsyncRawOcmClient:
                         typing.Any,
                         construct_type(
                             type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 502:
+                raise BadGatewayError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorResponse,
+                        construct_type(
+                            type_=ErrorResponse,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 503:
+                raise ServiceUnavailableError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorResponse,
+                        construct_type(
+                            type_=ErrorResponse,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
@@ -1545,7 +1223,7 @@ class AsyncRawOcmClient:
         request_options: typing.Optional[RequestOptions] = None,
     ) -> AsyncHttpResponse[typing.List[OperationalOnDemandBatchDto]]:
         """
-        Retrieve one or more On Demand Batches.
+        Retrieve info on On Demand Batches that have been submitted to TraCSS. Includes info on if CDMs were generated by a batch
 
         Parameters
         ----------
@@ -1644,199 +1322,8 @@ class AsyncRawOcmClient:
                         ),
                     ),
                 )
-            if _response.status_code == 404:
-                raise NotFoundError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Any,
-                        construct_type(
-                            type_=typing.Any,  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 422:
-                raise UnprocessableEntityError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Any,
-                        construct_type(
-                            type_=typing.Any,  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 500:
-                raise InternalServerError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Any,
-                        construct_type(
-                            type_=typing.Any,  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            _response_json = _response.json()
-        except JSONDecodeError:
-            raise ApiError(
-                status_code=_response.status_code,
-                headers=dict(_response.headers),
-                body=_response.text,
-            )
-        except ValidationError as e:
-            raise ParsingError(
-                status_code=_response.status_code,
-                headers=dict(_response.headers),
-                body=_response.json(),
-                cause=e,
-            )
-        raise ApiError(
-            status_code=_response.status_code,
-            headers=dict(_response.headers),
-            body=_response_json,
-        )
-
-    async def list_v1(
-        self,
-        *,
-        owner: typing.Optional[str] = None,
-        operator: typing.Optional[str] = None,
-        object_designator: typing.Optional[str] = None,
-        message_id: typing.Optional[str] = None,
-        file_name: typing.Optional[str] = None,
-        creation_date: typing.Optional[str] = None,
-        headers_only: typing.Optional[bool] = None,
-        max_creation_date: typing.Optional[bool] = None,
-        format: typing.Optional[str] = None,
-        sort: typing.Optional[str] = None,
-        fields: typing.Optional[str] = None,
-        page: typing.Optional[int] = None,
-        size: typing.Optional[int] = None,
-        request_options: typing.Optional[RequestOptions] = None,
-    ) -> AsyncHttpResponse[ListV1OcmResponse]:
-        """
-        Retrieve one or more OCMs from TRACSS. If no parameters are provided, the system will default to the header of all OCMs currently stored.
-
-        Parameters
-        ----------
-        owner : typing.Optional[str]
-            Owner of the satellite. A value with an optional operator that may be pre-pended to the value. Valid operators are: Not Equal (<>Value), In (Value1,Value2) , Like (\\*Value), Not Like(~*Value)
-
-        operator : typing.Optional[str]
-            Operator of the satellite. A value with an optional operator that may be pre-pended to the value. Valid operators are: Not Equal (<>Value), In (Value1,Value2) , Like (\\*Value), Not Like(~*Value)
-
-        object_designator : typing.Optional[str]
-            Object Designator (Satellite Number). A value with an optional operator that may be pre-pended to the value. Valid operators are: Greater Than (>Value), Less Than (<Value), Greater Than or Equal (>=Value), Less Than or Equal (<=Value), Not Equal (<>Value), In (Value1,Value2), Between (Value1...Value2) (smaller value first), Like (\\*Value), Not Like(~*Value)
-
-        message_id : typing.Optional[str]
-            Message Id (UUID) of the OCM. A value with an optional operator that may be pre-pended to the value. Valid operators are: Not Equal (<>Value), In (Value1,Value2), Like (\\*Value), Not Like(~*Value)
-
-        file_name : typing.Optional[str]
-            File name of the OCM. A value with an optional operator that may be pre-pended to the value. Valid operators are: Not Equal (<>Value), In (Value1,Value2), Like (\\*Value), Not Like(~*Value) and Between (Value1...Value2) (smaller value first)
-
-        creation_date : typing.Optional[str]
-            Creation Date of the OCM. A value with an optional operator that may be pre-pended to the value. Valid operators are: Greater Than (>Value), Less Than (<Value), Greater Than or Equal (>=Value), Less Than or Equal (<=Value), Not Equal (<>Value)
-
-        headers_only : typing.Optional[bool]
-            Only get the header key fields of the object being asked for. Default is false. If set to true, format will be overwritten to JSON. Does not work with any filters
-
-        max_creation_date : typing.Optional[bool]
-            Retrieve only the latest OCM per object designator.
-
-        format : typing.Optional[str]
-            Desired format of the returned OCM(s). Options are KVN (Default), JSON or XML.
-
-        sort : typing.Optional[str]
-            Desired sort field and direction (ASC, DESC).
-
-        fields : typing.Optional[str]
-            Comma separated list of specific fields to include in the response.  Valid fields for JSON and XML are: cdmMsgLink, oebQ3, oebQ2, oebQ1, oebParentFrameEpoch, internationalDesignator, nextMessageEpoch, constellation, oebQC, gravAssistName, orbitCategory, dcPaStopAngle, covUnits, techOrg, fixedGeomagKp, shadowModel, oebInt, celestialSource, manNextId, dcRefTime, nextLeapEpoch, swDataSource, trajBasisId, originatorPhone, manId, dragUncertainty, covOrdering, oebMin, originatorAddress, dcMinCycles, tracksUsed, covBasisId,
-             oblateFlattening, sensorsN, fixedM10P7Mean, dcBodyTrigger, solarRadCoeff, sedr, dcPaStartAngle, taimUtcAtT0, trajBasis, rcs, vmApparentMin, manBasisId, dcType, avgManeuverFreq, orbRevNum, manPurpose, ut1MUtcAtT0, solidTidesModel, tdmMsgLink, swInterpMethod, alternateNames, fixedY10P7, manNextEpoch, dryMass, dvBol, initialWetMass, maxThrust, country, techPosition, manUnits, albedoModel, attPointing, interpMethodEop
-            , opsStatus, operator, objectType, areaTypForPc, eopSource, busModel, vmAbsolute, fixedGeomagDst, trajValues, atmosphericModel, fixedY10P7Mean, epochT0, objectDesignator, wetMass, recommendedOdSpan, odEpochElGMAJ, oebParentFrame, areaMaxForPc, rcsMin, manBasis, dcWinOpen, solarRadUncertainty, odMethod, covRefFrame, dcMaxCycles, prevMessageId, useableStartTime, nextMessageId, trajFrameEpoch, originatorPoc, dragCoeff
-            , trajId, areaAlongOebMin, propagator, originator, sclkOffsetAtEpoch, trajUnits, covValues, timeSystem, trajPrevId, nBodyPertubations, fixedF10P7, covScaleMin, odMaxPredEigMAJ, dcExecStart, owner, reflectance, gm, dcTimePulsePeriod, covPrevId, areaMinForPc, dcTimePulseDuration, tracksAvailable, interpolation, dcRefDir, fixedS10P7Mean, covType, dragConstArea, manPredSource, trajType, nextLeapTaimUtc, reductionTheory
-            , covFrameEpoch, manDeviceId, fixedGeomagAp, fixedS10P7, manComposition, techAddress, iXX, iXZ, weightedRms, iXY, classification, attControlMode, originatorPosition, previousMessageEpoch, gravityModel, prmMsgLink, odEpochElGINT, trajNextId, iYY, originatorEmail, iYZ, gdop, manufacturer, dcBodyFrame, dataTypes, orbRevNumBasis, obsUsed, dockedWith, startTime, oebMax, srpConstArea, ocmDataElements, areaAlongOebInt, so
-            lveN, solveStates, iZZ, manPrevEpoch, odPrevId, dcExecStop, orbAveraging, considerParams, trajRefFrame, vmApparentMax, equatorialRadius, daysSinceFirstObs, interpolationDegree, techPoc, covNextId, srpModel, techPhone, fixedF10P7Mean, attActuatorType, considerN, odEpochElGMIN, rcsMax, timeSpan, oceanTidesModel, daysSinceLastObs, odConfidence, odMaxPredEigMIN, dcWinClose, messageId, centralBodyRotation, creationDate,
-             admMsgLink, catalogName, fixedM10P7, manValues, attControl, manFrameEpoch, manRefFrame, rdmMsgLink, centerName, swDataEpoch, covBasis, odEpoch, sclkSecPerSiSec, attKnowledge, shadowBodies, stopTime, covScaleMax, covId, odId, obsAvailable, covConfidence, maxObsGap, useableStopTime, sensors, manPrevId, albedoGridSize, areaAlongOebMax, objectName, user, vmApparent, dvRemaining, techEmail, cdmMsgLink, oebQ3, oebQ2, oe
-            bQ1, oebParentFrameEpoch, internationalDesignator, nextMessageEpoch, constellation, oebQC, gravAssistName, orbitCategory, dcPaStopAngle, covUnits, techOrg, fixedGeomagKp, shadowModel, oebInt, celestialSource, manNextId, dcRefTime, nextLeapEpoch, swDataSource, trajBasisId, originatorPhone, manId, dragUncertainty, covOrdering, oebMin, originatorAddress, dcMinCycles, tracksUsed, covBasisId, oblateFlattening, sensorsN,
-             fixedM10P7Mean, dcBodyTrigger, solarRadCoeff, sedr, dcPaStartAngle, taimUtcAtT0, trajBasis, rcs, vmApparentMin, manBasisId, dcType, avgManeuverFreq, orbRevNum, manPurpose, ut1MUtcAtT0, solidTidesModel, tdmMsgLink, swInterpMethod, alternateNames, fixedY10P7, manNextEpoch, dryMass, dvBol, initialWetMass, maxThrust, country, techPosition, manUnits, albedoModel, attPointing, interpMethodEop, opsStatus, operator, objec
-            tType, areaTypForPc, eopSource, busModel, vmAbsolute, fixedGeomagDst, trajValues, atmosphericModel, fixedY10P7Mean, epochT0, objectDesignator, wetMass, recommendedOdSpan, odEpochElGMAJ, oebParentFrame, areaMaxForPc, rcsMin, manBasis, dcWinOpen, solarRadUncertainty, odMethod, covRefFrame, dcMaxCycles, prevMessageId, useableStartTime, nextMessageId, trajFrameEpoch, originatorPoc, dragCoeff, trajId, areaAlongOebMin, p
-            ropagator, originator, sclkOffsetAtEpoch, trajUnits, covValues, timeSystem, trajPrevId, nBodyPertubations, fixedF10P7, covScaleMin, odMaxPredEigMAJ, dcExecStart, owner, reflectance, gm, dcTimePulsePeriod, covPrevId, areaMinForPc, dcTimePulseDuration, tracksAvailable, interpolation, dcRefDir, fixedS10P7Mean, covType, dragConstArea, manPredSource, trajType, nextLeapTaimUtc, reductionTheory, covFrameEpoch, manDeviceId
-            , fixedGeomagAp, fixedS10P7, manComposition, techAddress, iXX, iXZ, weightedRms, iXY, classification, attControlMode, originatorPosition, previousMessageEpoch, gravityModel, prmMsgLink, odEpochElGINT, trajNextId, iYY, originatorEmail, iYZ, gdop, manufacturer, dcBodyFrame, dataTypes, orbRevNumBasis, obsUsed, dockedWith, startTime, oebMax, srpConstArea, ocmDataElements, areaAlongOebInt, solveN, solveStates, iZZ, manP
-            revEpoch, odPrevId, dcExecStop, orbAveraging, considerParams, trajRefFrame, vmApparentMax, equatorialRadius, daysSinceFirstObs, interpolationDegree, techPoc, covNextId, srpModel, techPhone, fixedF10P7Mean, attActuatorType, considerN, odEpochElGMIN, rcsMax, timeSpan, oceanTidesModel, daysSinceLastObs, odConfidence, odMaxPredEigMIN, dcWinClose, messageId, centralBodyRotation, creationDate, admMsgLink, catalogName, fixedM10P7, manValues, attControl, manFrameEpoch, manRefFrame, rdmMsgLink, centerName, swDataEpoch, covBasis, odEpoch, sclkSecPerSiSec, attKnowledge, shadowBodies, stopTime, covScaleMax, covId, odId, obsAvailable, covConfidence, maxObsGap, useableStopTime, sensors, manPrevId, albedoGridSize, areaAlongOebMax, objectName, user, vmApparent, dvRemaining, techEmail,
-            CDM_MSG_LINK, OEB_Q3, OEB_Q2, OEB_Q1, OEB_PARENT_FRAME_EPOCH, INTERNATIONAL_DESIGNATOR, NEXT_MESSAGE_EPOCH, CONSTELLATION, OEB_QC, GRAV_ASSIST_NAME, ORBIT_CATEGORY, DC_PA_STOP_ANGLE, COV_UNITS, TECH_ORG, FIXED_GEOMAG_KP, SHADOW_MODEL, OEB_INT, CELESTIAL_SOURCE, MAN_NEXT_ID, DC_REF_TIME, NEXT_LEAP_EPOCH, SW_DATA_SOURCE, TRAJ_BASIS_ID, ORIGINATOR_PHONE, MAN_ID, DRAG_UNCERTAINTY, COV_ORDERING, OEB_MIN, ORIGINATOR_ADDR
-            ESS, DC_MIN_CYCLES, TRACKS_USED, COV_BASIS_ID, OBLATE_FLATTENING, SENSORS_N, FIXED_M10P7_MEAN, DC_BODY_TRIGGER, SOLAR_RAD_COEFF, SEDR, DC_PA_START_ANGLE, TAIMUTC_AT_TZERO, TRAJ_BASIS, RCS, VM_APPARENT_MIN, MAN_BASIS_ID, DC_TYPE, AVG_MANEUVER_FREQ, ORB_REVNUM, MAN_PURPOSE, UT1MUTC_AT_TZERO, SOLID_TIDES_MODEL, TDM_MSG_LINK, SW_INTERP_METHOD, ALTERNATE_NAMES, FIXED_Y10P7, MAN_NEXT_EPOCH, DRY_MASS, DV_BOL, INITIAL_WET_
-            MASS, MAX_THRUST, COUNTRY, TECH_POSITION, MAN_UNITS, ALBEDO_MODEL, ATT_POINTING, INTERP_METHOD_EOP, OPS_STATUS, OPERATOR, OBJECT_TYPE, AREA_TYP_FOR_PC, EOP_SOURCE, BUS_MODEL, VM_ABSOLUTE, FIXED_GEOMAG_DST, TRAJ_VALUES, ATMOSPHERIC_MODEL, FIXED_Y10P7_MEAN, EPOCH_TZERO, OBJECT_DESIGNATOR, WET_MASS, RECOMMENDED_OD_SPAN, OD_EPOCH_EIGMAJ, OEB_PARENT_FRAME, AREA_MAX_FOR_PC, RCS_MIN, MAN_BASIS, DC_WIN_OPEN, SOLAR_RAD_UNCE
-            RTAINTY, OD_METHOD, COV_REF_FRAME, DC_MAX_CYCLES, PREVIOUS_MESSAGE_ID, USEABLE_START_TIME, NEXT_MESSAGE_ID, TRAJ_FRAME_EPOCH, ORIGINATOR_POC, DRAG_COEFF_NOM, TRAJ_ID, AREA_ALONG_OEB_MIN, PROPAGATOR, ORIGINATOR, SCLK_OFFSET_AT_EPOCH, TRAJ_UNITS, covValues, TIME_SYSTEM, TRAJ_PREV_ID, N_BODY_PERTURBATIONS, FIXED_F10P7, COV_SCALE_MIN, OD_MAX_PRED_EIGMAJ, DC_EXEC_START, OWNER, REFLECTANCE, GM, DC_TIME_PULSE_PERIOD, COV_
-            PREV_ID, AREA_MIN_FOR_PC, DC_TIME_PULSE_DURATION, TRACKS_AVAILABLE, INTERPOLATION, DC_REF_DIR, FIXED_S10P7_MEAN, COV_TYPE, DRAG_CONST_AREA, MAN_PRED_SOURCE, TRAJ_TYPE, NEXT_LEAP_TAIMUTC, REDUCTION_THEORY, COV_FRAME_EPOCH, MAN_DEVICE_ID, FIXED_GEOMAG_AP, FIXED_S10P7, MAN_COMPOSITION, TECH_ADDRESS, IXX, IXZ, WEIGHTED_RMS, IXY, CLASSIFICATION, ATT_CONTROL_MODE, ORIGINATOR_POSITION, PREVIOUS_MESSAGE_EPOCH, GRAVITY_MODE
-            L, PRM_MSG_LINK, OD_EPOCH_EIGINT, TRAJ_NEXT_ID, IYY, ORIGINATOR_EMAIL, IYZ, GDOP, MANUFACTURER, DC_BODY_FRAME, DATA_TYPES, ORB_REVNUM_BASIS, OBS_USED, DOCKED_WITH, START_TIME, OEB_MAX, SRP_CONST_AREA, OCM_DATA_ELEMENTS, AREA_ALONG_OEB_INT, SOLVE_N, SOLVE_STATES, IZZ, MAN_PREV_EPOCH, OD_PREV_ID, DC_EXEC_STOP, ORB_AVERAGING, CONSIDER_PARAMS, TRAJ_REF_FRAME, VM_APPARENT_MAX, EQUATORIAL_RADIUS, DAYS_SINCE_FIRST_OBS, IN
-            TERPOLATION_DEGREE, TECH_POC, COV_NEXT_ID, SRP_MODEL, TECH_PHONE, FIXED_F10P7_MEAN, ATT_ACTUATOR_TYPE, CONSIDER_N, OD_EPOCH_EIGMIN, RCS_MAX, TIME_SPAN, OCEAN_TIDES_MODEL, DAYS_SINCE_LAST_OBS, OD_CONFIDENCE, OD_MIN_PRED_EIGMIN, DC_WIN_CLOSE, MESSAGE_ID, CENTRAL_BODY_ROTATION, CREATION_DATE, ADM_MSG_LINK, CATALOG_NAME, FIXED_M10P7, manValues, ATT_CONTROL, MAN_FRAME_EPOCH, MAN_REF_FRAME, RDM_MSG_LINK, CENTER_NAME, SW_
-            DATA_EPOCH, COV_BASIS, OD_EPOCH, SCLK_SEC_PER_SI_SEC, ATT_KNOWLEDGE, SHADOW_BODIES, STOP_TIME, COV_SCALE_MAX, COV_ID, OD_ID, OBS_AVAILABLE, COV_CONFIDENCE, MAXIMUM_OBS_GAP, USEABLE_STOP_TIME, SENSORS, MAN_PREV_ID, ALBEDO_GRID_SIZE, AREA_ALONG_OEB_MAX, OBJECT_NAME, USER_DATA, VM_APPARENT, DV_REMAINING, TECH_EMAIL, CDM_MSG_LINK, OEB_Q3, OEB_Q2, OEB_Q1, OEB_PARENT_FRAME_EPOCH, INTERNATIONAL_DESIGNATOR, NEXT_MESSAGE_EP
-            OCH, CONSTELLATION, OEB_QC, GRAV_ASSIST_NAME, ORBIT_CATEGORY, DC_PA_STOP_ANGLE, COV_UNITS, TECH_ORG, FIXED_GEOMAG_KP, SHADOW_MODEL, OEB_INT, CELESTIAL_SOURCE, MAN_NEXT_ID, DC_REF_TIME, NEXT_LEAP_EPOCH, SW_DATA_SOURCE, TRAJ_BASIS_ID, ORIGINATOR_PHONE, MAN_ID, DRAG_UNCERTAINTY, COV_ORDERING, OEB_MIN, ORIGINATOR_ADDRESS, DC_MIN_CYCLES, TRACKS_USED, COV_BASIS_ID, OBLATE_FLATTENING, SENSORS_N, FIXED_M10P7_MEAN, DC_BODY_
-            TRIGGER, SOLAR_RAD_COEFF, SEDR, DC_PA_START_ANGLE, TAIMUTC_AT_TZERO, TRAJ_BASIS, RCS, VM_APPARENT_MIN, MAN_BASIS_ID, DC_TYPE, AVG_MANEUVER_FREQ, ORB_REVNUM, MAN_PURPOSE, UT1MUTC_AT_TZERO, SOLID_TIDES_MODEL, TDM_MSG_LINK, SW_INTERP_METHOD, ALTERNATE_NAMES, FIXED_Y10P7, MAN_NEXT_EPOCH, DRY_MASS, DV_BOL, INITIAL_WET_MASS, MAX_THRUST, COUNTRY, TECH_POSITION, MAN_UNITS, ALBEDO_MODEL, ATT_POINTING, INTERP_METHOD_EOP, OPS
-            _STATUS, OPERATOR, OBJECT_TYPE, AREA_TYP_FOR_PC, EOP_SOURCE, BUS_MODEL, VM_ABSOLUTE, FIXED_GEOMAG_DST, TRAJ_VALUES, ATMOSPHERIC_MODEL, FIXED_Y10P7_MEAN, EPOCH_TZERO, OBJECT_DESIGNATOR, WET_MASS, RECOMMENDED_OD_SPAN, OD_EPOCH_EIGMAJ, OEB_PARENT_FRAME, AREA_MAX_FOR_PC, RCS_MIN, MAN_BASIS, DC_WIN_OPEN, SOLAR_RAD_UNCERTAINTY, OD_METHOD, COV_REF_FRAME, DC_MAX_CYCLES, PREVIOUS_MESSAGE_ID, USEABLE_START_TIME, NEXT_MESSAGE
-            _ID, TRAJ_FRAME_EPOCH, ORIGINATOR_POC, DRAG_COEFF_NOM, TRAJ_ID, AREA_ALONG_OEB_MIN, PROPAGATOR, ORIGINATOR, SCLK_OFFSET_AT_EPOCH, TRAJ_UNITS, covValues, TIME_SYSTEM, TRAJ_PREV_ID, N_BODY_PERTURBATIONS, FIXED_F10P7, COV_SCALE_MIN, OD_MAX_PRED_EIGMAJ, DC_EXEC_START, OWNER, REFLECTANCE, GM, DC_TIME_PULSE_PERIOD, COV_PREV_ID, AREA_MIN_FOR_PC, DC_TIME_PULSE_DURATION, TRACKS_AVAILABLE, INTERPOLATION, DC_REF_DIR, FIXED_S1
-            0P7_MEAN, COV_TYPE, DRAG_CONST_AREA, MAN_PRED_SOURCE, TRAJ_TYPE, NEXT_LEAP_TAIMUTC, REDUCTION_THEORY, COV_FRAME_EPOCH, MAN_DEVICE_ID, FIXED_GEOMAG_AP, FIXED_S10P7, MAN_COMPOSITION, TECH_ADDRESS, IXX, IXZ, WEIGHTED_RMS, IXY, CLASSIFICATION, ATT_CONTROL_MODE, ORIGINATOR_POSITION, PREVIOUS_MESSAGE_EPOCH, GRAVITY_MODEL, PRM_MSG_LINK, OD_EPOCH_EIGINT, TRAJ_NEXT_ID, IYY, ORIGINATOR_EMAIL, IYZ, GDOP, MANUFACTURER, DC_BODY
-            _FRAME, DATA_TYPES, ORB_REVNUM_BASIS, OBS_USED, DOCKED_WITH, START_TIME, OEB_MAX, SRP_CONST_AREA, OCM_DATA_ELEMENTS, AREA_ALONG_OEB_INT, SOLVE_N, SOLVE_STATES, IZZ, MAN_PREV_EPOCH, OD_PREV_ID, DC_EXEC_STOP, ORB_AVERAGING, CONSIDER_PARAMS, TRAJ_REF_FRAME, VM_APPARENT_MAX, EQUATORIAL_RADIUS, DAYS_SINCE_FIRST_OBS, INTERPOLATION_DEGREE, TECH_POC, COV_NEXT_ID, SRP_MODEL, TECH_PHONE, FIXED_F10P7_MEAN, ATT_ACTUATOR_TYPE,
-            CONSIDER_N, OD_EPOCH_EIGMIN, RCS_MAX, TIME_SPAN, OCEAN_TIDES_MODEL, DAYS_SINCE_LAST_OBS, OD_CONFIDENCE, OD_MIN_PRED_EIGMIN, DC_WIN_CLOSE, MESSAGE_ID, CENTRAL_BODY_ROTATION, CREATION_DATE, ADM_MSG_LINK, CATALOG_NAME, FIXED_M10P7, manValues, ATT_CONTROL, MAN_FRAME_EPOCH, MAN_REF_FRAME, RDM_MSG_LINK, CENTER_NAME, SW_DATA_EPOCH, COV_BASIS, OD_EPOCH, SCLK_SEC_PER_SI_SEC, ATT_KNOWLEDGE, SHADOW_BODIES, STOP_TIME, COV_SCALE_MAX, COV_ID, OD_ID, OBS_AVAILABLE, COV_CONFIDENCE, MAXIMUM_OBS_GAP, USEABLE_STOP_TIME, SENSORS, MAN_PREV_ID, ALBEDO_GRID_SIZE, AREA_ALONG_OEB_MAX, OBJECT_NAME, USER_DATA, VM_APPARENT, DV_REMAINING, TECH_EMAIL
-
-        page : typing.Optional[int]
-            Page number for the queried OCM(s). Default is 0
-
-        size : typing.Optional[int]
-            Number of OCM(s) per page.  Max is 10
-
-        request_options : typing.Optional[RequestOptions]
-            Request-specific configuration.
-
-        Returns
-        -------
-        AsyncHttpResponse[ListV1OcmResponse]
-            Ok - OCM(s) successfully retrieved.  Available formats are KVN (Text, Default), JSON, and XML.
-        """
-        _response = await self._client_wrapper.httpx_client.request(
-            "metadata/ocm",
-            method="GET",
-            params={
-                "owner": owner,
-                "operator": operator,
-                "objectDesignator": object_designator,
-                "messageId": message_id,
-                "fileName": file_name,
-                "creationDate": creation_date,
-                "headersOnly": headers_only,
-                "maxCreationDate": max_creation_date,
-                "format": format,
-                "sort": sort,
-                "fields": fields,
-                "page": page,
-                "size": size,
-            },
-            request_options=request_options,
-        )
-        try:
-            if 200 <= _response.status_code < 300:
-                _data = typing.cast(
-                    ListV1OcmResponse,
-                    construct_type(
-                        type_=ListV1OcmResponse,  # type: ignore
-                        object_=_response.json(),
-                    ),
-                )
-                return AsyncHttpResponse(response=_response, data=_data)
-            if _response.status_code == 400:
-                raise BadRequestError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Any,
-                        construct_type(
-                            type_=typing.Any,  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 401:
-                raise UnauthorizedError(
+            if _response.status_code == 403:
+                raise ForbiddenError(
                     headers=dict(_response.headers),
                     body=typing.cast(
                         typing.Any,
@@ -1857,8 +1344,30 @@ class AsyncRawOcmClient:
                         ),
                     ),
                 )
-            if _response.status_code == 422:
-                raise UnprocessableEntityError(
+            if _response.status_code == 405:
+                raise MethodNotAllowedError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        construct_type(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 417:
+                raise ExpectationFailedError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        construct_type(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 429:
+                raise TooManyRequestsError(
                     headers=dict(_response.headers),
                     body=typing.cast(
                         typing.Any,
@@ -1879,172 +1388,24 @@ class AsyncRawOcmClient:
                         ),
                     ),
                 )
-            _response_json = _response.json()
-        except JSONDecodeError:
-            raise ApiError(
-                status_code=_response.status_code,
-                headers=dict(_response.headers),
-                body=_response.text,
-            )
-        except ValidationError as e:
-            raise ParsingError(
-                status_code=_response.status_code,
-                headers=dict(_response.headers),
-                body=_response.json(),
-                cause=e,
-            )
-        raise ApiError(
-            status_code=_response.status_code,
-            headers=dict(_response.headers),
-            body=_response_json,
-        )
-
-    async def list_by_operational_batch_v1(
-        self,
-        *,
-        message_id: typing.Optional[str] = None,
-        batch_id: typing.Optional[str] = None,
-        sat_no: typing.Optional[str] = None,
-        upload_date: typing.Optional[str] = None,
-        usable_start_time: typing.Optional[str] = None,
-        usable_stop_time: typing.Optional[str] = None,
-        creation_date: typing.Optional[str] = None,
-        cdm_found: typing.Optional[str] = None,
-        created_by: typing.Optional[str] = None,
-        sort: typing.Optional[str] = None,
-        page: typing.Optional[int] = None,
-        size: typing.Optional[int] = None,
-        request_options: typing.Optional[RequestOptions] = None,
-    ) -> AsyncHttpResponse[typing.List[OperationalOnDemandBatchDto]]:
-        """
-        Retrieve one or more On Demand Batches.
-
-        Parameters
-        ----------
-        message_id : typing.Optional[str]
-            Message Id (generated) from ASW that processed the CDM during super combo processing. A value with an optional operator that may be pre-pended to the value. Valid operators are: Not Equal (<>Value), In (Value1,Value2), Like (\\*Value), Not Like(~*Value)
-
-        batch_id : typing.Optional[str]
-            Batch Id from the batch of OCMs that was uploaded. A value with an optional operator that may be pre-pended to the value. Valid operators are: Not Equal (<>Value), In (Value1,Value2), Like (\\*Value), Not Like(~*Value)
-
-        sat_no : typing.Optional[str]
-            SatNo from the OCM that was uploaded as part of the batch. A value with an optional operator that may be pre-pended to the value. Valid operators are: Not Equal (<>Value), In (Value1,Value2), Like (\\*Value), Not Like(~*Value)
-
-        upload_date : typing.Optional[str]
-            Upload Date from the OCM batch that was uploaded. Valid operators are: Greater Than (>Value), Less Than (<Value), Greater Than or Equal (>=Value), Less Than or Equal (<=Value), and Between (Value1...Value2) (smaller value first)
-
-        usable_start_time : typing.Optional[str]
-            usableStartTime from an OCM that was uploaded as part of the batch. Valid operators are: Greater Than (>Value), Less Than (<Value), Greater Than or Equal (>=Value), Less Than or Equal (<=Value), and Between (Value1...Value2) (smaller value first)
-
-        usable_stop_time : typing.Optional[str]
-            usableStopTime from an OCM that was uploaded as part of the batch. Valid operators are: Greater Than (>Value), Less Than (<Value), Greater Than or Equal (>=Value), Less Than or Equal (<=Value), and Between (Value1...Value2) (smaller value first)
-
-        creation_date : typing.Optional[str]
-            creationDate from an OCM that was uploaded as part of the batch. Valid operators are: Greater Than (>Value), Less Than (<Value), Greater Than or Equal (>=Value), Less Than or Equal (<=Value), and Between (Value1...Value2) (smaller value first)
-
-        cdm_found : typing.Optional[str]
-            If a cdm is found as part of the batch on-demand run. Valid operators are: Not Equal (<>Value)
-
-        created_by : typing.Optional[str]
-            Username of batches to find. Can be a specific username or 'all' for all users. Defaults to requesting user's username
-
-        sort : typing.Optional[str]
-            Desired sort field and direction (Ascending = ASC, Descending = DESC), separated by a comma.
-
-        page : typing.Optional[int]
-            Page number for the queried TraCSS CDM(s). Default is 0
-
-        size : typing.Optional[int]
-            Number of TraCSS CDMs per page.  Max is 100000
-
-        request_options : typing.Optional[RequestOptions]
-            Request-specific configuration.
-
-        Returns
-        -------
-        AsyncHttpResponse[typing.List[OperationalOnDemandBatchDto]]
-            Ok - CDM(s) successfully retrieved.  Available formats are KVN (Text, Default), JSON, and XML.
-        """
-        _response = await self._client_wrapper.httpx_client.request(
-            "metadata/ocm/operationalBatch",
-            method="GET",
-            params={
-                "messageId": message_id,
-                "batchId": batch_id,
-                "satNo": sat_no,
-                "uploadDate": upload_date,
-                "usableStartTime": usable_start_time,
-                "usableStopTime": usable_stop_time,
-                "creationDate": creation_date,
-                "cdmFound": cdm_found,
-                "createdBy": created_by,
-                "sort": sort,
-                "page": page,
-                "size": size,
-            },
-            request_options=request_options,
-        )
-        try:
-            if 200 <= _response.status_code < 300:
-                _data = typing.cast(
-                    typing.List[OperationalOnDemandBatchDto],
-                    construct_type(
-                        type_=typing.List[OperationalOnDemandBatchDto],  # type: ignore
-                        object_=_response.json(),
-                    ),
-                )
-                return AsyncHttpResponse(response=_response, data=_data)
-            if _response.status_code == 400:
-                raise BadRequestError(
+            if _response.status_code == 502:
+                raise BadGatewayError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        typing.Any,
+                        ErrorResponse,
                         construct_type(
-                            type_=typing.Any,  # type: ignore
+                            type_=ErrorResponse,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
                 )
-            if _response.status_code == 401:
-                raise UnauthorizedError(
+            if _response.status_code == 503:
+                raise ServiceUnavailableError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        typing.Any,
+                        ErrorResponse,
                         construct_type(
-                            type_=typing.Any,  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 404:
-                raise NotFoundError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Any,
-                        construct_type(
-                            type_=typing.Any,  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 422:
-                raise UnprocessableEntityError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Any,
-                        construct_type(
-                            type_=typing.Any,  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 500:
-                raise InternalServerError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Any,
-                        construct_type(
-                            type_=typing.Any,  # type: ignore
+                            type_=ErrorResponse,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),

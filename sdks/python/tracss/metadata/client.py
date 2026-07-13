@@ -23,6 +23,10 @@ if typing.TYPE_CHECKING:
     from .space_track.client import AsyncSpaceTrackClient, SpaceTrackClient
     from .tip_reports.client import AsyncTipReportsClient, TipReportsClient
     from .tracss_cat.client import AsyncTracssCatClient, TracssCatClient
+    from .translation_errors.client import (
+        AsyncTranslationErrorsClient,
+        TranslationErrorsClient,
+    )
 
 
 class MetadataClient:
@@ -32,6 +36,7 @@ class MetadataClient:
         self._contact_directory: typing.Optional[ContactDirectoryClient] = None
         self._ocm: typing.Optional[OcmClient] = None
         self._tracss_cat: typing.Optional[TracssCatClient] = None
+        self._translation_errors: typing.Optional[TranslationErrorsClient] = None
         self._cdm: typing.Optional[CdmClient] = None
         self._tip_reports: typing.Optional[TipReportsClient] = None
         self._space_track: typing.Optional[SpaceTrackClient] = None
@@ -75,6 +80,16 @@ class MetadataClient:
 
             self._tracss_cat = TracssCatClient(client_wrapper=self._client_wrapper)
         return self._tracss_cat
+
+    @property
+    def translation_errors(self):
+        if self._translation_errors is None:
+            from .translation_errors.client import TranslationErrorsClient  # noqa: E402
+
+            self._translation_errors = TranslationErrorsClient(
+                client_wrapper=self._client_wrapper
+            )
+        return self._translation_errors
 
     @property
     def cdm(self):
@@ -134,6 +149,7 @@ class AsyncMetadataClient:
         self._contact_directory: typing.Optional[AsyncContactDirectoryClient] = None
         self._ocm: typing.Optional[AsyncOcmClient] = None
         self._tracss_cat: typing.Optional[AsyncTracssCatClient] = None
+        self._translation_errors: typing.Optional[AsyncTranslationErrorsClient] = None
         self._cdm: typing.Optional[AsyncCdmClient] = None
         self._tip_reports: typing.Optional[AsyncTipReportsClient] = None
         self._space_track: typing.Optional[AsyncSpaceTrackClient] = None
@@ -177,6 +193,16 @@ class AsyncMetadataClient:
 
             self._tracss_cat = AsyncTracssCatClient(client_wrapper=self._client_wrapper)
         return self._tracss_cat
+
+    @property
+    def translation_errors(self):
+        if self._translation_errors is None:
+            from .translation_errors.client import AsyncTranslationErrorsClient  # noqa: E402
+
+            self._translation_errors = AsyncTranslationErrorsClient(
+                client_wrapper=self._client_wrapper
+            )
+        return self._translation_errors
 
     @property
     def cdm(self):

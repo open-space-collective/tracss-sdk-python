@@ -12,7 +12,7 @@
 <dl>
 <dd>
 
-Find all TIP reports in the system or all reports that meet your search criteria defined by the query parameters.
+Find all TIP reports in the system or all reports that meet your search criteria defined by the query parameters
 </dd>
 </dl>
 </dd>
@@ -31,7 +31,7 @@ from tracss import TraCSS
 from tracss.environment import TraCSSEnvironment
 
 client = TraCSS(
-    token="<token>",
+    client_id="YOUR_CLIENT_ID", client_secret="YOUR_CLIENT_SECRET",
     environment=TraCSSEnvironment.DEFAULT,
 )
 
@@ -206,6 +206,223 @@ client.bulk_data.tip.stream(
 </dl>
 </details>
 
+## BulkData Schemas
+<details><summary><code>client.bulk_data.schemas.<a href="src/tracss/bulk_data/schemas/client.py">get_xsd</a>() -> typing.List[SchemaResponse]</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```python
+from tracss import TraCSS
+from tracss.environment import TraCSSEnvironment
+
+client = TraCSS(
+    client_id="YOUR_CLIENT_ID", client_secret="YOUR_CLIENT_SECRET",
+    environment=TraCSSEnvironment.DEFAULT,
+)
+
+client.bulk_data.schemas.get_xsd()
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.bulk_data.schemas.<a href="src/tracss/bulk_data/schemas/client.py">download_xsd</a>(...) -> typing.Iterator[bytes]</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```python
+from tracss import TraCSS
+from tracss.environment import TraCSSEnvironment
+
+client = TraCSS(
+    client_id="YOUR_CLIENT_ID", client_secret="YOUR_CLIENT_SECRET",
+    environment=TraCSSEnvironment.DEFAULT,
+)
+
+client.bulk_data.schemas.download_xsd(
+    filename="filename",
+)
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**filename:** `str` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.bulk_data.schemas.<a href="src/tracss/bulk_data/schemas/client.py">get_json</a>() -> typing.List[SchemaResponse]</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```python
+from tracss import TraCSS
+from tracss.environment import TraCSSEnvironment
+
+client = TraCSS(
+    client_id="YOUR_CLIENT_ID", client_secret="YOUR_CLIENT_SECRET",
+    environment=TraCSSEnvironment.DEFAULT,
+)
+
+client.bulk_data.schemas.get_json()
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.bulk_data.schemas.<a href="src/tracss/bulk_data/schemas/client.py">download_json</a>(...) -> typing.Iterator[bytes]</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```python
+from tracss import TraCSS
+from tracss.environment import TraCSSEnvironment
+
+client = TraCSS(
+    client_id="YOUR_CLIENT_ID", client_secret="YOUR_CLIENT_SECRET",
+    environment=TraCSSEnvironment.DEFAULT,
+)
+
+client.bulk_data.schemas.download_json(
+    filename="filename",
+)
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**filename:** `str` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
 ## BulkData Ocm
 <details><summary><code>client.bulk_data.ocm.<a href="src/tracss/bulk_data/ocm/client.py">stream</a>(...) -> typing.Iterator[bytes]</code></summary>
 <dl>
@@ -219,7 +436,17 @@ client.bulk_data.tip.stream(
 <dl>
 <dd>
 
-Retrieve one or more TraCSS V2 OCMs from TRACSS cloud storage.
+Retrieve OCMs that have been uploaded to TraCSS
+
+
+Example Scripts:
+
+
+| Guide                                                            | Script                                                               |
+|------------------------------------------------------------------|----------------------------------------------------------------------|
+| [Pull Max OCMs Guide](/bulkdata/scripts/README_pull_max_ocms.md) | [Pull Max OCMs Script (Python)](/bulkdata/scripts/pull_max_ocms.py)  |
+
+
 </dd>
 </dl>
 </dd>
@@ -238,7 +465,7 @@ from tracss import TraCSS
 from tracss.environment import TraCSSEnvironment
 
 client = TraCSS(
-    token="<token>",
+    client_id="YOUR_CLIENT_ID", client_secret="YOUR_CLIENT_SECRET",
     environment=TraCSSEnvironment.DEFAULT,
 )
 
@@ -296,7 +523,7 @@ client.bulk_data.ocm.stream(
 <dl>
 <dd>
 
-**object_designator:** `typing.Optional[str]` — The designator for OCM object.A value with an optional operator that may be pre-pended to the value. Valid operators are: Greater Than (>Value), Less Than (<Value), Greater Than or Equal (>=Value), Less Than or Equal (<=Value), Not Equal (<>Value), In (Value1,Value2), Between (Value1...Value2) (smaller value first), Like (\*Value), Not Like(~*Value)
+**object_designator:** `typing.Optional[str]` — The designator for OCM object.A value with an optional operator that may be pre-pended to the value. Valid operators are: Greater Than (>Value), Less Than (<Value), Greater Than or Equal (>=Value), Less Than or Equal (<=Value), Not Equal (<>Value), In (Value1,Value2), Between (Value1...Value2) (smaller value first)
     
 </dd>
 </dl>
@@ -396,203 +623,6 @@ client.bulk_data.ocm.stream(
 </dl>
 </details>
 
-<details><summary><code>client.bulk_data.ocm.<a href="src/tracss/bulk_data/ocm/client.py">stream_v1</a>(...) -> typing.Iterator[bytes]</code></summary>
-<dl>
-<dd>
-
-#### 📝 Description
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-Retrieve one or more TraCSS V1 OCMs from TRACSS cloud storage.
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```python
-from tracss import TraCSS
-from tracss.environment import TraCSSEnvironment
-
-client = TraCSS(
-    token="<token>",
-    environment=TraCSSEnvironment.DEFAULT,
-)
-
-client.bulk_data.ocm.stream_v1(
-    created_by="some_ephem.ocm",
-    creation_date="2024-09-04T18:37:01Z",
-    message_id="000043928_conj_000054603_2024329195621",
-    operator="some_user",
-    owner="some_user",
-)
-
-```
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**constellation:** `typing.Optional[str]` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**created_by:** `typing.Optional[str]` — Filename of the file that created the OCM.A value with an optional operator that may be pre-pended to the value. Valid operators are: Not Equal (<>Value), In (Value1,Value2) , Like (\*Value), Not Like(~*Value)
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**creation_date:** `typing.Optional[str]` — Creation Date of the OCM. A value with an optional operator that may be pre-pended to the value. Valid operators are: Greater Than (>Value), Less Than (<Value), Greater Than or Equal (>=Value), Less Than or Equal (<=Value), Not Equal (<>Value) and Between (Value1...Value2) (smaller value first)
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**message_id:** `typing.Optional[str]` — Message Id of the OCM. A value with an optional operator that may be pre-pended to the value. Valid operators are: Not Equal (<>Value), In (Value1,Value2) , Like (\*Value), Not Like(~*Value)
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**object_designator:** `typing.Optional[str]` — The designator for OCM object.A value with an optional operator that may be pre-pended to the value. Valid operators are: Greater Than (>Value), Less Than (<Value), Greater Than or Equal (>=Value), Less Than or Equal (<=Value), Not Equal (<>Value), In (Value1,Value2), Between (Value1...Value2) (smaller value first), Like (\*Value), Not Like(~*Value)
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**operator:** `typing.Optional[str]` — Name of operator.A value with an optional operator that may be pre-pended to the value. Valid operators are: Not Equal (<>Value), In (Value1,Value2) , Like (\*Value), Not Like(~*Value)
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**owner:** `typing.Optional[str]` — Name of the object owner.A value with an optional operator that may be pre-pended to the value. Valid operators are: Not Equal (<>Value), In (Value1,Value2) , Like (\*Value), Not Like(~*Value)
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**start_time:** `typing.Optional[str]` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**stop_time:** `typing.Optional[str]` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**traj_basis:** `typing.Optional[str]` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**tech_org:** `typing.Optional[str]` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**tech_poc:** `typing.Optional[str]` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**size:** `typing.Optional[int]` — Number of results to return.  Default of 0 means return all possible results.
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**page:** `typing.Optional[int]` — Page number for the queried OCM(s), indexed by 0 (first page). Default is 0
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**headers_only:** `typing.Optional[bool]` — Return a reduced object. works with filters messageId, creationDate, objectDesignator, operator
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**format:** `typing.Optional[str]` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
-    
-</dd>
-</dl>
-</dd>
-</dl>
-
-
-</dd>
-</dl>
-</details>
-
 ## BulkData Cdm
 <details><summary><code>client.bulk_data.cdm.<a href="src/tracss/bulk_data/cdm/client.py">stream</a>(...) -> typing.Iterator[bytes]</code></summary>
 <dl>
@@ -606,7 +636,17 @@ client.bulk_data.ocm.stream_v1(
 <dl>
 <dd>
 
-Retrieve one or more TraCSS V2 CDMs from TRACSS cloud storage.
+Retrieve CDMs generated by TraCSS
+
+
+Example Scripts:
+
+
+| Guide                                                              | Script                                                                 |
+|--------------------------------------------------------------------|------------------------------------------------------------------------|
+| [Pull Bulk CDMs Guide](/bulkdata/scripts/README_pull_bulk_cdms.md) | [Pull Bulk CDMs Script (Python)](/bulkdata/scripts/pull_bulk_cdms.py)  |
+
+
 </dd>
 </dl>
 </dd>
@@ -625,7 +665,7 @@ from tracss import TraCSS
 from tracss.environment import TraCSSEnvironment
 
 client = TraCSS(
-    token="<token>",
+    client_id="YOUR_CLIENT_ID", client_secret="YOUR_CLIENT_SECRET",
     environment=TraCSSEnvironment.DEFAULT,
 )
 
@@ -856,271 +896,8 @@ client.bulk_data.cdm.stream(
 </dl>
 </details>
 
-<details><summary><code>client.bulk_data.cdm.<a href="src/tracss/bulk_data/cdm/client.py">stream_v1</a>(...) -> typing.Iterator[bytes]</code></summary>
-<dl>
-<dd>
-
-#### 📝 Description
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-Retrieve one or more TraCSS V1 CDMs from TRACSS cloud storage.
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```python
-from tracss import TraCSS
-from tracss.environment import TraCSSEnvironment
-
-client = TraCSS(
-    token="<token>",
-    environment=TraCSSEnvironment.DEFAULT,
-)
-
-client.bulk_data.cdm.stream_v1(
-    message_id="000043928_conj_000054603_2024329195621",
-    tca="2024-314T07:41:39.411",
-    creation_date="2024-09-04T18:37:01Z",
-    message_for="IRIDIUM 161",
-    screening_option="Covariance",
-    object1screen_volume_shape="Box, Ellipsoid, Deep Space",
-    object1type="Payload",
-    object1international_designator="2019-002A",
-    object1operator_organization="Iridium",
-    object1ephemeris_name="NONE",
-    object2screen_volume_shape="Box, Ellipsoid, Deep Space",
-    object2type="Payload",
-    object2international_designator="2019-002A",
-    object2operator_organization="Iridium",
-    object2ephemeris_name="NONE",
-)
-
-```
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**message_id:** `typing.Optional[str]` — Message Id (generated) from ASW that processed the CDM during super combo processing.A value with an optional operator that may be pre-pended to the value. Valid operators are: Not Equal (<>Value), In (Value1,Value2), Like (\*Value), Not Like(~*Value)
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**correlation_id:** `typing.Optional[str]` — Correlation Id (UUID) of the TraCSS CDM.A value with an optional operator that may be pre-pended to the value. Valid operators are: Not Equal (<>Value), In (Value1,Value2), Like (\*Value), Not Like(~*Value)
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**tca:** `typing.Optional[str]` — TCA (Time of Closest Approach).A value with an optional operator that may be pre-pended to the value. Valid operators are: Greater Than (>Value), Less Than (<Value), Greater Than or Equal (>=Value),Less Than or Equal (<=Value), Not Equal (<>Value) and Between (Value1...Value2) (smaller value first)
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**creation_date:** `typing.Optional[str]` — Creation Date of the CDM.A value with an optional operator that may be pre-pended to the value. Valid operators are: Greater Than (>Value), Less Than (<Value), Greater Than or Equal (>=Value),Less Than or Equal (<=Value), Not Equal (<>Value) and Between (Value1...Value2) (smaller value first)
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**message_for:** `typing.Optional[str]` — Name of Satellite whom the TraCSS cdm is for.A value with an optional operator that may be pre-pended to the value. Valid operators are: Not Equal (<>Value), In (Value1,Value2), Like (\*Value), Not Like(~*Value)
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**screening_option:** `typing.Optional[str]` — What was used during the screening process.A value with an optional operator that may be pre-pended to the value. Valid operators are: Not Equal (<>Value), In (Value1,Value2), Like (\*Value), Not Like(~*Value)
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**miss_distance:** `typing.Optional[str]` — The distance (in m) that object1 and object2 missed by. A value with an optional operator that may be pre-pended to the value. Valid operators are: Greater Than (>Value), Less Than (<Value), Greater Than or Equal (>=Value), Less Than or Equal (<=Value), Not Equal (<>Value), In (Value1,Value2) , Between (Value1...Value2) (smaller value first)
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**collision_probability:** `typing.Optional[str]` — The probability of object1 and object2 having a collision.A value with an optional operator that may be pre-pended to the value. Valid operators are: Greater Than (>Value), Less Than (<Value), Greater Than or Equal (>=Value), Less Than or Equal (<=Value), Not Equal (<>Value), In (Value1,Value2) , Between (Value1...Value2) (smaller value first)
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**object1screen_volume_shape:** `typing.Optional[str]` — The shape of the screen volume for object1A value with an optional operator that may be pre-pended to the value. Valid operators are: Not Equal (<>Value), In (Value1,Value2), Like (\*Value), Not Like(~*Value)
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**object1type:** `typing.Optional[str]` — The object type of object1A value with an optional operator that may be pre-pended to the value. Valid operators are: Not Equal (<>Value), In (Value1,Value2), Like (\*Value), Not Like(~*Value)
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**object1object_designator:** `typing.Optional[str]` — The designator for object1A value with an optional operator that may be pre-pended to the value. Valid operators are: Not Equal (<>Value), In (Value1,Value2), Like (\*Value), Not Like(~*Value)
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**object1international_designator:** `typing.Optional[str]` — The international designator for object1A value with an optional operator that may be pre-pended to the value. Valid operators are: Not Equal (<>Value), In (Value1,Value2), Like (\*Value), Not Like(~*Value)
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**object1operator_organization:** `typing.Optional[str]` — The operator organization for object1A value with an optional operator that may be pre-pended to the value. Valid operators are: Not Equal (<>Value), In (Value1,Value2), Like (\*Value), Not Like(~*Value)
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**object1ephemeris_name:** `typing.Optional[str]` — The ephemeris name for object1A value with an optional operator that may be pre-pended to the value. Valid operators are: Not Equal (<>Value), In (Value1,Value2), Like (\*Value), Not Like(~*Value)
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**object2screen_volume_shape:** `typing.Optional[str]` — The shape of the screen volume for object2A value with an optional operator that may be pre-pended to the value. Valid operators are: Not Equal (<>Value), In (Value1,Value2), Like (\*Value), Not Like(~*Value)
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**object2type:** `typing.Optional[str]` — The object type of object2A value with an optional operator that may be pre-pended to the value. Valid operators are: Not Equal (<>Value), In (Value1,Value2), Like (\*Value), Not Like(~*Value)
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**object2object_designator:** `typing.Optional[str]` — The designator for object2A value with an optional operator that may be pre-pended to the value. Valid operators are: Not Equal (<>Value), In (Value1,Value2), Like (\*Value), Not Like(~*Value)
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**object2international_designator:** `typing.Optional[str]` — The international designator for object2A value with an optional operator that may be pre-pended to the value. Valid operators are: Not Equal (<>Value), In (Value1,Value2), Like (\*Value), Not Like(~*Value)
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**object2operator_organization:** `typing.Optional[str]` — The operator organization for object2A value with an optional operator that may be pre-pended to the value. Valid operators are: Not Equal (<>Value), In (Value1,Value2), Like (\*Value), Not Like(~*Value)
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**object2ephemeris_name:** `typing.Optional[str]` — The ephemeris name for object2A value with an optional operator that may be pre-pended to the value. Valid operators are: Not Equal (<>Value), In (Value1,Value2), Like (\*Value), Not Like(~*Value)
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**size:** `typing.Optional[int]` — Number of results to return.  Default of 0 means return all possible results.
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**page:** `typing.Optional[int]` — Page number for the queried CDM(s), indexed by 0 (first page). Default is 0
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**format:** `typing.Optional[str]` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
-    
-</dd>
-</dl>
-</dd>
-</dl>
-
-
-</dd>
-</dl>
-</details>
-
 ## BulkData Announcements
-<details><summary><code>client.bulk_data.announcements.<a href="src/tracss/bulk_data/announcements/client.py">list</a>(...) -> str</code></summary>
+<details><summary><code>client.bulk_data.announcements.<a href="src/tracss/bulk_data/announcements/client.py">list</a>(...) -> typing.List[typing.Dict[str, typing.Any]]</code></summary>
 <dl>
 <dd>
 
@@ -1132,7 +909,7 @@ client.bulk_data.cdm.stream_v1(
 <dl>
 <dd>
 
-Fetches a list of announcements data from cloud storage.
+Retrieve Space-Track Announcements that have been given to TraCSS
 </dd>
 </dl>
 </dd>
@@ -1151,7 +928,7 @@ from tracss import TraCSS
 from tracss.environment import TraCSSEnvironment
 
 client = TraCSS(
-    token="<token>",
+    client_id="YOUR_CLIENT_ID", client_secret="YOUR_CLIENT_SECRET",
     environment=TraCSSEnvironment.DEFAULT,
 )
 
@@ -1214,7 +991,7 @@ client.bulk_data.announcements.list(
 <dl>
 <dd>
 
-Updates an existing Satellite Operator record in the database based on the provided noradId(s) and data in the request body. Returns the updated Operator object as JSON.
+Updates an existing Satellite Operator record in the database based on the provided noradId(s) and data in the request body. Returns the updated Operator object as JSON
 </dd>
 </dl>
 </dd>
@@ -1233,7 +1010,7 @@ from tracss import TraCSS
 from tracss.environment import TraCSSEnvironment
 
 client = TraCSS(
-    token="<token>",
+    client_id="YOUR_CLIENT_ID", client_secret="YOUR_CLIENT_SECRET",
     environment=TraCSSEnvironment.DEFAULT,
 )
 
@@ -1321,7 +1098,7 @@ from tracss import TraCSS
 from tracss.environment import TraCSSEnvironment
 
 client = TraCSS(
-    token="<token>",
+    client_id="YOUR_CLIENT_ID", client_secret="YOUR_CLIENT_SECRET",
     environment=TraCSSEnvironment.DEFAULT,
 )
 
@@ -1384,7 +1161,9 @@ client.metadata.contact_directory.list_operational(
 <dl>
 <dd>
 
-Upload a V2 OCM or zip file of OCMs (file param in formData). If you wish to update the database, use a header of updateDatabase with a value of true.The following will be used from the OCM:
+Upload an OCM or zip file of OCMs (file param in formData). OCM files / zips have a limit of 4000mbs, if you're batch is larger than 4000mbs, it must be split into smaller batches. These OCMs must follow the latest TraCSS OCM spec for succesful results. Format issues will be returned after the upload has finished, listing validation issues (if any) with the uploaded OCM(s).
+If you wish to update the TraCSS CAT and Operator contact info, use a header of updateDatabase with a value of true.
+The following will be used from the OCM:
 * Tech POC
 * Tech Org
 * Tech Position
@@ -1418,115 +1197,11 @@ from tracss import TraCSS
 from tracss.environment import TraCSSEnvironment
 
 client = TraCSS(
-    token="<token>",
+    client_id="YOUR_CLIENT_ID", client_secret="YOUR_CLIENT_SECRET",
     environment=TraCSSEnvironment.DEFAULT,
 )
 
 client.metadata.ocm.upload(
-    file="example_file",
-)
-
-```
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**file:** `core.File` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**trigger_ca:** `typing.Optional[bool]` — Whether to trigger CA with uploaded OCM(s). Defaults to false. NOTE: This only affects OPERATIONAL OCMs, CANDIDATE OCMs will always trigger on-demand CA NOTE: If two Operational OCMs with the same objectId are uploaded, only the most recently created OCM will be screened for on demand.
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**update_database:** `typing.Optional[str]` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
-    
-</dd>
-</dl>
-</dd>
-</dl>
-
-
-</dd>
-</dl>
-</details>
-
-<details><summary><code>client.metadata.ocm.<a href="src/tracss/metadata/ocm/client.py">upload_v1</a>(...) -> typing.Dict[str, typing.Any]</code></summary>
-<dl>
-<dd>
-
-#### 📝 Description
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-Upload an OCM or zip file of OCMs (file param in formData). If you wish to update the database, use a header of updateDatabase with a value of true.The following will be used from the OCM:
-* Tech POC
-* Tech Org
-* Tech Position
-* Tech Phone
-* Tech Email
-* Tech Address
-* Originator POC
-* Originator Position
-* Originator Phone
-* Originator Email
-* Originator Address
-* Ops Status
-* Orbit Category
-* Wet mass
-* Hard Body Radius
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```python
-from tracss import TraCSS
-from tracss.environment import TraCSSEnvironment
-
-client = TraCSS(
-    token="<token>",
-    environment=TraCSSEnvironment.DEFAULT,
-)
-
-client.metadata.ocm.upload_v1(
     file="example_file",
 )
 
@@ -1592,7 +1267,17 @@ client.metadata.ocm.upload_v1(
 <dl>
 <dd>
 
-Retrieve one or more OCMs from TRACSS. If no parameters are provided, the system will default to the header of all OCMs currently stored.
+Retrieve OCMs that have been uploaded to TraCSS
+
+
+Example Scripts:
+
+
+| Guide                                           | Script                                             |
+|-------------------------------------------------|----------------------------------------------------|
+| [Pull OCMs Guide](/metadata/scripts/README_pull_ocms.md) | [Pull OCMs Script (Python)](/metadata/scripts/pull_ocms.py)  |
+
+
 </dd>
 </dl>
 </dd>
@@ -1611,7 +1296,7 @@ from tracss import TraCSS
 from tracss.environment import TraCSSEnvironment
 
 client = TraCSS(
-    token="<token>",
+    client_id="YOUR_CLIENT_ID", client_secret="YOUR_CLIENT_SECRET",
     environment=TraCSSEnvironment.DEFAULT,
 )
 
@@ -1796,7 +1481,7 @@ stem, techPhone, fixedY10P7, centerName, albedoGridSize, trajRefFrame, manNextEp
 <dl>
 <dd>
 
-Retrieve one or more On Demand Batches.
+Retrieve info on On Demand Batches that have been submitted to TraCSS. Includes info on if CDMs were generated by a batch
 </dd>
 </dl>
 </dd>
@@ -1815,7 +1500,7 @@ from tracss import TraCSS
 from tracss.environment import TraCSSEnvironment
 
 client = TraCSS(
-    token="<token>",
+    client_id="YOUR_CLIENT_ID", client_secret="YOUR_CLIENT_SECRET",
     environment=TraCSSEnvironment.DEFAULT,
 )
 
@@ -1952,380 +1637,8 @@ client.metadata.ocm.list_by_operational_batch(
 </dl>
 </details>
 
-<details><summary><code>client.metadata.ocm.<a href="src/tracss/metadata/ocm/client.py">list_v1</a>(...) -> ListV1OcmResponse</code></summary>
-<dl>
-<dd>
-
-#### 📝 Description
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-Retrieve one or more OCMs from TRACSS. If no parameters are provided, the system will default to the header of all OCMs currently stored.
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```python
-from tracss import TraCSS
-from tracss.environment import TraCSSEnvironment
-
-client = TraCSS(
-    token="<token>",
-    environment=TraCSSEnvironment.DEFAULT,
-)
-
-client.metadata.ocm.list_v1(
-    owner="ABCCorporation",
-    operator="CDECorporation",
-    message_id="d4c8f1b1-2652-4b33-b78b-9e5f0429ff08",
-    file_name="d4c8f1b1-2652-4b33-b78b-9e5f0429ff08",
-    creation_date="2024-09-04T18:37:01Z",
-    format="json",
-    sort="objectDesignator,ASC",
-)
-
-```
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**owner:** `typing.Optional[str]` — Owner of the satellite. A value with an optional operator that may be pre-pended to the value. Valid operators are: Not Equal (<>Value), In (Value1,Value2) , Like (\*Value), Not Like(~*Value)
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**operator:** `typing.Optional[str]` — Operator of the satellite. A value with an optional operator that may be pre-pended to the value. Valid operators are: Not Equal (<>Value), In (Value1,Value2) , Like (\*Value), Not Like(~*Value)
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**object_designator:** `typing.Optional[str]` — Object Designator (Satellite Number). A value with an optional operator that may be pre-pended to the value. Valid operators are: Greater Than (>Value), Less Than (<Value), Greater Than or Equal (>=Value), Less Than or Equal (<=Value), Not Equal (<>Value), In (Value1,Value2), Between (Value1...Value2) (smaller value first), Like (\*Value), Not Like(~*Value)
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**message_id:** `typing.Optional[str]` — Message Id (UUID) of the OCM. A value with an optional operator that may be pre-pended to the value. Valid operators are: Not Equal (<>Value), In (Value1,Value2), Like (\*Value), Not Like(~*Value)
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**file_name:** `typing.Optional[str]` — File name of the OCM. A value with an optional operator that may be pre-pended to the value. Valid operators are: Not Equal (<>Value), In (Value1,Value2), Like (\*Value), Not Like(~*Value) and Between (Value1...Value2) (smaller value first)
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**creation_date:** `typing.Optional[str]` — Creation Date of the OCM. A value with an optional operator that may be pre-pended to the value. Valid operators are: Greater Than (>Value), Less Than (<Value), Greater Than or Equal (>=Value), Less Than or Equal (<=Value), Not Equal (<>Value)
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**headers_only:** `typing.Optional[bool]` — Only get the header key fields of the object being asked for. Default is false. If set to true, format will be overwritten to JSON. Does not work with any filters
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**max_creation_date:** `typing.Optional[bool]` — Retrieve only the latest OCM per object designator.
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**format:** `typing.Optional[str]` — Desired format of the returned OCM(s). Options are KVN (Default), JSON or XML.
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**sort:** `typing.Optional[str]` — Desired sort field and direction (ASC, DESC).
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**fields:** `typing.Optional[str]` 
-
-Comma separated list of specific fields to include in the response.  Valid fields for JSON and XML are: cdmMsgLink, oebQ3, oebQ2, oebQ1, oebParentFrameEpoch, internationalDesignator, nextMessageEpoch, constellation, oebQC, gravAssistName, orbitCategory, dcPaStopAngle, covUnits, techOrg, fixedGeomagKp, shadowModel, oebInt, celestialSource, manNextId, dcRefTime, nextLeapEpoch, swDataSource, trajBasisId, originatorPhone, manId, dragUncertainty, covOrdering, oebMin, originatorAddress, dcMinCycles, tracksUsed, covBasisId,
- oblateFlattening, sensorsN, fixedM10P7Mean, dcBodyTrigger, solarRadCoeff, sedr, dcPaStartAngle, taimUtcAtT0, trajBasis, rcs, vmApparentMin, manBasisId, dcType, avgManeuverFreq, orbRevNum, manPurpose, ut1MUtcAtT0, solidTidesModel, tdmMsgLink, swInterpMethod, alternateNames, fixedY10P7, manNextEpoch, dryMass, dvBol, initialWetMass, maxThrust, country, techPosition, manUnits, albedoModel, attPointing, interpMethodEop
-, opsStatus, operator, objectType, areaTypForPc, eopSource, busModel, vmAbsolute, fixedGeomagDst, trajValues, atmosphericModel, fixedY10P7Mean, epochT0, objectDesignator, wetMass, recommendedOdSpan, odEpochElGMAJ, oebParentFrame, areaMaxForPc, rcsMin, manBasis, dcWinOpen, solarRadUncertainty, odMethod, covRefFrame, dcMaxCycles, prevMessageId, useableStartTime, nextMessageId, trajFrameEpoch, originatorPoc, dragCoeff
-, trajId, areaAlongOebMin, propagator, originator, sclkOffsetAtEpoch, trajUnits, covValues, timeSystem, trajPrevId, nBodyPertubations, fixedF10P7, covScaleMin, odMaxPredEigMAJ, dcExecStart, owner, reflectance, gm, dcTimePulsePeriod, covPrevId, areaMinForPc, dcTimePulseDuration, tracksAvailable, interpolation, dcRefDir, fixedS10P7Mean, covType, dragConstArea, manPredSource, trajType, nextLeapTaimUtc, reductionTheory
-, covFrameEpoch, manDeviceId, fixedGeomagAp, fixedS10P7, manComposition, techAddress, iXX, iXZ, weightedRms, iXY, classification, attControlMode, originatorPosition, previousMessageEpoch, gravityModel, prmMsgLink, odEpochElGINT, trajNextId, iYY, originatorEmail, iYZ, gdop, manufacturer, dcBodyFrame, dataTypes, orbRevNumBasis, obsUsed, dockedWith, startTime, oebMax, srpConstArea, ocmDataElements, areaAlongOebInt, so
-lveN, solveStates, iZZ, manPrevEpoch, odPrevId, dcExecStop, orbAveraging, considerParams, trajRefFrame, vmApparentMax, equatorialRadius, daysSinceFirstObs, interpolationDegree, techPoc, covNextId, srpModel, techPhone, fixedF10P7Mean, attActuatorType, considerN, odEpochElGMIN, rcsMax, timeSpan, oceanTidesModel, daysSinceLastObs, odConfidence, odMaxPredEigMIN, dcWinClose, messageId, centralBodyRotation, creationDate,
- admMsgLink, catalogName, fixedM10P7, manValues, attControl, manFrameEpoch, manRefFrame, rdmMsgLink, centerName, swDataEpoch, covBasis, odEpoch, sclkSecPerSiSec, attKnowledge, shadowBodies, stopTime, covScaleMax, covId, odId, obsAvailable, covConfidence, maxObsGap, useableStopTime, sensors, manPrevId, albedoGridSize, areaAlongOebMax, objectName, user, vmApparent, dvRemaining, techEmail, cdmMsgLink, oebQ3, oebQ2, oe
-bQ1, oebParentFrameEpoch, internationalDesignator, nextMessageEpoch, constellation, oebQC, gravAssistName, orbitCategory, dcPaStopAngle, covUnits, techOrg, fixedGeomagKp, shadowModel, oebInt, celestialSource, manNextId, dcRefTime, nextLeapEpoch, swDataSource, trajBasisId, originatorPhone, manId, dragUncertainty, covOrdering, oebMin, originatorAddress, dcMinCycles, tracksUsed, covBasisId, oblateFlattening, sensorsN,
- fixedM10P7Mean, dcBodyTrigger, solarRadCoeff, sedr, dcPaStartAngle, taimUtcAtT0, trajBasis, rcs, vmApparentMin, manBasisId, dcType, avgManeuverFreq, orbRevNum, manPurpose, ut1MUtcAtT0, solidTidesModel, tdmMsgLink, swInterpMethod, alternateNames, fixedY10P7, manNextEpoch, dryMass, dvBol, initialWetMass, maxThrust, country, techPosition, manUnits, albedoModel, attPointing, interpMethodEop, opsStatus, operator, objec
-tType, areaTypForPc, eopSource, busModel, vmAbsolute, fixedGeomagDst, trajValues, atmosphericModel, fixedY10P7Mean, epochT0, objectDesignator, wetMass, recommendedOdSpan, odEpochElGMAJ, oebParentFrame, areaMaxForPc, rcsMin, manBasis, dcWinOpen, solarRadUncertainty, odMethod, covRefFrame, dcMaxCycles, prevMessageId, useableStartTime, nextMessageId, trajFrameEpoch, originatorPoc, dragCoeff, trajId, areaAlongOebMin, p
-ropagator, originator, sclkOffsetAtEpoch, trajUnits, covValues, timeSystem, trajPrevId, nBodyPertubations, fixedF10P7, covScaleMin, odMaxPredEigMAJ, dcExecStart, owner, reflectance, gm, dcTimePulsePeriod, covPrevId, areaMinForPc, dcTimePulseDuration, tracksAvailable, interpolation, dcRefDir, fixedS10P7Mean, covType, dragConstArea, manPredSource, trajType, nextLeapTaimUtc, reductionTheory, covFrameEpoch, manDeviceId
-, fixedGeomagAp, fixedS10P7, manComposition, techAddress, iXX, iXZ, weightedRms, iXY, classification, attControlMode, originatorPosition, previousMessageEpoch, gravityModel, prmMsgLink, odEpochElGINT, trajNextId, iYY, originatorEmail, iYZ, gdop, manufacturer, dcBodyFrame, dataTypes, orbRevNumBasis, obsUsed, dockedWith, startTime, oebMax, srpConstArea, ocmDataElements, areaAlongOebInt, solveN, solveStates, iZZ, manP
-revEpoch, odPrevId, dcExecStop, orbAveraging, considerParams, trajRefFrame, vmApparentMax, equatorialRadius, daysSinceFirstObs, interpolationDegree, techPoc, covNextId, srpModel, techPhone, fixedF10P7Mean, attActuatorType, considerN, odEpochElGMIN, rcsMax, timeSpan, oceanTidesModel, daysSinceLastObs, odConfidence, odMaxPredEigMIN, dcWinClose, messageId, centralBodyRotation, creationDate, admMsgLink, catalogName, fixedM10P7, manValues, attControl, manFrameEpoch, manRefFrame, rdmMsgLink, centerName, swDataEpoch, covBasis, odEpoch, sclkSecPerSiSec, attKnowledge, shadowBodies, stopTime, covScaleMax, covId, odId, obsAvailable, covConfidence, maxObsGap, useableStopTime, sensors, manPrevId, albedoGridSize, areaAlongOebMax, objectName, user, vmApparent, dvRemaining, techEmail,
-CDM_MSG_LINK, OEB_Q3, OEB_Q2, OEB_Q1, OEB_PARENT_FRAME_EPOCH, INTERNATIONAL_DESIGNATOR, NEXT_MESSAGE_EPOCH, CONSTELLATION, OEB_QC, GRAV_ASSIST_NAME, ORBIT_CATEGORY, DC_PA_STOP_ANGLE, COV_UNITS, TECH_ORG, FIXED_GEOMAG_KP, SHADOW_MODEL, OEB_INT, CELESTIAL_SOURCE, MAN_NEXT_ID, DC_REF_TIME, NEXT_LEAP_EPOCH, SW_DATA_SOURCE, TRAJ_BASIS_ID, ORIGINATOR_PHONE, MAN_ID, DRAG_UNCERTAINTY, COV_ORDERING, OEB_MIN, ORIGINATOR_ADDR
-ESS, DC_MIN_CYCLES, TRACKS_USED, COV_BASIS_ID, OBLATE_FLATTENING, SENSORS_N, FIXED_M10P7_MEAN, DC_BODY_TRIGGER, SOLAR_RAD_COEFF, SEDR, DC_PA_START_ANGLE, TAIMUTC_AT_TZERO, TRAJ_BASIS, RCS, VM_APPARENT_MIN, MAN_BASIS_ID, DC_TYPE, AVG_MANEUVER_FREQ, ORB_REVNUM, MAN_PURPOSE, UT1MUTC_AT_TZERO, SOLID_TIDES_MODEL, TDM_MSG_LINK, SW_INTERP_METHOD, ALTERNATE_NAMES, FIXED_Y10P7, MAN_NEXT_EPOCH, DRY_MASS, DV_BOL, INITIAL_WET_
-MASS, MAX_THRUST, COUNTRY, TECH_POSITION, MAN_UNITS, ALBEDO_MODEL, ATT_POINTING, INTERP_METHOD_EOP, OPS_STATUS, OPERATOR, OBJECT_TYPE, AREA_TYP_FOR_PC, EOP_SOURCE, BUS_MODEL, VM_ABSOLUTE, FIXED_GEOMAG_DST, TRAJ_VALUES, ATMOSPHERIC_MODEL, FIXED_Y10P7_MEAN, EPOCH_TZERO, OBJECT_DESIGNATOR, WET_MASS, RECOMMENDED_OD_SPAN, OD_EPOCH_EIGMAJ, OEB_PARENT_FRAME, AREA_MAX_FOR_PC, RCS_MIN, MAN_BASIS, DC_WIN_OPEN, SOLAR_RAD_UNCE
-RTAINTY, OD_METHOD, COV_REF_FRAME, DC_MAX_CYCLES, PREVIOUS_MESSAGE_ID, USEABLE_START_TIME, NEXT_MESSAGE_ID, TRAJ_FRAME_EPOCH, ORIGINATOR_POC, DRAG_COEFF_NOM, TRAJ_ID, AREA_ALONG_OEB_MIN, PROPAGATOR, ORIGINATOR, SCLK_OFFSET_AT_EPOCH, TRAJ_UNITS, covValues, TIME_SYSTEM, TRAJ_PREV_ID, N_BODY_PERTURBATIONS, FIXED_F10P7, COV_SCALE_MIN, OD_MAX_PRED_EIGMAJ, DC_EXEC_START, OWNER, REFLECTANCE, GM, DC_TIME_PULSE_PERIOD, COV_
-PREV_ID, AREA_MIN_FOR_PC, DC_TIME_PULSE_DURATION, TRACKS_AVAILABLE, INTERPOLATION, DC_REF_DIR, FIXED_S10P7_MEAN, COV_TYPE, DRAG_CONST_AREA, MAN_PRED_SOURCE, TRAJ_TYPE, NEXT_LEAP_TAIMUTC, REDUCTION_THEORY, COV_FRAME_EPOCH, MAN_DEVICE_ID, FIXED_GEOMAG_AP, FIXED_S10P7, MAN_COMPOSITION, TECH_ADDRESS, IXX, IXZ, WEIGHTED_RMS, IXY, CLASSIFICATION, ATT_CONTROL_MODE, ORIGINATOR_POSITION, PREVIOUS_MESSAGE_EPOCH, GRAVITY_MODE
-L, PRM_MSG_LINK, OD_EPOCH_EIGINT, TRAJ_NEXT_ID, IYY, ORIGINATOR_EMAIL, IYZ, GDOP, MANUFACTURER, DC_BODY_FRAME, DATA_TYPES, ORB_REVNUM_BASIS, OBS_USED, DOCKED_WITH, START_TIME, OEB_MAX, SRP_CONST_AREA, OCM_DATA_ELEMENTS, AREA_ALONG_OEB_INT, SOLVE_N, SOLVE_STATES, IZZ, MAN_PREV_EPOCH, OD_PREV_ID, DC_EXEC_STOP, ORB_AVERAGING, CONSIDER_PARAMS, TRAJ_REF_FRAME, VM_APPARENT_MAX, EQUATORIAL_RADIUS, DAYS_SINCE_FIRST_OBS, IN
-TERPOLATION_DEGREE, TECH_POC, COV_NEXT_ID, SRP_MODEL, TECH_PHONE, FIXED_F10P7_MEAN, ATT_ACTUATOR_TYPE, CONSIDER_N, OD_EPOCH_EIGMIN, RCS_MAX, TIME_SPAN, OCEAN_TIDES_MODEL, DAYS_SINCE_LAST_OBS, OD_CONFIDENCE, OD_MIN_PRED_EIGMIN, DC_WIN_CLOSE, MESSAGE_ID, CENTRAL_BODY_ROTATION, CREATION_DATE, ADM_MSG_LINK, CATALOG_NAME, FIXED_M10P7, manValues, ATT_CONTROL, MAN_FRAME_EPOCH, MAN_REF_FRAME, RDM_MSG_LINK, CENTER_NAME, SW_
-DATA_EPOCH, COV_BASIS, OD_EPOCH, SCLK_SEC_PER_SI_SEC, ATT_KNOWLEDGE, SHADOW_BODIES, STOP_TIME, COV_SCALE_MAX, COV_ID, OD_ID, OBS_AVAILABLE, COV_CONFIDENCE, MAXIMUM_OBS_GAP, USEABLE_STOP_TIME, SENSORS, MAN_PREV_ID, ALBEDO_GRID_SIZE, AREA_ALONG_OEB_MAX, OBJECT_NAME, USER_DATA, VM_APPARENT, DV_REMAINING, TECH_EMAIL, CDM_MSG_LINK, OEB_Q3, OEB_Q2, OEB_Q1, OEB_PARENT_FRAME_EPOCH, INTERNATIONAL_DESIGNATOR, NEXT_MESSAGE_EP
-OCH, CONSTELLATION, OEB_QC, GRAV_ASSIST_NAME, ORBIT_CATEGORY, DC_PA_STOP_ANGLE, COV_UNITS, TECH_ORG, FIXED_GEOMAG_KP, SHADOW_MODEL, OEB_INT, CELESTIAL_SOURCE, MAN_NEXT_ID, DC_REF_TIME, NEXT_LEAP_EPOCH, SW_DATA_SOURCE, TRAJ_BASIS_ID, ORIGINATOR_PHONE, MAN_ID, DRAG_UNCERTAINTY, COV_ORDERING, OEB_MIN, ORIGINATOR_ADDRESS, DC_MIN_CYCLES, TRACKS_USED, COV_BASIS_ID, OBLATE_FLATTENING, SENSORS_N, FIXED_M10P7_MEAN, DC_BODY_
-TRIGGER, SOLAR_RAD_COEFF, SEDR, DC_PA_START_ANGLE, TAIMUTC_AT_TZERO, TRAJ_BASIS, RCS, VM_APPARENT_MIN, MAN_BASIS_ID, DC_TYPE, AVG_MANEUVER_FREQ, ORB_REVNUM, MAN_PURPOSE, UT1MUTC_AT_TZERO, SOLID_TIDES_MODEL, TDM_MSG_LINK, SW_INTERP_METHOD, ALTERNATE_NAMES, FIXED_Y10P7, MAN_NEXT_EPOCH, DRY_MASS, DV_BOL, INITIAL_WET_MASS, MAX_THRUST, COUNTRY, TECH_POSITION, MAN_UNITS, ALBEDO_MODEL, ATT_POINTING, INTERP_METHOD_EOP, OPS
-_STATUS, OPERATOR, OBJECT_TYPE, AREA_TYP_FOR_PC, EOP_SOURCE, BUS_MODEL, VM_ABSOLUTE, FIXED_GEOMAG_DST, TRAJ_VALUES, ATMOSPHERIC_MODEL, FIXED_Y10P7_MEAN, EPOCH_TZERO, OBJECT_DESIGNATOR, WET_MASS, RECOMMENDED_OD_SPAN, OD_EPOCH_EIGMAJ, OEB_PARENT_FRAME, AREA_MAX_FOR_PC, RCS_MIN, MAN_BASIS, DC_WIN_OPEN, SOLAR_RAD_UNCERTAINTY, OD_METHOD, COV_REF_FRAME, DC_MAX_CYCLES, PREVIOUS_MESSAGE_ID, USEABLE_START_TIME, NEXT_MESSAGE
-_ID, TRAJ_FRAME_EPOCH, ORIGINATOR_POC, DRAG_COEFF_NOM, TRAJ_ID, AREA_ALONG_OEB_MIN, PROPAGATOR, ORIGINATOR, SCLK_OFFSET_AT_EPOCH, TRAJ_UNITS, covValues, TIME_SYSTEM, TRAJ_PREV_ID, N_BODY_PERTURBATIONS, FIXED_F10P7, COV_SCALE_MIN, OD_MAX_PRED_EIGMAJ, DC_EXEC_START, OWNER, REFLECTANCE, GM, DC_TIME_PULSE_PERIOD, COV_PREV_ID, AREA_MIN_FOR_PC, DC_TIME_PULSE_DURATION, TRACKS_AVAILABLE, INTERPOLATION, DC_REF_DIR, FIXED_S1
-0P7_MEAN, COV_TYPE, DRAG_CONST_AREA, MAN_PRED_SOURCE, TRAJ_TYPE, NEXT_LEAP_TAIMUTC, REDUCTION_THEORY, COV_FRAME_EPOCH, MAN_DEVICE_ID, FIXED_GEOMAG_AP, FIXED_S10P7, MAN_COMPOSITION, TECH_ADDRESS, IXX, IXZ, WEIGHTED_RMS, IXY, CLASSIFICATION, ATT_CONTROL_MODE, ORIGINATOR_POSITION, PREVIOUS_MESSAGE_EPOCH, GRAVITY_MODEL, PRM_MSG_LINK, OD_EPOCH_EIGINT, TRAJ_NEXT_ID, IYY, ORIGINATOR_EMAIL, IYZ, GDOP, MANUFACTURER, DC_BODY
-_FRAME, DATA_TYPES, ORB_REVNUM_BASIS, OBS_USED, DOCKED_WITH, START_TIME, OEB_MAX, SRP_CONST_AREA, OCM_DATA_ELEMENTS, AREA_ALONG_OEB_INT, SOLVE_N, SOLVE_STATES, IZZ, MAN_PREV_EPOCH, OD_PREV_ID, DC_EXEC_STOP, ORB_AVERAGING, CONSIDER_PARAMS, TRAJ_REF_FRAME, VM_APPARENT_MAX, EQUATORIAL_RADIUS, DAYS_SINCE_FIRST_OBS, INTERPOLATION_DEGREE, TECH_POC, COV_NEXT_ID, SRP_MODEL, TECH_PHONE, FIXED_F10P7_MEAN, ATT_ACTUATOR_TYPE, 
-CONSIDER_N, OD_EPOCH_EIGMIN, RCS_MAX, TIME_SPAN, OCEAN_TIDES_MODEL, DAYS_SINCE_LAST_OBS, OD_CONFIDENCE, OD_MIN_PRED_EIGMIN, DC_WIN_CLOSE, MESSAGE_ID, CENTRAL_BODY_ROTATION, CREATION_DATE, ADM_MSG_LINK, CATALOG_NAME, FIXED_M10P7, manValues, ATT_CONTROL, MAN_FRAME_EPOCH, MAN_REF_FRAME, RDM_MSG_LINK, CENTER_NAME, SW_DATA_EPOCH, COV_BASIS, OD_EPOCH, SCLK_SEC_PER_SI_SEC, ATT_KNOWLEDGE, SHADOW_BODIES, STOP_TIME, COV_SCALE_MAX, COV_ID, OD_ID, OBS_AVAILABLE, COV_CONFIDENCE, MAXIMUM_OBS_GAP, USEABLE_STOP_TIME, SENSORS, MAN_PREV_ID, ALBEDO_GRID_SIZE, AREA_ALONG_OEB_MAX, OBJECT_NAME, USER_DATA, VM_APPARENT, DV_REMAINING, TECH_EMAIL
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**page:** `typing.Optional[int]` — Page number for the queried OCM(s). Default is 0
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**size:** `typing.Optional[int]` — Number of OCM(s) per page.  Max is 10
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
-    
-</dd>
-</dl>
-</dd>
-</dl>
-
-
-</dd>
-</dl>
-</details>
-
-<details><summary><code>client.metadata.ocm.<a href="src/tracss/metadata/ocm/client.py">list_by_operational_batch_v1</a>(...) -> typing.List[OperationalOnDemandBatchDto]</code></summary>
-<dl>
-<dd>
-
-#### 📝 Description
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-Retrieve one or more On Demand Batches.
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```python
-from tracss import TraCSS
-from tracss.environment import TraCSSEnvironment
-
-client = TraCSS(
-    token="<token>",
-    environment=TraCSSEnvironment.DEFAULT,
-)
-
-client.metadata.ocm.list_by_operational_batch_v1(
-    message_id="000043928_conj_000054603_2024329195621",
-    batch_id="opebe5bc-95e9-4b11-9594-5d0c61e0b241",
-    upload_date=">2024-09-04T18:37:01Z",
-    usable_start_time=">2024-09-04T18:37:01Z",
-    usable_stop_time=">2024-09-04T18:37:01Z",
-    creation_date=">2024-09-04T18:37:01Z",
-    created_by="all",
-    sort="satNo,ASC",
-)
-
-```
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**message_id:** `typing.Optional[str]` — Message Id (generated) from ASW that processed the CDM during super combo processing. A value with an optional operator that may be pre-pended to the value. Valid operators are: Not Equal (<>Value), In (Value1,Value2), Like (\*Value), Not Like(~*Value)
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**batch_id:** `typing.Optional[str]` — Batch Id from the batch of OCMs that was uploaded. A value with an optional operator that may be pre-pended to the value. Valid operators are: Not Equal (<>Value), In (Value1,Value2), Like (\*Value), Not Like(~*Value)
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**sat_no:** `typing.Optional[str]` — SatNo from the OCM that was uploaded as part of the batch. A value with an optional operator that may be pre-pended to the value. Valid operators are: Not Equal (<>Value), In (Value1,Value2), Like (\*Value), Not Like(~*Value)
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**upload_date:** `typing.Optional[str]` — Upload Date from the OCM batch that was uploaded. Valid operators are: Greater Than (>Value), Less Than (<Value), Greater Than or Equal (>=Value), Less Than or Equal (<=Value), and Between (Value1...Value2) (smaller value first)
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**usable_start_time:** `typing.Optional[str]` — usableStartTime from an OCM that was uploaded as part of the batch. Valid operators are: Greater Than (>Value), Less Than (<Value), Greater Than or Equal (>=Value), Less Than or Equal (<=Value), and Between (Value1...Value2) (smaller value first)
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**usable_stop_time:** `typing.Optional[str]` — usableStopTime from an OCM that was uploaded as part of the batch. Valid operators are: Greater Than (>Value), Less Than (<Value), Greater Than or Equal (>=Value), Less Than or Equal (<=Value), and Between (Value1...Value2) (smaller value first)
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**creation_date:** `typing.Optional[str]` — creationDate from an OCM that was uploaded as part of the batch. Valid operators are: Greater Than (>Value), Less Than (<Value), Greater Than or Equal (>=Value), Less Than or Equal (<=Value), and Between (Value1...Value2) (smaller value first)
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**cdm_found:** `typing.Optional[str]` — If a cdm is found as part of the batch on-demand run. Valid operators are: Not Equal (<>Value)
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**created_by:** `typing.Optional[str]` — Username of batches to find. Can be a specific username or 'all' for all users. Defaults to requesting user's username
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**sort:** `typing.Optional[str]` — Desired sort field and direction (Ascending = ASC, Descending = DESC), separated by a comma.
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**page:** `typing.Optional[int]` — Page number for the queried TraCSS CDM(s). Default is 0
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**size:** `typing.Optional[int]` — Number of TraCSS CDMs per page.  Max is 100000
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
-    
-</dd>
-</dl>
-</dd>
-</dl>
-
-
-</dd>
-</dl>
-</details>
-
 ## Metadata TracssCat
-<details><summary><code>client.metadata.tracss_cat.<a href="src/tracss/metadata/tracss_cat/client.py">upload_csv</a>() -> typing.Any</code></summary>
+<details><summary><code>client.metadata.tracss_cat.<a href="src/tracss/metadata/tracss_cat/client.py">upload_csv</a>(...) -> typing.Any</code></summary>
 <dl>
 <dd>
 
@@ -2356,11 +1669,13 @@ from tracss import TraCSS
 from tracss.environment import TraCSSEnvironment
 
 client = TraCSS(
-    token="<token>",
+    client_id="YOUR_CLIENT_ID", client_secret="YOUR_CLIENT_SECRET",
     environment=TraCSSEnvironment.DEFAULT,
 )
 
-client.metadata.tracss_cat.upload_csv()
+client.metadata.tracss_cat.upload_csv(
+    file="example_file",
+)
 
 ```
 </dd>
@@ -2372,6 +1687,14 @@ client.metadata.tracss_cat.upload_csv()
 
 <dl>
 <dd>
+
+<dl>
+<dd>
+
+**file:** `core.File` — CSV file containing TraCSS Cat noradIds and columns to update. Accepted file types: .csv
+    
+</dd>
+</dl>
 
 <dl>
 <dd>
@@ -2388,7 +1711,7 @@ client.metadata.tracss_cat.upload_csv()
 </dl>
 </details>
 
-<details><summary><code>client.metadata.tracss_cat.<a href="src/tracss/metadata/tracss_cat/client.py">list</a>(...) -> ListTracssCatResponse</code></summary>
+<details><summary><code>client.metadata.tracss_cat.<a href="src/tracss/metadata/tracss_cat/client.py">list</a>(...) -> typing.List[typing.Dict[str, typing.Any]]</code></summary>
 <dl>
 <dd>
 
@@ -2400,7 +1723,7 @@ client.metadata.tracss_cat.upload_csv()
 <dl>
 <dd>
 
-Retrieve one or more TraCSSCats based on query parameters. <b>All fields may be pre-pended with the following optional operators</b>: <br>Equal - (=Value) This is default and does not need to be included.
+Retrieve TraCSSCAT records based on query parameters. <b>All fields may be pre-pended with the following optional operators</b>: <br>Equal - (=Value) This is default and does not need to be included.
 <br>Not Equal (<>Value)
 <br>Greater Than (>Value)
 <br>Greater Than or Equal (>=Value)
@@ -2432,7 +1755,7 @@ from tracss import TraCSS
 from tracss.environment import TraCSSEnvironment
 
 client = TraCSS(
-    token="<token>",
+    client_id="YOUR_CLIENT_ID", client_secret="YOUR_CLIENT_SECRET",
     environment=TraCSSEnvironment.DEFAULT,
 )
 
@@ -2441,7 +1764,17 @@ client.metadata.tracss_cat.list(
     satellite_name="THEMIS A",
     organization="nasa, or nasa,iridium",
     object_type="Payload",
+    orbital_regime="LEO1",
+    countries_of_affiliation="US,UK",
+    international_designator="2026-001A",
+    operational_status="OPERATIONAL_MANEUVERABLE",
+    conjunction_mitigation_capabilities="chemical propulsion",
+    rcs_size="Medium",
+    launch_location="AFETR",
+    constellation="Starlink",
     fields="noradId,objectType",
+    countries_of_affiliation_tag_mode="ALL",
+    conjunction_mitigation_capabilities_tag_mode="ALL",
     sort="noradId,ASC",
 )
 
@@ -2467,7 +1800,7 @@ client.metadata.tracss_cat.list(
 <dl>
 <dd>
 
-**satellite_name:** `typing.Optional[str]` — Name of the TracssCat object. A value with an optional operator that may be pre-pended to the value. Valid operators are: Not Equal (<>Value), In (Value1,Value2) , Between (Value1...Value2) (smaller value first), Like (\*Value), Not Like(~*Value)
+**satellite_name:** `typing.Optional[str]` — Name of the TracssCat object. A value with an optional operator that may be pre-pended to the value. Valid operators are: Not Equal (<>Value), In (Value1,Value2), Like (\*Value), Not Like(~*Value)
     
 </dd>
 </dl>
@@ -2491,7 +1824,7 @@ client.metadata.tracss_cat.list(
 <dl>
 <dd>
 
-**orbital_regime:** `typing.Optional[str]` 
+**orbital_regime:** `typing.Optional[str]` — Derived orbital regime of the TracssCat(s) object.A value with an optional operator that may be pre-pended to the value. Valid operators are: Not Equal (<>Value), In (Value1,Value2) , Like (\*Value), Not Like(~*Value)
     
 </dd>
 </dl>
@@ -2499,7 +1832,63 @@ client.metadata.tracss_cat.list(
 <dl>
 <dd>
 
-**count_only:** `typing.Optional[bool]` 
+**countries_of_affiliation:** `typing.Optional[str]` — Countries affiliated with the TracssCat(s) object.This value defaults to an OR query, records that contain ANY of the values provided in the query string. If looking for an exact match, see the description of countriesOfAffiliationTagMode.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**international_designator:** `typing.Optional[str]` — International Designator of the TracssCat(s) object.A value with an optional operator that may be pre-pended to the value. Valid operators are: Not Equal (<>Value), In (Value1,Value2) , Like (\*Value), Not Like(~*Value)
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**operational_status:** `typing.Optional[str]` — Operational status of the TracssCat(s) object.A value with an optional operator that may be pre-pended to the value. Valid operators are: Not Equal (<>Value), In (Value1,Value2) , Like (\*Value), Not Like(~*Value)
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**conjunction_mitigation_capabilities:** `typing.Optional[str]` — Onboard conjunction mitigation capabilities of the TracssCat(s) object.This value defaults to an OR query, records that contain ANY of the values provided in the query string. If looking for an exact match, see the description of countriesOfAffiliationTagMode.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**rcs_size:** `typing.Optional[str]` — Derived radar cross section size of the TracssCat(s) object.A value with an optional operator that may be pre-pended to the value. Valid operators are: Not Equal (<>Value), In (Value1,Value2) , Like (\*Value), Not Like(~*Value)
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**launch_location:** `typing.Optional[str]` — Launch location of the TracssCat(s) object.A value with an optional operator that may be pre-pended to the value. Valid operators are: Not Equal (<>Value), In (Value1,Value2) , Like (\*Value), Not Like(~*Value) This parameter accepts launch location codes as well as fully qualified names. If the value being provided to the query contains a comma, the value must be wrapped in quotes - "Cape Canaveral/Eastern Test Range, United States of America".
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**constellation:** `typing.Optional[str]` — Constellation the TracssCat(s) object are part of.A value with an optional operator that may be pre-pended to the value. Valid operators are: Not Equal (<>Value), In (Value1,Value2) , Like (\*Value), Not Like(~*Value)
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**count_only:** `typing.Optional[bool]` — Returns the total count of objects matching your query parameters
     
 </dd>
 </dl>
@@ -2516,6 +1905,30 @@ client.metadata.tracss_cat.list(
 <dd>
 
 **headers_only:** `typing.Optional[bool]` — return only key fields from tracsscat in json format. Does not work with any filters
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**include_metadata:** `typing.Optional[bool]` — Returns the last update time, data source, and organization that last updated each field, along with the actual TracssCat data.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**countries_of_affiliation_tag_mode:** `typing.Optional[str]` — Describes how to query on the countriesOfAffiliation field.Valid values are OR and ALL. The value will default to OR if not provided. This parameter will change how the countriesOfAffiliation field is queried. If the value is OR it will return all records containing ANY of the values provided in the countriesOfAffiliation field. If the value is ALL, it will return only records that contain ALL of the values in the countriesOfAffiliation field.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**conjunction_mitigation_capabilities_tag_mode:** `typing.Optional[str]` — Describes how to query on the conjunctionMitigationCapabilities field.Valid values are OR and ALL. The value will default to OR if not provided. This parameter will change how the conjunctionMitigationCapabilities field is queried. If the value is OR it will return all records containing ANY of the values provided in the conjunctionMitigationCapabilities field. If the value is ALL, it will return only records that contain ALL of the values in the conjunctionMitigationCapabilities field.
     
 </dd>
 </dl>
@@ -2559,8 +1972,8 @@ client.metadata.tracss_cat.list(
 </dl>
 </details>
 
-## Metadata Cdm
-<details><summary><code>client.metadata.cdm.<a href="src/tracss/metadata/cdm/client.py">list</a>(...) -> ListCdmResponse</code></summary>
+## Metadata TranslationErrors
+<details><summary><code>client.metadata.translation_errors.<a href="src/tracss/metadata/translation_errors/client.py">list</a>(...) -> typing.List[OcmMetadataV2Dto]</code></summary>
 <dl>
 <dd>
 
@@ -2572,7 +1985,7 @@ client.metadata.tracss_cat.list(
 <dl>
 <dd>
 
-Retrieve one or more TraCSS CDMs from TRACSS.
+Retrieve OCM Translation Errors that may have occurred during Conjunction Analysis for given OCMs
 </dd>
 </dl>
 </dd>
@@ -2591,7 +2004,105 @@ from tracss import TraCSS
 from tracss.environment import TraCSSEnvironment
 
 client = TraCSS(
-    token="<token>",
+    client_id="YOUR_CLIENT_ID", client_secret="YOUR_CLIENT_SECRET",
+    environment=TraCSSEnvironment.DEFAULT,
+)
+
+client.metadata.translation_errors.list()
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**message_id:** `typing.Optional[str]` — A string representing the messageId to look for in the OCMs.Valid operators are: Equal (=Value), example = "messageId=OCM_202605142222"
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**satellite_id:** `typing.Optional[int]` — A string representing the satelliteId to look for in the OCMs.Valid operators are: Equal (=Value), example = "satelliteId=43129"
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**run_id:** `typing.Optional[str]` — A string representing a runId to look for in the OCMs.Valid operators are: Equal (=Value), example = "runId=ope9054f-b477-4a01-b68a-111fe592785d"
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+## Metadata Cdm
+<details><summary><code>client.metadata.cdm.<a href="src/tracss/metadata/cdm/client.py">list</a>(...) -> ListCdmResponse</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Retrieve CDMs generated by TraCSS
+
+
+Example Scripts:
+
+
+| Guide                                           | Script                                             |
+|-------------------------------------------------|----------------------------------------------------|
+| [Pull CDMs Guide](/metadata/scripts/README_pull_cdms.md) | [Pull CDMs Script (Python)](/metadata/scripts/pull_cdms.py)  |
+
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```python
+from tracss import TraCSS
+from tracss.environment import TraCSSEnvironment
+
+client = TraCSS(
+    client_id="YOUR_CLIENT_ID", client_secret="YOUR_CLIENT_SECRET",
     environment=TraCSSEnvironment.DEFAULT,
 )
 
@@ -2610,10 +2121,12 @@ client.metadata.cdm.list(
     object1international_designator="2019-002A",
     object1operator_organization="Iridium",
     object1ephemeris_name="NONE",
+    object1screening_data_source="NONE",
     object2type="Payload",
     object2international_designator="2019-002A",
     object2operator_organization="Iridium",
     object2ephemeris_name="NONE",
+    object2screening_data_source="NONE",
     conjunction_id="000005e5-d1dd-4a43-b2df-86196e42d29a, or 000005e5-d1dd-4a43-b2df-86196e42d29a,000005e5-d1dd-4a43-b2df-86196e42d29a",
     batch_id="000005e5-d1dd-4a43-b2df-86196e42d29a, or 000005e5-d1dd-4a43-b2df-86196e42d29a,000005e5-d1dd-4a43-b2df-86196e42d29a",
     counter="1000, <500",
@@ -2780,6 +2293,14 @@ client.metadata.cdm.list(
 <dl>
 <dd>
 
+**object1screening_data_source:** `typing.Optional[str]` — The screening data source for object1.A value with an optional operator that may be pre-pended to the value. Valid operators are: Not Equal (<>Value), In (Value1,Value2), Like (\*Value), Not Like(~*Value)
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
 **object2type:** `typing.Optional[str]` — The object type of object2. Possible values are: PAYLOAD, ROCKET BODY, DEBRIS, UNKNOWN, OTHER. A value with an optional operator that may be pre-pended to the value. Valid operators are: Not Equal (<>Value), In (Value1,Value2), Like (\*Value), Not Like(~*Value)
     
 </dd>
@@ -2813,6 +2334,14 @@ client.metadata.cdm.list(
 <dd>
 
 **object2ephemeris_name:** `typing.Optional[str]` — The ephemeris name for object2. If an OCM was involved, this will be the OCMs messageId, otherwise NONE. A value with an optional operator that may be pre-pended to the value. Valid operators are: Not Equal (<>Value), In (Value1,Value2), Like (\*Value), Not Like(~*Value)
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**object2screening_data_source:** `typing.Optional[str]` — The screening data source for object2.A value with an optional operator that may be pre-pended to the value. Valid operators are: Not Equal (<>Value), In (Value1,Value2), Like (\*Value), Not Like(~*Value)
     
 </dd>
 </dl>
@@ -2948,7 +2477,7 @@ client.metadata.cdm.list(
 <dl>
 <dd>
 
-Retrieve one or more TraCSS CDMs for an On-Demand run.
+Retrieve CDMs generated by OCMs from On-Demand Batches submitted to TraCSS
 </dd>
 </dl>
 </dd>
@@ -2967,7 +2496,7 @@ from tracss import TraCSS
 from tracss.environment import TraCSSEnvironment
 
 client = TraCSS(
-    token="<token>",
+    client_id="YOUR_CLIENT_ID", client_secret="YOUR_CLIENT_SECRET",
     environment=TraCSSEnvironment.DEFAULT,
 )
 
@@ -3034,490 +2563,6 @@ client.metadata.cdm.list_by_operational_batch(
 </dl>
 </details>
 
-<details><summary><code>client.metadata.cdm.<a href="src/tracss/metadata/cdm/client.py">list_v1</a>(...) -> ListV1CdmResponse</code></summary>
-<dl>
-<dd>
-
-#### 📝 Description
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-Retrieve one or more TraCSS CDMs from TRACSS.
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```python
-from tracss import TraCSS
-from tracss.environment import TraCSSEnvironment
-
-client = TraCSS(
-    token="<token>",
-    environment=TraCSSEnvironment.DEFAULT,
-)
-
-client.metadata.cdm.list_v1(
-    message_id="000043928_conj_000054603_2024329195621, or 000060681_conj_000026126_2025191132238_1751813630,000060681_conj_000026126_2025191132238_1751898521",
-    correlation_id="dd8c054b-6bea-48fb-a245-6cb23331b156",
-    ca_status="complete",
-    ocm_message_id="000043928_conj_000054603_2024329195621",
-    operator_organization="SpaceX",
-    tca="2024-314T07:41:39.411",
-    creation_date="2024-09-04T18:37:01Z",
-    message_for="IRIDIUM 161",
-    miss_distance="1000, <500",
-    screening_option="Covariance",
-    object1screen_volume_shape="Box, Ellipsoid",
-    object1type="Payload",
-    object1international_designator="2019-002A",
-    object1operator_organization="Iridium",
-    object1ephemeris_name="NONE",
-    object2screen_volume_shape="Box, Ellipsoid",
-    object2type="Payload",
-    object2international_designator="2019-002A",
-    object2operator_organization="Iridium",
-    object2ephemeris_name="NONE",
-    conjunction_id="000005e5-d1dd-4a43-b2df-86196e42d29a, or 000005e5-d1dd-4a43-b2df-86196e42d29a,000005e5-d1dd-4a43-b2df-86196e42d29a",
-    batch_id="000005e5-d1dd-4a43-b2df-86196e42d29a, or 000005e5-d1dd-4a43-b2df-86196e42d29a,000005e5-d1dd-4a43-b2df-86196e42d29a",
-    counter="1000, <500",
-    format="json",
-    sort="object1ObjectDesignator,ASC",
-    fields="Comma separated list of fields to include in the response.",
-)
-
-```
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**message_id:** `typing.Optional[str]` — Message Id (generated), or list of comma separated IDs, from ASW that processed the CDM during super combo processing. A value with an optional operator that may be pre-pended to the value. Valid operators are: Not Equal (<>Value), In (Value1,Value2), Like (\*Value), Not Like(~*Value)
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**correlation_id:** `typing.Optional[str]` — Correlation Id (UUID) of the TraCSS CDM. If set to 'most_recent', the most recent CA run's correlationId will be used, and will default to most_recent if not other params used.A value with an optional operator that may be pre-pended to the value. Valid operators are: Not Equal (<>Value), In (Value1,Value2), Like (\*Value), Not Like(~*Value)
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**ca_status:** `typing.Optional[str]` — Can be set to 'Complete' (case insensitive) in conjunction with correlationId to find the latest correlationId of a completed CA run.A value with an optional operator that may be pre-pended to the value. Valid operators are: Not Equal (<>Value)
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**ocm_message_id:** `typing.Optional[str]` — OCM Message Id from an OCM that processed the CDM during super combo processing. A value with an optional operator that may be pre-pended to the value. Valid operators are: Not Equal (<>Value), In (Value1,Value2), Like (\*Value), Not Like(~*Value)
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**object1id:** `typing.Optional[str]` — DEPRECATED: Please use object1ObjectDesignator param instead. Object1 Id (Primary Satellite Number). A value with an optional operator that may be pre-pended to the value. Valid operators are: Greater Than (>Value), Less Than (<Value), Greater Than or Equal (>=Value), Less Than or Equal (<=Value), Not Equal (<>Value), In (Value1,Value2) , Between (Value1...Value2) (smaller value first), Like (\*Value), Not Like(~*Value)
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**object2id:** `typing.Optional[str]` — DEPRECATED: Please use object2ObjectDesignator param instead. Object2 Id (Secondary Satellite Number of conjuncting satellite). A value with an optional operator that may be pre-pended to the value. Valid operators are: Greater Than (>Value), Less Than (<Value), Greater Than or Equal (>=Value), Less Than or Equal (<=Value), Not Equal (<>Value), In (Value1,Value2), Between (Value1...Value2) (smaller value first), Like (\*Value), Not Like(~*Value)
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**operator_organization:** `typing.Optional[str]` — The name of the current operator's organization. A value with an optional operator that may be pre-pended to the value. Valid operators are: Not Equal (<>Value), In (Value1,Value2), Like (\*Value), Not Like(~*Value)
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**tca:** `typing.Optional[str]` — TCA (Time of Closest Approach). A value with an optional operator that may be pre-pended to the value. Valid operators are: Greater Than (>Value), Less Than (<Value), Greater Than or Equal (>=Value), Less Than or Equal (<=Value), Not Equal (<>Value) and Between (Value1...Value2) (smaller value first)
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**creation_date:** `typing.Optional[str]` — Creation Date of the CDM. A value with an optional operator that may be pre-pended to the value. Valid operators are: Greater Than (>Value), Less Than (<Value), Greater Than or Equal (>=Value), Less Than or Equal (<=Value), Not Equal (<>Value) and Between (Value1...Value2) (smaller value first)
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**message_for:** `typing.Optional[str]` — Name of Satellite whom the TraCSS cdm is for. A value with an optional operator that may be pre-pended to the value. Valid operators are: Not Equal (<>Value), In (Value1,Value2), Like (\*Value), Not Like(~*Value)
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**miss_distance:** `typing.Optional[str]` — The distance (in m) that object1 and object2 missed by. A value with an optional operator that may be pre-pended to the value. Valid operators are: Greater Than (>Value), Less Than (<Value), Greater Than or Equal (>=Value), Less Than or Equal (<=Value), Not Equal (<>Value), In (Value1,Value2) , Between (Value1...Value2) (smaller value first)
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**collision_probability:** `typing.Optional[str]` — The probability of object1 and object2 having a collision. Valid operators are: Greater Than (>Value), Less Than (<Value), Greater Than or Equal (>=Value), Less Than or Equal (<=Value), Not Equal (<>Value), In (Value1,Value2) , Between (Value1...Value2) (smaller value first). Does NOT work with Like (\*Value) and Not Like(~*Value)
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**screening_option:** `typing.Optional[str]` — What was used during the screening process. A value with an optional operator that may be pre-pended to the value. Valid operators are: Not Equal (<>Value), In (Value1,Value2), Like (\*Value), Not Like(~*Value)
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**object1screen_volume_shape:** `typing.Optional[str]` — The shape of the screen volume for object1. A value with an optional operator that may be pre-pended to the value. Valid operators are: Not Equal (<>Value), In (Value1,Value2), Like (\*Value), Not Like(~*Value)
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**object1type:** `typing.Optional[str]` — The object type of object1. Possible values are: PAYLOAD, ROCKET BODY, DEBRIS, UNKNOWN, OTHER. A value with an optional operator that may be pre-pended to the value. Valid operators are: Not Equal (<>Value), In (Value1,Value2), Like (\*Value), Not Like(~*Value)
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**object1object_designator:** `typing.Optional[str]` — The designator for object1. A value with an optional operator that may be pre-pended to the value. Valid operators are: Not Equal (<>Value), In (Value1,Value2), Like (\*Value), Not Like(~*Value)
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**object1international_designator:** `typing.Optional[str]` — The international designator for object1. A value with an optional operator that may be pre-pended to the value. Valid operators are: Not Equal (<>Value), In (Value1,Value2), Like (\*Value), Not Like(~*Value)
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**object1operator_organization:** `typing.Optional[str]` — The operator organization for object1. A value with an optional operator that may be pre-pended to the value. Valid operators are: Not Equal (<>Value), In (Value1,Value2), Like (\*Value), Not Like(~*Value)
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**object1ephemeris_name:** `typing.Optional[str]` — The ephemeris name for object1. If an OCM was involved, this will be the OCMs messageId, otherwise NONE. A value with an optional operator that may be pre-pended to the value. Valid operators are: Not Equal (<>Value), In (Value1,Value2), Like (\*Value), Not Like(~*Value)
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**object2screen_volume_shape:** `typing.Optional[str]` — The shape of the screen volume for object2. A value with an optional operator that may be pre-pended to the value. Valid operators are: Not Equal (<>Value), In (Value1,Value2), Like (\*Value), Not Like(~*Value)
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**object2type:** `typing.Optional[str]` — The object type of object2. Possible values are: PAYLOAD, ROCKET BODY, DEBRIS, UNKNOWN, OTHER. A value with an optional operator that may be pre-pended to the value. Valid operators are: Not Equal (<>Value), In (Value1,Value2), Like (\*Value), Not Like(~*Value)
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**object2object_designator:** `typing.Optional[str]` — The designator for object2. A value with an optional operator that may be pre-pended to the value. Valid operators are: Not Equal (<>Value), In (Value1,Value2), Like (\*Value), Not Like(~*Value)
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**object2international_designator:** `typing.Optional[str]` — The international designator for object2. A value with an optional operator that may be pre-pended to the value. Valid operators are: Not Equal (<>Value), In (Value1,Value2), Like (\*Value), Not Like(~*Value)
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**object2operator_organization:** `typing.Optional[str]` — The operator organization for object2. A value with an optional operator that may be pre-pended to the value. Valid operators are: Not Equal (<>Value), In (Value1,Value2), Like (\*Value), Not Like(~*Value)
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**object2ephemeris_name:** `typing.Optional[str]` — The ephemeris name for object2. If an OCM was involved, this will be the OCMs messageId, otherwise NONE. A value with an optional operator that may be pre-pended to the value. Valid operators are: Not Equal (<>Value), In (Value1,Value2), Like (\*Value), Not Like(~*Value)
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**conjunction_id:** `typing.Optional[str]` — Conjunction ID for a TracssCdm.  This can be a single ID or a comma separated list of IDs. A value with an optional operator that may be pre-pended to the value. Valid operators are: Not Equal (<>Value), In (Value1,Value2), Like (\*Value), Not Like(~*Value)
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**batch_id:** `typing.Optional[str]` — Batch ID of an On-Demand CA run. Does not work along with correlationId, and will override this param.A value with an optional operator that may be pre-pended to the value. Valid operators are: In (Value1,Value2)
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**active_cdms_only:** `typing.Optional[bool]` — If true, only active (tca > now) CDMS will be returned. If used with latestCdmsOnly then only countOnly and object1ObjectDesignator may be used.  If false, all CDMS will be returned.Does not work in conjunction with counter param. NOTE: This param can take significantly longer to return data
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**latest_cdms_only:** `typing.Optional[bool]` — If true, only the latest CDM for obj1 + obj2 combo will be returned. Can only be used with countOnly, activeCdmsOnly, object1ObjectDesignator or by itself.  If false, all CDMS will be returned.
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**counter:** `typing.Optional[str]` — The counter for the record in the database. Does not work with latestCdmsOnly. A value with an optional operator that may be pre-pended to the value. Valid operators are: Greater Than (>Value), Less Than (<Value), Greater Than or Equal (>=Value), Less Than or Equal (<=Value), Not Equal (<>Value), In (Value1,Value2) , Between (Value1...Value2) (smaller value first)
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**headers_only:** `typing.Optional[str]` — Only get the header key fields of the object being asked for. Default is false. If set to true, format will be overwritten to JSON. Does not work with any filters
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**format:** `typing.Optional[str]` — Desired format of the returned TraCSS CDM(s). Options are KVN (Default), JSON, XML, or CSV. CSV is a comma separated file derived from KVN
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**sort:** `typing.Optional[str]` — Desired sort field and direction (Ascending = ASC, Descending = DESC), separated by a comma.
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**fields:** `typing.Optional[str]` — Comma separated list of specific fields to include in the response.  Valid fields for JSON and XML are: CORRELATION_ID, CCSDS_CDM_VERS, COMMENT, CREATION_DATE, ORIGINATOR, MESSAGE_FOR, MESSAGE_ID, TCA, MISS_DISTANCE, MISS_DISTANCE_UNIT, RELATIVE_SPEED, RELATIVE_SPEED_UNIT, RELATIVE_POSITION_R, RELATIVE_POSITION_R_UNIT, RELATIVE_POSITION_T, RELATIVE_POSITION_T_UNIT, RELATIVE_POSITION_N, RELATIVE_POSITION_N_UNIT, RELATIVE_VELOCITY_R, RELATIVE_VELOCITY_R_UNIT, RELATIVE_VELOCITY_T, RELATIVE_VELOCITY_T_UNIT, RELATIVE_VELOCITY_N, RELATIVE_VELOCITY_N_UNIT, COLLISION_PROBABILITY, COLLISION_PROBABILITY_METHOD, START_SCREEN_PERIOD, STOP_SCREEN_PERIOD, SCREEN_VOLUME_SHAPE, SCREEN_VOLUME_FRAME, SCREEN_VOLUME_X, SCREEN_VOLUME_X_UNIT, SCREEN_VOLUME_Y, SCREEN_VOLUME_Y_UNIT, SCREEN_VOLUME_Z, SCREEN_VOLUME_Z_UNIT, SCREEN_ENTRY_TIME, SCREEN_EXIT_TIME, SAT1_OBJECT_DESIGNATOR, SAT1_CATALOG_NAME, SAT1_OBJECT_NAME, SAT1_INTERNATIONAL_DESIGNATOR, SAT1_OBJECT_TYPE, SAT1_OPERATOR_CONTACT_POSITION, SAT1_OPERATOR_ORGANIZATION, SAT1_OPERATOR_PHONE, SAT1_OPERATOR_EMAIL, SAT1_EPHEMERIS_NAME, SAT1_COVARIANCE_METHOD, SAT1_MANEUVERABLE, SAT1_ORBIT_CENTER, SAT1_REF_FRAME, SAT1_GRAVITY_MODEL, SAT1_ATMOSPHERIC_MODEL, SAT1_N_BODY_PERTURBATIONS, SAT1_SOLAR_RAD_PRESSURE, SAT1_EARTH_TIDES, SAT1_INTRACK_THRUST, SAT1_TIME_LASTOB_START, SAT1_TIME_LASTOB_END, SAT1_RECOMMENDED_OD_SPAN, SAT1_RECOMMENDED_OD_SPAN_UNIT, SAT1_ACTUAL_OD_SPAN, SAT1_ACTUAL_OD_SPAN_UNIT, SAT1_OBS_AVAILABLE, SAT1_OBS_USED, SAT1_TRACKS_AVAILABLE, SAT1_TRACKS_USED, SAT1_RESIDUALS_ACCEPTED, SAT1_RESIDUALS_ACCEPTED_UNIT, SAT1_WEIGHTED_RMS, SAT1_AREA_PC, SAT1_AREA_PC_UNIT, SAT1_CD_AREA_OVER_MASS, SAT1_CD_AREA_OVER_MASS_UNIT, SAT1_CR_AREA_OVER_MASS, SAT1_CR_AREA_OVER_MASS_UNIT, SAT1_THRUST_ACCELERATION, SAT1_THRUST_ACCELERATION_UNIT, SAT1_SEDR, SAT1_SEDR_UNIT, SAT1_X, SAT1_X_UNIT, SAT1_Y, SAT1_Y_UNIT, SAT1_Z, SAT1_Z_UNIT, SAT1_X_DOT, SAT1_X_DOT_UNIT, SAT1_Y_DOT, SAT1_Y_DOT_UNIT, SAT1_Z_DOT, SAT1_Z_DOT_UNIT, SAT2_OBJECT_DESIGNATOR, SAT2_CATALOG_NAME, SAT2_OBJECT_NAME, SAT2_INTERNATIONAL_DESIGNATOR, SAT2_OBJECT_TYPE, SAT2_OPERATOR_CONTACT_POSITION, SAT2_OPERATOR_ORGANIZATION, SAT2_OPERATOR_PHONE, SAT2_OPERATOR_EMAIL, SAT2_EPHEMERIS_NAME, SAT2_COVARIANCE_METHOD, SAT2_MANEUVERABLE, SAT2_ORBIT_CENTER, SAT2_REF_FRAME, SAT2_GRAVITY_MODEL, SAT2_ATMOSPHERIC_MODEL, SAT2_N_BODY_PERTURBATIONS, SAT2_SOLAR_RAD_PRESSURE, SAT2_EARTH_TIDES, SAT2_INTRACK_THRUST, SAT2_TIME_LASTOB_START, SAT2_TIME_LASTOB_END, SAT2_RECOMMENDED_OD_SPAN, SAT2_RECOMMENDED_OD_SPAN_UNIT, SAT2_ACTUAL_OD_SPAN, SAT2_ACTUAL_OD_SPAN_UNIT, SAT2_OBS_AVAILABLE, SAT2_OBS_USED, SAT2_TRACKS_AVAILABLE, SAT2_TRACKS_USED, SAT2_RESIDUALS_ACCEPTED, SAT2_RESIDUALS_ACCEPTED_UNIT, SAT2_WEIGHTED_RMS, SAT2_AREA_PC, SAT2_AREA_PC_UNIT, SAT2_CD_AREA_OVER_MASS, SAT2_CD_AREA_OVER_MASS_UNIT, SAT2_CR_AREA_OVER_MASS, SAT2_CR_AREA_OVER_MASS_UNIT, SAT2_THRUST_ACCELERATION, SAT2_THRUST_ACCELERATION_UNIT, SAT2_SEDR, SAT2_SEDR_UNIT, SAT2_X, SAT2_X_UNIT, SAT2_Y, SAT2_Y_UNIT, SAT2_Z, SAT2_Z_UNIT, SAT2_X_DOT, SAT2_X_DOT_UNIT, SAT2_Y_DOT, SAT2_Y_DOT_UNIT, SAT2_Z_DOT, SAT2_Z_DOT_UNIT
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**page:** `typing.Optional[int]` — Page number for the queried TraCSS CDM(s). Default is 0
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**size:** `typing.Optional[int]` — Number of TraCSS CDMs per page.  Max is 5000
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**count_only:** `typing.Optional[bool]` — If true, only the count of the TraCSS CDMs will be returned. Default is false.
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
-    
-</dd>
-</dl>
-</dd>
-</dl>
-
-
-</dd>
-</dl>
-</details>
-
-<details><summary><code>client.metadata.cdm.<a href="src/tracss/metadata/cdm/client.py">list_by_operational_batch_v1</a>(...) -> ListByOperationalBatchV1CdmResponse</code></summary>
-<dl>
-<dd>
-
-#### 📝 Description
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-Retrieve one or more TraCSS CDMs for an On-Demand run.
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```python
-from tracss import TraCSS
-from tracss.environment import TraCSSEnvironment
-
-client = TraCSS(
-    token="<token>",
-    environment=TraCSSEnvironment.DEFAULT,
-)
-
-client.metadata.cdm.list_by_operational_batch_v1(
-    batch_id="ope76b2e-2e2f-4526-b782-f96d2675ec32",
-    format="KVN",
-)
-
-```
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**batch_id:** `str` — Batch Id (generated) from an upload of OCMs for operational On Demand Screening. A value with an optional operator that may be pre-pended to the value. Valid operators are: Not Equal (<>Value), In (Value1,Value2), Like (\*Value), Not Like(~*Value)
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**headers_only:** `typing.Optional[str]` — Only get the header key fields of the object being asked for. Default is false. If set to true, format will be overwritten to JSON
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**format:** `typing.Optional[str]` — format of the TraCSS CDM. Valid values are KVN, JSON, and XML. Default if not provided is KVN. Valid operators are: Equal (=value)
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**size:** `typing.Optional[int]` — Number of TraCSS CDMs per page.  Max is 100000
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
-    
-</dd>
-</dl>
-</dd>
-</dl>
-
-
-</dd>
-</dl>
-</details>
-
 ## Metadata TipReports
 <details><summary><code>client.metadata.tip_reports.<a href="src/tracss/metadata/tip_reports/client.py">list</a>(...) -> typing.Any</code></summary>
 <dl>
@@ -3531,7 +2576,7 @@ client.metadata.cdm.list_by_operational_batch_v1(
 <dl>
 <dd>
 
-Find all TIP reports in the system or all reports that meet your search criteria defined by the query parameters.
+Find all TIP reports in the system or all reports that meet your search criteria defined by the query parameters
 </dd>
 </dl>
 </dd>
@@ -3550,7 +2595,7 @@ from tracss import TraCSS
 from tracss.environment import TraCSSEnvironment
 
 client = TraCSS(
-    token="<token>",
+    client_id="YOUR_CLIENT_ID", client_secret="YOUR_CLIENT_SECRET",
     environment=TraCSSEnvironment.DEFAULT,
 )
 
@@ -3739,7 +2784,7 @@ Regular KVN format does not support tuples.
 </details>
 
 ## Metadata SpaceTrack
-<details><summary><code>client.metadata.space_track.<a href="src/tracss/metadata/space_track/client.py">list</a>(...) -> typing.Optional[typing.List[SpaceTrack]]</code></summary>
+<details><summary><code>client.metadata.space_track.<a href="src/tracss/metadata/space_track/client.py">list</a>(...) -> typing.List[SpaceTrack]</code></summary>
 <dl>
 <dd>
 
@@ -3751,7 +2796,7 @@ Regular KVN format does not support tuples.
 <dl>
 <dd>
 
-Retrieves Space-track data based on a given correlationId
+Retrieves Space-track Package Data
 </dd>
 </dl>
 </dd>
@@ -3770,7 +2815,7 @@ from tracss import TraCSS
 from tracss.environment import TraCSSEnvironment
 
 client = TraCSS(
-    token="<token>",
+    client_id="YOUR_CLIENT_ID", client_secret="YOUR_CLIENT_SECRET",
     environment=TraCSSEnvironment.DEFAULT,
 )
 
@@ -3822,7 +2867,7 @@ client.metadata.space_track.list()
 <dl>
 <dd>
 
-Retrieve Space Track Package Data with all tar files combined in response
+Retrieve Space Track Package Data in a condensed object format
 </dd>
 </dl>
 </dd>
@@ -3841,7 +2886,7 @@ from tracss import TraCSS
 from tracss.environment import TraCSSEnvironment
 
 client = TraCSS(
-    token="<token>",
+    client_id="YOUR_CLIENT_ID", client_secret="YOUR_CLIENT_SECRET",
     environment=TraCSSEnvironment.DEFAULT,
 )
 
@@ -3882,7 +2927,7 @@ client.metadata.space_track.list_nested()
 </details>
 
 ## Metadata Schemas
-<details><summary><code>client.metadata.schemas.<a href="src/tracss/metadata/schemas/client.py">get_xsd</a>() -> typing.List[str]</code></summary>
+<details><summary><code>client.metadata.schemas.<a href="src/tracss/metadata/schemas/client.py">get_xsd</a>() -> typing.List[SchemaResponse]</code></summary>
 <dl>
 <dd>
 
@@ -3899,7 +2944,7 @@ from tracss import TraCSS
 from tracss.environment import TraCSSEnvironment
 
 client = TraCSS(
-    token="<token>",
+    client_id="YOUR_CLIENT_ID", client_secret="YOUR_CLIENT_SECRET",
     environment=TraCSSEnvironment.DEFAULT,
 )
 
@@ -3931,7 +2976,7 @@ client.metadata.schemas.get_xsd()
 </dl>
 </details>
 
-<details><summary><code>client.metadata.schemas.<a href="src/tracss/metadata/schemas/client.py">get_json</a>() -> typing.List[str]</code></summary>
+<details><summary><code>client.metadata.schemas.<a href="src/tracss/metadata/schemas/client.py">download_xsd</a>(...) -> typing.Iterator[bytes]</code></summary>
 <dl>
 <dd>
 
@@ -3948,7 +2993,66 @@ from tracss import TraCSS
 from tracss.environment import TraCSSEnvironment
 
 client = TraCSS(
-    token="<token>",
+    client_id="YOUR_CLIENT_ID", client_secret="YOUR_CLIENT_SECRET",
+    environment=TraCSSEnvironment.DEFAULT,
+)
+
+client.metadata.schemas.download_xsd(
+    filename="filename",
+)
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**filename:** `str` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.metadata.schemas.<a href="src/tracss/metadata/schemas/client.py">get_json</a>() -> typing.List[SchemaResponse]</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```python
+from tracss import TraCSS
+from tracss.environment import TraCSSEnvironment
+
+client = TraCSS(
+    client_id="YOUR_CLIENT_ID", client_secret="YOUR_CLIENT_SECRET",
     environment=TraCSSEnvironment.DEFAULT,
 )
 
@@ -3980,6 +3084,65 @@ client.metadata.schemas.get_json()
 </dl>
 </details>
 
+<details><summary><code>client.metadata.schemas.<a href="src/tracss/metadata/schemas/client.py">download_json</a>(...) -> typing.Iterator[bytes]</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```python
+from tracss import TraCSS
+from tracss.environment import TraCSSEnvironment
+
+client = TraCSS(
+    client_id="YOUR_CLIENT_ID", client_secret="YOUR_CLIENT_SECRET",
+    environment=TraCSSEnvironment.DEFAULT,
+)
+
+client.metadata.schemas.download_json(
+    filename="filename",
+)
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**filename:** `str` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
 ## Metadata ConjunctionEvents
 <details><summary><code>client.metadata.conjunction_events.<a href="src/tracss/metadata/conjunction_events/client.py">list</a>(...) -> ListConjunctionEventsResponse</code></summary>
 <dl>
@@ -3993,7 +3156,7 @@ client.metadata.schemas.get_json()
 <dl>
 <dd>
 
-Retrieve one or more Evolving Conjunctions events from TRACSS.
+Retrieve CDEs generated from the TraCSS System. It is highly suggested to make use of different min/max params, as this endpoint can return a lot of data
 </dd>
 </dl>
 </dd>
@@ -4012,7 +3175,7 @@ from tracss import TraCSS
 from tracss.environment import TraCSSEnvironment
 
 client = TraCSS(
-    token="<token>",
+    client_id="YOUR_CLIENT_ID", client_secret="YOUR_CLIENT_SECRET",
     environment=TraCSSEnvironment.DEFAULT,
 )
 
@@ -4184,7 +3347,7 @@ client.metadata.conjunction_events.list(
 <dl>
 <dd>
 
-Fetches announcement records from the database. Returns a JSON array of announcement objects. Supports optional filtering by ID, type, and pagination.
+Retrieve Space-Track Announcements that have been given to TraCSS
 </dd>
 </dl>
 </dd>
@@ -4203,7 +3366,7 @@ from tracss import TraCSS
 from tracss.environment import TraCSSEnvironment
 
 client = TraCSS(
-    token="<token>",
+    client_id="YOUR_CLIENT_ID", client_secret="YOUR_CLIENT_SECRET",
     environment=TraCSSEnvironment.DEFAULT,
 )
 
@@ -4302,7 +3465,7 @@ from tracss import TraCSS
 from tracss.environment import TraCSSEnvironment
 
 client = TraCSS(
-    token="<token>",
+    client_id="YOUR_CLIENT_ID", client_secret="YOUR_CLIENT_SECRET",
     environment=TraCSSEnvironment.DEFAULT,
 )
 
@@ -4346,7 +3509,7 @@ client.subscriber.topics.list()
 <dl>
 <dd>
 
-Retrieve the latest kafka offset of a passed in topic
+Retrieve the latest offset of a passed in topic
 </dd>
 </dl>
 </dd>
@@ -4365,12 +3528,12 @@ from tracss import TraCSS
 from tracss.environment import TraCSSEnvironment
 
 client = TraCSS(
-    token="<token>",
+    client_id="YOUR_CLIENT_ID", client_secret="YOUR_CLIENT_SECRET",
     environment=TraCSSEnvironment.DEFAULT,
 )
 
 client.subscriber.topics.get_offset(
-    topic="gov.tracss.tracss.v1.cdms",
+    topic="gov.tracss.tracss.v2.cdms",
 )
 
 ```
@@ -4420,7 +3583,7 @@ client.subscriber.topics.get_offset(
 <dl>
 <dd>
 
-Retrieve messages from a given topic starting at a given offset. Available topics are:                            gov.tracss.parsed.elsetCsv,                            gov.tracss.tracss.v1.cdms,                            gov.tracss.tracss.v2.cdms,                            gov.tracss.parsed.v1.ocms,                            gov.tracss.parsed.v2.ocms,                            gov.tracss.parsed.spVectors,                            gov.tracss.parsed.tracsscat                            gov.tracss.conjunction.data.event
+Retrieve messages from a given topic starting at a given offset. Available topics are:                            gov.tracss.parsed.elsetCsv,                            gov.tracss.tracss.v2.cdms,                            gov.tracss.parsed.v2.ocms,                            gov.tracss.parsed.spVectors,                            gov.tracss.parsed.tracsscat                            gov.tracss.conjunction.data.event
 </dd>
 </dl>
 </dd>
@@ -4439,13 +3602,12 @@ from tracss import TraCSS
 from tracss.environment import TraCSSEnvironment
 
 client = TraCSS(
-    token="<token>",
+    client_id="YOUR_CLIENT_ID", client_secret="YOUR_CLIENT_SECRET",
     environment=TraCSSEnvironment.DEFAULT,
 )
 
 client.subscriber.messages.list(
-    topic="gov.tracss.tracss.v1.cdms",
-    offset="offset",
+    topic="gov.tracss.tracss.v2.cdms",
     fields="missDistance, collisionProbability",
 )
 
@@ -4471,7 +3633,7 @@ client.subscriber.messages.list(
 <dl>
 <dd>
 
-**offset:** `str` — Offset to begin retrieving messages from - represents the starting point. Defaults to 0
+**offset:** `typing.Optional[str]` — Offset to begin retrieving messages from - represents the starting point. Defaults to 0
     
 </dd>
 </dl>
@@ -4479,7 +3641,7 @@ client.subscriber.messages.list(
 <dl>
 <dd>
 
-**max_results:** `typing.Optional[str]` — Optional - max amount of messages to retrieve. If not provided, defaults to 1000, or 25 for gov.tracss.parsed.v1.ocms. This limits the number of results in the response - not number of messages looked at
+**max_results:** `typing.Optional[str]` — Optional - max amount of messages to retrieve. If not provided, defaults to 1000, or 25 for gov.tracss.parsed.v2.ocms. This limits the number of results in the response - not number of messages looked at
     
 </dd>
 </dl>

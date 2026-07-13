@@ -11,6 +11,7 @@ if typing.TYPE_CHECKING:
     from .announcements.client import AnnouncementsClient, AsyncAnnouncementsClient
     from .cdm.client import AsyncCdmClient, CdmClient
     from .ocm.client import AsyncOcmClient, OcmClient
+    from .schemas.client import AsyncSchemasClient, SchemasClient
     from .tip.client import AsyncTipClient, TipClient
 
 
@@ -19,6 +20,7 @@ class BulkDataClient:
         self._raw_client = RawBulkDataClient(client_wrapper=client_wrapper)
         self._client_wrapper = client_wrapper
         self._tip: typing.Optional[TipClient] = None
+        self._schemas: typing.Optional[SchemasClient] = None
         self._ocm: typing.Optional[OcmClient] = None
         self._cdm: typing.Optional[CdmClient] = None
         self._announcements: typing.Optional[AnnouncementsClient] = None
@@ -41,6 +43,14 @@ class BulkDataClient:
 
             self._tip = TipClient(client_wrapper=self._client_wrapper)
         return self._tip
+
+    @property
+    def schemas(self):
+        if self._schemas is None:
+            from .schemas.client import SchemasClient  # noqa: E402
+
+            self._schemas = SchemasClient(client_wrapper=self._client_wrapper)
+        return self._schemas
 
     @property
     def ocm(self):
@@ -72,6 +82,7 @@ class AsyncBulkDataClient:
         self._raw_client = AsyncRawBulkDataClient(client_wrapper=client_wrapper)
         self._client_wrapper = client_wrapper
         self._tip: typing.Optional[AsyncTipClient] = None
+        self._schemas: typing.Optional[AsyncSchemasClient] = None
         self._ocm: typing.Optional[AsyncOcmClient] = None
         self._cdm: typing.Optional[AsyncCdmClient] = None
         self._announcements: typing.Optional[AsyncAnnouncementsClient] = None
@@ -94,6 +105,14 @@ class AsyncBulkDataClient:
 
             self._tip = AsyncTipClient(client_wrapper=self._client_wrapper)
         return self._tip
+
+    @property
+    def schemas(self):
+        if self._schemas is None:
+            from .schemas.client import AsyncSchemasClient  # noqa: E402
+
+            self._schemas = AsyncSchemasClient(client_wrapper=self._client_wrapper)
+        return self._schemas
 
     @property
     def ocm(self):

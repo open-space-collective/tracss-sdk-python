@@ -6,6 +6,7 @@ import os
 import threading
 from collections.abc import Generator
 from http.server import BaseHTTPRequestHandler, HTTPServer
+from pathlib import Path
 
 import httpx
 import pytest
@@ -14,14 +15,66 @@ from tracss import AsyncTraCSS, TraCSS
 
 _NDJSON_PORT = int(os.environ.get("TRACSS_NDJSON_PORT", "4013"))
 
-_CDM_LINE = json.dumps({"headersOnly": None, "default": None})
-_OCM_LINE = json.dumps({"headersOnly": None, "default": None})
+_REPO_ROOT = Path(__file__).parents[2]
+
+
+def _spec_ndjson_example(api: str, endpoint: str, field: str) -> dict[str, str]:
+    """Return the OpenAPI example dict for one NDJSON response field.
+
+    Reads from the committed spec file so that ``make specs`` (which updates
+    those files) automatically keeps the mock payloads in sync with the real
+    API.  When a field is renamed in the spec and the SDK is regenerated, the
+    payload changes and the ``item.<field> is not None`` assertion in the
+    integration tests catches the mismatch immediately.
+    """
+    spec = json.loads(
+        (_REPO_ROOT / "fern" / "openapi" / api / "openapi.json").read_text()
+    )
+    props = spec["paths"][endpoint]["get"]["responses"]["200"]["content"][
+        "application/x-ndjson"
+    ]["schema"]["properties"]
+    return props.get(field, {}).get("example", {})
+
+
+def _spec_json_example(api: str, endpoint: str) -> dict:
+    """Return the JSON example object for a line-streamed endpoint.
+
+    Used for endpoints that stream line-delimited JSON (``application/json``)
+    without a dedicated NDJSON schema (e.g. TIP stream).
+    """
+    spec = json.loads(
+        (_REPO_ROOT / "fern" / "openapi" / api / "openapi.json").read_text()
+    )
+    examples = (
+        spec["paths"][endpoint]["get"]["responses"]["200"]["content"]
+        .get("application/json", {})
+        .get("examples", {})
+    )
+    return examples.get("json", {}).get("value", {})
+
+
+# headersOnly and default are Optional[str] in StreamCdmResponse/StreamOcmResponse:
+# the API serializes the header object as a JSON string inside the NDJSON envelope.
+# We mirror that here so item.headers_only is a parseable JSON string in tests.
+_CDM_HEADERS_EXAMPLE = _spec_ndjson_example(
+    "bulk_data", "/bulkdata/cdm/v2/stream", "headersOnly"
+)
+_CDM_LINE = json.dumps({"headersOnly": json.dumps(_CDM_HEADERS_EXAMPLE), "default": None})
+
+_OCM_HEADERS_EXAMPLE = _spec_ndjson_example(
+    "bulk_data", "/bulkdata/ocm/v2/stream", "headersOnly"
+)
+_OCM_LINE = json.dumps({"headersOnly": json.dumps(_OCM_HEADERS_EXAMPLE), "default": None})
+
+_TIP_KEYS_EXAMPLE = _spec_json_example("bulk_data", "/bulkdata/tip/stream")
+_TIP_LINE = json.dumps(_TIP_KEYS_EXAMPLE)
 
 _NDJSON_ROUTES: dict[str, str] = {
     "/bulkdata/cdm/v2/stream": _CDM_LINE,
     "/bulkdata/cdm/v1/stream": _CDM_LINE,
     "/bulkdata/ocm/v2/stream": _OCM_LINE,
     "/bulkdata/ocm/v1/stream": _OCM_LINE,
+    "/bulkdata/tip/stream": _TIP_LINE,
 }
 
 

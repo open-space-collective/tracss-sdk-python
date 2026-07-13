@@ -70,6 +70,11 @@ class SatelliteCharacteristicsDto(UncheckedBaseModel):
         FieldMetadata(alias="hardBodyRadius"),
         pydantic.Field(alias="hardBodyRadius"),
     ] = None
+    hard_body_radius_calculation_method: typing_extensions.Annotated[
+        typing.Optional[str],
+        FieldMetadata(alias="hardBodyRadiusCalculationMethod"),
+        pydantic.Field(alias="hardBodyRadiusCalculationMethod"),
+    ] = None
     conjunction_mitigation_capabilities: typing_extensions.Annotated[
         typing.Optional[typing.List[str]],
         FieldMetadata(alias="conjunctionMitigationCapabilities"),
@@ -114,6 +119,11 @@ class SatelliteCharacteristicsDto(UncheckedBaseModel):
         typing.Optional[str],
         FieldMetadata(alias="additionalDeployments"),
         pydantic.Field(alias="additionalDeployments"),
+    ] = None
+    additional_deployments_information: typing_extensions.Annotated[
+        typing.Optional[str],
+        FieldMetadata(alias="additionalDeploymentsInformation"),
+        pydantic.Field(alias="additionalDeploymentsInformation"),
     ] = None
     launch_name: typing_extensions.Annotated[
         typing.Optional[str],

@@ -6,12 +6,26 @@ import typing
 from importlib import import_module
 
 if typing.TYPE_CHECKING:
+    from .bad_gateway_error import BadGatewayError
     from .bad_request_error import BadRequestError
+    from .expectation_failed_error import ExpectationFailedError
+    from .forbidden_error import ForbiddenError
     from .internal_server_error import InternalServerError
+    from .method_not_allowed_error import MethodNotAllowedError
+    from .not_found_error import NotFoundError
+    from .service_unavailable_error import ServiceUnavailableError
+    from .too_many_requests_error import TooManyRequestsError
     from .unauthorized_error import UnauthorizedError
 _dynamic_imports: typing.Dict[str, str] = {
+    "BadGatewayError": ".bad_gateway_error",
     "BadRequestError": ".bad_request_error",
+    "ExpectationFailedError": ".expectation_failed_error",
+    "ForbiddenError": ".forbidden_error",
     "InternalServerError": ".internal_server_error",
+    "MethodNotAllowedError": ".method_not_allowed_error",
+    "NotFoundError": ".not_found_error",
+    "ServiceUnavailableError": ".service_unavailable_error",
+    "TooManyRequestsError": ".too_many_requests_error",
     "UnauthorizedError": ".unauthorized_error",
 }
 
@@ -39,4 +53,15 @@ def __dir__():
     return sorted(lazy_attrs)
 
 
-__all__ = ["BadRequestError", "InternalServerError", "UnauthorizedError"]
+__all__ = [
+    "BadGatewayError",
+    "BadRequestError",
+    "ExpectationFailedError",
+    "ForbiddenError",
+    "InternalServerError",
+    "MethodNotAllowedError",
+    "NotFoundError",
+    "ServiceUnavailableError",
+    "TooManyRequestsError",
+    "UnauthorizedError",
+]

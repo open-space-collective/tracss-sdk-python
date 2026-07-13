@@ -7,16 +7,9 @@ from ...core.pydantic_utilities import IS_PYDANTIC_V2
 from ...core.unchecked_base_model import UncheckedBaseModel
 
 
-class CsvRegistrationRequest(UncheckedBaseModel):
-    csv: bytes = pydantic.Field()
-    """
-    CSV file with registration info
-    """
-
-    organization: typing.Optional[str] = pydantic.Field(default=None)
-    """
-    Organization to register the satellites to
-    """
+class SchemaResponse(UncheckedBaseModel):
+    name: typing.Optional[str] = None
+    url: typing.Optional[str] = None
 
     if IS_PYDANTIC_V2:
         model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(

@@ -33,7 +33,7 @@ class AnnouncementsClient:
         request_options: typing.Optional[RequestOptions] = None,
     ) -> typing.List[SpaceTrackAnnouncement]:
         """
-        Fetches announcement records from the database. Returns a JSON array of announcement objects. Supports optional filtering by ID, type, and pagination.
+        Retrieve Space-Track Announcements that have been given to TraCSS
 
         Parameters
         ----------
@@ -104,7 +104,7 @@ class AsyncAnnouncementsClient:
         request_options: typing.Optional[RequestOptions] = None,
     ) -> typing.List[SpaceTrackAnnouncement]:
         """
-        Fetches announcement records from the database. Returns a JSON array of announcement objects. Supports optional filtering by ID, type, and pagination.
+        Retrieve Space-Track Announcements that have been given to TraCSS
 
         Parameters
         ----------

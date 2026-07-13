@@ -15,12 +15,12 @@ class ConjunctionDataEventHeaderDto(UncheckedBaseModel):
         FieldMetadata(alias="object1ObjectDesignator"),
         pydantic.Field(alias="object1ObjectDesignator"),
     ] = None
+    tca: typing.Optional[str] = None
     miss_distance: typing_extensions.Annotated[
         typing.Optional[float],
         FieldMetadata(alias="missDistance"),
         pydantic.Field(alias="missDistance"),
     ] = None
-    tca: typing.Optional[str] = None
     collision_probability: typing_extensions.Annotated[
         typing.Optional[float],
         FieldMetadata(alias="collisionProbability"),

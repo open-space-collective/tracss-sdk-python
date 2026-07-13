@@ -3,7 +3,7 @@ title: Subscriber
 description: Subscribe to Kafka topics for real-time space tracking data.
 ---
 
-The Subscriber API exposes a Kafka-backed message bus that delivers tracking data in real time. Use it when you want to receive new data as it arrives — for live dashboards, alerting, or event-driven pipelines.
+The Subscriber API exposes a Kafka-backed message bus that delivers tracking data in real time. Use it when you want to receive new data as it arrives - for live dashboards, alerting, or event-driven pipelines.
 
 ## How it works
 
@@ -26,23 +26,73 @@ from tracss import TraCSS
 
 client = TraCSS()
 
-# 1. Discover available topics and their latest offsets
+# 1. Discover available topics
 topics = client.subscriber.topics.list()
 
-# 2. Find the current end of a specific topic
-offset = client.subscriber.topics.get_offset(
+# 2. Find the current end of a specific topic (returns an integer offset)
+current_offset: int = client.subscriber.topics.get_offset(
     topic="gov.tracss.tracss.v2.cdms"
 )
 
-# 3. Read messages from a known offset
+# 3. Read messages starting 100 records before the current end
 msgs = client.subscriber.messages.list(
     topic="gov.tracss.tracss.v2.cdms",
-    offset=offset - 100,  # last 100 messages
+    offset=str(max(0, current_offset - 100)),  # offset is passed as a string
 )
+# msgs.cdm_v2 contains the CDM records for the v2 topic
 ```
 
-To process data continuously, poll `messages.list()` and advance the offset after each batch.
+<Warning>
+`topics.list()` returns a **JSON-encoded string**, not a dict. Call `json.loads()` before
+iterating:
+
+```python
+import json
+topics_raw = client.subscriber.topics.list()  # str: '{"gov.tracss.tracss.v2.cdms": ...}'
+topics = json.loads(topics_raw)               # dict[str, int]: topic name → message count
+first_topic = next(iter(topics))
+```
+
+Treating the raw string as a dict raises `TypeError`. This behavior matches the live API
+spec; Prism returns a dict directly and does not reproduce the issue.
+</Warning>
+
+<Note>
+`topic` and `offset` are **required** by the API for `messages.list()`. The Python SDK
+generates them as keyword-only arguments, and omitting either causes a `TypeError` at
+call time (not a runtime HTTP error).
+</Note>
+
+## Continuous polling
+
+To process data as it arrives, poll `messages.list()` and advance the offset after each
+successful batch:
+
+```python
+import time
+from tracss import TraCSS
+
+client = TraCSS()
+TOPIC = "gov.tracss.tracss.v2.cdms"
+
+# Start from the current end of the topic
+offset: int = client.subscriber.topics.get_offset(topic=TOPIC)
+
+while True:
+    batch = client.subscriber.messages.list(topic=TOPIC, offset=str(offset))
+    records = batch.cdm_v2 or []  # field name matches the topic (cdm_v2 for v2 CDMs)
+    for record in records:
+        process(record)
+    if records:
+        offset += len(records)  # advance past the records we just consumed
+    else:
+        time.sleep(5)  # no new data, so back off before the next poll
+```
+
+`ListMessagesResponse` has a separate field per data type (`cdm_v2`, `cdm_v1`, `ocm_v2`,
+`ocm_v1`, `tip_reports`, `tracsscat`, `conjunction_data_event`). Use the field that
+matches the topic you subscribed to; the others will be `None`.
 
 ## Authentication
 
-All endpoints require a valid Okta access token. The SDK fetches and refreshes tokens automatically — see [Authentication](/authentication) for details.
+All endpoints require a valid Okta access token. The SDK fetches and refreshes tokens automatically - see [Authentication](/authentication) for details.

@@ -1,29 +1,34 @@
 ---
 name: Bug report
-about: Report a reproducible defect in the SDK
+about: Create a report to help us improve
+title: "[fix] Issue title"
 labels: bug
+assignees: ''
 ---
 
-## Description
+**Describe the bug**
+A clear and concise description of what the bug is. Describe when the issue occurs (e.g. during auth, streaming, metadata list, etc.) and whether it is consistently reproducible. Include the `tracss` SDK version, Python version, and OS if not filled in below.
 
-A clear description of the bug.
+**Steps to reproduce**
+Steps to reproduce the behavior (add code snippets as needed):
+1.
+2.
+3.
+4.
 
-## Steps to reproduce
+Don't hesitate to add screenshots if that helps.
 
-```python
-# Minimal code that triggers the issue
-```
+**Expected behavior**
+A clear and concise description of what you expected to happen, with code snippets if possible.
 
-## Expected behavior
-
-What you expected to happen.
-
-## Actual behavior
-
-What actually happened. Include the full traceback if one was raised.
-
-## Environment
-
-- tracss version:
+**Environment**
+- `tracss` version:
 - Python version:
 - OS:
+- Installation method (`pip install tracss`, cloned repo, etc.):
+
+**Additional context**
+Add any other context about the problem here.
+
+**Potential suggestion**
+Add envisioned options to fix the bug if you have thought of any.

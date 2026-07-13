@@ -15,6 +15,9 @@ dist/
 
 # Local secrets
 .env
+
+# Prism mock server PIDs (written by make prism-all, cleaned up by make prism-stop)
+.prism.pids
 *.html
 test.py
 

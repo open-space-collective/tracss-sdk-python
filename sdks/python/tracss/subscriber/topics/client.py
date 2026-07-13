@@ -52,7 +52,7 @@ class TopicsClient:
         self, *, topic: str, request_options: typing.Optional[RequestOptions] = None
     ) -> typing.Any:
         """
-        Retrieve the latest kafka offset of a passed in topic
+        Retrieve the latest offset of a passed in topic
 
         Parameters
         ----------
@@ -75,7 +75,7 @@ class TopicsClient:
             client_id="YOUR_CLIENT_ID", client_secret="YOUR_CLIENT_SECRET",
         )
         client.subscriber.topics.get_offset(
-            topic="gov.tracss.tracss.v1.cdms",
+            topic="gov.tracss.tracss.v2.cdms",
         )
         """
         _response = self._raw_client.get_offset(
@@ -139,7 +139,7 @@ class AsyncTopicsClient:
         self, *, topic: str, request_options: typing.Optional[RequestOptions] = None
     ) -> typing.Any:
         """
-        Retrieve the latest kafka offset of a passed in topic
+        Retrieve the latest offset of a passed in topic
 
         Parameters
         ----------
@@ -167,7 +167,7 @@ class AsyncTopicsClient:
 
         async def main() -> None:
             await client.subscriber.topics.get_offset(
-                topic="gov.tracss.tracss.v1.cdms",
+                topic="gov.tracss.tracss.v2.cdms",
             )
 
 

@@ -16,7 +16,7 @@ permissions:
 jobs:
   changes:
     name: Detect changed paths
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 5
     outputs:
       fern: ${{ steps.filter.outputs.fern }}
@@ -31,21 +31,18 @@ jobs:
 
   fern-check:
     name: Fern config validation
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 10
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: "20"
-      - run: npm install -g fern-api@5.46.0
+      - uses: ./.github/actions/setup-fern
       - run: fern check
 
   spec-freshness:
     name: OpenAPI spec freshness
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 10
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    continue-on-error: true
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -65,23 +62,25 @@ jobs:
             echo "::error::OpenAPI specs are stale. Run 'make specs' and commit."
             exit 1
           fi
+      - name: Warn on persistent failure
+        if: failure()
+        run: echo "::warning file=.github/workflows/ci.yml::spec-freshness failed - api.tracss.gov may be unreachable; spec drift is accumulating"
 
   generate-check:
     name: Generated SDK is up to date
-    needs: [fern-check]
-    runs-on: ubuntu-latest
+    needs: [fern-check, changes]
+    runs-on: ubuntu-24.04
     timeout-minutes: 20
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    if: |
+      (github.event_name == 'push' && github.ref == 'refs/heads/main') ||
+      (github.event_name == 'pull_request' && needs.changes.outputs.fern == 'true')
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: "20"
-      - run: npm install -g fern-api@5.46.0
+      - uses: ./.github/actions/setup-fern
       - uses: astral-sh/setup-uv@v4
         with:
           enable-cache: true
-      - run: uv sync
+      - run: uv sync --frozen
       - name: Regenerate SDK
         run: make generate
         env:
@@ -95,37 +94,37 @@ jobs:
 
   lint-and-test:
     name: Lint & unit tests (Python ${{ matrix.python-version }})
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 15
     strategy:
       matrix:
-        python-version: ["3.10", "3.11", "3.12"]
+        python-version: ["3.10", "3.11", "3.12", "3.13", "3.14"]
     steps:
       - uses: actions/checkout@v4
       - uses: astral-sh/setup-uv@v4
         with:
           enable-cache: true
           python-version: ${{ matrix.python-version }}
-      - run: uv sync
+      - run: uv sync --frozen
       - run: make lint
       - run: make test
 
   security:
     name: Security scan
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
       - uses: astral-sh/setup-uv@v4
         with:
           enable-cache: true
-      - run: uv sync
+      - run: uv sync --frozen
       - run: uv run bandit -r sdks/python/tracss/client.py tests/ -ll
       - run: uv run pip-audit --vulnerability-service osv
 
   commitlint:
     name: Commit message lint
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 10
     if: github.event_name == 'pull_request'
     steps:
@@ -139,27 +138,27 @@ jobs:
   typecheck:
     name: Type checking (mypy)
     needs: [lint-and-test]
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
       - uses: astral-sh/setup-uv@v4
         with:
           enable-cache: true
-      - run: uv sync
+      - run: uv sync --frozen
       - run: make typecheck
 
   build:
     name: Build & validate wheel
     needs: [lint-and-test, security]
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
       - uses: astral-sh/setup-uv@v4
         with:
           enable-cache: true
-      - run: uv sync
+      - run: uv sync --frozen
       - run: make build
       - run: uv run pip-licenses --fail-on="GPL" --ignore-packages tracss
       - uses: actions/upload-artifact@v4
@@ -170,19 +169,20 @@ jobs:
   integration:
     name: Integration tests (Prism)
     needs: [lint-and-test]
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 20
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version: "20"
+          cache: "npm"
       - uses: astral-sh/setup-uv@v4
         with:
           enable-cache: true
-      - run: uv sync
+      - run: uv sync --frozen
       - name: Install Prism mock server
-        run: npm install -g @stoplight/prism-cli@5
+        run: npm install -g @stoplight/prism-cli@5.15.11
       - name: Start Prism mock servers
         run: |
           prism mock fern/openapi/subscriber/openapi.json --port 4010 &
@@ -201,15 +201,12 @@ jobs:
   docs:
     name: Fern docs preview
     needs: [fern-check, changes]
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 20
     if: github.event_name == 'pull_request' && needs.changes.outputs.fern == 'true'
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: "20"
-      - run: npm install -g fern-api@5.46.0
+      - uses: ./.github/actions/setup-fern
       - name: Preview docs
         run: fern generate --docs --preview
         env:
@@ -218,15 +215,12 @@ jobs:
   docs-deploy:
     name: Deploy Fern docs
     needs: [fern-check, changes]
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 20
     if: github.ref == 'refs/heads/main' && github.event_name == 'push' && needs.changes.outputs.fern == 'true'
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: "20"
-      - run: npm install -g fern-api@5.46.0
+      - uses: ./.github/actions/setup-fern
       - name: Deploy docs
         run: fern generate --docs
         env:

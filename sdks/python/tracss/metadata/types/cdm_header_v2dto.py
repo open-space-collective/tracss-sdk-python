@@ -10,19 +10,22 @@ from ...core.unchecked_base_model import UncheckedBaseModel
 
 
 class CdmHeaderV2Dto(UncheckedBaseModel):
-    object1: typing.Optional[str] = None
-    object2: typing.Optional[str] = None
     message_id: typing_extensions.Annotated[
         typing.Optional[str],
         FieldMetadata(alias="messageId"),
         pydantic.Field(alias="messageId"),
     ] = None
+    conjunction_id: typing_extensions.Annotated[
+        typing.Optional[str],
+        FieldMetadata(alias="conjunctionId"),
+        pydantic.Field(alias="conjunctionId"),
+    ] = None
+    tca: typing.Optional[str] = None
     miss_distance: typing_extensions.Annotated[
         typing.Optional[str],
         FieldMetadata(alias="missDistance"),
         pydantic.Field(alias="missDistance"),
     ] = None
-    tca: typing.Optional[str] = None
     collision_probability: typing_extensions.Annotated[
         typing.Optional[str],
         FieldMetadata(alias="collisionProbability"),
@@ -43,11 +46,8 @@ class CdmHeaderV2Dto(UncheckedBaseModel):
         FieldMetadata(alias="ocmMessageId"),
         pydantic.Field(alias="ocmMessageId"),
     ] = None
-    conjunction_id: typing_extensions.Annotated[
-        typing.Optional[str],
-        FieldMetadata(alias="conjunctionId"),
-        pydantic.Field(alias="conjunctionId"),
-    ] = None
+    object1: typing.Optional[str] = None
+    object2: typing.Optional[str] = None
 
     if IS_PYDANTIC_V2:
         model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(

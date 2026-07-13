@@ -7,11 +7,7 @@ from importlib import import_module
 
 if typing.TYPE_CHECKING:
     from .stream_ocm_response import StreamOcmResponse
-    from .stream_v1ocm_response import StreamV1OcmResponse
-_dynamic_imports: typing.Dict[str, str] = {
-    "StreamOcmResponse": ".stream_ocm_response",
-    "StreamV1OcmResponse": ".stream_v1ocm_response",
-}
+_dynamic_imports: typing.Dict[str, str] = {"StreamOcmResponse": ".stream_ocm_response"}
 
 
 def __getattr__(attr_name: str) -> typing.Any:
@@ -37,4 +33,4 @@ def __dir__():
     return sorted(lazy_attrs)
 
 
-__all__ = ["StreamOcmResponse", "StreamV1OcmResponse"]
+__all__ = ["StreamOcmResponse"]

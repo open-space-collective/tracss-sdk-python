@@ -35,9 +35,9 @@
 >
 > **Metadata responses default to JSON.** The SDK ships
 > `_MetadataWithJsonDefaults`, a subclass of the generated `MetadataClient`
-> that silently injects `format="json"` on every `cdm` and `ocm` list call.
-> Without this, the TraCSS API returns CCSDS KVN text that the Fern-generated
-> response parser cannot handle. You do not need to pass `format=` at all for
+> that silently injects `format="json"` on every `cdm`, `ocm`, and `tip_reports` list call.
+> Without this, those metadata list endpoints return CCSDS KVN text by default that the Fern-generated
+> response parser cannot handle. (The other metadata endpoints are JSON-only.) You do not need to pass `format=` at all for
 > JSON since it is the default. To receive raw KVN, XML, or CSV instead, pass
 > `format="KVN"` (or `"xml"`, `"csv"`) explicitly; the SDK catches the
 > resulting `ApiError(status_code=200)` and returns `error.body` as a plain
