@@ -30,7 +30,7 @@ jobs:
           TRACSS_CLIENT_SECRET: ${{ secrets.TRACSS_CLIENT_SECRET }}
           TRACSS_OKTA_DOMAIN: ${{ secrets.TRACSS_OKTA_DOMAIN }}
           TRACSS_OKTA_AUTH_SERVER_ID: ${{ secrets.TRACSS_OKTA_AUTH_SERVER_ID }}
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         if: always()
         with:
           name: smoke-results
