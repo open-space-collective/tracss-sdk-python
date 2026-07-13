@@ -26,10 +26,7 @@ jobs:
 
       - uses: ./.github/actions/setup-fern
 
-      - uses: astral-sh/setup-uv@v4
-        with:
-          enable-cache: true
-      - run: uv sync --frozen
+      - uses: ./.github/actions/setup-python-uv
 
       - name: Fetch latest OpenAPI specs
         run: make specs

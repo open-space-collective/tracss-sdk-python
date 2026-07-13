@@ -20,10 +20,7 @@ jobs:
     if: github.repository == 'open-space-collective/tracss-sdk-python'
     steps:
       - uses: actions/checkout@v4
-      - uses: astral-sh/setup-uv@v4
-        with:
-          enable-cache: true
-      - run: uv sync --frozen
+      - uses: ./.github/actions/setup-python-uv
       - run: uv run pytest tests/smoke/ -v -m smoke --junitxml=smoke-results.xml
         env:
           TRACSS_CLIENT_ID: ${{ secrets.TRACSS_CLIENT_ID }}
