@@ -1,0 +1,15 @@
+paths:
+  /subscriber/topics:
+    get:
+      x-fern-sdk-group-name: [topics]
+      x-fern-sdk-method-name: list
+
+  /subscriber/offset:
+    get:
+      x-fern-sdk-group-name: [topics]
+      x-fern-sdk-method-name: get_offset
+
+  /subscriber/messages:
+    get:
+      x-fern-sdk-group-name: [messages]
+      x-fern-sdk-method-name: list

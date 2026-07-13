@@ -1,0 +1,50 @@
+# yaml-language-server: $schema=https://schema.buildwithfern.dev/docs-yml.json
+
+instances:
+  - url: open-space-collective.docs.buildwithfern.com
+    # custom-domain: docs.tracss.gov   # uncomment once DNS is delegated to Fern
+    edit-this-page:
+      github:
+        owner: open-space-collective
+        repo: tracss-sdk-python
+        branch: main
+
+default-language: python
+
+navigation:
+  - page: Getting Started
+    path: docs/pages/getting-started.mdx
+  - page: Authentication
+    path: docs/pages/authentication.mdx
+
+  - section: Bulk Data
+    contents:
+      - page: Overview
+        path: docs/pages/bulk-data.mdx
+
+  - section: Metadata
+    contents:
+      - page: Overview
+        path: docs/pages/metadata.mdx
+
+  - section: Subscriber
+    contents:
+      - page: Overview
+        path: docs/pages/subscriber.mdx
+
+  - api: API Reference
+    snippets:
+      python: tracss
+
+colors:
+  accent-primary:
+    dark: "#4A90D9"
+    light: "#1A5F9E"
+
+logo:
+  dark: docs/assets/logo.svg
+  light: docs/assets/logo.svg
+  height: 32
+  href: https://github.com/open-space-collective/tracss-sdk-python
+
+favicon: docs/assets/favicon.svg

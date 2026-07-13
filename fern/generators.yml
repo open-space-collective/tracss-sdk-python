@@ -1,0 +1,195 @@
+# yaml-language-server: $schema=https://schema.buildwithfern.dev/generators-yml.json
+
+api:
+  auth: bearer
+  specs:
+    - openapi: ./openapi/bulk_data/openapi.json
+      namespace: bulk_data
+      overrides: ./sdks/bulkdata-overrides.yaml
+
+    - openapi: ./openapi/metadata/openapi.json
+      namespace: metadata
+      overrides: ./sdks/metadata-overrides.yaml
+
+    - openapi: ./openapi/subscriber/openapi.json
+      namespace: subscriber
+      overrides: ./sdks/subscriber-overrides.yaml
+
+default-group: python-sdk
+
+readme:
+  apiName: TraCSS
+  apiReferenceLink: "https://open-space-collective.docs.buildwithfern.com"
+  defaultEndpoint:
+    method: GET
+    path: /bulkdata/cdm/v2/stream
+    stream: true
+  introduction: |
+    > [!IMPORTANT]
+    > **Code samples might show `token="YOUR_TOKEN"`. Do not use `token="YOUR_TOKEN"`.**
+    > The published SDK exports `TraCSS` (not `BaseTraCSS`), which handles
+    > Okta client-credentials auth automatically.
+    > You never construct or refresh a token yourself:
+    >
+    > ```python
+    > from tracss import TraCSS
+    >
+    > client = TraCSS(
+    >     client_id="…",       # or env TRACSS_CLIENT_ID
+    >     client_secret="…",   # or env TRACSS_CLIENT_SECRET
+    > )
+    >
+    > # Bulk Data
+    > for record in client.bulk_data.cdm.stream(...):
+    >     ...
+    >
+    > # Metadata - JSON is the default; no format= required
+    > results = client.metadata.cdm.list(...)
+    >
+    > # Subscriber
+    > topics = client.subscriber.topics.list()
+    > ```
+    >
+    > Tokens are fetched lazily on the first request and refreshed 30s before
+    > expiry. `AsyncTraCSS` is also available for async/await usage.
+    >
+    > ---
+    >
+    > **Metadata responses default to JSON.** The SDK ships
+    > `_MetadataWithJsonDefaults`, a subclass of the generated `MetadataClient`
+    > that silently injects `format="json"` on every `cdm`, `ocm`, and `tip_reports` list call.
+    > Without this, those metadata list endpoints return CCSDS KVN text by default that the Fern-generated
+    > response parser cannot handle. (The other metadata endpoints are JSON-only.) You do not need to pass `format=` at all for
+    > JSON since it is the default. To receive raw KVN, XML, or CSV instead, pass
+    > `format="KVN"` (or `"xml"`, `"csv"`) explicitly; the SDK catches the
+    > resulting `ApiError(status_code=200)` and returns `error.body` as a plain
+    > string (for Status OK responses only).
+  features:
+    Bulk Data (streaming):
+      - method: GET
+        path: /bulkdata/cdm/v2/stream
+        stream: true
+      - method: GET
+        path: /bulkdata/ocm/v2/stream
+        stream: true
+      - method: GET
+        path: /bulkdata/tip/stream
+        stream: true
+    Bulk Data (other):
+      - method: GET
+        path: /bulkdata/announcements
+    Metadata - OCM:
+      - method: GET
+        path: /metadata/v2/ocm
+      - method: GET
+        path: /metadata/v2/ocm/operationalBatch
+      - method: POST
+        path: /metadata/v2/ocm/upload
+    Metadata - CDM:
+      - method: GET
+        path: /metadata/v2/tracssCdm
+      - method: GET
+        path: /metadata/v2/tracssCdmByOperationalBatch
+    Metadata - Contact Directory:
+      - method: GET
+        path: /metadata/contactDirectory/operational/all
+      - method: PUT
+        path: /metadata/contactDirectory/operational/update
+    Metadata - TraCSS Cat:
+      - method: GET
+        path: /metadata/tracssCat
+      - method: POST
+        path: /metadata/tracssCat/update/csv
+    Metadata - TIP Reports:
+      - method: GET
+        path: /metadata/tipReports
+    Metadata - SpaceTrack:
+      - method: GET
+        path: /metadata/space-track
+      - method: GET
+        path: /metadata/space-track-nested
+    Metadata - Schemas:
+      - method: GET
+        path: /metadata/schemas/xsd
+      - method: GET
+        path: /metadata/schemas/json
+    Metadata - Other:
+      - method: GET
+        path: /metadata/conjunctionDataEvents
+      - method: GET
+        path: /metadata/announcements
+    Subscriber:
+      - method: GET
+        path: /subscriber/topics
+      - method: GET
+        path: /subscriber/offset
+      - method: GET
+        path: /subscriber/messages
+
+groups:
+  python-sdk:
+    generators:
+      - name: fernapi/fern-python-sdk
+        version: 5.14.19
+        config:
+          # fern-python-sdk bug: test_aiohttp_autodetect.py is generated with the Fern
+          # org name ("open-space-collective") as a Python import instead of package_name
+          # ("tracss"). The hyphens make it an invalid identifier, so in-container ruff
+          # exits 1 before files are extracted. Disabling in-container formatting lets
+          # generation complete; post-generate sed + ruff handle the fix on the host side.
+          skip_formatting: true
+          package_name: tracss
+
+          client:
+            filename: base_client.py
+            class_name: BaseTraCSS
+            exported_filename: client.py
+            exported_class_name: TraCSS
+
+          flat_layout: true
+
+          pydantic_config:
+            use_str_enums: true
+            enum_type: forward_compatible_python_enums
+            skip_validation: true
+            use_typeddict_requests: false
+
+          # Inject metadata into the generated pyproject.toml.
+          pyproject_toml: |
+            [build-system]
+            requires = ["hatchling", "hatch-vcs"]
+            build-backend = "hatchling.build"
+
+            [project]
+            description = "Python SDK for the TraCSS REST APIs"
+            authors = [{ name = "Open Space Collective" }]
+            readme = "tracss/README.md"
+            requires-python = ">=3.10"
+            dynamic = ["version"]
+            classifiers = [
+              "Development Status :: 4 - Beta",
+              "Intended Audience :: Developers",
+              "License :: OSI Approved :: Apache Software License",
+              "Programming Language :: Python :: 3",
+              "Typing :: Typed"
+            ]
+
+            [project.license]
+            text = "Apache-2.0"
+
+            [project.urls]
+            Homepage = "https://github.com/open-space-collective/tracss-sdk-python"
+            Repository = "https://github.com/open-space-collective/tracss-sdk-python"
+            Issues = "https://github.com/open-space-collective/tracss-sdk-python/issues"
+            Documentation = "https://open-space-collective.docs.buildwithfern.com"
+
+            [tool.hatch.build.targets.wheel]
+            packages = ["tracss"]
+
+            [tool.hatch.version]
+            source = "vcs"
+            raw-options = { root = "../.." }
+
+        output:
+          location: local-file-system
+          path: ../sdks/python/tracss

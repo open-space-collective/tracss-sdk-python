@@ -1,0 +1,133 @@
+paths:
+  # ── Contact Directory ──────────────────────────────────────────────────
+  /metadata/contactDirectory/operational/all:
+    get:
+      x-fern-sdk-group-name: [contact_directory]
+      x-fern-sdk-method-name: list_operational
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/OperationalContactInfoDTO"
+
+  /metadata/contactDirectory/operational/update:
+    put:
+      x-fern-sdk-group-name: [contact_directory]
+      x-fern-sdk-method-name: update_operational
+
+  # ── OCM (v2 default) ───────────────────────────────────────────────────
+  /metadata/v2/ocm:
+    get:
+      x-fern-sdk-group-name: [ocm]
+      x-fern-sdk-method-name: list
+
+  /metadata/v2/ocm/operationalBatch:
+    get:
+      x-fern-sdk-group-name: [ocm]
+      x-fern-sdk-method-name: list_by_operational_batch
+
+  /metadata/v2/ocm/upload:
+    post:
+      x-fern-sdk-group-name: [ocm]
+      x-fern-sdk-method-name: upload
+
+  # ── CDM (v2 default) ───────────────────────────────────────────────────
+  /metadata/v2/tracssCdm:
+    get:
+      x-fern-sdk-group-name: [cdm]
+      x-fern-sdk-method-name: list
+
+  /metadata/v2/tracssCdmByOperationalBatch:
+    get:
+      x-fern-sdk-group-name: [cdm]
+      x-fern-sdk-method-name: list_by_operational_batch
+
+  # ── TraCSS CAT ─────────────────────────────────────────────────────────
+  # The OpenAPI spec declares the 200 response as `type: object` with a
+  # `default` property, but the live API returns a bare JSON array.
+  # This override corrects the schema so Fern generates the right return
+  # type and construct_type() never tries model_construct(**list).
+  # After regeneration _ListTracssCatClient can use _raw_client like
+  # _AnnouncementsClient does and the hardcoded path bypass can be removed.
+  /metadata/tracssCat:
+    get:
+      x-fern-sdk-group-name: [tracss_cat]
+      x-fern-sdk-method-name: list
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  additionalProperties: true
+
+  /metadata/tracssCat/update/csv:
+    post:
+      description: >-
+        Upload a CSV file to update the TraCSS catalog. The CSV must include a noradId column as the
+        minimum required header; all other fields are optional. Rows with noradIds your organization
+        does not own will generate change requests pending TraCSS Operations approval.
+        See tracss.gov for the full list of valid fields and accepted date formats.
+      x-fern-sdk-group-name: [tracss_cat]
+      x-fern-sdk-method-name: upload_csv
+
+  # ── TIP Reports ────────────────────────────────────────────────────────
+  /metadata/tipReports:
+    get:
+      x-fern-sdk-group-name: [tip_reports]
+      x-fern-sdk-method-name: list
+
+  # ── Space Track ────────────────────────────────────────────────────────
+  /metadata/space-track:
+    get:
+      x-fern-sdk-group-name: [space_track]
+      x-fern-sdk-method-name: list
+
+  /metadata/space-track-nested:
+    get:
+      x-fern-sdk-group-name: [space_track]
+      x-fern-sdk-method-name: list_nested
+
+  # ── Schemas ────────────────────────────────────────────────────────────
+  /metadata/schemas/xsd:
+    get:
+      x-fern-sdk-group-name: [schemas]
+      x-fern-sdk-method-name: get_xsd
+
+  /metadata/schemas/xsd/download/{filename}:
+    get:
+      x-fern-sdk-group-name: [schemas]
+      x-fern-sdk-method-name: download_xsd
+
+  /metadata/schemas/json:
+    get:
+      x-fern-sdk-group-name: [schemas]
+      x-fern-sdk-method-name: get_json
+
+  /metadata/schemas/json/download/{filename}:
+    get:
+      x-fern-sdk-group-name: [schemas]
+      x-fern-sdk-method-name: download_json
+
+  # ── Translation Errors ─────────────────────────────────────────────────
+  /metadata/v2/translationErrors:
+    get:
+      x-fern-sdk-group-name: [translation_errors]
+      x-fern-sdk-method-name: list
+
+  # ── Conjunction Events ─────────────────────────────────────────────────
+  /metadata/conjunctionDataEvents:
+    get:
+      x-fern-sdk-group-name: [conjunction_events]
+      x-fern-sdk-method-name: list
+
+  # ── Announcements ──────────────────────────────────────────────────────
+  /metadata/announcements:
+    get:
+      x-fern-sdk-group-name: [announcements]
+      x-fern-sdk-method-name: list

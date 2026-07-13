@@ -1,0 +1,10 @@
+# Default reviewer for all files
+*                                   @open-space-collective/developers
+
+# Auto-generated SDK files, maintained by the spec-refresh workflow.
+# Changes here should come from fern generate, not manual edits.
+sdks/python/tracss/bulk_data/       @open-space-collective/developers
+sdks/python/tracss/metadata/        @open-space-collective/developers
+sdks/python/tracss/subscriber/      @open-space-collective/developers
+sdks/python/tracss/core/            @open-space-collective/developers
+sdks/python/tracss/base_client.py   @open-space-collective/developers

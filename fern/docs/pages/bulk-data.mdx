@@ -1,0 +1,133 @@
+---
+title: Bulk Data
+description: Stream CDM, OCM, and TIP tracking data in bulk over HTTP.
+---
+
+The Bulk Data API streams large volumes of space tracking data as chunked HTTP responses. Use it when you need the full dataset rather than real-time updates - for backfilling a database, running analytics, or syncing to a file store.
+
+## Data types
+
+| Group | Method | Data |
+|---|---|---|
+| `client.bulk_data.cdm` | `stream()` | Conjunction Data Messages (v2, current) |
+| `client.bulk_data.cdm` | `stream_v1()` | CDM (v1, legacy), uses pretty-printed JSON internally (see note below) |
+| `client.bulk_data.ocm` | `stream()` | Object Catalog Messages (v2, current) |
+| `client.bulk_data.ocm` | `stream_v1()` | OCM (v1, legacy), uses pretty-printed JSON internally (see note below) |
+| `client.bulk_data.tip` | `stream()` | Tasking Information Package reports |
+| `client.bulk_data.announcements` | `list()` | System announcements |
+
+v2 endpoints are current. v1 endpoints are retained for backwards compatibility and are marked legacy - prefer v2 for new integrations.
+
+<Note>
+**v1 encoding difference**: v2 endpoints deliver records as NDJSON (one compact JSON object per line). v1 endpoints return pretty-printed JSON (one record spread across ~200 lines). The SDK handles both transparently with the same iterator interface, but v1 parsing is more memory-intensive and slower for large result sets.
+</Note>
+
+## Quick start
+
+```python
+from tracss import TraCSS
+
+client = TraCSS()  # reads TRACSS_CLIENT_ID and TRACSS_CLIENT_SECRET from env
+
+# Stream all CDM conjunction messages
+for chunk in client.bulk_data.cdm.stream():
+    process(chunk)
+
+# Stream OCM object catalog data
+for chunk in client.bulk_data.ocm.stream():
+    process(chunk)
+
+# Stream TIP tasking reports
+for chunk in client.bulk_data.tip.stream():
+    process(chunk)
+```
+
+<Warning>
+An empty stream does **not** guarantee no conjunctions exist. Three distinct conditions produce identical empty results: no matching data, mid-stream auth failure, and filter misconfiguration. For safety-critical pipelines, always check `result.record_count` after full iteration and treat 0 as a signal to investigate - not confirmation of a clear sky. See [Empty streams](#empty-streams) below.
+</Warning>
+
+Each `stream()` call returns a `StreamResult[T]` - an iterator of typed response objects. The connection stays open until all data has been delivered.
+
+## Stream results
+
+Every `stream()` call returns a `StreamResult[T]` (sync) or `AsyncStreamResult[T]` (async) object from `tracss.client`. Both implement the standard iterator protocol and add two safety features on top:
+
+**Record count.** `.record_count` is available at any time during or after iteration. It reflects the number of records consumed so far.
+
+**Zero-record warning.** When the stream is fully exhausted and zero records were returned, the SDK emits a `WARNING` log entry indicating that the stream returned 0 records and prompting the caller to verify filters, credentials, and data availability. This warning fires once, the first time `StopIteration` (or `StopAsyncIteration`) is raised on an empty stream.
+
+```python
+from tracss import TraCSS
+from tracss.client import StreamResult
+
+client = TraCSS()
+
+stream: StreamResult = client.bulk_data.cdm.stream()
+for record in stream:
+    print(record)
+
+# Available after iteration is complete
+print(f"Consumed {stream.record_count} CDM records")
+```
+
+Async usage:
+
+```python
+from tracss import AsyncTraCSS
+from tracss.client import AsyncStreamResult
+
+client = AsyncTraCSS()
+
+stream: AsyncStreamResult = client.bulk_data.cdm.stream()
+async for record in stream:
+    print(record)
+
+print(f"Consumed {stream.record_count} CDM records")
+```
+
+The warning is emitted via Python's standard `logging` module under the `tracss.client` logger. To capture it:
+
+```python
+import logging
+logging.basicConfig(level=logging.WARNING)
+```
+
+Or configure a handler on the `tracss.client` logger directly.
+
+## Single-pass iteration
+
+<Warning>
+`StreamResult` and `AsyncStreamResult` are **single-pass iterators**. Once exhausted, re-iterating yields nothing. No error is raised; the second loop simply exits immediately.
+
+If you need to process the records more than once, collect them into a list first:
+
+```python
+records = list(client.bulk_data.cdm.stream())  # collect all records
+for r in records:                               # iterate as many times as needed
+    ...
+```
+</Warning>
+
+## Silent record drops
+
+<Warning>
+The NDJSON parser silently skips any line it cannot parse (malformed JSON, unexpected schema, encoding error). `iteration_errored` only becomes `True` when an exception *escapes* the iterator. It stays `False` on silent per-record drops.
+
+For safety-critical pipelines, do not rely solely on `iteration_errored`. Instead compare `result.record_count` against an independently-known expected minimum before acting on the result.
+</Warning>
+
+## Empty streams
+
+An empty iterator returned by `stream()` does **not** guarantee that the API had no data to return. The same empty result occurs in at least three distinct situations:
+
+1. **No data** - the API has no records matching the requested filters for the given time window.
+2. **Auth failure** - the server rejected the token mid-stream and closed the connection after delivering zero objects.
+3. **Filter misconfiguration** - the query parameters matched nothing due to an incorrect epoch, unknown NORAD ID, or unsupported filter combination.
+
+All three cases produce an identical empty iterator with no distinguishing signal from the SDK.
+
+**Recommendation for automated pipelines:** Before treating an empty stream as a confirmed "no data" result, validate that the expected data volume is plausible. For a known-active satellite pair, receiving zero CDMs for an epoch is operationally significant - confirm the stream was not silently truncated by cross-checking with a control query (e.g. a known active object) or by inspecting response metadata.
+
+## Authentication
+
+All endpoints require a valid Okta access token. The SDK fetches and refreshes tokens automatically - see [Authentication](/authentication) for details.

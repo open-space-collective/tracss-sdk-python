@@ -1,0 +1,43 @@
+repos:
+  - repo: local
+    hooks:
+      - id: ruff
+        name: ruff
+        language: system
+        entry: uv run ruff check --fix
+        files: "^(sdks/python/tracss/client\\.py|tests/)"
+        types: [python]
+
+      - id: ruff-format
+        name: ruff-format
+        language: system
+        entry: uv run ruff format
+        files: "^(sdks/python/tracss/|tests/)"
+        types: [python]
+
+      - id: bandit
+        name: bandit
+        language: system
+        entry: uv run bandit
+        args: ["-ll"]
+        files: "^(sdks/python/tracss/client\\.py|tests/)"
+        types: [python]
+
+      - id: mypy
+        name: mypy
+        language: system
+        entry: uv run mypy
+        files: "^(sdks/python/tracss/client\\.py|tests/)"
+        types: [python]
+        pass_filenames: false
+        args: ["sdks/python/tracss/client.py", "tests/"]
+
+      - id: commitlint
+        name: commitlint
+        language: node
+        entry: commitlint
+        stages: [commit-msg]
+        args: ["--config", ".commitlintrc.yml", "--edit"]
+        additional_dependencies:
+          - "@commitlint/cli@19"
+          - "@commitlint/config-conventional@19"

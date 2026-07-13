@@ -1,0 +1,38 @@
+name: Smoke tests
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  smoke:
+    name: Smoke tests (live API)
+    runs-on: ubuntu-24.04
+    # Prevent forks from failing with missing secrets instead of skipping.
+    if: github.repository == 'open-space-collective/tracss-sdk-python'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v4
+        with:
+          enable-cache: true
+      - run: uv sync --frozen
+      - run: uv run pytest tests/smoke/ -v -m smoke --junitxml=smoke-results.xml
+        env:
+          TRACSS_CLIENT_ID: ${{ secrets.TRACSS_CLIENT_ID }}
+          TRACSS_CLIENT_SECRET: ${{ secrets.TRACSS_CLIENT_SECRET }}
+          TRACSS_OKTA_DOMAIN: ${{ secrets.TRACSS_OKTA_DOMAIN }}
+          TRACSS_OKTA_AUTH_SERVER_ID: ${{ secrets.TRACSS_OKTA_AUTH_SERVER_ID }}
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: smoke-results
+          path: smoke-results.xml
+          retention-days: 30

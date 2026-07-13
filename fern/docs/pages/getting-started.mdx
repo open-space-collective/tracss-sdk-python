@@ -1,0 +1,118 @@
+# Getting Started
+
+<Note>
+  **Community SDK - not an official TraCSS product.**
+  Built and maintained by [Loft Orbital](https://www.loftorbital.com) via the
+  [Open Space Collective](https://github.com/open-space-collective) organization,
+  using [Fern](https://buildwithfern.com). Not affiliated with, endorsed by, or
+  officially supported by the Office of Space Commerce (OSC) or NOAA.
+</Note>
+
+## Installation
+
+```bash
+pip install tracss
+```
+
+The SDK requires Python 3.10 or later.
+
+## Configuration
+
+The client reads credentials from environment variables by default:
+
+```bash
+export TRACSS_CLIENT_ID="your-client-id"
+export TRACSS_CLIENT_SECRET="your-client-secret"
+```
+
+You can also pass them directly at construction time:
+
+```python
+from tracss import TraCSS
+
+client = TraCSS(client_id="your-client-id", client_secret="your-client-secret")
+```
+
+See the [Authentication guide](./authentication) for details on the Okta token flow and
+advanced configuration options.
+
+## Usage
+
+### Bulk Data
+
+```python
+from tracss import TraCSS
+
+client = TraCSS()
+
+# Stream CDM conjunction messages
+for chunk in client.bulk_data.cdm.stream():
+    process(chunk)
+
+# Stream OCM object catalog data
+for chunk in client.bulk_data.ocm.stream():
+    process(chunk)
+
+# Stream TIP tasking reports
+for report in client.bulk_data.tip.stream():
+    process(report)
+```
+
+### Metadata
+
+```python
+# Upload OCM (v2 default)
+client.metadata.ocm.upload(...)
+
+# Upload OCM (legacy v1)
+client.metadata.ocm.upload_v1(...)
+
+# List CDM records
+records = client.metadata.cdm.list(...)
+records = client.metadata.cdm.list_by_operational_batch(...)
+
+# Update contact directory
+client.metadata.contact_directory.update_operational(...)
+
+# Update TraCSS catalog from CSV
+client.metadata.tracss_cat.upload_csv(...)
+```
+
+### Subscriber
+
+```python
+# List available topics (returns a JSON-encoded string, not a dict)
+topics = client.subscriber.topics.list()
+
+# Get offset for a topic
+offset = client.subscriber.topics.get_offset(topic="my-topic")
+
+# Read messages from a topic
+messages = client.subscriber.messages.list(topic="my-topic", offset=0)
+```
+
+<Note>
+`topics.list()` returns a JSON-encoded string. Use `json.loads()` before iterating topic
+names or counts. See the [Subscriber guide](./subscriber) for a full example.
+</Note>
+
+## Async Client
+
+An async variant is available for use with `asyncio`:
+
+```python
+from tracss import AsyncTraCSS
+
+async def main():
+    client = AsyncTraCSS()
+    topics = await client.subscriber.topics.list()
+```
+
+## Errors
+
+Two exception types cover the common failure cases:
+
+- **`httpx.HTTPStatusError`**: raised when the Okta token request fails (non-200 from Okta). This means authentication could not complete; check your credentials and Okta connectivity.
+- **`ApiError`**: raised on 4xx/5xx responses from TraCSS (`from tracss.core import ApiError`). `e.status_code` holds the HTTP status; `e.body` holds the response body.
+
+The SDK has no built-in retry logic. See [Authentication](/authentication) for retry guidance.

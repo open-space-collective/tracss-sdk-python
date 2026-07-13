@@ -1,0 +1,70 @@
+# Versioning convention: unversioned name = current latest; prior version gets _vN suffix.
+# When a new API version arrives, rename the current entry (e.g. from 'stream' to 'stream_v2')
+# and add a new entry for the new path. CI enforces intentional decisions:
+#   test_all_endpoints_have_overrides -> fails if any spec endpoint has no entry here
+#   test_method_surface_matches_snapshot -> fails if the generated surface doesn't match
+#     the snapshot in test_codegen_contract.py
+# Note: test_no_stale_overrides which exists in test_spec_coverage.py checks the reverse
+# direction, i.e. entries in overrides that don't correspond to any spec endpoint. Stale
+# entries will actually fail CI.
+
+paths:
+  /bulkdata/tip/stream:
+    get:
+      x-fern-sdk-group-name: [tip]
+      x-fern-sdk-method-name: stream
+      x-fern-streaming: true
+
+  /bulkdata/ocm/v2/stream:
+    get:
+      x-fern-sdk-group-name: [ocm]
+      x-fern-sdk-method-name: stream
+      x-fern-streaming: true
+
+  /bulkdata/cdm/v2/stream:
+    get:
+      x-fern-sdk-group-name: [cdm]
+      x-fern-sdk-method-name: stream
+      x-fern-streaming: true
+
+  # The OpenAPI spec declares the 200 response as `content: */*` with
+  # `schema: {type: string}`, but the live API returns a bare JSON array.
+  # This override corrects the schema so Fern generates the right return
+  # type and construct_type() never coerces the array into a repr string.
+  # After regeneration, _AnnouncementsClient / _AsyncAnnouncementsClient in
+  # client.py can be deleted (same pattern as the tracssCat fix in
+  # metadata-overrides.yaml).
+  /bulkdata/announcements:
+    get:
+      x-fern-sdk-group-name: [announcements]
+      x-fern-sdk-method-name: list
+      responses:
+        "200":
+          content:
+            "*/*":
+              schema:
+                type: array
+                items:
+                  type: object
+                  additionalProperties: true
+
+  # ── Schemas ────────────────────────────────────────────────────────────
+  /bulkdata/schemas/json:
+    get:
+      x-fern-sdk-group-name: [schemas]
+      x-fern-sdk-method-name: get_json
+
+  /bulkdata/schemas/json/download/{filename}:
+    get:
+      x-fern-sdk-group-name: [schemas]
+      x-fern-sdk-method-name: download_json
+
+  /bulkdata/schemas/xsd:
+    get:
+      x-fern-sdk-group-name: [schemas]
+      x-fern-sdk-method-name: get_xsd
+
+  /bulkdata/schemas/xsd/download/{filename}:
+    get:
+      x-fern-sdk-group-name: [schemas]
+      x-fern-sdk-method-name: download_xsd

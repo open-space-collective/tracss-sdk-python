@@ -1,0 +1,92 @@
+name: Spec Refresh
+
+on:
+  schedule:
+    - cron: "0 6 * * *"
+  workflow_dispatch:
+    inputs:
+      reason:
+        description: "Reason for manual trigger"
+        required: false
+        type: string
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  refresh:
+    name: Fetch specs, generate SDK, open PR
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: ./.github/actions/setup-fern
+
+      - uses: astral-sh/setup-uv@v4
+        with:
+          enable-cache: true
+      - run: uv sync --frozen
+
+      - name: Fetch latest OpenAPI specs
+        run: make specs
+
+      - name: Check for spec changes
+        id: diff
+        run: |
+          if git diff --quiet fern/openapi/; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+            echo "No spec changes detected."
+          else
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+            echo "Changed specs:"
+            git diff --name-only fern/openapi/
+          fi
+
+      - name: Validate Fern config against new specs
+        if: steps.diff.outputs.changed == 'true'
+        run: fern check
+
+      - name: Regenerate SDK
+        if: steps.diff.outputs.changed == 'true'
+        run: make generate
+        env:
+          FERN_TOKEN: ${{ secrets.FERN_TOKEN }}
+
+      - name: Build PR body
+        if: steps.diff.outputs.changed == 'true'
+        id: pr-body
+        run: |
+          CHANGED=$(git diff --name-only fern/openapi/ | sed 's/^/- /')
+          cat <<EOF >> "$GITHUB_OUTPUT"
+          body<<BODY
+          Automated spec refresh. The following OpenAPI specs changed:
+
+          ${CHANGED}
+
+          The SDK has been regenerated via \`fern generate --group python-sdk --local\`.
+
+          ## Versioning checklist
+
+          - [ ] Review \`git diff fern/openapi/\` and identify any new paths or HTTP methods
+          - [ ] For each new endpoint, add an override entry in the relevant \`fern/sdks/*-overrides.yaml\` (convention: unversioned name = current latest; old version gets \`_vN\` suffix + \`x-fern-availability: legacy\`)
+          - [ ] Update \`EXPECTED_SURFACE\` in \`tests/unit/test_codegen_contract.py\` to match the new surface
+          - [ ] Run \`make test\` and \`make integration\` locally before merging
+          - [ ] Review \`git diff sdks/python/\` for type renames, parameter changes, or streaming protocol changes that the automated tests do not catch
+          BODY
+          EOF
+
+      - name: Open pull request
+        if: steps.diff.outputs.changed == 'true'
+        uses: peter-evans/create-pull-request@v6
+        with:
+          token: ${{ secrets.GH_PAT }}
+          branch: auto/spec-refresh-${{ github.run_id }}
+          title: "chore: refresh OpenAPI specs and regenerate SDK"
+          body: ${{ steps.pr-body.outputs.body }}
+          commit-message: "chore: refresh OpenAPI specs and regenerate SDK"
+          labels: automated, spec-refresh
+          delete-branch: true

@@ -1,0 +1,125 @@
+# This is the uv workspace root and tooling config only - it is not a distributable
+# package, so it intentionally has no [project] table. The published package and its
+# runtime dependencies (httpx, pydantic) live in sdks/python/pyproject.toml.
+
+[[tool.uv.index]]
+url = "https://pypi.org/simple"
+default = true
+
+[tool.uv.workspace]
+members = ["sdks/python"]
+
+[dependency-groups]
+dev = [
+    "ruff>=0.4",
+    "mypy>=1.10",
+    "pre-commit>=3",
+    "pytest>=8",
+    "pytest-asyncio>=0.23",
+    "pytest-cov>=5",
+    "respx>=0.21",
+    "httpx>=0.28.1",
+    "twine>=5",
+    "bandit>=1.8",
+    "pip-audit>=2.7",
+    "pip-licenses>=5",
+    "pyyaml>=6",
+    "python-dotenv>=1",
+]
+
+[tool.mypy]
+python_version = "3.10"
+check_untyped_defs = true
+ignore_missing_imports = true
+namespace_packages = true
+exclude = [
+    "sdks/python/tracss/core/",
+    "sdks/python/tracss/bulk_data/",
+    "sdks/python/tracss/metadata/",
+    "sdks/python/tracss/subscriber/",
+    "sdks/python/tracss/__init__.py",
+    "sdks/python/tracss/base_client.py",
+    "sdks/python/tracss/environment.py",
+    "sdks/python/tracss/_default_clients.py",
+    "sdks/python/tracss/tests/",
+]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+addopts = ""
+markers = [
+    "integration: requires Prism mock servers (run with make prism-all first)",
+    "smoke: requires live TraCSS credentials (run with make smoke)",
+]
+
+[tool.ruff]
+line-length = 90
+target-version = "py310"
+
+[tool.ruff.lint]
+select = ["ALL"]
+ignore = [
+    "DOC",    # pydoclint, defer until docstring pass
+    "COM812", # trailing-comma-missing, formatter conflict
+    "ISC001", # implicit-str-concat, formatter conflict
+    "ERA001", # commented-out-code
+    "FIX002", # line-contains-todo
+    "TD",     # TODO rules
+    "ANN",    # annotations, generated files have none; revisit later
+    "CPY001", # copyright-notice, pattern not yet configured
+    "TRY003", # raise-vanilla-args, existing pattern is clear enough
+    "EM101",  # raw-string-in-exception, not enforced here
+    "EM102",  # f-string-in-exception, not enforced here
+    "D105",   # magic-method-docstring, self-explanatory by name
+    "D107",   # missing-docstring-in-__init__, Google style: Args live on class docstring
+    "UP046",  # non-pep695-generic - Generic[T] is correct for requires-python = ">=3.10"
+    "UP047",  # non-pep695-type-alias - type Foo = ... requires 3.12+
+]
+
+[tool.ruff.lint.pydocstyle]
+convention = "google"
+
+[tool.ruff.lint.per-file-ignores]
+"sdks/python/tracss/client.py"           = ["D107"]
+"sdks/python/tracss/core/**"             = ["ALL"]
+"sdks/python/tracss/bulk_data/**"        = ["ALL"]
+"sdks/python/tracss/metadata/**"         = ["ALL"]
+"sdks/python/tracss/subscriber/**"       = ["ALL"]
+"sdks/python/tracss/__init__.py"         = ["ALL"]
+"sdks/python/tracss/base_client.py"      = ["ALL"]
+"sdks/python/tracss/environment.py"      = ["ALL"]
+"sdks/python/tracss/_default_clients.py" = ["ALL"]
+"sdks/python/tracss/tests/**"            = ["ALL"]
+"tests/__init__.py"                      = ["D100", "D104"]
+"tests/unit/__init__.py"                 = ["D100", "D104"]
+"tests/smoke/__init__.py"                = ["D100", "D104"]
+"tests/integration/__init__.py"          = ["D100", "D104"]
+"tests/**" = [
+    "S101",    # assert - expected in tests
+    "S105",    # hardcoded-password-string, test tokens are intentional
+    "S106",    # hardcoded-password-func-arg, test credentials are intentional
+    "ANN",     # annotations
+    "PLR2004", # magic-value-comparison
+    "PLR6301", # no-self-use, test classes use self for fixture access
+    "SLF001",  # private-member-access, tests legitimately probe internals
+    "ARG001",  # unused-function-argument, fixture args may not be used directly
+    "PLC2701", # private-import, tests may import private helpers
+    "F401",    # unused-import, some test modules import for side effects
+    "PLC0415", # import-not-at-top, lazy imports inside test functions are intentional
+    "D102",    # public-method-docstring, test methods are self-documenting by name
+    "D103",    # public-function-docstring, test functions are self-documenting by name
+    "PERF203", # try-except-in-loop, intentional in tests that simulate generator behavior
+]
+
+"scripts/**" = [
+    "T201",    # print, expected in CLI scripts
+    "D103",    # public-function-docstring, CLI entry points are self-documenting
+    "INP001",  # implicit-namespace-package, scripts/ is not a Python package
+]
+
+[tool.ruff.lint.isort]
+known-first-party = ["tracss"]
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"

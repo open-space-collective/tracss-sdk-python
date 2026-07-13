@@ -1,0 +1,111 @@
+# Authentication
+
+<Note>
+The API reference panels show an `Authorization: Bearer <token>` header marked as required.
+**You do not need to set this header yourself when using the SDK.** The client fetches a token
+from Okta automatically and attaches the correct `Authorization` header to every request. The
+header documentation describes the underlying HTTP contract which is satisfied transparently by
+the SDK.
+</Note>
+
+TraCSS uses an **Okta client-credentials** OAuth 2.0 flow. The SDK handles the entire token
+lifecycle automatically - callers never need to manage tokens directly.
+
+## Obtaining Credentials
+
+1. Log in to your TraCSS account at [tracss.gov](https://tracss.gov).
+2. Navigate to your application settings to find your **Client ID** and **Client Secret**.
+
+## Environment Variables
+
+| Variable | Required | Default | Description |
+|---|---|---|---|
+| `TRACSS_CLIENT_ID` | Yes | - | OAuth client ID |
+| `TRACSS_CLIENT_SECRET` | Yes | - | OAuth client secret |
+| `TRACSS_OKTA_DOMAIN` | No | `tracssamu.okta-gov.com` | Okta domain |
+| `TRACSS_OKTA_AUTH_SERVER_ID` | No | `aus1358llxDldKxE80j7` | Okta authorization server ID |
+| `TRACSS_OKTA_SCOPE` | No | `tracssusername` | OAuth scope |
+
+Set the required variables before calling any SDK method:
+
+```bash
+export TRACSS_CLIENT_ID="your-client-id"
+export TRACSS_CLIENT_SECRET="your-client-secret"
+```
+
+## Explicit Configuration
+
+Pass credentials directly if you prefer not to use environment variables, or need to override
+the Okta defaults:
+
+```python
+from tracss import TraCSS
+
+client = TraCSS(
+    client_id="your-client-id",
+    client_secret="your-client-secret",
+    okta_domain="tracssamu.okta-gov.com",        # optional override
+    okta_auth_server_id="aus1358llxDldKxE80j7",  # optional override
+    okta_scope="tracssusername",                  # optional override
+)
+```
+
+## Token Lifecycle
+
+- **Lazy fetch**: The token is not fetched at construction time. The first API call triggers
+  the credential exchange.
+- **Automatic refresh**: Token lifetime is set by Okta's `expires_in` response (falling back to
+  1 hour if the IdP omits it). The SDK refreshes the token automatically 30 seconds before expiry
+  so requests never fail mid-session.
+- **Thread safety**: A `threading.Lock` (non-reentrant) serializes token fetches. Concurrent
+  callers queue on the lock; only one fetch runs at a time. There is no deadlock risk because
+  nothing inside the token-fetch path calls `_get_token()` recursively.
+- **Token fetch timeout**: Token requests to Okta have a 10-second network timeout.
+
+The token endpoint used is:
+
+```
+POST https://{okta_domain}/oauth2/{okta_auth_server_id}/v1/token
+```
+
+Credentials are sent as HTTP Basic Auth (`Authorization: Basic base64(client_id:client_secret)`).
+
+## Errors & Retry
+
+The SDK has **no built-in retry logic** for token acquisition or API calls.
+
+| Situation | What is raised |
+|---|---|
+| Okta returns a non-200 status | `httpx.HTTPStatusError` |
+| Okta 200 body is missing `access_token` | `ValueError` (with the actual keys returned) |
+| Okta 200 body is not valid JSON | `ValueError` (with the Okta URL) |
+
+For automated pipelines, wrap calls with a retry library such as
+[tenacity](https://tenacity.readthedocs.io):
+
+```python
+from tenacity import retry, stop_after_attempt, wait_exponential
+from tracss import TraCSS
+
+client = TraCSS()
+
+@retry(stop=stop_after_attempt(3), wait=wait_exponential(multiplier=1, min=2, max=10))
+def fetch_cdms():
+    return list(client.bulk_data.cdm.stream())
+```
+
+## Async Client
+
+The async client (`AsyncTraCSS`) uses the same credential resolution and token lifecycle, with
+an `asyncio.Lock` in place of the threading lock:
+
+```python
+import asyncio
+from tracss import AsyncTraCSS
+
+async def main():
+    client = AsyncTraCSS(client_id="...", client_secret="...")
+    topics = await client.subscriber.topics.list()
+
+asyncio.run(main())
+```

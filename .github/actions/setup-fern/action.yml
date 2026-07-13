@@ -1,0 +1,19 @@
+name: Set up Node + Fern CLI
+description: Installs Node.js and the pinned fern-api CLI version
+
+inputs:
+  node-version:
+    description: Node.js version
+    default: "24"
+  fern-version:
+    description: fern-api npm package version
+    default: "5.46.0"
+
+runs:
+  using: composite
+  steps:
+    - uses: actions/setup-node@v4
+      with:
+        node-version: ${{ inputs.node-version }}
+    - run: npm install -g fern-api@${{ inputs.fern-version }}
+      shell: bash
